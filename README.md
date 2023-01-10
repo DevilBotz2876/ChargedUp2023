@@ -1,3 +1,5 @@
+[![CI](https://github.com/BHSRobotix/ChargedUp2023/actions/workflows/main.yml/badge.svg)](https://github.com/BHSRobotix/ChargedUp2023/actions/workflows/main.yml)
+
 # Charged Up 2023
 Code for the FRC 2023 Robotics Competition
 
