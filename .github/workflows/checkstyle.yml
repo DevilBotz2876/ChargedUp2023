@@ -11,4 +11,5 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           level: warning
+          checkstyle_config: sun_checks.xml
           
