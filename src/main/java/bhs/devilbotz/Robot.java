@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
 
     /**
      * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
+     * This is a dummy comment to test if I disabled the line check test correctly, or not.  This should be longer than 80 characters.
      */
     @Override
     public void autonomousInit() {
