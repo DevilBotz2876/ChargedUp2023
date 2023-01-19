@@ -14,6 +14,8 @@ package bhs.devilbotz;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final int JOYSTICK_PORT = 0;
     public static class OperatorConstants {
         public static final int DRIVER_CONTROLLER_PORT = 0;
     }
