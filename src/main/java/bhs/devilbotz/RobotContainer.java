@@ -5,13 +5,17 @@
 
 package bhs.devilbotz;
 
-import bhs.devilbotz.Constants.OperatorConstants;
-import bhs.devilbotz.commands.Autos;
-import bhs.devilbotz.commands.ExampleCommand;
-import bhs.devilbotz.subsystems.ExampleSubsystem;
+import bhs.devilbotz.commands.DriveCommand;
+import bhs.devilbotz.commands.auto.BalanceAuto;
+import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.utils.ShuffleboardManager;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import java.util.HashMap;
 
 
 /**
@@ -21,12 +25,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
-    private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
+
+    private final DriveTrain driveTrain = new DriveTrain();
+
+    private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
+
+    private final Joystick joystick = new Joystick(Constants.JOYSTICK_PORT);
 
 
     /**
@@ -35,6 +41,7 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         configureBindings();
+        buildAutoCommands();
     }
 
 
@@ -48,23 +55,31 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-        new Trigger(exampleSubsystem::exampleCondition)
-                .onTrue(new ExampleCommand(exampleSubsystem));
+        driveTrain.setDefaultCommand(
+                new DriveCommand(
+                        driveTrain,
+                        joystick::getY,
+                        joystick::getX
+                )
+        );
+    }
 
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-        // cancelling on release.
-        driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+    private void buildAutoCommands() {
+        autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto());
     }
 
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return Autos.exampleAuto(exampleSubsystem);
+    public Command getAutonomousCommand(AutonomousModes autoMode) {
+        Command autonomousCommand = autoCommands.get(autoMode);
+
+        if (autoMode == null) {
+            System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
+        }
+
+        return autonomousCommand;
+    }
+
+    public ShuffleboardManager getShuffleboardManager() {
+        return shuffleboardManager;
     }
 }
