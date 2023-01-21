@@ -102,4 +102,8 @@ public class DriveTrain extends SubsystemBase {
     public AHRS getNavx() {
         return navx;
     }
+
+    public double getRoll() {
+        return navx.getRoll();
+    }
 }
