@@ -20,6 +20,7 @@
         - if pieceMode == cone: (use reflective tape?)
             - left
             - right
+        - activate balance
 - Sensors
     - NavX
     - Ultrasonic (for detecting when hanging off ramp?)
