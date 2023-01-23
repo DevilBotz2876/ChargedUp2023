@@ -5,8 +5,6 @@
 
 package bhs.devilbotz;
 
-import java.util.HashMap;
-
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.auto.BalanceAuto;
