@@ -19,12 +19,9 @@ public class BalancePID extends CommandBase {
   {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
-    pid = new 
-      PIDController(
-        0.07, 0, 0.01
-      );
-    addRequirements(
-      drive);}
+    pid = new PIDController(0.07, 0, 0.01);
+    addRequirements(drive);
+  }
 
   // Called when the command is initially scheduled.
   @Override
