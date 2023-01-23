@@ -35,4 +35,15 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      run: ./gradlew build
+      run: ./gradlew build -x spotlessCheck
+
+    # Run reviewdog using diff from spotlessApply
+    - name: Create reviewdog diff using spotlessApply
+      run: |
+        ./gradlew spotlessApply
+        git diff
+    - uses: reviewdog/action-suggester@v1
+      with:
+        tool_name: spotless
+        github_token: ${{ secrets.github_token }}
+        level: warning
