@@ -14,9 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 import java.util.HashMap;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,60 +24,49 @@ import java.util.HashMap;
  */
 public class RobotContainer {
 
-    private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
+  private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
-    private final DriveTrain driveTrain = new DriveTrain();
+  private final DriveTrain driveTrain = new DriveTrain();
 
-    private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
+  private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
-    private final Joystick joystick = new Joystick(Constants.JOYSTICK_PORT);
+  private final Joystick joystick = new Joystick(Constants.JOYSTICK_PORT);
 
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    // Configure the trigger bindings
+    configureBindings();
+    buildAutoCommands();
+  }
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        // Configure the trigger bindings
-        configureBindings();
-        buildAutoCommands();
+  /**
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
+  private void configureBindings() {
+    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
+  }
+
+  private void buildAutoCommands() {
+    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
+  }
+
+  public Command getAutonomousCommand(AutonomousModes autoMode) {
+    Command autonomousCommand = autoCommands.get(autoMode);
+
+    if (autoMode == null) {
+      System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
     }
 
+    return autonomousCommand;
+  }
 
-    /**
-     * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-     * predicate, or via the named factories in {@link
-     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-     * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-     * joysticks}.
-     */
-    private void configureBindings() {
-        driveTrain.setDefaultCommand(
-                new DriveCommand(
-                        driveTrain,
-                        joystick::getY,
-                        joystick::getX
-                )
-        );
-    }
-
-    private void buildAutoCommands() {
-        autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    }
-
-
-    public Command getAutonomousCommand(AutonomousModes autoMode) {
-        Command autonomousCommand = autoCommands.get(autoMode);
-
-        if (autoMode == null) {
-            System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
-        }
-
-        return autonomousCommand;
-    }
-
-    public ShuffleboardManager getShuffleboardManager() {
-        return shuffleboardManager;
-    }
+  public ShuffleboardManager getShuffleboardManager() {
+    return shuffleboardManager;
+  }
 }

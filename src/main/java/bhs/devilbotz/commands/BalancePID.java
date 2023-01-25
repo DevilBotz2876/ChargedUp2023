@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package bhs.devilbotz.commands;
+
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.utils.Utils;
 import edu.wpi.first.math.MathUtil;
@@ -14,9 +15,9 @@ public class BalancePID extends CommandBase {
   /** Creates a new BalancePID. */
   // TODO: Add a feedforward term to the PID controller and tune pid
   private final DriveTrain drive;
-  //private double levelAngle;
+  // private double levelAngle;
   private final PIDController pid;
-  
+
   public BalancePID(DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;

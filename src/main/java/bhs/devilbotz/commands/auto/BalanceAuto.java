@@ -5,13 +5,11 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class BalanceAuto extends SequentialCommandGroup {
-    private final DriveTrain drive;
-    public BalanceAuto(DriveTrain drive) {
-        this.drive = drive;
+  private final DriveTrain drive;
 
-        addCommands(
-                new BalancePID(drive)
-        );
+  public BalanceAuto(DriveTrain drive) {
+    this.drive = drive;
 
-    }
+    addCommands(new BalancePID(drive));
+  }
 }
