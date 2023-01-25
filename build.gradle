@@ -156,3 +156,7 @@ spotless {
         endWithNewline()
     }
 }
+
+spotlessJavaCheck.enabled = false
+spotlessXmlCheck.enabled = false
+spotlessMiscCheck.enabled = false
