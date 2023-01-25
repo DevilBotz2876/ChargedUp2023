@@ -35,7 +35,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      run: ./gradlew build -x spotlessCheck
+      run: ./gradlew build
 
     # Run reviewdog using diff from spotlessApply
     - name: Create reviewdog diff using spotlessApply
