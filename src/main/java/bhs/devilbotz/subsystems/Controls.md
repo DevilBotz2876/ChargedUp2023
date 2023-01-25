@@ -24,8 +24,8 @@
 - Sensors
     - NavX
     - Ultrasonic (for detecting when hanging off ramp?)
-    - Visual Camera
-    - PhotonVision Camera?
+    - Visual Camera x2
+    - PhotonVision Camera x2
 
 ### Arm Control
 - Stick
@@ -52,3 +52,11 @@
         - Upper
         - Lower
     - Visual Camera?
+
+### Misc
+
+#### Hardware/Sensors
+- LEDs (For communication with human player)
+    - pieceMode
+        - cone
+        - cube
