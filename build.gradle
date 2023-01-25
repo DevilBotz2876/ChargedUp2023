@@ -115,6 +115,8 @@ idea {
 }
 
 spotless {
+    ratchetFrom 'origin/main'
+
     java {
         target fileTree('.') {
             include '**/*.java'
