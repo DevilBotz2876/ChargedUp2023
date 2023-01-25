@@ -157,6 +157,8 @@ spotless {
     }
 }
 
-spotlessJavaCheck.enabled = false
-spotlessXmlCheck.enabled = false
-spotlessMiscCheck.enabled = false
+if (!('spotlessCheck' in gradle.startParameter.taskNames)) {
+    spotlessJavaCheck.enabled = false
+    spotlessXmlCheck.enabled = false
+    spotlessMiscCheck.enabled = false
+}
