@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -8,16 +9,16 @@ import java.util.function.DoubleSupplier;
 public class DriveCommand extends CommandBase {
   private final DriveTrain drive;
   private final DoubleSupplier speed;
-  private final DoubleSupplier rotation;
+  private final DoubleSupplier rot;
 
   private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(3);
 
   private final SlewRateLimiter rotationSlewRateLimiter = new SlewRateLimiter(3);
 
-  public DriveCommand(DriveTrain drive, DoubleSupplier speed, DoubleSupplier rotation) {
+  public DriveCommand(DriveTrain drive, DoubleSupplier speed, DoubleSupplier rot) {
     this.drive = drive;
     this.speed = speed;
-    this.rotation = rotation;
+    this.rot = rot;
     addRequirements(this.drive);
   }
 
@@ -28,9 +29,13 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.arcadeDrive(
-        speedSlewRateLimiter.calculate(speed.getAsDouble()),
-        rotationSlewRateLimiter.calculate(rotation.getAsDouble()));
+    // The joysticks are inverted, so negate the values
+    final var speed = -speedSlewRateLimiter.calculate(this.speed.getAsDouble() * Constants.DriveConstants.maxSpeed);
+
+    // The rotation is inverted, so negate the value
+    final var rot = -rotationSlewRateLimiter.calculate(this.rot.getAsDouble() * Constants.DriveConstants.maxAngularSpeed);
+
+    drive.arcadeDrive(speed, rot);
   }
 
   // Called once the command ends or is interrupted.

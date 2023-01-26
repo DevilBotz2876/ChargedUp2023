@@ -1,10 +1,16 @@
 package bhs.devilbotz.subsystems;
 
+import bhs.devilbotz.Constants;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,20 +29,87 @@ public class DriveTrain extends SubsystemBase {
   private final DifferentialDrive differentialDrive =
       new DifferentialDrive(leftMaster, rightMaster);
 
-  private final SlewRateLimiter leftSlew = new SlewRateLimiter(5);
+  private final PIDController leftPIDController = new PIDController(Constants.DriveConstants.driveP,
+          Constants.DriveConstants.driveI, Constants.DriveConstants.driveD);
+  private final PIDController rightPIDController = new PIDController(Constants.DriveConstants.driveP,
+          Constants.DriveConstants.driveI, Constants.DriveConstants.driveD);
 
-  private final SlewRateLimiter rightSlew = new SlewRateLimiter(5);
+  private final DifferentialDriveKinematics kinematics =
+          new DifferentialDriveKinematics(Constants.DriveConstants.trackWidth);
 
+  private final DifferentialDriveOdometry odometry;
+
+
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.DriveConstants.driveFFS,
+          Constants.DriveConstants.driveFFV);
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     setupTalons();
     resetNavx();
     resetEncoders();
+
+    odometry =
+            new DifferentialDriveOdometry(
+                    navx.getRotation2d(), getLeftDistance(), getRightDistance());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  /**
+   * Get the left encoder distance.
+   * @return The left encoder distance in meters.
+   * @see #getRightDistance()
+   */
+  private double getLeftDistance() {
+    return leftMaster.getSelectedSensorPosition() * (2 * Math.PI * Constants.DriveConstants.wheelRadius / Constants.DriveConstants.encoderResolution);
+  }
+
+  /**
+   * Get the right encoder distance.
+   * @return The right encoder distance in meters.
+   * @see #getLeftDistance()
+   */
+  private double getRightDistance() {
+    return rightMaster.getSelectedSensorPosition() * (2 * Math.PI * Constants.DriveConstants.wheelRadius / Constants.DriveConstants.encoderResolution);
+  }
+
+  /**
+   * Get the left encoder velocity.
+   * @return The left encoder velocity in meters per second.
+   * @see #getRightVelocity()
+   */
+    private double getLeftVelocity() {
+      return leftMaster.getSelectedSensorVelocity() * (2 * Math.PI * Constants.DriveConstants.wheelRadius / Constants.DriveConstants.encoderResolution);
+    }
+
+    /**
+     * Get the right encoder velocity.
+     * @return The right encoder velocity in meters per second.
+     * @see #getLeftVelocity()
+     */
+    private double getRightVelocity() {
+      return rightMaster.getSelectedSensorVelocity() * (2 * Math.PI * Constants.DriveConstants.wheelRadius / Constants.DriveConstants.encoderResolution);
+    }
+
+  /**
+   * Sets the desired wheel speeds.
+   *
+   * @param speeds The desired wheel speeds in meters per second.
+   */
+  public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+    final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
+    final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
+
+    // get rate is meters per second
+    final double leftOutput =
+            leftPIDController.calculate(getLeftVelocity(), speeds.leftMetersPerSecond);
+    final double rightOutput =
+            rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
+    leftMaster.setVoltage(leftOutput + leftFeedforward);
+    rightMaster.setVoltage(rightOutput + rightFeedforward);
   }
 
   private void setupTalons() {
@@ -71,8 +144,15 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.setSelectedSensorPosition(0, 0, 0);
   }
 
-  public void arcadeDrive(double speed, double rotation) {
-    differentialDrive.arcadeDrive(-speed, -rotation);
+  /**
+   * Drives the robot with the given linear velocity and angular velocity.
+   *
+   * @param speed Linear velocity in m/s.
+   * @param rot Angular velocity in rad/s.
+   */
+  public void arcadeDrive(double speed, double rot) {
+    var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
+    setSpeeds(wheelSpeeds);
   }
 
   public void setTalonMode(NeutralMode mode) {
@@ -80,6 +160,32 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.setNeutralMode(mode);
     leftFollower.setNeutralMode(mode);
     rightFollower.setNeutralMode(mode);
+  }
+
+  /** Updates the field-relative position. */
+  public void updateOdometry() {
+    odometry.update(
+            navx.getRotation2d(), getLeftDistance(), getRightDistance());
+  }
+
+  public WPI_TalonSRX getLeftMaster() {
+    return leftMaster;
+  }
+
+  public WPI_TalonSRX getRightMaster() {
+    return rightMaster;
+  }
+
+  public WPI_TalonSRX getLeftFollower() {
+    return leftFollower;
+  }
+
+  public WPI_TalonSRX getRightFollower() {
+    return rightFollower;
+  }
+
+  public AHRS getNavx() {
+    return navx;
   }
 
   public double getRoll() {

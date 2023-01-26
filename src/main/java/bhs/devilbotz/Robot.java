@@ -6,6 +6,7 @@
 package bhs.devilbotz;
 
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +26,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer robotContainer;
 
+  private DriveTrain drive;
+
   /**
    * This method is run when the robot is first started up and should be used for any initialization
    * code.
@@ -34,6 +37,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    drive = robotContainer.getDriveTrain();
     shuffleboardManager = robotContainer.getShuffleboardManager();
   }
 
@@ -54,6 +58,7 @@ public class Robot extends TimedRobot {
 
     autoMode = ShuffleboardManager.autoModeChooser.getSelected();
     shuffleboardManager.updateValues();
+    drive.updateOdometry();
   }
 
   /** This method is called once each time the robot enters Disabled mode. */
