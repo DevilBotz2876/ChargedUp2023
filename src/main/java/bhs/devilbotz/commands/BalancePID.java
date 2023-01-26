@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package bhs.devilbotz.commands;
+
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -12,9 +13,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class BalancePID extends CommandBase {
   /** Creates a new BalancePID. */
   private final DriveTrain m_drive;
-  //private double levelAngle;
+  // private double levelAngle;
   PIDController pid;
-  
+
   public BalancePID(DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
@@ -27,7 +28,7 @@ public class BalancePID extends CommandBase {
   public void initialize() {
     System.out.println("BalancePID start");
     m_drive.arcadeDrive(0, 0);
-    //m_drive.resetEncoders();
+    // m_drive.resetEncoders();
 
   }
 
