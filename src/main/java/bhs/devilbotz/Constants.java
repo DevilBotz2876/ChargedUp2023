@@ -21,8 +21,6 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 
-
   public static final int GRIPPER_SOLENOID_FORWARD = 0;
   public static final int GRIPPER_SOLENOID_REVERSE = 1;
-
 }
