@@ -1,11 +1,15 @@
 package bhs.devilbotz.commands.auto;
 
-import bhs.devilbotz.commands.Balance;
+import bhs.devilbotz.commands.BalancePID;
+import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class BalanceAuto extends SequentialCommandGroup {
-  public BalanceAuto() {
+  private final DriveTrain drive;
 
-    addCommands(new Balance());
+  public BalanceAuto(DriveTrain drive) {
+    this.drive = drive;
+
+    addCommands(new BalancePID(drive));
   }
 }

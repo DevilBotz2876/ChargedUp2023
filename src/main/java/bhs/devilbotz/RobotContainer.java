@@ -5,7 +5,6 @@
 
 package bhs.devilbotz;
 
-import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.lib.AutonomousModes;
@@ -14,7 +13,6 @@ import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.HashMap;
 
@@ -52,12 +50,10 @@ public class RobotContainer {
    */
   private void configureBindings() {
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
-    // Just for testing
-    new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
   }
 
   private void buildAutoCommands() {
-    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto());
+    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
   }
 
   public Command getAutonomousCommand(AutonomousModes autoMode) {
