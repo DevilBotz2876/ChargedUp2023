@@ -9,41 +9,42 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class ShuffleboardManager {
-    public static SendableChooser<AutonomousModes> autoModeChooser = new SendableChooser<>();
-    public ShuffleboardManager() {
-        ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+  public static SendableChooser<AutonomousModes> autoModeChooser = new SendableChooser<>();
 
-        // get the default instance of NetworkTables
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        int connListenerHandle;
-        connListenerHandle = inst.addConnectionListener(true, event -> {
-            if (event.is(NetworkTableEvent.Kind.kConnected)) {
+  public ShuffleboardManager() {
+    ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+
+    // get the default instance of NetworkTables
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    int connListenerHandle;
+    connListenerHandle =
+        inst.addConnectionListener(
+            true,
+            event -> {
+              if (event.is(NetworkTableEvent.Kind.kConnected)) {
                 System.out.println("Connected to " + event.connInfo.remote_id);
-            } else if (event.is(NetworkTableEvent.Kind.kDisconnected)) {
+              } else if (event.is(NetworkTableEvent.Kind.kDisconnected)) {
                 System.out.println("Disconnected from " + event.connInfo.remote_id);
-            }
-        });
-        driveTab.add("Auto Mode", autoModeChooser)
-                .withWidget(BuiltInWidgets.kComboBoxChooser)
-                .withPosition(0, 0)
-                .withSize(2, 1);
+              }
+            });
+    driveTab
+        .add("Auto Mode", autoModeChooser)
+        .withWidget(BuiltInWidgets.kComboBoxChooser)
+        .withPosition(0, 0)
+        .withSize(2, 1);
 
-        initAutoModeChooser();
+    initAutoModeChooser();
+  }
+  // shuffleboard connect event
 
-    }
-    // shuffleboard connect event
+  private void initAutoModeChooser() {
+    autoModeChooser.setDefaultOption("Backup Short", AutonomousModes.BACKUP_SHORT);
+    autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
+    autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
+    autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
+  }
 
-
-
-
-    private void initAutoModeChooser() {
-        autoModeChooser.setDefaultOption("Backup Short", AutonomousModes.BACKUP_SHORT);
-        autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
-        autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
-        autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
-    }
-
-    public void updateValues() {
-        // TODO: add values to update on shuffleboard
-    }
+  public void updateValues() {
+    // TODO: add values to update on shuffleboard
+  }
 }

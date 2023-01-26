@@ -4,11 +4,8 @@ import bhs.devilbotz.commands.Balance;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class BalanceAuto extends SequentialCommandGroup {
-    public BalanceAuto() {
+  public BalanceAuto() {
 
-        addCommands(
-                new Balance()
-        );
-
-    }
+    addCommands(new Balance());
+  }
 }
