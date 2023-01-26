@@ -82,26 +82,6 @@ public class DriveTrain extends SubsystemBase {
     rightFollower.setNeutralMode(mode);
   }
 
-  public WPI_TalonSRX getLeftMaster() {
-    return leftMaster;
-  }
-
-  public WPI_TalonSRX getRightMaster() {
-    return rightMaster;
-  }
-
-  public WPI_TalonSRX getLeftFollower() {
-    return leftFollower;
-  }
-
-  public WPI_TalonSRX getRightFollower() {
-    return rightFollower;
-  }
-
-  public AHRS getNavx() {
-    return navx;
-  }
-
   public double getRoll() {
     return navx.getRoll();
   }

@@ -52,12 +52,13 @@ public class RobotContainer {
    */
   private void configureBindings() {
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
-    // Just for testing
+
+    // For testing
     new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
   }
 
   private void buildAutoCommands() {
-    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto());
+    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
   }
 
   public Command getAutonomousCommand(AutonomousModes autoMode) {
