@@ -4,16 +4,16 @@
 
 package bhs.devilbotz.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import bhs.devilbotz.Constants;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   private WPI_TalonSRX armMotor;
+
   private boolean armUp;
-  
+
   public Arm() {
     armMotor = new WPI_TalonSRX(Constants.ARM_CAN_ID);
     armUp = false;
@@ -22,7 +22,7 @@ public class Arm extends SubsystemBase {
   public boolean isArmUp() {
     return armUp;
   }
-  
+
   public void Up(double speed) {
     armMotor.set(speed);
     armUp = true;

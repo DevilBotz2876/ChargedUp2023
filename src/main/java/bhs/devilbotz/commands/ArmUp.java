@@ -7,11 +7,11 @@ package bhs.devilbotz.commands;
 import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ArmIdle extends CommandBase {
-  /** Creates a new ArmIdle. */
+public class ArmUp extends CommandBase {
+  /** Creates a new ArmUp. */
   private Arm _arm;
 
-  public ArmIdle(Arm arm) {
+  public ArmUp(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     _arm = arm;
     addRequirements(_arm);
@@ -19,13 +19,13 @@ public class ArmIdle extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    _arm.stop();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    _arm.Up(0.5);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
