@@ -15,4 +15,6 @@ public class Utils {
         }
         return timer.get() >= x;
     }
+    return timer.get() >= x;
+  }
 }
