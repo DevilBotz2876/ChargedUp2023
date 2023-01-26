@@ -17,6 +17,10 @@ public final class Constants {
 
   public static final int JOYSTICK_PORT = 0;
 
+  public static final double BALANCE_P = 0.07; // TODO: Get correct values
+  public static final double BALANCE_I = 0.0; // TODO: Get correct values
+  public static final double BALANCE_D = 0.01; // TODO: Get correct values
+
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }

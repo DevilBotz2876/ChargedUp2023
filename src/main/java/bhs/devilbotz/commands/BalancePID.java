@@ -4,6 +4,7 @@
 
 package bhs.devilbotz.commands;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,7 +21,7 @@ public class BalancePID extends CommandBase {
   public BalancePID(DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
-    pid = new PIDController(0.07, 0, 0.01);
+    pid = new PIDController(Constants.BALANCE_P, Constants.BALANCE_I, Constants.BALANCE_D);
     addRequirements(drive);
   }
 
