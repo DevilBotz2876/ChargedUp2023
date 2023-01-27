@@ -30,6 +30,5 @@ public final class Constants {
     public static final int kMotorPortRightMaster = 4;
     public static final int kMotorPortLeftFollower = 1;
     public static final int kMotorPortRightFollower = 2;
-
   }
 }
