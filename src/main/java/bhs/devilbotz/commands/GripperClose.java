@@ -8,11 +8,11 @@ import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class GripperClose extends CommandBase {
-  private Gripper _gripper;
+  private Gripper gripper;
 
   public GripperClose(Gripper gripper) {
-    _gripper = gripper;
-    addRequirements(_gripper);
+    this.gripper = gripper;
+    addRequirements(gripper);
   }
 
   // Called when the command is initially scheduled.
@@ -22,7 +22,7 @@ public class GripperClose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _gripper.close();
+    gripper.close();
   }
 
   // Called once the command ends or is interrupted.

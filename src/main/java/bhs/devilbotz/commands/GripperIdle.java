@@ -8,17 +8,17 @@ import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class GripperIdle extends CommandBase {
-  private Gripper _gripper;
+  private Gripper gripper;
 
   public GripperIdle(Gripper gripper) {
-    _gripper = gripper;
-    addRequirements(_gripper);
+    this.gripper = gripper;
+    addRequirements(gripper);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _gripper.stop();
+    gripper.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
