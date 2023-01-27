@@ -5,7 +5,11 @@ Code for the FRC 2023 Robotics Competition
 
 ## Resources
 * [Official FIRST Robotics Competition Control System (WPILib)](https://docs.wpilib.org/en/stable/)
-  * [WPILib Installation Guide](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html)
+    * [WPILib Installation Guide](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html)
+* API Documentation
+    * [WPILib API](https://github.wpilib.org/allwpilib/docs/release/java/index.html)
+    * [Talon SRC Drive Motors](https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/package-summary.html)
+    * [NavX Gyro Sensor](https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/com/kauailabs/navx/frc/package-summary.html)
 
 ## Desired Robot Controls
 
