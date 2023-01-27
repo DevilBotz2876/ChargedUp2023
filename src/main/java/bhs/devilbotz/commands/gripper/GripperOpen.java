@@ -2,15 +2,15 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package bhs.devilbotz.commands;
+package bhs.devilbotz.commands.gripper;
 
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class GripperClose extends CommandBase {
-  private Gripper gripper;
+public class GripperOpen extends CommandBase {
+  private final Gripper gripper;
 
-  public GripperClose(Gripper gripper) {
+  public GripperOpen(Gripper gripper) {
     this.gripper = gripper;
     addRequirements(gripper);
   }
@@ -22,7 +22,7 @@ public class GripperClose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gripper.close();
+    gripper.open();
   }
 
   // Called once the command ends or is interrupted.
