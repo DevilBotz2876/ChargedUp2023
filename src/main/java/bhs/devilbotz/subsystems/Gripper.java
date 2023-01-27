@@ -17,8 +17,8 @@ public class Gripper extends SubsystemBase {
     gripperSolenoid =
         new DoubleSolenoid(
             PneumaticsModuleType.CTREPCM,
-            Constants.GRIPPER_SOLENOID_FORWARD,
-            Constants.GRIPPER_SOLENOID_REVERSE);
+            Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
+            Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
   }
 
   public void open() {
