@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DriveTrain extends SubsystemBase {
   // Define talons
   private static final WPI_TalonSRX leftMaster =
-      new WPI_TalonSRX(DriveConstants.kMotorPortLeftMaster);
+      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_MASTER_CAN_ID);
   private static final WPI_TalonSRX rightMaster =
-      new WPI_TalonSRX(DriveConstants.kMotorPortRightMaster);
+      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_MASTER_CAN_ID);
   private static final WPI_TalonSRX leftFollower =
-      new WPI_TalonSRX(DriveConstants.kMotorPortLeftFollower);
+      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_FOLLOWER_CAN_ID);
   private static final WPI_TalonSRX rightFollower =
-      new WPI_TalonSRX(DriveConstants.kMotorPortRightFollower);
+      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_FOLLOWER_CAN_ID);
 
   // Define NAVX
   private static final AHRS navx = new AHRS(SPI.Port.kMXP);
