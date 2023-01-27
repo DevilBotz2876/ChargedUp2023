@@ -25,6 +25,15 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 
-  public static final int GRIPPER_SOLENOID_FORWARD = 0;
-  public static final int GRIPPER_SOLENOID_REVERSE = 1;
+  public static class GripperConstants {
+    public static final int GRIPPER_SOLENOID_FORWARD = 0;
+    public static final int GRIPPER_SOLENOID_REVERSE = 1;
+  }
+
+  public static final class DriveConstants {
+    public static final int MOTOR_LEFT_MASTER_CAN_ID = 3;
+    public static final int MOTOR_RIGHT_MASTER_CAN_ID = 4;
+    public static final int MOTOR_LEFT_FOLLOWER_CAN_ID = 1;
+    public static final int MOTOR_RIGHT_FOLLOWER_CAN_ID = 2;
+  }
 }
