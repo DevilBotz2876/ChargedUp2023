@@ -11,6 +11,36 @@ Code for the FRC 2023 Robotics Competition
     * [Talon SRC Drive Motors](https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/package-summary.html)
     * [NavX Gyro Sensor](https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/com/kauailabs/navx/frc/package-summary.html)
 
+## Hardware Configuration
+- DriveTrain
+    - Motors
+        - Left
+            - Master: Talon SRX (on CAN ID 3)
+            - Follower: Talon SRX (on CAN ID 1)
+        - Right:
+            - Master: Talon SRX (on CAN ID 4) - Inverted
+            - Follower: Talon SRX (on CAN ID 2) - Inverted  
+    - Gear Box
+        - Toughbox Mini Classic
+            - Counts Per Revolution: 4096 
+            - Encoder Ratio: 1:1
+        - Wheels
+            - 6" Diameter (0.1524 meters)
+    - Gyro
+        - NavX (on SPI MXP Port)
+- Arm
+    - Motor
+        - TBD
+    - Limit Switches
+        - Upper
+            - TBD
+        - Lower
+            - TBD
+- Gripper
+    - TBD
+- Cameras
+    - TBD
+
 ## Desired Robot Controls
 
 ### Hardware
