@@ -1,20 +1,24 @@
 package bhs.devilbotz.subsystems;
 
+import bhs.devilbotz.Constants.DriveConstants;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
   // Define talons
-  private static final WPI_TalonSRX leftMaster = new WPI_TalonSRX(3);
-  private static final WPI_TalonSRX rightMaster = new WPI_TalonSRX(4);
-  private static final WPI_TalonSRX leftFollower = new WPI_TalonSRX(1);
-  private static final WPI_TalonSRX rightFollower = new WPI_TalonSRX(2);
+  private static final WPI_TalonSRX leftMaster =
+      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_MASTER_CAN_ID);
+  private static final WPI_TalonSRX rightMaster =
+      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_MASTER_CAN_ID);
+  private static final WPI_TalonSRX leftFollower =
+      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_FOLLOWER_CAN_ID);
+  private static final WPI_TalonSRX rightFollower =
+      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_FOLLOWER_CAN_ID);
 
   // Define NAVX
   private static final AHRS navx = new AHRS(SPI.Port.kMXP);
@@ -22,10 +26,6 @@ public class DriveTrain extends SubsystemBase {
   // Define differential drive
   private final DifferentialDrive differentialDrive =
       new DifferentialDrive(leftMaster, rightMaster);
-
-  private final SlewRateLimiter leftSlew = new SlewRateLimiter(5);
-
-  private final SlewRateLimiter rightSlew = new SlewRateLimiter(5);
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
