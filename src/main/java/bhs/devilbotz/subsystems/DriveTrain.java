@@ -13,6 +13,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
@@ -39,14 +41,18 @@ public class DriveTrain extends SubsystemBase {
 
   private final DifferentialDriveOdometry odometry;
 
-
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.DriveConstants.driveFFS,
-          Constants.DriveConstants.driveFFV);
+          Constants.DriveConstants.driveFFV, Constants.DriveConstants.driveFFA);
+
+  private final Field2d field = new Field2d();
+
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     setupTalons();
     resetNavx();
     resetEncoders();
+
+    SmartDashboard.putData("Field", field);
 
     odometry =
             new DifferentialDriveOdometry(
@@ -56,6 +62,8 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    updateOdometry();
+    field.setRobotPose(odometry.getPoseMeters());
   }
 
   /**

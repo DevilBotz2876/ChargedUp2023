@@ -58,7 +58,6 @@ public class Robot extends TimedRobot {
 
     autoMode = ShuffleboardManager.autoModeChooser.getSelected();
     shuffleboardManager.updateValues();
-    drive.updateOdometry();
   }
 
   /** This method is called once each time the robot enters Disabled mode. */
