@@ -72,6 +72,7 @@ public class DriveTrain extends SubsystemBase {
    * @see #getRightDistance()
    */
   private double getLeftDistance() {
+    SmartDashboard.putNumber("LeftDistance", leftMaster.getSelectedSensorPosition() * (2 * Math.PI * Constants.DriveConstants.wheelRadius / Constants.DriveConstants.encoderResolution));
     return leftMaster.getSelectedSensorPosition() * (2 * Math.PI * Constants.DriveConstants.wheelRadius / Constants.DriveConstants.encoderResolution);
   }
 
@@ -117,7 +118,12 @@ public class DriveTrain extends SubsystemBase {
     final double rightOutput =
             rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
     leftMaster.setVoltage(leftOutput + leftFeedforward);
+    SmartDashboard.putNumber("leftOutput", leftOutput + leftFeedforward);
+    System.out.println(leftFeedforward);
+    System.out.println("output: " + leftOutput);
     rightMaster.setVoltage(rightOutput + rightFeedforward);
+    SmartDashboard.putNumber("rightOutput", rightOutput + rightFeedforward);
+
   }
 
   private void setupTalons() {

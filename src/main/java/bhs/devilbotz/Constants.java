@@ -34,13 +34,13 @@ public final class Constants {
     public static final int encoderResolution = 4096; // CTRE Magnetic Encoder
 
     // Drive PID values TODO: Tune
-    public static final double driveP = 0.39941;
+    public static final double driveP = 3.5725;
     public static final double driveI = 0.0;
     public static final double driveD = 0.0;
 
     // Feedforward constants TODO: Tune
-    public static final double driveFFS = 1.032;
-    public static final double driveFFV = 2.4523;
-    public static final double driveFFA = 0.28226;
+    public static final double driveFFS = 0.94143;
+    public static final double driveFFV = 2.3803;
+    public static final double driveFFA = 0.48128;
   }
 }
