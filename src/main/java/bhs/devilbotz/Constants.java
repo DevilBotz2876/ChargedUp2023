@@ -29,7 +29,7 @@ public final class Constants {
     public static final double SLEW_RATE_LIMITER = 3;
     public static final double MAX_SPEED = 2.447; // meters per second TODO: Measure/SysID
     public static final double MAX_ANGULAR_SPEED =
-            2 * Math.PI; // one rotation per second TODO: Measure
+        2 * Math.PI; // one rotation per second TODO: Measure
 
     public static final double TRACK_WIDTH = 0.555; // meters, robot width TODO: Measure
     public static final double WHEEL_RADIUS =
