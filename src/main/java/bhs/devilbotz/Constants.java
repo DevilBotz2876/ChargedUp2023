@@ -33,7 +33,7 @@ public final class Constants {
 
     public static final double TRACK_WIDTH = 0.555; // meters, robot width TODO: Measure
     public static final double WHEEL_RADIUS =
-            0.0762; // meters (Andymark am-0940b "High Grip Wheels, 6")
+        0.0762; // meters (Andymark am-0940b "High Grip Wheels, 6")
     public static final int ENCODER_RESOLUTION = 4096; // CTRE Magnetic Encoder
 
     // Drive PID values TODO: Tune
