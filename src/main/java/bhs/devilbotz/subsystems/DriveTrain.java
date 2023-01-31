@@ -92,7 +92,6 @@ public class DriveTrain extends SubsystemBase {
     resetNavx();
     resetEncoders();
 
-
     ShuffleboardManager.putField(field);
 
     // Defines the odometry of the drive train, which is used to calculate the position of the
