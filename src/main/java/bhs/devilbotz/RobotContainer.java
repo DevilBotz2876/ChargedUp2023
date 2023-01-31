@@ -28,7 +28,7 @@ public class RobotContainer {
 
   private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
-  private final DriveTrain driveTrain = new DriveTrain();
+  private final DriveTrain driveTrain = new DriveTrain(this);
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
@@ -75,7 +75,7 @@ public class RobotContainer {
     return shuffleboardManager;
   }
 
-    public DriveTrain getDriveTrain() {
-        return driveTrain;
-    }
+  public DriveTrain getDriveTrain() {
+    return driveTrain;
+  }
 }

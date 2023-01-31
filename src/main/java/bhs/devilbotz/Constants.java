@@ -27,10 +27,12 @@ public final class Constants {
 
   public static class DriveConstants {
     public static final double maxSpeed = 2.447; // meters per second TODO: Measure/SysID
-    public static final double maxAngularSpeed = 2 * Math.PI; // one rotation per second TODO: Measure
+    public static final double maxAngularSpeed =
+        2 * Math.PI; // one rotation per second TODO: Measure
 
     public static final double trackWidth = 0.555; // meters, robot width TODO: Measure
-    public static final double wheelRadius = 0.0762; // meters (Andymark am-0940b "High Grip Wheels, 6")
+    public static final double wheelRadius =
+        0.0762; // meters (Andymark am-0940b "High Grip Wheels, 6")
     public static final int encoderResolution = 4096; // CTRE Magnetic Encoder
 
     // Drive PID values TODO: Tune
