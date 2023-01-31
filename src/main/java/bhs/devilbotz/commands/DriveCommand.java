@@ -32,12 +32,12 @@ public class DriveCommand extends CommandBase {
     // The joysticks are inverted, so negate the values
     final var speed =
         -speedSlewRateLimiter.calculate(
-            this.speed.getAsDouble() * Constants.DriveConstants.maxSpeed);
+            this.speed.getAsDouble() * Constants.DriveConstants.MAX_SPEED);
 
     // The rotation is inverted, so negate the value
     final var rot =
         -rotationSlewRateLimiter.calculate(
-            this.rot.getAsDouble() * Constants.DriveConstants.maxAngularSpeed);
+            this.rot.getAsDouble() * Constants.DriveConstants.MAX_ANGULAR_SPEED);
 
     drive.arcadeDrive(speed, rot);
   }

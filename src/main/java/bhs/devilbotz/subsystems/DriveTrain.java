@@ -48,18 +48,18 @@ public class DriveTrain extends SubsystemBase {
   // These are used to control the speed of the motors proportionally to the speed of the wheels.
   private final PIDController leftPIDController =
       new PIDController(
-          Constants.DriveConstants.driveP,
-          Constants.DriveConstants.driveI,
-          Constants.DriveConstants.driveD);
+          Constants.DriveConstants.DRIVE_P,
+          Constants.DriveConstants.DRIVE_I,
+          Constants.DriveConstants.DRIVE_D);
   private final PIDController rightPIDController =
       new PIDController(
-          Constants.DriveConstants.driveP,
-          Constants.DriveConstants.driveI,
-          Constants.DriveConstants.driveD);
+          Constants.DriveConstants.DRIVE_P,
+          Constants.DriveConstants.DRIVE_I,
+          Constants.DriveConstants.DRIVE_D);
 
   // Defines the kinematics of the drive train, which is used to calculate the speed of the wheels.
   private final DifferentialDriveKinematics kinematics =
-      new DifferentialDriveKinematics(Constants.DriveConstants.trackWidth);
+      new DifferentialDriveKinematics(Constants.DriveConstants.TRACK_WIDTH);
 
   // Defines the odometry of the drive train, which is used to calculate the position of the robot.
   private final DifferentialDriveOdometry odometry;
@@ -68,9 +68,9 @@ public class DriveTrain extends SubsystemBase {
   // move the robot.
   private final SimpleMotorFeedforward feedforward =
       new SimpleMotorFeedforward(
-          Constants.DriveConstants.driveFFS,
-          Constants.DriveConstants.driveFFV,
-          Constants.DriveConstants.driveFFA);
+          Constants.DriveConstants.DRIVE_FFS,
+          Constants.DriveConstants.DRIVE_FFV,
+          Constants.DriveConstants.DRIVE_FFA);
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
@@ -124,8 +124,8 @@ public class DriveTrain extends SubsystemBase {
     return leftMaster.getSelectedSensorPosition()
         * (2
             * Math.PI
-            * Constants.DriveConstants.wheelRadius
-            / Constants.DriveConstants.encoderResolution);
+            * Constants.DriveConstants.WHEEL_RADIUS
+            / Constants.DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
@@ -139,8 +139,8 @@ public class DriveTrain extends SubsystemBase {
     return rightMaster.getSelectedSensorPosition()
         * (2
             * Math.PI
-            * Constants.DriveConstants.wheelRadius
-            / Constants.DriveConstants.encoderResolution);
+            * Constants.DriveConstants.WHEEL_RADIUS
+            / Constants.DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
@@ -153,8 +153,8 @@ public class DriveTrain extends SubsystemBase {
     return leftMaster.getSelectedSensorVelocity()
         * (2
             * Math.PI
-            * Constants.DriveConstants.wheelRadius
-            / Constants.DriveConstants.encoderResolution);
+            * Constants.DriveConstants.WHEEL_RADIUS
+            / Constants.DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
@@ -167,8 +167,8 @@ public class DriveTrain extends SubsystemBase {
     return rightMaster.getSelectedSensorVelocity()
         * (2
             * Math.PI
-            * Constants.DriveConstants.wheelRadius
-            / Constants.DriveConstants.encoderResolution);
+            * Constants.DriveConstants.WHEEL_RADIUS
+            / Constants.DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
