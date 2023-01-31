@@ -13,6 +13,7 @@ import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -184,6 +185,34 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+  }
+
+  /**
+   * Resets the odometry to the specified pose.
+   *
+   * @param pose The pose to which to set the odometry.
+   */
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    odometry.resetPosition(navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
+  }
+
+  /**
    * This method updates once per loop of the robot only in simulation mode. It is not run when
    * deployed to the physical robot.
    *
@@ -340,8 +369,7 @@ public class DriveTrain extends SubsystemBase {
         rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
 
     // Sets the motor controller speeds.
-    leftMaster.setVoltage(leftOutput + leftFeedforward);
-    rightMaster.setVoltage(rightOutput + rightFeedforward);
+    tankDriveVolts(leftOutput + leftFeedforward, rightOutput + rightFeedforward);
   }
 
   /**
@@ -398,6 +426,19 @@ public class DriveTrain extends SubsystemBase {
   public void arcadeDrive(double speed, double rot) {
     var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
     setSpeeds(wheelSpeeds);
+  }
+
+  /**
+   * Controls the left and right sides of the drive directly with voltages.
+   *
+   * @param leftVolts the commanded left output
+   * @param rightVolts the commanded right output
+   */
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    // Sets the motor controller speeds.
+    leftMaster.setVoltage(leftVolts);
+    rightMaster.setVoltage(rightVolts);
+    //    m_drive.feed();
   }
 
   /**
