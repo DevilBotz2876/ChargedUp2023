@@ -6,17 +6,16 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class ShuffleboardManager {
   public static SendableChooser<AutonomousModes> autoModeChooser = new SendableChooser<>();
-  ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+  private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
   public ShuffleboardManager() {
-    // get the default instance of NetworkTables
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    int connListenerHandle;
-    connListenerHandle =
+    int connListenerHandle =
         inst.addConnectionListener(
             true,
             event -> {
@@ -26,15 +25,19 @@ public class ShuffleboardManager {
                 System.out.println("Disconnected from " + event.connInfo.remote_id);
               }
             });
+
+    addDefaultWidgets();
+
+    initAutoModeChooser();
+  }
+
+  private void addDefaultWidgets() {
     driveTab
         .add("Auto Mode", autoModeChooser)
         .withWidget(BuiltInWidgets.kComboBoxChooser)
         .withPosition(0, 0)
         .withSize(2, 1);
-
-    initAutoModeChooser();
   }
-  // shuffleboard connect event
 
   private void initAutoModeChooser() {
     autoModeChooser.setDefaultOption("Backup Short", AutonomousModes.BACKUP_SHORT);
@@ -48,11 +51,11 @@ public class ShuffleboardManager {
   }
 
   // Put field
-  public void putField(Object field) {
+  public static void putField(Field2d field) {
     driveTab
         .add("Field", field)
-        .withWidget(BuiltInWidgets.kComboBoxChooser)
-        .withPosition(1, 0)
-        .withSize(3, 4);
+        .withWidget(BuiltInWidgets.kField)
+        .withPosition(2, 0)
+        .withSize(5, 3);
   }
 }

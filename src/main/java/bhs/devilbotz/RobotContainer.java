@@ -28,7 +28,7 @@ public class RobotContainer {
 
   private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
-  private final DriveTrain driveTrain = new DriveTrain(this);
+  private final DriveTrain driveTrain = new DriveTrain();
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
