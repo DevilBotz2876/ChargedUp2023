@@ -100,7 +100,6 @@ public class DriveTrain extends SubsystemBase {
         new DifferentialDriveOdometry(navx.getRotation2d(), getLeftDistance(), getRightDistance());
   }
 
-
   /**
    * This method updates once per loop of the robot.
    *
