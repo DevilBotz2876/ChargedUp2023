@@ -5,6 +5,11 @@
 
 package bhs.devilbotz;
 
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -35,20 +40,35 @@ public final class Constants {
     public static final double WHEEL_RADIUS =
         0.0762; // meters (Andymark am-0940b "High Grip Wheels, 6")
     public static final int ENCODER_RESOLUTION = 4096; // CTRE Magnetic Encoder
+    public static final int ENCODER_GEAR_RATIO = 1; // Encoder is connected directly to drive shaft
 
     // Drive PID values TODO: Tune
     public static final double DRIVE_P = 3.5725;
     public static final double DRIVE_I = 0.0;
     public static final double DRIVE_D = 0.0;
 
-    // Feedforward constants TODO: Tune
+    // Feedforward constants (straight-line) TODO: Tune
     public static final double DRIVE_FFS = 0.94143;
     public static final double DRIVE_FFV = 2.3803;
     public static final double DRIVE_FFA = 0.48128;
+
+    // Feedforward constants (rotating) TODO: Tune
+    public static final double DRIVE_ANGULAR_FFS = 1.5;
+    public static final double DRIVE_ANGULAR_FFV = 3;
+    public static final double DRIVE_ANGULAR_FFA = 0.3;
+
+    public static final LinearSystem<N2, N2, N2> DRIVE_PLANT =
+        LinearSystemId.identifyDrivetrainSystem(
+            DRIVE_FFV, DRIVE_FFA, DRIVE_ANGULAR_FFV, DRIVE_ANGULAR_FFA);
+
+    public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
+
     public static final int MOTOR_LEFT_MASTER_CAN_ID = 3;
     public static final int MOTOR_RIGHT_MASTER_CAN_ID = 4;
     public static final int MOTOR_LEFT_FOLLOWER_CAN_ID = 1;
     public static final int MOTOR_RIGHT_FOLLOWER_CAN_ID = 2;
+
+    public static final double MOTOR_GEAR_RATIO = 8.45;
   }
 
   public static class GripperConstants {

@@ -6,15 +6,21 @@ import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -77,6 +83,44 @@ public class DriveTrain extends SubsystemBase {
 
   private final ShuffleboardManager shuffleboardManager;
 
+  /* Object for simulated inputs into Talon. */
+  private static final TalonSRXSimCollection leftMasterSim = leftMaster.getSimCollection();
+  private static final TalonSRXSimCollection rightMasterSim = rightMaster.getSimCollection();
+
+  // Create the simulation model of our drivetrain
+  // (https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L61)
+  private DifferentialDrivetrainSim differentialDriveSim =
+      new DifferentialDrivetrainSim(
+          // Create a linear system from our identification gains.
+          Constants.DriveConstants.DRIVE_PLANT,
+          Constants.DriveConstants.MOTOR_CONFIGURATION,
+          Constants.DriveConstants.MOTOR_GEAR_RATIO,
+          Constants.DriveConstants.TRACK_WIDTH,
+          Constants.DriveConstants.WHEEL_RADIUS,
+
+          // The standard deviations for measurement noise:
+          // x and y:          0.001 m
+          // heading:          0.001 rad
+          // l and r velocity: 0.1   m/s
+          // l and r position: 0.005 m
+          VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
+
+  private int distanceToNativeUnits(double positionMeters) {
+    double wheelRotations = positionMeters / (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
+    double motorRotations = wheelRotations * DriveConstants.ENCODER_GEAR_RATIO;
+    int sensorCounts = (int) (motorRotations * DriveConstants.ENCODER_RESOLUTION);
+    return sensorCounts;
+  }
+
+  private int velocityToNativeUnits(double velocityMetersPerSecond) {
+    double wheelRotationsPerSecond =
+        velocityMetersPerSecond / (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
+    double motorRotationsPerSecond = wheelRotationsPerSecond * DriveConstants.ENCODER_GEAR_RATIO;
+    double motorRotationsPer100ms = motorRotationsPerSecond / 10;
+    int sensorCountsPer100ms = (int) (motorRotationsPer100ms * DriveConstants.ENCODER_RESOLUTION);
+    return sensorCountsPer100ms;
+  }
+
   /**
    * DriveTrain constructor This constructor sets up the drive train.
    *
@@ -111,6 +155,69 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // Updates the odometry of the drive train.
     updateOdometry();
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // Simulate motors
+    // (https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L145)
+    /* Pass the robot battery voltage to the simulated Talon SRXs */
+    leftMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
+    rightMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
+
+    /*
+     * CTRE simulation is low-level, so SimCollection inputs
+     * and outputs are not affected by SetInverted(). Only
+     * the regular user-level API calls are affected.
+     *
+     * WPILib expects +V to be forward.
+     * Positive motor output lead voltage is ccw. We observe
+     * on our physical robot that this is reverse for the
+     * right motor, so negate it.
+     *
+     * We are hard-coding the negation of the values instead of
+     * using getInverted() so we can catch a possible bug in the
+     * robot code where the wrong value is passed to setInverted().
+     */
+    differentialDriveSim.setInputs(
+        leftMasterSim.getMotorOutputLeadVoltage(), -rightMasterSim.getMotorOutputLeadVoltage());
+
+    /*
+     * Advance the model by 20 ms. Note that if you are running this
+     * subsystem in a separate thread or have changed the nominal
+     * timestep of TimedRobot, this value needs to match it.
+     */
+    differentialDriveSim.update(0.02);
+
+    // Simulate encoders
+    /*
+     * Update all of our sensors.
+     *
+     * Since WPILib's simulation class is assuming +V is forward,
+     * but -V is forward for the right motor, we need to negate the
+     * position reported by the simulation class. Basically, we
+     * negated the input, so we need to negate the output.
+     *
+     * We also observe on our physical robot that a positive voltage
+     * across the output leads results in a positive sensor velocity
+     * for both the left and right motors, so we do not need to negate
+     * the output any further.
+     * If we had observed that a positive voltage results in a negative
+     * sensor velocity, we would need to negate the output once more.
+     */
+    leftMasterSim.setQuadratureRawPosition(
+        distanceToNativeUnits(differentialDriveSim.getLeftPositionMeters()));
+    leftMasterSim.setQuadratureVelocity(
+        velocityToNativeUnits(differentialDriveSim.getLeftVelocityMetersPerSecond()));
+    rightMasterSim.setQuadratureRawPosition(
+        distanceToNativeUnits(-differentialDriveSim.getRightPositionMeters()));
+    rightMasterSim.setQuadratureVelocity(
+        velocityToNativeUnits(-differentialDriveSim.getRightVelocityMetersPerSecond()));
+
+    // Simulate navX (https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/)
+    int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+    SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    angle.set(-differentialDriveSim.getHeading().getDegrees());
   }
 
   /**
