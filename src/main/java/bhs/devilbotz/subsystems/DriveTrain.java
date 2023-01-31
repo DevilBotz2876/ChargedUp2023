@@ -75,24 +75,19 @@ public class DriveTrain extends SubsystemBase {
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
 
-  private final ShuffleboardManager shuffleboardManager;
-
   /**
    * DriveTrain constructor This constructor sets up the drive train.
    *
    * @since 1/30/2023
    */
-  public DriveTrain(RobotContainer robotContainer) {
-    this.shuffleboardManager = robotContainer.getShuffleboardManager();
-
+  public DriveTrain() {
     // Sets the motor controllers to the correct mode & inverts the right side
     setupTalons();
     // Sets the initial position of the robot to (0, 0) and the initial angle to 0 degrees.
     resetNavx();
     resetEncoders();
 
-    // Adds the field to Shuffleboard.
-    shuffleboardManager.putField(field);
+    ShuffleboardManager.putField(field);
 
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
