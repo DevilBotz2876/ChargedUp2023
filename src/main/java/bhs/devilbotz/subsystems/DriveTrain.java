@@ -267,7 +267,7 @@ public class DriveTrain extends SubsystemBase {
    *
    * @since 1/30/2023
    */
-  public void updateOdometry() {
+  private void updateOdometry() {
     odometry.update(navx.getRotation2d(), getLeftDistance(), getRightDistance());
     field.setRobotPose(odometry.getPoseMeters());
   }

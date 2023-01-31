@@ -74,8 +74,4 @@ public class RobotContainer {
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
   }
-
-  public DriveTrain getDriveTrain() {
-    return driveTrain;
-  }
 }
