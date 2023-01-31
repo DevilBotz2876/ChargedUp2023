@@ -4,7 +4,6 @@ import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.utils.ShuffleboardManager;
-import bhs.devilbotz.Constants.DriveConstants;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
