@@ -10,10 +10,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class ShuffleboardManager {
   public static SendableChooser<AutonomousModes> autoModeChooser = new SendableChooser<>();
+  ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
   public ShuffleboardManager() {
-    ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
-
     // get the default instance of NetworkTables
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     int connListenerHandle;
@@ -46,5 +45,14 @@ public class ShuffleboardManager {
 
   public void updateValues() {
     // TODO: add values to update on shuffleboard
+  }
+
+  // Put field
+  public void putField(Object field) {
+    driveTab
+        .add("Field", field)
+        .withWidget(BuiltInWidgets.kComboBoxChooser)
+        .withPosition(1, 0)
+        .withSize(3, 4);
   }
 }
