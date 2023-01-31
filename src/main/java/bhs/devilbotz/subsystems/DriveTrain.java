@@ -80,12 +80,16 @@ public class DriveTrain extends SubsystemBase {
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
 
-  /* Object for simulated inputs into Talon. */
+  // Object for simulated inputs into Talon. 
   private static final TalonSRXSimCollection leftMasterSim = leftMaster.getSimCollection();
   private static final TalonSRXSimCollection rightMasterSim = rightMaster.getSimCollection();
 
-  // Create the simulation model of our drivetrain
-  // (https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L61)
+  /**
+   * Create the simulation model of our drivetrain
+   *
+   * @see <a href="https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L6">DifferentialDrive Simulation Example</a>
+   * @since 1/31/2023
+   */
   private DifferentialDrivetrainSim differentialDriveSim =
       new DifferentialDrivetrainSim(
           // Create a linear system from our identification gains.
