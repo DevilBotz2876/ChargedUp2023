@@ -14,7 +14,8 @@ public class DriveCommand extends CommandBase {
   private final SlewRateLimiter speedSlewRateLimiter =
       new SlewRateLimiter(Constants.DriveConstants.SLEW_RATE_LIMITER);
 
-  private final SlewRateLimiter rotationSlewRateLimiter = new SlewRateLimiter(Constants.DriveConstants.SLEW_RATE_LIMITER);
+  private final SlewRateLimiter rotationSlewRateLimiter =
+      new SlewRateLimiter(Constants.DriveConstants.SLEW_RATE_LIMITER);
 
   public DriveCommand(DriveTrain drive, DoubleSupplier speed, DoubleSupplier rot) {
     this.drive = drive;
