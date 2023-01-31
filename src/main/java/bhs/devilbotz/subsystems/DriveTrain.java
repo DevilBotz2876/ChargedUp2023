@@ -3,6 +3,7 @@ package bhs.devilbotz.subsystems;
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import bhs.devilbotz.Constants.DriveConstants;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -30,10 +31,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DriveTrain extends SubsystemBase {
   // Defines the motor controllers for both sides of the drive train (left and right).
 
-  private static final WPI_TalonSRX leftMaster = new WPI_TalonSRX(3);
-  private static final WPI_TalonSRX rightMaster = new WPI_TalonSRX(4);
-  private static final WPI_TalonSRX leftFollower = new WPI_TalonSRX(1);
-  private static final WPI_TalonSRX rightFollower = new WPI_TalonSRX(2);
+  private static final WPI_TalonSRX leftMaster =
+      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_MASTER_CAN_ID);
+  private static final WPI_TalonSRX rightMaster =
+      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_MASTER_CAN_ID);
+  private static final WPI_TalonSRX leftFollower =
+      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_FOLLOWER_CAN_ID);
+  private static final WPI_TalonSRX rightFollower =
+      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_FOLLOWER_CAN_ID);
 
   // Defines the NAVX, which is a gyroscope that we use to track the robot's position.
   // It is attached to the robot via SPI (Serial Peripheral Interface).
