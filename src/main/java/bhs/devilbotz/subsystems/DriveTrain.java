@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -83,7 +84,8 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   public DriveTrain(RobotContainer robotContainer) {
-    this.shuffleboardManager = robotContainer.getShuffleboardManager();
+
+    shuffleboardManager = robotContainer.getShuffleboardManager();
 
     // Sets the motor controllers to the correct mode & inverts the right side
     setupTalons();
@@ -91,14 +93,15 @@ public class DriveTrain extends SubsystemBase {
     resetNavx();
     resetEncoders();
 
-    // Adds the field to Shuffleboard.
-    shuffleboardManager.putField(field);
+
+    ShuffleboardManager.putField(field);
 
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
     odometry =
         new DifferentialDriveOdometry(navx.getRotation2d(), getLeftDistance(), getRightDistance());
   }
+
 
   /**
    * This method updates once per loop of the robot.
