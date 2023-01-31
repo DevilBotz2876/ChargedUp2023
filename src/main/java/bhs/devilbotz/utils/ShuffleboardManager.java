@@ -16,15 +16,15 @@ public class ShuffleboardManager {
   public ShuffleboardManager() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     int connListenerHandle =
-            inst.addConnectionListener(
-                    true,
-                    event -> {
-                      if (event.is(NetworkTableEvent.Kind.kConnected)) {
-                        System.out.println("Connected to " + event.connInfo.remote_id);
-                      } else if (event.is(NetworkTableEvent.Kind.kDisconnected)) {
-                        System.out.println("Disconnected from " + event.connInfo.remote_id);
-                      }
-                    });
+        inst.addConnectionListener(
+            true,
+            event -> {
+              if (event.is(NetworkTableEvent.Kind.kConnected)) {
+                System.out.println("Connected to " + event.connInfo.remote_id);
+              } else if (event.is(NetworkTableEvent.Kind.kDisconnected)) {
+                System.out.println("Disconnected from " + event.connInfo.remote_id);
+              }
+            });
 
     addDefaultWidgets();
 
