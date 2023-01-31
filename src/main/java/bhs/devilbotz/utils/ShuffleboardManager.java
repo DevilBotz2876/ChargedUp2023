@@ -33,10 +33,10 @@ public class ShuffleboardManager {
 
   private void addDefaultWidgets() {
     driveTab
-            .add("Auto Mode", autoModeChooser)
-            .withWidget(BuiltInWidgets.kComboBoxChooser)
-            .withPosition(0, 0)
-            .withSize(2, 1);
+        .add("Auto Mode", autoModeChooser)
+        .withWidget(BuiltInWidgets.kComboBoxChooser)
+        .withPosition(0, 0)
+        .withSize(2, 1);
   }
 
   private void initAutoModeChooser() {
