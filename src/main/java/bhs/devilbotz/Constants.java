@@ -57,10 +57,12 @@ public final class Constants {
     public static final double DRIVE_ANGULAR_FFV = 3;
     public static final double DRIVE_ANGULAR_FFA = 0.3;
 
+    // Create a linear system from our system identification gains.
     public static final LinearSystem<N2, N2, N2> DRIVE_PLANT =
         LinearSystemId.identifyDrivetrainSystem(
             DRIVE_FFV, DRIVE_FFA, DRIVE_ANGULAR_FFV, DRIVE_ANGULAR_FFA);
 
+    // Dual Talon SRX CIM motors on each side of drive train
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
 
     public static final int MOTOR_LEFT_MASTER_CAN_ID = 3;

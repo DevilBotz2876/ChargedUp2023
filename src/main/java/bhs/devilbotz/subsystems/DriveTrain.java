@@ -80,14 +80,19 @@ public class DriveTrain extends SubsystemBase {
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
 
-  // Object for simulated inputs into Talon. 
+  // Object for simulated inputs into Talon.
   private static final TalonSRXSimCollection leftMasterSim = leftMaster.getSimCollection();
   private static final TalonSRXSimCollection rightMasterSim = rightMaster.getSimCollection();
 
   /**
-   * Create the simulation model of our drivetrain
+   * The simulation model of our drivetrain
    *
-   * @see <a href="https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L6">DifferentialDrive Simulation Example</a>
+   * @see <a
+   *     href="https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/drivesim-tutorial/drivetrain-model.html">Creating
+   *     a Drivetrain Model</a>
+   * @see <a
+   *     href="https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L6">CTRE
+   *     DifferentialDrive Simulation Example</a>
    * @since 1/31/2023
    */
   private DifferentialDrivetrainSim differentialDriveSim =
@@ -106,6 +111,18 @@ public class DriveTrain extends SubsystemBase {
           // l and r position: 0.005 m
           VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
+  /**
+   * Helper function to convert position (in meters) to Talon SRX encoder native units. Used for
+   * Simulation.
+   *
+   * @param positionMeters The robot's current position (in meters)
+   * @return The robot's current position in native units (sensorCount)
+   * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureRawPosition(int)
+   * @see <a
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L208">CTRE
+   *     Sample Code</a>
+   * @since 1/31/2023
+   */
   private int distanceToNativeUnits(double positionMeters) {
     double wheelRotations = positionMeters / (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
     double motorRotations = wheelRotations * DriveConstants.ENCODER_GEAR_RATIO;
@@ -113,6 +130,16 @@ public class DriveTrain extends SubsystemBase {
     return sensorCounts;
   }
 
+  /**
+   * Helper function to convert velocity to Talon SRX encoder native units. Used for Simulation.
+   *
+   * @param velocityMetersPerSecond The robot's current velocity (in meter/second)
+   * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
+   * @see <a
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L215">CTRE
+   *     Sample Code</a>
+   * @since 1/31/2023
+   */
   private int velocityToNativeUnits(double velocityMetersPerSecond) {
     double wheelRotationsPerSecond =
         velocityMetersPerSecond / (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
@@ -155,11 +182,26 @@ public class DriveTrain extends SubsystemBase {
     updateOdometry();
   }
 
+  /**
+   * This method updates once per loop of the robot only in simulation mode. It is not run when
+   * deployed to the physical robot.
+   *
+   * @see <a
+   *     href="https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/device-sim.html">Device
+   *     Simulation</a>
+   * @since 1/30/2023
+   */
   @Override
   public void simulationPeriodic() {
-    // Simulate motors
-    // (https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L145)
-    /* Pass the robot battery voltage to the simulated Talon SRXs */
+    /**
+     * Simulate motors and integrated sensors
+     *
+     * @see <a
+     *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L144"</a>
+     * @since 1/30/2023
+     */
+
+    // Pass the robot battery voltage to the simulated Talon SRXs
     leftMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
     rightMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
 
@@ -187,7 +229,6 @@ public class DriveTrain extends SubsystemBase {
      */
     differentialDriveSim.update(0.02);
 
-    // Simulate encoders
     /*
      * Update all of our sensors.
      *
@@ -212,7 +253,11 @@ public class DriveTrain extends SubsystemBase {
     rightMasterSim.setQuadratureVelocity(
         velocityToNativeUnits(-differentialDriveSim.getRightVelocityMetersPerSecond()));
 
-    // Simulate navX (https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/)
+    /**
+     * Simulate navX
+     *
+     * @see <a href="https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/"</a>
+     */
     int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
     SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
     angle.set(-differentialDriveSim.getHeading().getDegrees());
