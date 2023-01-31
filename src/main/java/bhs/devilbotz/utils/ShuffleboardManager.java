@@ -1,6 +1,5 @@
 package bhs.devilbotz.utils;
 
-import bhs.devilbotz.Robot;
 import bhs.devilbotz.lib.AutonomousModes;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
