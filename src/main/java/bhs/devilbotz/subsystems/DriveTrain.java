@@ -134,6 +134,7 @@ public class DriveTrain extends SubsystemBase {
    * Helper function to convert velocity to Talon SRX encoder native units. Used for Simulation.
    *
    * @param velocityMetersPerSecond The robot's current velocity (in meter/second)
+   * @return The robot's current velocity in native units (encoderCounts per 100ms)
    * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
    * @see <a
    *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L215">CTRE
