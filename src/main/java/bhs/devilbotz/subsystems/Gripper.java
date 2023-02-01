@@ -19,9 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Gripper extends SubsystemBase {
   DoubleSolenoid gripperSolenoid;
 
-  /**
-   * The constructor for the gripper subsystem.
-   */
+  /** The constructor for the gripper subsystem. */
   public Gripper() {
     gripperSolenoid =
         new DoubleSolenoid(
@@ -30,23 +28,17 @@ public class Gripper extends SubsystemBase {
             Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
   }
 
-  /**
-   * This method opens the gripper.
-   */
+  /** This method opens the gripper. */
   public void open() {
     gripperSolenoid.set(Value.kForward);
   }
 
-  /**
-   * This method closes the gripper.
-   */
+  /** This method closes the gripper. */
   public void close() {
     gripperSolenoid.set(Value.kReverse);
   }
 
-  /**
-   * This method sets the grippers speed to 0.
-   */
+  /** This method sets the grippers speed to 0. */
   public void stop() {
     gripperSolenoid.set(Value.kOff);
   }

@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class GripperOpen extends CommandBase {
   private final Gripper gripper;
 
-    /**
-     * The constructor for the gripper open command.
-     *
-     * @param gripper The gripper subsystem.
-     */
+  /**
+   * The constructor for the gripper open command.
+   *
+   * @param gripper The gripper subsystem.
+   */
   public GripperOpen(Gripper gripper) {
     this.gripper = gripper;
     addRequirements(gripper);

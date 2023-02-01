@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
 
 /**
- * This is the command that is used to drive the robot. It takes in a speed and rotation value, and uses a slew rate
- * limiter to limit the acceleration of the robot.
+ * This is the command that is used to drive the robot. It takes in a speed and rotation value, and
+ * uses a slew rate limiter to limit the acceleration of the robot.
  *
  * @since 1/18/2023
  * @author ParkerMeyers
@@ -26,6 +26,7 @@ public class DriveCommand extends CommandBase {
 
   /**
    * The constructor for the drive command.
+   *
    * @param drive The drive train subsystem.
    * @param speed The speed of the robot.
    * @param rot The rotation of the robot.
@@ -39,6 +40,7 @@ public class DriveCommand extends CommandBase {
 
   /**
    * Called when the command is initially scheduled.
+   *
    * @see CommandBase#initialize()
    */
   @Override
@@ -46,6 +48,7 @@ public class DriveCommand extends CommandBase {
 
   /**
    * Called every time the scheduler runs while the command is scheduled.
+   *
    * @see CommandBase#execute()
    */
   @Override
@@ -65,6 +68,7 @@ public class DriveCommand extends CommandBase {
 
   /**
    * Called once the command ends or is interrupted.
+   *
    * @see CommandBase#end(boolean)
    */
   @Override
@@ -72,6 +76,7 @@ public class DriveCommand extends CommandBase {
 
   /**
    * Returns whether the command is finished.
+   *
    * @see CommandBase#isFinished()
    */
   @Override

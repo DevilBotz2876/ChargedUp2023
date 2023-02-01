@@ -21,11 +21,20 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
  * @since 1/9/2023
  */
 public final class Constants {
-  /** P value for the PID controller for the balance command. TODO: Change this to work with the drive PID values */
+  /**
+   * P value for the PID controller for the balance command. TODO: Change this to work with the
+   * drive PID values
+   */
   public static final double BALANCE_P = 0.39941;
-  /** I value for the PID controller for the balance command. TODO: Change this to work with the drive PID values */
+  /**
+   * I value for the PID controller for the balance command. TODO: Change this to work with the
+   * drive PID values
+   */
   public static final double BALANCE_I = 0.0;
-  /** D value for the PID controller for the balance command. TODO: Change this to work with the drive PID values */
+  /**
+   * D value for the PID controller for the balance command. TODO: Change this to work with the
+   * drive PID values
+   */
   public static final double BALANCE_D = 0.00;
 
   /**
@@ -34,7 +43,10 @@ public final class Constants {
    * @since 1/11/2023
    */
   public static class OperatorConstants {
-    /** The port for the joystick on the driver station. This is the main joystick and is used for driving */
+    /**
+     * The port for the joystick on the driver station. This is the main joystick and is used for
+     * driving
+     */
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 
@@ -72,35 +84,35 @@ public final class Constants {
 
     // Feedforward constants (straight-line) TODO: Tune
     /**
-     * The S value for the feedforward controller for the drive train. Gotten from SYSID
-     *  This is the static friction of the robot in a straight line.
+     * The S value for the feedforward controller for the drive train. Gotten from SYSID This is the
+     * static friction of the robot in a straight line.
      */
     public static final double DRIVE_FFS = 0.94143;
     /**
-     * The V value for the feedforward controller for the drive train. Gotten from SYSID
-     * This is the velocity gain of the robot in a straight line.
+     * The V value for the feedforward controller for the drive train. Gotten from SYSID This is the
+     * velocity gain of the robot in a straight line.
      */
     public static final double DRIVE_FFV = 2.3803;
     /**
-     * The A value for the feedforward controller for the drive train. Gotten from SYSID
-     * This is the acceleration gain of the robot in a straight line.
+     * The A value for the feedforward controller for the drive train. Gotten from SYSID This is the
+     * acceleration gain of the robot in a straight line.
      */
     public static final double DRIVE_FFA = 0.48128;
 
     // Feedforward constants (rotating) TODO: Tune
     /**
-     * The S value for the feedforward controller for the drive train. Gotten from SYSID
-     *  This is the static friction of the robot when rotating.
+     * The S value for the feedforward controller for the drive train. Gotten from SYSID This is the
+     * static friction of the robot when rotating.
      */
     public static final double DRIVE_ANGULAR_FFS = 1.5;
     /**
-     * The V value for the feedforward controller for the drive train. Gotten from SYSID
-     * This is the velocity gain of the robot when rotating.
+     * The V value for the feedforward controller for the drive train. Gotten from SYSID This is the
+     * velocity gain of the robot when rotating.
      */
     public static final double DRIVE_ANGULAR_FFV = 3;
     /**
-     * The A value for the feedforward controller for the drive train. Gotten from SYSID
-     * This is the acceleration gain of the robot when rotating.
+     * The A value for the feedforward controller for the drive train. Gotten from SYSID This is the
+     * acceleration gain of the robot when rotating.
      */
     public static final double DRIVE_ANGULAR_FFA = 0.3;
 
@@ -114,6 +126,7 @@ public final class Constants {
 
     /** The CAN IDs for the motors on the drive train */
     public static final int MOTOR_LEFT_MASTER_CAN_ID = 3;
+
     public static final int MOTOR_RIGHT_MASTER_CAN_ID = 4;
     public static final int MOTOR_LEFT_FOLLOWER_CAN_ID = 1;
     public static final int MOTOR_RIGHT_FOLLOWER_CAN_ID = 2;

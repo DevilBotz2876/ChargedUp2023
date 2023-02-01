@@ -18,11 +18,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class ShuffleboardManager {
   /** The auto mode chooser for network tables */
   public static SendableChooser<AutonomousModes> autoModeChooser = new SendableChooser<>();
+
   private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
-  /**
-   * The constructor for the shuffleboard manager.
-   */
+  /** The constructor for the shuffleboard manager. */
   public ShuffleboardManager() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     int connListenerHandle =
@@ -56,15 +55,14 @@ public class ShuffleboardManager {
     autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
   }
 
-    /**
-     * Updates the values on the shuffleboard.
-     */
+  /** Updates the values on the shuffleboard. */
   public void updateValues() {
     // TODO: add values to update on shuffleboard
   }
 
   /**
    * Puts the field on the shuffleboard.
+   *
    * @param field The field to put on the shuffleboard.
    */
   public static void putField(Field2d field) {

@@ -32,7 +32,8 @@ public class RobotContainer {
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
-  private final Joystick joystick = new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
+  private final Joystick joystick =
+      new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
