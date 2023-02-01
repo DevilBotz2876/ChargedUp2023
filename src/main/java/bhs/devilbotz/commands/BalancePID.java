@@ -11,6 +11,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * This command is a PID controller that balances the robot on the charge platform.
+ *
+ * @since 1/21/2023
+ * @author firydragon57
+ */
 public class BalancePID extends CommandBase {
   /** Creates a new BalancePID. */
   // TODO: Add a feedforward term to the PID controller and tune pid
@@ -18,6 +24,10 @@ public class BalancePID extends CommandBase {
   // private double levelAngle;
   private final PIDController pid;
 
+  /**
+   * The constructor for the balance PID command.
+   * @param drive The drive train subsystem.
+   */
   public BalancePID(DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
