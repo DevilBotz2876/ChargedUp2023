@@ -19,6 +19,8 @@ public final class Main {
    * Main initialization method. Do not perform any initialization here.
    *
    * <p>If you change your main Robot class (name), change the parameter type.
+   *
+   * @param args The command line arguments
    */
   public static void main(String... args) {
     RobotBase.startRobot(Robot::new);
