@@ -9,18 +9,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ArmIdle extends CommandBase {
   /** Creates a new ArmIdle. */
-  private Arm _arm;
+  private Arm arm;
 
   public ArmIdle(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    _arm = arm;
-    addRequirements(_arm);
+    this.arm = arm;
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _arm.stop();
+    arm.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
