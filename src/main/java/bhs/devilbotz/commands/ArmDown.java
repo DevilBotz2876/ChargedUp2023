@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ArmDown extends CommandBase {
   /** Creates a new ArmDown. */
-  private Arm _arm;
+  private Arm arm;
 
   public ArmDown(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    _arm = arm;
-    addRequirements(_arm);
+    this.arm = arm;
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +24,7 @@ public class ArmDown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _arm.Down(-0.5);
+    arm.down(-0.5);
   }
 
   // Called once the command ends or is interrupted.

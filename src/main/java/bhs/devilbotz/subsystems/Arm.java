@@ -23,12 +23,12 @@ public class Arm extends SubsystemBase {
     return armUp;
   }
 
-  public void Up(double speed) {
+  public void up(double speed) {
     armMotor.set(speed);
     armUp = true;
   }
 
-  public void Down(double speed) {
+  public void down(double speed) {
     armMotor.set(-speed);
     armUp = false;
   }

@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ArmUp extends CommandBase {
   /** Creates a new ArmUp. */
-  private Arm _arm;
+  private Arm arm;
 
   public ArmUp(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    _arm = arm;
-    addRequirements(_arm);
+    this.arm = arm;
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +24,7 @@ public class ArmUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _arm.Up(0.5);
+    arm.up(0.5);
   }
 
   // Called once the command ends or is interrupted.
