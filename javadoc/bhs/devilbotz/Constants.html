@@ -79,6 +79,10 @@ loadScripts(document, 'script');</script>
 
  <p>It is advised to statically import this class (or one of its inner classes) wherever the
  constants are needed, to reduce verbosity.</div>
+<dl class="notes">
+<dt>Since:</dt>
+<dd>1/9/2023</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -93,13 +97,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="Constants.DriveConstants.html" class="type-name-link" title="class in bhs.devilbotz">Constants.DriveConstants</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Drive constants are for the drive train subsystem characteristics.</div>
+</div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="Constants.GripperConstants.html" class="type-name-link" title="class in bhs.devilbotz">Constants.GripperConstants</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Gripper constants are for the gripper subsystem</div>
+</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="Constants.OperatorConstants.html" class="type-name-link" title="class in bhs.devilbotz">Constants.OperatorConstants</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Operator constants are for the operator interface (joysticks, buttons, etc.).</div>
+</div>
 </div>
 </section>
 </li>
@@ -114,16 +124,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final double</code></div>
 <div class="col-second even-row-color"><code><a href="#BALANCE_D" class="member-name-link">BALANCE_D</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">D value for the PID controller for the balance command.</div>
+</div>
 <div class="col-first odd-row-color"><code>static final double</code></div>
 <div class="col-second odd-row-color"><code><a href="#BALANCE_I" class="member-name-link">BALANCE_I</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">I value for the PID controller for the balance command.</div>
+</div>
 <div class="col-first even-row-color"><code>static final double</code></div>
 <div class="col-second even-row-color"><code><a href="#BALANCE_P" class="member-name-link">BALANCE_P</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#JOYSTICK_PORT" class="member-name-link">JOYSTICK_PORT</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">P value for the PID controller for the balance command.</div>
+</div>
 </div>
 </section>
 </li>
@@ -159,23 +172,11 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="JOYSTICK_PORT">
-<h3>JOYSTICK_PORT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">JOYSTICK_PORT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../constant-values.html#bhs.devilbotz.Constants.JOYSTICK_PORT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="BALANCE_P">
 <h3>BALANCE_P</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">BALANCE_P</span></div>
+<div class="block">P value for the PID controller for the balance command. TODO: Change this to work with the
+ drive PID values</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -190,6 +191,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="BALANCE_I">
 <h3>BALANCE_I</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">BALANCE_I</span></div>
+<div class="block">I value for the PID controller for the balance command. TODO: Change this to work with the
+ drive PID values</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -204,6 +207,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="BALANCE_D">
 <h3>BALANCE_D</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">BALANCE_D</span></div>
+<div class="block">D value for the PID controller for the balance command. TODO: Change this to work with the
+ drive PID values</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
