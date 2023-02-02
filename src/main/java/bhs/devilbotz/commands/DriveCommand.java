@@ -2,6 +2,7 @@ package bhs.devilbotz.commands;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
@@ -53,17 +54,28 @@ public class DriveCommand extends CommandBase {
    */
   @Override
   public void execute() {
+    //(a*(x^{3})+(b-a)*x)*c
+    double speed = this.speed.getAsDouble();
+    double rot = this.rot.getAsDouble();
+
+    double a = 0.7;
+    double b = 0.9091;
+    double c = 1.1;
+
+    speed = (a * (speed * speed * speed) + (b - a) * speed) * c;
+    rot = (a * (rot * rot * rot) + (b - a) * rot) * c;
+
     // The joysticks are inverted, so negate the values
-    final var speed =
+    final var calculatedSpeed =
         -speedSlewRateLimiter.calculate(
-            this.speed.getAsDouble() * Constants.DriveConstants.MAX_SPEED);
+            speed * Constants.DriveConstants.MAX_SPEED);
 
     // The rotation is inverted, so negate the value
-    final var rot =
+    final var calculatedRot =
         -rotationSlewRateLimiter.calculate(
-            this.rot.getAsDouble() * Constants.DriveConstants.MAX_ANGULAR_SPEED);
+            rot * Constants.DriveConstants.MAX_ANGULAR_SPEED);
 
-    drive.arcadeDrive(speed, rot);
+    drive.arcadeDrive(calculatedSpeed, calculatedRot);
   }
 
   /**
