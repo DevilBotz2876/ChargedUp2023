@@ -56,6 +56,10 @@ public final class Constants {
    * @since 1/26/2023
    */
   public static class DriveConstants {
+    /**
+     * The deadband for the joystick. This is the minimum value that the joystick must be at to move
+     * the robot.
+     */
     public static final double JOYSTICK_DEADBAND = 0.035;
 
     /** The maximum acceleration of the robot in units per second */

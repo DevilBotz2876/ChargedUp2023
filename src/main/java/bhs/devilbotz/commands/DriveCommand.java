@@ -64,10 +64,16 @@ public class DriveCommand extends CommandBase {
     rot = MathUtil.applyDeadband(rot, Constants.DriveConstants.JOYSTICK_DEADBAND);
 
     // (a*(x^{3})+(b-a)*x)*c
+    // Plug this into the graphing calculator, such as Desmos to see the curve
     double a = 0.7;
     double b = 0.9091;
     double c = 1.1;
 
+    /*
+     This is the equation that is used to calculate the speed of the robot. It is a cubic function
+     that is used to make the robot accelerate slower at the beginning of the joystick movement to allow
+     for more precise control.
+    */
     speed = (a * (speed * speed * speed) + (b - a) * speed) * c;
     rot = (a * (rot * rot * rot) + (b - a) * rot) * c;
 
