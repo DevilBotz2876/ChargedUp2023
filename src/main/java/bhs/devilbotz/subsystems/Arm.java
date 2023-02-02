@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
-  private WPI_TalonSRX armMotor;
+  private final WPI_TalonSRX armMotor;
 
   private boolean armUp;
 
