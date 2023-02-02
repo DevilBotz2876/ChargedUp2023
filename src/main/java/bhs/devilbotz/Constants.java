@@ -56,6 +56,8 @@ public final class Constants {
    * @since 1/26/2023
    */
   public static class DriveConstants {
+    public static final double JOYSTICK_DEADBAND = 0.035;
+
     /** The maximum acceleration of the robot in units per second */
     public static final double SLEW_RATE_LIMITER = 2.5;
     /** The maximum speed of the robot in meters per second */

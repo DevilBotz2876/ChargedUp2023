@@ -54,10 +54,16 @@ public class DriveCommand extends CommandBase {
    */
   @Override
   public void execute() {
-    //(a*(x^{3})+(b-a)*x)*c
-    double speed = this.speed.getAsDouble();
-    double rot = this.rot.getAsDouble();
+    // Clamp the values to the range [0.95, 0.95] to allow the PID loop some room to work
+    // TODO: replace clamp with dynamic range
+    double speed = MathUtil.clamp(this.speed.getAsDouble(), -0.95, 0.95);
+    double rot = MathUtil.clamp(this.rot.getAsDouble(), -0.95, 0.95);
 
+    // Add a deadband to the joystick values
+    speed = MathUtil.applyDeadband(speed, Constants.DriveConstants.JOYSTICK_DEADBAND);
+    rot = MathUtil.applyDeadband(rot, Constants.DriveConstants.JOYSTICK_DEADBAND);
+
+    //(a*(x^{3})+(b-a)*x)*c
     double a = 0.7;
     double b = 0.9091;
     double c = 1.1;
