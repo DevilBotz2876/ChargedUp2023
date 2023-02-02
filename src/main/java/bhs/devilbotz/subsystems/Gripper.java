@@ -5,6 +5,7 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -17,10 +18,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj
  */
 public class Gripper extends SubsystemBase {
-  DoubleSolenoid gripperSolenoid;
+  private final DoubleSolenoid gripperSolenoid;
+  private final static Compressor pcmCompressor = new Compressor(10, PneumaticsModuleType.CTREPCM);
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
+    pcmCompressor.enableDigital();
+    pcmCompressor.disable();
+
+    boolean enabled = pcmCompressor.isEnabled();
+    boolean pressureSwitch = pcmCompressor.getPressureSwitchValue();
     gripperSolenoid =
         new DoubleSolenoid(
             PneumaticsModuleType.CTREPCM,
@@ -52,5 +59,14 @@ public class Gripper extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(pcmCompressor.getPressure() + "\n " +
+            pcmCompressor.getPressureSwitchValue());
+
+  }
+
+  public static void enableCompressor() {
+    if (!pcmCompressor.isEnabled()) {
+      pcmCompressor.enableDigital();
+    }
   }
 }

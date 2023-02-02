@@ -7,6 +7,7 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -68,6 +69,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
+    Gripper.enableCompressor();
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -85,6 +87,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    Gripper.enableCompressor();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
