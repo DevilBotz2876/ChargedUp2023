@@ -15,7 +15,7 @@ public class Arm extends SubsystemBase {
   private boolean armUp;
 
   public Arm() {
-    armMotor = new WPI_TalonSRX(Constants.ARM_CAN_ID);
+    armMotor = new WPI_TalonSRX(Constants.ArmConstants.ARM_CAN_ID);
     armUp = false;
   }
 
