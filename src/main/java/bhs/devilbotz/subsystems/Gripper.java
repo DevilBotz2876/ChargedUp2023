@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Gripper extends SubsystemBase {
   private final DoubleSolenoid gripperSolenoid;
-  private final static Compressor pcmCompressor = new Compressor(10, PneumaticsModuleType.CTREPCM);
+  private static final Compressor pcmCompressor = new Compressor(10, PneumaticsModuleType.CTREPCM);
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
@@ -59,9 +59,8 @@ public class Gripper extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(pcmCompressor.getPressure() + "\n " +
-            pcmCompressor.getPressureSwitchValue());
-
+    System.out.println(
+        pcmCompressor.getPressure() + "\n " + pcmCompressor.getPressureSwitchValue());
   }
 
   public static void enableCompressor() {

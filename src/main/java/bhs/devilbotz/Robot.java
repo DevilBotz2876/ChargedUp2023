@@ -6,7 +6,6 @@
 package bhs.devilbotz;
 
 import bhs.devilbotz.lib.AutonomousModes;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.TimedRobot;
