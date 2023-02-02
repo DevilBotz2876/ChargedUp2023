@@ -66,7 +66,7 @@ public final class Constants {
     public static final double MAX_SPEED = 2.447; // meters per second TODO: Measure/SysID
     /** The maximum angular speed of the robot in radians per second */
     public static final double MAX_ANGULAR_SPEED =
-            2 * Math.PI; // one rotation per second TODO: Measure
+        2 * Math.PI; // one rotation per second TODO: Measure
 
     /** The track width of the robot in meters */
     public static final double TRACK_WIDTH = 0.555; // meters, robot width TODO: Measure
