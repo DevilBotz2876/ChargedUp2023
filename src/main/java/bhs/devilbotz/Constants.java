@@ -57,7 +57,7 @@ public final class Constants {
    */
   public static class DriveConstants {
     /** The maximum acceleration of the robot in units per second */
-    public static final double SLEW_RATE_LIMITER = 3;
+    public static final double SLEW_RATE_LIMITER = 2.5;
     /** The maximum speed of the robot in meters per second */
     public static final double MAX_SPEED = 2.447; // meters per second TODO: Measure/SysID
     /** The maximum angular speed of the robot in radians per second */
