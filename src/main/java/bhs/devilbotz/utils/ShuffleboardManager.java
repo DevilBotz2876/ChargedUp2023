@@ -9,10 +9,19 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+/**
+ * This class manages the shuffleboard.
+ *
+ * @since 1/18/2023
+ * @author ParkerMeyers
+ */
 public class ShuffleboardManager {
+  /** The auto mode chooser for network tables */
   public static SendableChooser<AutonomousModes> autoModeChooser = new SendableChooser<>();
+
   private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
+  /** The constructor for the shuffleboard manager. */
   public ShuffleboardManager() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     int connListenerHandle =
@@ -46,11 +55,16 @@ public class ShuffleboardManager {
     autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
   }
 
+  /** Updates the values on the shuffleboard. */
   public void updateValues() {
     // TODO: add values to update on shuffleboard
   }
 
-  // Put field
+  /**
+   * Puts the field on the shuffleboard.
+   *
+   * @param field The field to put on the shuffleboard.
+   */
   public static void putField(Field2d field) {
     driveTab
         .add("Field", field)

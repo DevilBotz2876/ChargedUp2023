@@ -7,9 +7,20 @@ package bhs.devilbotz.commands.gripper;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * This command stops the gripper.
+ *
+ * @since 1/25/2023
+ * @author joshuamanoj
+ */
 public class GripperIdle extends CommandBase {
   private final Gripper gripper;
 
+  /**
+   * The constructor for the gripper idle command.
+   *
+   * @param gripper The gripper subsystem.
+   */
   public GripperIdle(Gripper gripper) {
     this.gripper = gripper;
     addRequirements(gripper);
