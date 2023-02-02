@@ -32,7 +32,8 @@ public class RobotContainer {
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
-  private final Joystick joystick = new Joystick(Constants.JOYSTICK_PORT);
+  private final Joystick joystick =
+      new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -52,14 +53,20 @@ public class RobotContainer {
    */
   private void configureBindings() {
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
-    // Just for testing
+
+    // For testing
     new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
   }
 
   private void buildAutoCommands() {
-    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto());
+    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
   }
 
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
     Command autonomousCommand = autoCommands.get(autoMode);
 
@@ -70,6 +77,11 @@ public class RobotContainer {
     return autonomousCommand;
   }
 
+  /**
+   * Returns the {@link ShuffleboardManager} instance.
+   *
+   * @return the {@link ShuffleboardManager} instance
+   */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
   }

@@ -4,22 +4,35 @@
 
 package bhs.devilbotz.commands;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * This command is a PID controller that balances the robot on the charge platform.
+ *
+ * @since 1/21/2023
+ * @author firydragon57
+ */
 public class BalancePID extends CommandBase {
   /** Creates a new BalancePID. */
-  private final DriveTrain m_drive;
+  // TODO: Add a feedforward term to the PID controller and tune pid
+  private final DriveTrain drive;
   // private double levelAngle;
-  PIDController pid;
+  private final PIDController pid;
 
+  /**
+   * The constructor for the balance PID command.
+   *
+   * @param drive The drive train subsystem.
+   */
   public BalancePID(DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    pid = new PIDController(0.07, 0, 0.01);
+    this.drive = drive;
+    pid = new PIDController(Constants.BALANCE_P, Constants.BALANCE_I, Constants.BALANCE_D);
     addRequirements(drive);
   }
 
@@ -27,37 +40,32 @@ public class BalancePID extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("BalancePID start");
-    m_drive.arcadeDrive(0, 0);
-    // m_drive.resetEncoders();
-
+    drive.arcadeDrive(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double error = pid.calculate(m_drive.getRoll(), 0);
+    double error = pid.calculate(drive.getRoll(), 0);
     double output = MathUtil.clamp(error, -0.5, 0.5);
 
-    m_drive.arcadeDrive(-output, 0);
+    drive.arcadeDrive(-output, 0);
 
     SmartDashboard.putNumber("error", error);
     SmartDashboard.putNumber("output", output);
-    SmartDashboard.putNumber("angle", m_drive.getRoll());
+    SmartDashboard.putNumber("angle", drive.getRoll());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.arcadeDrive(0, 0);
+    drive.arcadeDrive(0, 0);
     System.out.println("BalancePID Finished");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(pid.atSetpoint()) {
-    //   return true;
-    // }
     return false;
   }
 }
