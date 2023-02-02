@@ -50,7 +50,6 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 
-
   public static class ArmConstants {
     public static final int ARM_CAN_ID = 5;
   }
