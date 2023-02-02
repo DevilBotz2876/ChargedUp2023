@@ -63,7 +63,7 @@ public class DriveCommand extends CommandBase {
     speed = MathUtil.applyDeadband(speed, Constants.DriveConstants.JOYSTICK_DEADBAND);
     rot = MathUtil.applyDeadband(rot, Constants.DriveConstants.JOYSTICK_DEADBAND);
 
-    //(a*(x^{3})+(b-a)*x)*c
+    // (a*(x^{3})+(b-a)*x)*c
     double a = 0.7;
     double b = 0.9091;
     double c = 1.1;
@@ -73,13 +73,11 @@ public class DriveCommand extends CommandBase {
 
     // The joysticks are inverted, so negate the values
     final var calculatedSpeed =
-        -speedSlewRateLimiter.calculate(
-            speed * Constants.DriveConstants.MAX_SPEED);
+        -speedSlewRateLimiter.calculate(speed * Constants.DriveConstants.MAX_SPEED);
 
     // The rotation is inverted, so negate the value
     final var calculatedRot =
-        -rotationSlewRateLimiter.calculate(
-            rot * Constants.DriveConstants.MAX_ANGULAR_SPEED);
+        -rotationSlewRateLimiter.calculate(rot * Constants.DriveConstants.MAX_ANGULAR_SPEED);
 
     drive.arcadeDrive(calculatedSpeed, calculatedRot);
   }
