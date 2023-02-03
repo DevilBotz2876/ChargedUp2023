@@ -8,6 +8,7 @@ package bhs.devilbotz;
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.auto.BalanceAuto;
+import bhs.devilbotz.commands.auto.TestAuto;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.utils.ShuffleboardManager;
@@ -60,6 +61,8 @@ public class RobotContainer {
 
   private void buildAutoCommands() {
     autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
+
+    autoCommands.put(AutonomousModes.TEST, new TestAuto(driveTrain));
   }
 
   /**

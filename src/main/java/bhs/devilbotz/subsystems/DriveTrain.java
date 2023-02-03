@@ -2,16 +2,20 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.DriveConstants;
+import bhs.devilbotz.Constants.DriveConstants.SysId;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -22,6 +26,9 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -54,14 +61,10 @@ public class DriveTrain extends SubsystemBase {
   // These are used to control the speed of the motors proportionally to the speed of the wheels.
   private final PIDController leftPIDController =
       new PIDController(
-          Constants.DriveConstants.DRIVE_P,
-          Constants.DriveConstants.DRIVE_I,
-          Constants.DriveConstants.DRIVE_D);
+          SysId.FEED_BACK_VELOCITY_P, SysId.FEED_BACK_VELOCITY_I, SysId.FEED_BACK_VELOCITY_D);
   private final PIDController rightPIDController =
       new PIDController(
-          Constants.DriveConstants.DRIVE_P,
-          Constants.DriveConstants.DRIVE_I,
-          Constants.DriveConstants.DRIVE_D);
+          SysId.FEED_BACK_VELOCITY_P, SysId.FEED_BACK_VELOCITY_I, SysId.FEED_BACK_VELOCITY_D);
 
   // Defines the kinematics of the drive train, which is used to calculate the speed of the wheels.
   private final DifferentialDriveKinematics kinematics =
@@ -71,12 +74,10 @@ public class DriveTrain extends SubsystemBase {
   private final DifferentialDriveOdometry odometry;
 
   // Defines the feedforward of the drive train, which is used to calculate the voltage needed to
-  // move the robot.
+  // move the robot
   private final SimpleMotorFeedforward feedforward =
       new SimpleMotorFeedforward(
-          Constants.DriveConstants.DRIVE_FFS,
-          Constants.DriveConstants.DRIVE_FFV,
-          Constants.DriveConstants.DRIVE_FFA);
+          SysId.FEED_FORWARD_LINEAR_S, SysId.FEED_FORWARD_LINEAR_V, SysId.FEED_FORWARD_LINEAR_A);
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
@@ -99,18 +100,18 @@ public class DriveTrain extends SubsystemBase {
   private DifferentialDrivetrainSim differentialDriveSim =
       new DifferentialDrivetrainSim(
           // Create a linear system from our identification gains.
-          Constants.DriveConstants.DRIVE_PLANT,
-          Constants.DriveConstants.MOTOR_CONFIGURATION,
-          Constants.DriveConstants.MOTOR_GEAR_RATIO,
-          Constants.DriveConstants.TRACK_WIDTH,
-          Constants.DriveConstants.WHEEL_RADIUS,
+          SysId.PLANT,
+          DriveConstants.MOTOR_CONFIGURATION,
+          DriveConstants.MOTOR_GEAR_RATIO,
+          DriveConstants.TRACK_WIDTH,
+          DriveConstants.WHEEL_RADIUS,
 
           // The standard deviations for measurement noise:
           // x and y:          0.001 m
           // heading:          0.001 rad
           // l and r velocity: 0.1   m/s
           // l and r position: 0.005 m
-          VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
+          VecBuilder.fill(0.000, 0.000, 0.000, 0.0, 0.0, 0.000, 0.000));
 
   /**
    * Helper function to convert position (in meters) to Talon SRX encoder native units. Used for
@@ -209,6 +210,7 @@ public class DriveTrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
+    resetNavx();
     odometry.resetPosition(navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
   }
 
@@ -302,10 +304,7 @@ public class DriveTrain extends SubsystemBase {
    */
   private double getLeftDistance() {
     return leftMaster.getSelectedSensorPosition()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
@@ -317,10 +316,7 @@ public class DriveTrain extends SubsystemBase {
    */
   private double getRightDistance() {
     return rightMaster.getSelectedSensorPosition()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
@@ -331,10 +327,7 @@ public class DriveTrain extends SubsystemBase {
    */
   private double getLeftVelocity() {
     return leftMaster.getSelectedSensorVelocity()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
@@ -345,10 +338,7 @@ public class DriveTrain extends SubsystemBase {
    */
   private double getRightVelocity() {
     return rightMaster.getSelectedSensorVelocity()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
   }
 
   /**
@@ -472,5 +462,35 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getRoll() {
     return navx.getRoll();
+  }
+
+  // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              // Reset odometry for the first path you run during auto
+              if (isFirstPath) {
+                this.resetOdometry(traj.getInitialPose());
+              }
+            }),
+        new PPRamseteCommand(
+            traj,
+            this::getPose, // Pose supplier
+            new RamseteController(),
+            feedforward,
+            this.kinematics, // DifferentialDriveKinematics
+            this::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
+            new PIDController(SysId.FEED_BACK_VELOCITY_P, 0, SysId.FEED_BACK_VELOCITY_D),
+            new PIDController(SysId.FEED_BACK_VELOCITY_P, 0, SysId.FEED_BACK_VELOCITY_D),
+            this::tankDriveVolts, // Voltage biconsumer
+            true, // Should the path be automatically mirrored depending on alliance color.
+            // Optional, defaults to true
+            this // Requires this drive subsystem
+            ),
+        new InstantCommand(
+            () -> {
+              this.tankDriveVolts(0, 0);
+            }));
   }
 }

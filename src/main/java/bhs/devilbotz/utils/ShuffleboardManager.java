@@ -49,7 +49,8 @@ public class ShuffleboardManager {
   }
 
   private void initAutoModeChooser() {
-    autoModeChooser.setDefaultOption("Backup Short", AutonomousModes.BACKUP_SHORT);
+    autoModeChooser.setDefaultOption("Test", AutonomousModes.TEST);
+    autoModeChooser.addOption("Backup Short", AutonomousModes.BACKUP_SHORT);
     autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
     autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
     autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
