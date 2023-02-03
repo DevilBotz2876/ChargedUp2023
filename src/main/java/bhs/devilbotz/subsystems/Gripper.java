@@ -15,19 +15,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * This subsystem controls the gripper.
  *
  * @since 1/25/2023
- * @author joshuamanoj
+ * @author joshuamanoj & ParkerMeyers
  */
 public class Gripper extends SubsystemBase {
   private final DoubleSolenoid gripperSolenoid;
-  private static final Compressor pcmCompressor = new Compressor(10, PneumaticsModuleType.CTREPCM);
+  private static final Compressor pcmCompressor =
+      new Compressor(Constants.GripperConstants.COMPRESSOR_CAN_ID, PneumaticsModuleType.CTREPCM);
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
     pcmCompressor.enableDigital();
     pcmCompressor.disable();
 
-    boolean enabled = pcmCompressor.isEnabled();
-    boolean pressureSwitch = pcmCompressor.getPressureSwitchValue();
     gripperSolenoid =
         new DoubleSolenoid(
             PneumaticsModuleType.CTREPCM,
@@ -57,15 +56,15 @@ public class Gripper extends SubsystemBase {
    *     Based Programming</a>
    */
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    System.out.println(
-        pcmCompressor.getPressure() + "\n " + pcmCompressor.getPressureSwitchValue());
-  }
+  public void periodic() {}
 
   public static void enableCompressor() {
     if (!pcmCompressor.isEnabled()) {
       pcmCompressor.enableDigital();
     }
+  }
+
+  public static boolean getAtSetpoint() {
+    return pcmCompressor.getPressureSwitchValue();
   }
 }
