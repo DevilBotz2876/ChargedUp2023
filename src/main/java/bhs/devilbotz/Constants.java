@@ -56,8 +56,14 @@ public final class Constants {
    * @since 1/26/2023
    */
   public static class DriveConstants {
+    /**
+     * The deadband for the joystick. This is the minimum value that the joystick must be at to move
+     * the robot.
+     */
+    public static final double JOYSTICK_DEADBAND = 0.035;
+
     /** The maximum acceleration of the robot in units per second */
-    public static final double SLEW_RATE_LIMITER = 3;
+    public static final double SLEW_RATE_LIMITER = 2.5;
     /** The maximum speed of the robot in meters per second */
     public static final double MAX_SPEED = 2.447; // meters per second TODO: Measure/SysID
     /** The maximum angular speed of the robot in radians per second */
