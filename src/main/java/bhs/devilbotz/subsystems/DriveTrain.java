@@ -142,12 +142,40 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/31/2023
    */
   private int velocityToNativeUnits(double velocityMetersPerSecond) {
-    double wheelRotationsPerSecond =
-        velocityMetersPerSecond / (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
-    double motorRotationsPerSecond = wheelRotationsPerSecond * DriveConstants.ENCODER_GEAR_RATIO;
-    double motorRotationsPer100ms = motorRotationsPerSecond / 10;
-    int sensorCountsPer100ms = (int) (motorRotationsPer100ms * DriveConstants.ENCODER_RESOLUTION);
-    return sensorCountsPer100ms;
+    return distanceToNativeUnits(velocityMetersPerSecond)/10;
+  }
+
+  /**
+   * Helper function to convert Talon SRX sensor counts to meters. Used for Simulation.
+   *
+   * @param sensorCounts The robot's encoder count
+   * @return The robot's current position in meters
+   * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
+   * @see <a
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L223">CTRE
+   *     Sample Code</a>
+   * @since 1/31/2023
+   */
+  private double nativeUnitsToDistanceMeters(double sensorCounts) {
+    double motorRotations = (double)sensorCounts / DriveConstants.ENCODER_RESOLUTION;
+    double wheelRotations = motorRotations / DriveConstants.ENCODER_GEAR_RATIO;
+    double positionMeters = wheelRotations * (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
+    return positionMeters;
+  }
+
+  /**
+   * Helper function to convert Talon SRX sensor counts per 100ms to meters/second. Used for Simulation.
+   *
+   * @param sensorCounts The robot's encoder count per 100ms
+   * @return The robot's current velocity in meters per second
+   * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
+   * @see <a
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L223">CTRE
+   *     Sample Code</a>
+   * @since 1/31/2023
+   */
+  private double nativeUnitsToVelocityMetersPerSecond(double sensorCountsPer100ms) {
+    return nativeUnitsToDistanceMeters(10*sensorCountsPer100ms);
   }
 
   /**
@@ -272,8 +300,7 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   private double getLeftDistance() {
-    return leftMaster.getSelectedSensorPosition()
-        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
+    return nativeUnitsToDistanceMeters(leftMaster.getSelectedSensorPosition());
   }
 
   /**
@@ -284,8 +311,7 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   private double getRightDistance() {
-    return rightMaster.getSelectedSensorPosition()
-        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
+    return nativeUnitsToDistanceMeters(rightMaster.getSelectedSensorPosition());
   }
 
   /**
@@ -295,8 +321,7 @@ public class DriveTrain extends SubsystemBase {
    * @see #getRightVelocity()
    */
   private double getLeftVelocity() {
-    return leftMaster.getSelectedSensorVelocity()
-        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
+    return nativeUnitsToVelocityMetersPerSecond(leftMaster.getSelectedSensorVelocity());
   }
 
   /**
@@ -306,8 +331,7 @@ public class DriveTrain extends SubsystemBase {
    * @see #getLeftVelocity()
    */
   private double getRightVelocity() {
-    return rightMaster.getSelectedSensorVelocity()
-        * (2 * Math.PI * DriveConstants.WHEEL_RADIUS / DriveConstants.ENCODER_RESOLUTION);
+    return nativeUnitsToVelocityMetersPerSecond(rightMaster.getSelectedSensorVelocity());
   }
 
   /**
