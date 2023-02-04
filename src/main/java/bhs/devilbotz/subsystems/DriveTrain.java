@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -462,6 +463,9 @@ public class DriveTrain extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
+    SmartDashboard.putNumber("Volts Left", leftVolts);
+    SmartDashboard.putNumber("Volts Right", rightVolts);
+    
     // Sets the motor controller speeds.
     leftMaster.setVoltage(leftVolts);
     rightMaster.setVoltage(rightVolts);
@@ -487,8 +491,13 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   private void updateOdometry() {
+    Pose2d currentPose = odometry.getPoseMeters();
     odometry.update(navx.getRotation2d(), getLeftDistance(), getRightDistance());
-    field.setRobotPose(odometry.getPoseMeters());
+    field.setRobotPose(currentPose);
+
+    SmartDashboard.putNumber("Current X", currentPose.getX());
+    SmartDashboard.putNumber("Current Y", currentPose.getY());
+    SmartDashboard.putNumber("Current Angle", currentPose.getRotation().getDegrees());
   }
 
   /**
@@ -503,6 +512,10 @@ public class DriveTrain extends SubsystemBase {
 
   // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    SmartDashboard.putNumber("Starting X", traj.getInitialPose().getX());
+    SmartDashboard.putNumber("Starting Y", traj.getInitialPose().getY());
+    SmartDashboard.putNumber("Starting Angle", traj.getInitialPose().getRotation().getDegrees());
+
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
