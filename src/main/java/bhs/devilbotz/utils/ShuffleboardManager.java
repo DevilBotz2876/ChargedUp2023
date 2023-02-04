@@ -1,6 +1,8 @@
 package bhs.devilbotz.utils;
 
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -21,6 +23,7 @@ public class ShuffleboardManager {
 
   private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
+  private final GenericEntry gripperSetpoint;
   /** The constructor for the shuffleboard manager. */
   public ShuffleboardManager() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -35,17 +38,21 @@ public class ShuffleboardManager {
               }
             });
 
-    addDefaultWidgets();
+    gripperSetpoint =
+        driveTab
+            .add("Gripper Setpoint", Gripper.getAtSetpoint())
+            .withPosition(0, 1)
+            .withSize(1, 1)
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .getEntry();
 
-    initAutoModeChooser();
-  }
-
-  private void addDefaultWidgets() {
     driveTab
         .add("Auto Mode", autoModeChooser)
         .withWidget(BuiltInWidgets.kComboBoxChooser)
         .withPosition(0, 0)
         .withSize(2, 1);
+
+    initAutoModeChooser();
   }
 
   private void initAutoModeChooser() {
@@ -57,7 +64,8 @@ public class ShuffleboardManager {
 
   /** Updates the values on the shuffleboard. */
   public void updateValues() {
-    // TODO: add values to update on shuffleboard
+    // update gripper setpoint using network tables
+    gripperSetpoint.setBoolean(Gripper.getAtSetpoint());
   }
 
   /**
