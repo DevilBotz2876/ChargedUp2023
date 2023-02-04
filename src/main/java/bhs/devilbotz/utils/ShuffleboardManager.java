@@ -53,6 +53,8 @@ public class ShuffleboardManager {
     autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
     autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
     autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
+    autoModeChooser.addOption("Drive Distance", AutonomousModes.DRIVE_DISTANCE);
+    autoModeChooser.setDefaultOption("Drive Distance PID", AutonomousModes.DRIVE_DISTANCE_PID);
   }
 
   /** Updates the values on the shuffleboard. */

@@ -5,8 +5,12 @@
 
 package bhs.devilbotz;
 
+import java.util.HashMap;
+
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
+import bhs.devilbotz.commands.DriveStraight;
+import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -16,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import java.util.HashMap;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -60,6 +63,8 @@ public class RobotContainer {
 
   private void buildAutoCommands() {
     autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
+    autoCommands.put(AutonomousModes.DRIVE_DISTANCE,new DriveStraight(driveTrain));
+    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID,new DriveStraightPID(driveTrain));
   }
 
   /**

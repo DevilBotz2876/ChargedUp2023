@@ -271,7 +271,7 @@ public class DriveTrain extends SubsystemBase {
    * @see #getRightDistance()
    * @since 1/30/2023
    */
-  private double getLeftDistance() {
+  public double getLeftDistance() {
     return leftMaster.getSelectedSensorPosition()
         * (2
             * Math.PI
@@ -286,14 +286,16 @@ public class DriveTrain extends SubsystemBase {
    * @see #getLeftDistance()
    * @since 1/30/2023
    */
-  private double getRightDistance() {
+  public double getRightDistance() {
     return rightMaster.getSelectedSensorPosition()
         * (2
             * Math.PI
             * Constants.DriveConstants.WHEEL_RADIUS
             / Constants.DriveConstants.ENCODER_RESOLUTION);
   }
-
+public double getAverageDistance() {
+    return (getLeftDistance() + getRightDistance())/2;
+}
   /**
    * Get the left encoder velocity.
    *
