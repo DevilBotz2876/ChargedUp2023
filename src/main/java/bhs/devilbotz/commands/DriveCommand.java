@@ -2,6 +2,7 @@ package bhs.devilbotz.commands;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
@@ -53,17 +54,38 @@ public class DriveCommand extends CommandBase {
    */
   @Override
   public void execute() {
+    // Clamp the values to the range [0.95, 0.95] to allow the PID loop some room to work
+    // TODO: replace clamp with dynamic range
+    double speed = MathUtil.clamp(this.speed.getAsDouble(), -0.95, 0.95);
+    double rot = MathUtil.clamp(this.rot.getAsDouble(), -0.95, 0.95);
+
+    // Add a deadband to the joystick values
+    speed = MathUtil.applyDeadband(speed, Constants.DriveConstants.JOYSTICK_DEADBAND);
+    rot = MathUtil.applyDeadband(rot, Constants.DriveConstants.JOYSTICK_DEADBAND);
+
+    // (a*(x^{3})+(b-a)*x)*c
+    // Plug this into the graphing calculator, such as Desmos to see the curve
+    double a = 0.7;
+    double b = 0.9091;
+    double c = 1.1;
+
+    /*
+     This is the equation that is used to calculate the speed of the robot. It is a cubic function
+     that is used to make the robot accelerate slower at the beginning of the joystick movement to allow
+     for more precise control.
+    */
+    speed = (a * (speed * speed * speed) + (b - a) * speed) * c;
+    rot = (a * (rot * rot * rot) + (b - a) * rot) * c;
+
     // The joysticks are inverted, so negate the values
-    final var speed =
-        -speedSlewRateLimiter.calculate(
-            this.speed.getAsDouble() * Constants.DriveConstants.MAX_SPEED);
+    final var calculatedSpeed =
+        -speedSlewRateLimiter.calculate(speed * Constants.DriveConstants.MAX_SPEED);
 
     // The rotation is inverted, so negate the value
-    final var rot =
-        -rotationSlewRateLimiter.calculate(
-            this.rot.getAsDouble() * Constants.DriveConstants.MAX_ANGULAR_SPEED);
+    final var calculatedRot =
+        -rotationSlewRateLimiter.calculate(rot * Constants.DriveConstants.MAX_ANGULAR_SPEED);
 
-    drive.arcadeDrive(speed, rot);
+    drive.arcadeDrive(calculatedSpeed, calculatedRot);
   }
 
   /**

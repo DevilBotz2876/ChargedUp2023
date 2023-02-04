@@ -14,6 +14,7 @@ import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +33,8 @@ public class RobotContainer {
   private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
   private final DriveTrain driveTrain = new DriveTrain();
+
+  private final Gripper gripper = new Gripper();
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 

@@ -1,7 +1,7 @@
 package bhs.devilbotz.subsystems;
 
-import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.DriveConstants;
+import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
@@ -53,18 +54,18 @@ public class DriveTrain extends SubsystemBase {
   // These are used to control the speed of the motors proportionally to the speed of the wheels.
   private final PIDController leftPIDController =
       new PIDController(
-          Constants.DriveConstants.DRIVE_P,
-          Constants.DriveConstants.DRIVE_I,
-          Constants.DriveConstants.DRIVE_D);
+          SysIdConstants.LEFT_FEED_BACK_VELOCITY_P,
+          SysIdConstants.LEFT_FEED_BACK_VELOCITY_I,
+          SysIdConstants.LEFT_FEED_BACK_VELOCITY_D);
   private final PIDController rightPIDController =
       new PIDController(
-          Constants.DriveConstants.DRIVE_P,
-          Constants.DriveConstants.DRIVE_I,
-          Constants.DriveConstants.DRIVE_D);
+          SysIdConstants.RIGHT_FEED_BACK_VELOCITY_P,
+          SysIdConstants.RIGHT_FEED_BACK_VELOCITY_I,
+          SysIdConstants.RIGHT_FEED_BACK_VELOCITY_D);
 
   // Defines the kinematics of the drive train, which is used to calculate the speed of the wheels.
   private final DifferentialDriveKinematics kinematics =
-      new DifferentialDriveKinematics(Constants.DriveConstants.TRACK_WIDTH);
+      new DifferentialDriveKinematics(DriveConstants.TRACK_WIDTH);
 
   // Defines the odometry of the drive train, which is used to calculate the position of the robot.
   private final DifferentialDriveOdometry odometry;
@@ -73,9 +74,9 @@ public class DriveTrain extends SubsystemBase {
   // move the robot.
   private final SimpleMotorFeedforward feedforward =
       new SimpleMotorFeedforward(
-          Constants.DriveConstants.DRIVE_FFS,
-          Constants.DriveConstants.DRIVE_FFV,
-          Constants.DriveConstants.DRIVE_FFA);
+          SysIdConstants.FEED_FORWARD_LINEAR_S,
+          SysIdConstants.FEED_FORWARD_LINEAR_V,
+          SysIdConstants.FEED_FORWARD_LINEAR_A);
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
@@ -98,11 +99,11 @@ public class DriveTrain extends SubsystemBase {
   private DifferentialDrivetrainSim differentialDriveSim =
       new DifferentialDrivetrainSim(
           // Create a linear system from our identification gains.
-          Constants.DriveConstants.DRIVE_PLANT,
-          Constants.DriveConstants.MOTOR_CONFIGURATION,
-          Constants.DriveConstants.MOTOR_GEAR_RATIO,
-          Constants.DriveConstants.TRACK_WIDTH,
-          Constants.DriveConstants.WHEEL_RADIUS,
+          SysIdConstants.PLANT,
+          DriveConstants.MOTOR_CONFIGURATION,
+          DriveConstants.MOTOR_GEAR_RATIO,
+          DriveConstants.TRACK_WIDTH,
+          DriveConstants.WHEEL_RADIUS,
 
           // The standard deviations for measurement noise:
           // x and y:          0.001 m
@@ -142,12 +143,41 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/31/2023
    */
   private int velocityToNativeUnits(double velocityMetersPerSecond) {
-    double wheelRotationsPerSecond =
-        velocityMetersPerSecond / (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
-    double motorRotationsPerSecond = wheelRotationsPerSecond * DriveConstants.ENCODER_GEAR_RATIO;
-    double motorRotationsPer100ms = motorRotationsPerSecond / 10;
-    int sensorCountsPer100ms = (int) (motorRotationsPer100ms * DriveConstants.ENCODER_RESOLUTION);
-    return sensorCountsPer100ms;
+    return distanceToNativeUnits(velocityMetersPerSecond) / 10;
+  }
+
+  /**
+   * Helper function to convert Talon SRX sensor counts to meters. Used for Simulation.
+   *
+   * @param sensorCounts The robot's encoder count
+   * @return The robot's current position in meters
+   * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
+   * @see <a
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L223">CTRE
+   *     Sample Code</a>
+   * @since 1/31/2023
+   */
+  private double nativeUnitsToDistanceMeters(double sensorCounts) {
+    double motorRotations = (double) sensorCounts / DriveConstants.ENCODER_RESOLUTION;
+    double wheelRotations = motorRotations / DriveConstants.ENCODER_GEAR_RATIO;
+    double positionMeters = wheelRotations * (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
+    return positionMeters;
+  }
+
+  /**
+   * Helper function to convert Talon SRX sensor counts per 100ms to meters/second. Used for
+   * Simulation.
+   *
+   * @param sensorCounts The robot's encoder count per 100ms
+   * @return The robot's current velocity in meters per second
+   * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
+   * @see <a
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L223">CTRE
+   *     Sample Code</a>
+   * @since 1/31/2023
+   */
+  private double nativeUnitsToVelocityMetersPerSecond(double sensorCountsPer100ms) {
+    return nativeUnitsToDistanceMeters(10 * sensorCountsPer100ms);
   }
 
   /**
@@ -271,12 +301,8 @@ public class DriveTrain extends SubsystemBase {
    * @see #getRightDistance()
    * @since 1/30/2023
    */
-  public double getLeftDistance() {
-    return leftMaster.getSelectedSensorPosition()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+  private double getLeftDistance() {
+    return nativeUnitsToDistanceMeters(leftMaster.getSelectedSensorPosition());
   }
 
   /**
@@ -286,12 +312,8 @@ public class DriveTrain extends SubsystemBase {
    * @see #getLeftDistance()
    * @since 1/30/2023
    */
-  public double getRightDistance() {
-    return rightMaster.getSelectedSensorPosition()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+  private double getRightDistance() {
+    return nativeUnitsToDistanceMeters(rightMaster.getSelectedSensorPosition());
   }
 public double getAverageDistance() {
     return (getLeftDistance() + getRightDistance())/2;
@@ -303,11 +325,7 @@ public double getAverageDistance() {
    * @see #getRightVelocity()
    */
   private double getLeftVelocity() {
-    return leftMaster.getSelectedSensorVelocity()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+    return nativeUnitsToVelocityMetersPerSecond(leftMaster.getSelectedSensorVelocity());
   }
 
   /**
@@ -317,11 +335,7 @@ public double getAverageDistance() {
    * @see #getLeftVelocity()
    */
   private double getRightVelocity() {
-    return rightMaster.getSelectedSensorVelocity()
-        * (2
-            * Math.PI
-            * Constants.DriveConstants.WHEEL_RADIUS
-            / Constants.DriveConstants.ENCODER_RESOLUTION);
+    return nativeUnitsToVelocityMetersPerSecond(rightMaster.getSelectedSensorVelocity());
   }
 
   /**
@@ -367,8 +381,14 @@ public double getAverageDistance() {
     this.setTalonMode(NeutralMode.Brake);
 
     // Set the sensor phase of the master talons
-    rightMaster.setSensorPhase(true);
-    leftMaster.setSensorPhase(true);
+    if (RobotBase.isSimulation()) {
+      // TODO: Understand why the sensor phase needs to be swapped for simulation
+      rightMaster.setSensorPhase(false);
+      leftMaster.setSensorPhase(false);
+    } else {
+      rightMaster.setSensorPhase(true);
+      leftMaster.setSensorPhase(true);
+    }
   }
 
   /**
