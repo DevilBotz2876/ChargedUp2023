@@ -10,7 +10,7 @@ import java.util.HashMap;
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.DriveStraight;
-import bhs.devilbotz.commands.DriveStraightPID;
+import bhs.devilbotz.commands.DriveSetDistancePID;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -66,8 +66,8 @@ public class RobotContainer {
 
   private void buildAutoCommands() {
     autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE,new DriveStraight(driveTrain));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID,new DriveStraightPID(driveTrain));
+    autoCommands.put(AutonomousModes.DRIVE_DISTANCE,new DriveStraight(driveTrain,1));
+    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID,new DriveSetDistancePID(driveTrain,1));
   }
 
   /**

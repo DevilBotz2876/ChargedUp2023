@@ -301,7 +301,7 @@ public class DriveTrain extends SubsystemBase {
    * @see #getRightDistance()
    * @since 1/30/2023
    */
-  private double getLeftDistance() {
+  public double getLeftDistance() {
     return nativeUnitsToDistanceMeters(leftMaster.getSelectedSensorPosition());
   }
 
@@ -312,7 +312,7 @@ public class DriveTrain extends SubsystemBase {
    * @see #getLeftDistance()
    * @since 1/30/2023
    */
-  private double getRightDistance() {
+  public double getRightDistance() {
     return nativeUnitsToDistanceMeters(rightMaster.getSelectedSensorPosition());
   }
 public double getAverageDistance() {

@@ -9,17 +9,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class DriveStraightPID extends CommandBase {
+public class DriveSetDistancePID extends CommandBase {
   private DriveTrain drivetrain;
   private PIDController distance_pid;
-  private PIDController straight_pid;
   private double distance;
 
-  public DriveStraightPID(DriveTrain drivetrain, double distance) {
+  public DriveSetDistancePID(DriveTrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
     this.distance = distance;
     distance_pid = new PIDController(0.25,0,0.1);
-    straight_pid = new PIDController(0, 0, 0);
 
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -37,7 +35,6 @@ public class DriveStraightPID extends CommandBase {
   public void execute() {
     //distance_pid.setTolerance(1);
     double output = distance_pid.calculate(drivetrain.getAverageDistance(), distance);
-    double error = straight_pid.calculate(drivetrain.getRoll());
     drivetrain.arcadeDrive(output, 0);
 
     SmartDashboard.putNumber("output", output);
