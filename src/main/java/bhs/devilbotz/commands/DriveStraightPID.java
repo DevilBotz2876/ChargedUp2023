@@ -18,8 +18,8 @@ public class DriveStraightPID extends CommandBase {
   public DriveStraightPID(DriveTrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
     this.distance = distance;
-    distance_pid = new PIDController(0.25,0,0.1);
-    straight_pid = new PIDController(0, 0, 0);
+    distance_pid = new PIDController(0.25, 0, 0.1);
+    straight_pid = new PIDController(0.1, 0, 0);
 
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -35,18 +35,18 @@ public class DriveStraightPID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //distance_pid.setTolerance(1);
+    // distance_pid.setTolerance(1);
     double output = distance_pid.calculate(drivetrain.getAverageDistance(), distance);
-    double error = straight_pid.calculate(drivetrain.getRoll());
-    drivetrain.arcadeDrive(output, 0);
+    double turnError = straight_pid.calculate(drivetrain.getYaw(), 0);
+    drivetrain.arcadeDrive(output, -turnError);
 
-    SmartDashboard.putNumber("output", output);
+    SmartDashboard.putNumber("Distance output", output);
     SmartDashboard.putNumber("Position Tolerance", distance_pid.getPositionTolerance());
     SmartDashboard.putBoolean("at Setpoint", distance_pid.atSetpoint());
     SmartDashboard.putNumber("Position Error", distance_pid.getPositionError());
     SmartDashboard.putNumber("Distance", drivetrain.getAverageDistance());
-    SmartDashboard.putNumber("Velocity Error", distance_pid.getVelocityError());
-    SmartDashboard.putNumber("Velocity Tolerance", distance_pid.getVelocityTolerance());
+    SmartDashboard.putNumber("Turn output", turnError);
+    SmartDashboard.putNumber("Yaw", drivetrain.getYaw());
   }
 
   // Called once the command ends or is interrupted.
@@ -59,8 +59,8 @@ public class DriveStraightPID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //return distance_pid.atSetpoint();
-    if(Math.abs(distance_pid.getPositionError())<0.001) {
+    // return distance_pid.atSetpoint();
+    if (Math.abs(distance_pid.getPositionError()) < 0.001) {
       return true;
     }
     return false;
