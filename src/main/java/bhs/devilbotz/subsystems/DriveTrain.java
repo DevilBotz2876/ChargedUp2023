@@ -237,9 +237,22 @@ public class DriveTrain extends SubsystemBase {
     leftMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
     rightMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
 
-    // Set sim drive's left/right voltage inputs
+    /*
+     * CTRE simulation is low-level, so SimCollection inputs
+     * and outputs are not affected by SetInverted(). Only
+     * the regular user-level API calls are affected.
+     *
+     * WPILib expects +V to be forward.
+     * Positive motor output lead voltage is ccw. We observe
+     * on our physical robot that this is reverse for the
+     * right motor, so negate it.
+     *
+     * We are hard-coding the negation of the values instead of
+     * using getInverted() so we can catch a possible bug in the
+     * robot code where the wrong value is passed to setInverted().
+     */
     differentialDriveSim.setInputs(
-        leftMasterSim.getMotorOutputLeadVoltage(), rightMasterSim.getMotorOutputLeadVoltage());
+        leftMasterSim.getMotorOutputLeadVoltage(), -rightMasterSim.getMotorOutputLeadVoltage());
 
     /*
      * Advance the model by 20 ms. Note that if you are running this
@@ -270,7 +283,7 @@ public class DriveTrain extends SubsystemBase {
     rightMasterSim.setQuadratureRawPosition(
         distanceToNativeUnits(-differentialDriveSim.getRightPositionMeters()));
     rightMasterSim.setQuadratureVelocity(
-        velocityToNativeUnits(differentialDriveSim.getRightVelocityMetersPerSecond()));
+        velocityToNativeUnits(-differentialDriveSim.getRightVelocityMetersPerSecond()));
 
     /**
      * Simulate navX
