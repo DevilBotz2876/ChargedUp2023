@@ -143,7 +143,7 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/31/2023
    */
   private int velocityToNativeUnits(double velocityMetersPerSecond) {
-    return distanceToNativeUnits(velocityMetersPerSecond)/10;
+    return distanceToNativeUnits(velocityMetersPerSecond) / 10;
   }
 
   /**
@@ -158,14 +158,15 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/31/2023
    */
   private double nativeUnitsToDistanceMeters(double sensorCounts) {
-    double motorRotations = (double)sensorCounts / DriveConstants.ENCODER_RESOLUTION;
+    double motorRotations = (double) sensorCounts / DriveConstants.ENCODER_RESOLUTION;
     double wheelRotations = motorRotations / DriveConstants.ENCODER_GEAR_RATIO;
     double positionMeters = wheelRotations * (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
     return positionMeters;
   }
 
   /**
-   * Helper function to convert Talon SRX sensor counts per 100ms to meters/second. Used for Simulation.
+   * Helper function to convert Talon SRX sensor counts per 100ms to meters/second. Used for
+   * Simulation.
    *
    * @param sensorCounts The robot's encoder count per 100ms
    * @return The robot's current velocity in meters per second
@@ -176,7 +177,7 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/31/2023
    */
   private double nativeUnitsToVelocityMetersPerSecond(double sensorCountsPer100ms) {
-    return nativeUnitsToDistanceMeters(10*sensorCountsPer100ms);
+    return nativeUnitsToDistanceMeters(10 * sensorCountsPer100ms);
   }
 
   /**
@@ -378,14 +379,11 @@ public class DriveTrain extends SubsystemBase {
     this.setTalonMode(NeutralMode.Brake);
 
     // Set the sensor phase of the master talons
-    if (RobotBase.isSimulation())
-    {
+    if (RobotBase.isSimulation()) {
       // TODO: Understand why the sensor phase needs to be swapped for simulation
       rightMaster.setSensorPhase(false);
       leftMaster.setSensorPhase(false);
-    }
-    else
-    {
+    } else {
       rightMaster.setSensorPhase(true);
       leftMaster.setSensorPhase(true);
     }
