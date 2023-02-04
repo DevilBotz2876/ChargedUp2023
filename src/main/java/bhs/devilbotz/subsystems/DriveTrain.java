@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
@@ -377,8 +378,17 @@ public class DriveTrain extends SubsystemBase {
     this.setTalonMode(NeutralMode.Brake);
 
     // Set the sensor phase of the master talons
-    rightMaster.setSensorPhase(true);
-    leftMaster.setSensorPhase(true);
+    if (RobotBase.isSimulation())
+    {
+      // TODO: Understand why the sensor phase needs to be swapped for simulation
+      rightMaster.setSensorPhase(false);
+      leftMaster.setSensorPhase(false);
+    }
+    else
+    {
+      rightMaster.setSensorPhase(true);
+      leftMaster.setSensorPhase(true);
+    }
   }
 
   /**
