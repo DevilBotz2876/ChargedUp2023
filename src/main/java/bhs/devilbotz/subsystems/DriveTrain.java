@@ -308,7 +308,7 @@ public class DriveTrain extends SubsystemBase {
    * @see #getRightDistance()
    * @since 1/30/2023
    */
-  private double getLeftDistance() {
+  public double getLeftDistance() {
     return nativeUnitsToDistanceMeters(leftMaster.getSelectedSensorPosition());
   }
 
@@ -319,10 +319,13 @@ public class DriveTrain extends SubsystemBase {
    * @see #getLeftDistance()
    * @since 1/30/2023
    */
-  private double getRightDistance() {
+  public double getRightDistance() {
     return nativeUnitsToDistanceMeters(rightMaster.getSelectedSensorPosition());
   }
 
+  public double getAverageDistance() {
+    return (getLeftDistance() + getRightDistance()) / 2;
+  }
   /**
    * Get the left encoder velocity.
    *
@@ -458,5 +461,13 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getRoll() {
     return navx.getRoll();
+  }
+  /**
+   * Gets the current yaw of the robot. It is the value of the gyro when it turns left and right
+   *
+   * @return The current yaw of the robot in degrees.
+   */
+  public double getYaw() {
+    return navx.getYaw();
   }
 }
