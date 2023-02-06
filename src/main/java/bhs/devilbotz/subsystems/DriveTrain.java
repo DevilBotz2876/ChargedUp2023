@@ -475,7 +475,7 @@ public class DriveTrain extends SubsystemBase {
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     SmartDashboard.putNumber("Volts Left", leftVolts);
     SmartDashboard.putNumber("Volts Right", rightVolts);
-    
+
     // Sets the motor controller speeds.
     leftMaster.setVoltage(leftVolts);
     rightMaster.setVoltage(rightVolts);
@@ -528,14 +528,17 @@ public class DriveTrain extends SubsystemBase {
     return navx.getYaw();
   }
 
-  /** Uses ramsete controller to follow the specified trajectory
-   * 
+  /**
+   * Uses ramsete controller to follow the specified trajectory
+   *
    * @param traj Requested trajectory
-   * @param isFirstPath Set to true if this is the first path being run in autonomous in order to reset odometry before starting
+   * @param isFirstPath Set to true if this is the first path being run in autonomous in order to
+   *     reset odometry before starting
    * @return A sequential command that when executed, moves the robot along the specified trajectory
-   * 
-   * @see <a href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner Example</a>
-  */
+   * @see <a
+   *     href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner
+   *     Example</a>
+   */
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
     SmartDashboard.putNumber("Starting X", traj.getInitialPose().getX());
     SmartDashboard.putNumber("Starting Y", traj.getInitialPose().getY());
@@ -557,13 +560,13 @@ public class DriveTrain extends SubsystemBase {
             this.kinematics, // DifferentialDriveKinematics
             this::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
             new PIDController(
-                SysIdConstants.LEFT_FEED_BACK_VELOCITY_P,
-                SysIdConstants.LEFT_FEED_BACK_VELOCITY_I,
-                SysIdConstants.LEFT_FEED_BACK_VELOCITY_D),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble()),
             new PIDController(
-                SysIdConstants.RIGHT_FEED_BACK_VELOCITY_P,
-                SysIdConstants.RIGHT_FEED_BACK_VELOCITY_I,
-                SysIdConstants.RIGHT_FEED_BACK_VELOCITY_D),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble()),
             this::tankDriveVolts, // Voltage biconsumer
             true, // Should the path be automatically mirrored depending on alliance color.
             // Optional, defaults to true
