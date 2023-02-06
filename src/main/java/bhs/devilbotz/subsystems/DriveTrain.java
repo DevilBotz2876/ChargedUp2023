@@ -528,7 +528,14 @@ public class DriveTrain extends SubsystemBase {
     return navx.getYaw();
   }
 
-  // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
+  /** Uses ramsete controller to follow the specified trajectory
+   * 
+   * @param traj Requested trajectory
+   * @param isFirstPath Set to true if this is the first path being run in autonomous in order to reset odometry before starting
+   * @return A sequential command that when executed, moves the robot along the specified trajectory
+   * 
+   * @see <a href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner Example</a>
+  */
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
     SmartDashboard.putNumber("Starting X", traj.getInitialPose().getX());
     SmartDashboard.putNumber("Starting Y", traj.getInitialPose().getY());
