@@ -2,6 +2,7 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -38,13 +39,13 @@ public class DriveTrain extends SubsystemBase {
   // Defines the motor controllers for both sides of the drive train (left and right).
 
   private static final WPI_TalonSRX leftMaster =
-      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_MASTER_CAN_ID);
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_LEFT_MASTER_CAN_ID").asInt());
   private static final WPI_TalonSRX rightMaster =
-      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_MASTER_CAN_ID);
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_RIGHT_MASTER_CAN_ID").asInt());
   private static final WPI_TalonSRX leftFollower =
-      new WPI_TalonSRX(DriveConstants.MOTOR_LEFT_FOLLOWER_CAN_ID);
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_LEFT_FOLLOWER_CAN_ID").asInt());
   private static final WPI_TalonSRX rightFollower =
-      new WPI_TalonSRX(DriveConstants.MOTOR_RIGHT_FOLLOWER_CAN_ID);
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_RIGHT_FOLLOWER_CAN_ID").asInt());
 
   // Defines the NAVX, which is a gyroscope that we use to track the robot's position.
   // It is attached to the robot via SPI (Serial Peripheral Interface).
@@ -54,18 +55,18 @@ public class DriveTrain extends SubsystemBase {
   // These are used to control the speed of the motors proportionally to the speed of the wheels.
   private final PIDController leftPIDController =
       new PIDController(
-          SysIdConstants.LEFT_FEED_BACK_VELOCITY_P,
-          SysIdConstants.LEFT_FEED_BACK_VELOCITY_I,
-          SysIdConstants.LEFT_FEED_BACK_VELOCITY_D);
+          Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble());
   private final PIDController rightPIDController =
       new PIDController(
-          SysIdConstants.RIGHT_FEED_BACK_VELOCITY_P,
-          SysIdConstants.RIGHT_FEED_BACK_VELOCITY_I,
-          SysIdConstants.RIGHT_FEED_BACK_VELOCITY_D);
+          Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble());
 
   // Defines the kinematics of the drive train, which is used to calculate the speed of the wheels.
   private final DifferentialDriveKinematics kinematics =
-      new DifferentialDriveKinematics(DriveConstants.TRACK_WIDTH);
+      new DifferentialDriveKinematics(Robot.getDriveTrainConstant("TRACK_WIDTH").asDouble());
 
   // Defines the odometry of the drive train, which is used to calculate the position of the robot.
   private final DifferentialDriveOdometry odometry;
@@ -74,9 +75,9 @@ public class DriveTrain extends SubsystemBase {
   // move the robot.
   private final SimpleMotorFeedforward feedforward =
       new SimpleMotorFeedforward(
-          SysIdConstants.FEED_FORWARD_LINEAR_S,
-          SysIdConstants.FEED_FORWARD_LINEAR_V,
-          SysIdConstants.FEED_FORWARD_LINEAR_A);
+          Robot.getSysIdConstant("FEED_FORWARD_LINEAR_S").asDouble(),
+          Robot.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
+          Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble());
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
@@ -101,9 +102,9 @@ public class DriveTrain extends SubsystemBase {
           // Create a linear system from our identification gains.
           SysIdConstants.PLANT,
           DriveConstants.MOTOR_CONFIGURATION,
-          DriveConstants.MOTOR_GEAR_RATIO,
-          DriveConstants.TRACK_WIDTH,
-          DriveConstants.WHEEL_RADIUS,
+          Robot.getDriveTrainConstant("MOTOR_GEAR_RATIO").asDouble(),
+          Robot.getDriveTrainConstant("TRACK_WIDTH").asDouble(),
+          Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble(),
 
           // The standard deviations for measurement noise:
           // x and y:          0.001 m
@@ -125,9 +126,12 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/31/2023
    */
   private int distanceToNativeUnits(double positionMeters) {
-    double wheelRotations = positionMeters / (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
-    double motorRotations = wheelRotations * DriveConstants.ENCODER_GEAR_RATIO;
-    int sensorCounts = (int) (motorRotations * DriveConstants.ENCODER_RESOLUTION);
+    double wheelRotations =
+        positionMeters / (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
+    double motorRotations =
+        wheelRotations * Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
+    int sensorCounts =
+        (int) (motorRotations * Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt());
     return sensorCounts;
   }
 
@@ -158,9 +162,12 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/31/2023
    */
   private double nativeUnitsToDistanceMeters(double sensorCounts) {
-    double motorRotations = (double) sensorCounts / DriveConstants.ENCODER_RESOLUTION;
-    double wheelRotations = motorRotations / DriveConstants.ENCODER_GEAR_RATIO;
-    double positionMeters = wheelRotations * (2 * Math.PI * DriveConstants.WHEEL_RADIUS);
+    double motorRotations =
+        (double) sensorCounts / Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt();
+    double wheelRotations =
+        motorRotations / Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
+    double positionMeters =
+        wheelRotations * (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
     return positionMeters;
   }
 
