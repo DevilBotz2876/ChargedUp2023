@@ -1,4 +1,5 @@
 [![CI](https://github.com/BHSRobotix/ChargedUp2023/actions/workflows/main.yml/badge.svg)](https://github.com/BHSRobotix/ChargedUp2023/actions/workflows/main.yml)
+[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://bhsrobotix.github.io/ChargedUp2023/javadoc/)
 
 # Charged Up 2023
 Code for the FRC 2023 Robotics Competition

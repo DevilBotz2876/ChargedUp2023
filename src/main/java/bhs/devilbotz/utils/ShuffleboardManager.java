@@ -1,6 +1,8 @@
 package bhs.devilbotz.utils;
 
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -9,10 +11,20 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+/**
+ * This class manages the shuffleboard.
+ *
+ * @since 1/18/2023
+ * @author ParkerMeyers
+ */
 public class ShuffleboardManager {
+  /** The auto mode chooser for network tables */
   public static SendableChooser<AutonomousModes> autoModeChooser = new SendableChooser<>();
+
   private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
+  private final GenericEntry gripperSetpoint;
+  /** The constructor for the shuffleboard manager. */
   public ShuffleboardManager() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     int connListenerHandle =
@@ -26,17 +38,21 @@ public class ShuffleboardManager {
               }
             });
 
-    addDefaultWidgets();
+    gripperSetpoint =
+        driveTab
+            .add("Gripper Setpoint", Gripper.getAtSetpoint())
+            .withPosition(0, 1)
+            .withSize(1, 1)
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .getEntry();
 
-    initAutoModeChooser();
-  }
-
-  private void addDefaultWidgets() {
     driveTab
         .add("Auto Mode", autoModeChooser)
         .withWidget(BuiltInWidgets.kComboBoxChooser)
         .withPosition(0, 0)
         .withSize(2, 1);
+
+    initAutoModeChooser();
   }
 
   private void initAutoModeChooser() {
@@ -44,13 +60,23 @@ public class ShuffleboardManager {
     autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
     autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
     autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
+    autoModeChooser.addOption("Drive Distance", AutonomousModes.DRIVE_DISTANCE);
+    autoModeChooser.addOption("Drive Distance PID", AutonomousModes.DRIVE_DISTANCE_PID);
+    autoModeChooser.setDefaultOption(
+        "Drive Distance Straight PID", AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID);
   }
 
+  /** Updates the values on the shuffleboard. */
   public void updateValues() {
-    // TODO: add values to update on shuffleboard
+    // update gripper setpoint using network tables
+    gripperSetpoint.setBoolean(Gripper.getAtSetpoint());
   }
 
-  // Put field
+  /**
+   * Puts the field on the shuffleboard.
+   *
+   * @param field The field to put on the shuffleboard.
+   */
   public static void putField(Field2d field) {
     driveTab
         .add("Field", field)

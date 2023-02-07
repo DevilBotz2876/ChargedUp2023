@@ -7,9 +7,13 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
+import bhs.devilbotz.commands.DriveSetDistancePID;
+import bhs.devilbotz.commands.DriveStraight;
+import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,9 +34,12 @@ public class RobotContainer {
 
   private final DriveTrain driveTrain = new DriveTrain();
 
+  private final Gripper gripper = new Gripper();
+
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
-  private final Joystick joystick = new Joystick(Constants.JOYSTICK_PORT);
+  private final Joystick joystick =
+      new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -59,8 +66,17 @@ public class RobotContainer {
 
   private void buildAutoCommands() {
     autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
+    autoCommands.put(AutonomousModes.DRIVE_DISTANCE, new DriveStraight(driveTrain, 10));
+    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID, new DriveSetDistancePID(driveTrain, 10));
+    autoCommands.put(
+        AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
   }
 
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
     Command autonomousCommand = autoCommands.get(autoMode);
 
@@ -71,6 +87,11 @@ public class RobotContainer {
     return autonomousCommand;
   }
 
+  /**
+   * Returns the {@link ShuffleboardManager} instance.
+   *
+   * @return the {@link ShuffleboardManager} instance
+   */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
   }

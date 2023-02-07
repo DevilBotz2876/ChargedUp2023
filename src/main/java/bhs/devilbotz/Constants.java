@@ -5,6 +5,11 @@
 
 package bhs.devilbotz;
 
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -12,47 +17,78 @@ package bhs.devilbotz;
  *
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
+ *
+ * @since 1/9/2023
  */
 public final class Constants {
+  /**
+   * P value for the PID controller for the balance command. TODO: Change this to work with the
+   * drive PID values
+   */
+  public static final double BALANCE_P = 0.39941;
+  /**
+   * I value for the PID controller for the balance command. TODO: Change this to work with the
+   * drive PID values
+   */
+  public static final double BALANCE_I = 0.0;
+  /**
+   * D value for the PID controller for the balance command. TODO: Change this to work with the
+   * drive PID values
+   */
+  public static final double BALANCE_D = 0.00;
 
-  public static final int JOYSTICK_PORT = 0;
-
-  public static final double BALANCE_P = 0.39941; // TODO: Get correct values
-  public static final double BALANCE_I = 0.0; // TODO: Get correct values
-  public static final double BALANCE_D = 0.00; // TODO: Get correct values
-
+  /**
+   * Operator constants are for the operator interface (joysticks, buttons, etc.).
+   *
+   * @since 1/11/2023
+   */
   public static class OperatorConstants {
+    /**
+     * The port for the joystick on the driver station. This is the main joystick and is used for
+     * driving
+     */
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 
+  /**
+   * Drive constants are for the drive train subsystem characteristics.
+   *
+   * @since 1/26/2023
+   */
   public static class DriveConstants {
-    public static final double SLEW_RATE_LIMITER = 3;
-    public static final double MAX_SPEED = 2.447; // meters per second TODO: Measure/SysID
-    public static final double MAX_ANGULAR_SPEED =
-        2 * Math.PI; // one rotation per second TODO: Measure
+    /**
+     * The deadband for the joystick. This is the minimum value that the joystick must be at to move
+     * the robot.
+     */
+    public static final double JOYSTICK_DEADBAND = 0.035;
 
-    public static final double TRACK_WIDTH = 0.555; // meters, robot width TODO: Measure
-    public static final double WHEEL_RADIUS =
-        0.0762; // meters (Andymark am-0940b "High Grip Wheels, 6")
-    public static final int ENCODER_RESOLUTION = 4096; // CTRE Magnetic Encoder
+    /** The maximum acceleration of the robot in units per second */
+    public static final double SLEW_RATE_LIMITER = 2.5;
 
-    // Drive PID values TODO: Tune
-    public static final double DRIVE_P = 3.5725;
-    public static final double DRIVE_I = 0.0;
-    public static final double DRIVE_D = 0.0;
-
-    // Feedforward constants TODO: Tune
-    public static final double DRIVE_FFS = 0.94143;
-    public static final double DRIVE_FFV = 2.3803;
-    public static final double DRIVE_FFA = 0.48128;
-    public static final int MOTOR_LEFT_MASTER_CAN_ID = 3;
-    public static final int MOTOR_RIGHT_MASTER_CAN_ID = 4;
-    public static final int MOTOR_LEFT_FOLLOWER_CAN_ID = 1;
-    public static final int MOTOR_RIGHT_FOLLOWER_CAN_ID = 2;
+    public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
   }
 
+  /**
+   * Gripper constants are for the gripper subsystem
+   *
+   * @since 1/30/2023
+   */
   public static class GripperConstants {
+    /** The gripper double solenoid forward channel */
     public static final int GRIPPER_SOLENOID_FORWARD = 0;
+    /** The gripper double solenoid reverse channel */
     public static final int GRIPPER_SOLENOID_REVERSE = 1;
+    /** The CAN ID for the gripper's pneumatic compressor */
+    public static final int COMPRESSOR_CAN_ID = 10;
+  }
+
+  public static final class SysIdConstants {
+    /** Create a linear system from our system identification gains. */
+    public static final LinearSystem<N2, N2, N2> PLANT =
+        LinearSystemId.identifyDrivetrainSystem(
+            Robot.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
+            Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble(),
+            Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_V").asDouble(),
+            Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_A").asDouble());
   }
 }

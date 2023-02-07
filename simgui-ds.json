@@ -3,12 +3,12 @@
     {
       "axisConfig": [
         {
-          "decKey": 65,
-          "incKey": 68
+          "decKey": 263,
+          "incKey": 262
         },
         {
-          "decKey": 87,
-          "incKey": 83
+          "decKey": 265,
+          "incKey": 264
         },
         {
           "decKey": 69,
@@ -17,7 +17,7 @@
           "keyRate": 0.009999999776482582
         }
       ],
-      "axisCount": 3,
+      "axisCount": 2,
       "buttonCount": 4,
       "buttonKeys": [
         90,
@@ -87,6 +87,11 @@
       "axisCount": 0,
       "buttonCount": 0,
       "povCount": 0
+    }
+  ],
+  "robotJoysticks": [
+    {
+      "guid": "Keyboard0"
     }
   ]
 }
