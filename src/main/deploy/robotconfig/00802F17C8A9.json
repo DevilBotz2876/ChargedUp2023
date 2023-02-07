@@ -8,8 +8,8 @@
         "ENCODER_RESOLUTION": 4096,
         "ENCODER_GEAR_RATIO": 1,
         "MOTOR_LEFT_MASTER_CAN_ID": 3,
-        "MOTOR_RIGHT_MASTER_CAN_ID": 1,
-        "MOTOR_LEFT_FOLLOWER_CAN_ID": 4,
+        "MOTOR_RIGHT_MASTER_CAN_ID": 4,
+        "MOTOR_LEFT_FOLLOWER_CAN_ID": 1,
         "MOTOR_RIGHT_FOLLOWER_CAN_ID": 2,
         "MOTOR_GEAR_RATIO": 8.45
     },
@@ -31,9 +31,9 @@
         "RIGHT_FEED_BACK_POSITION_I": 0.0,
         "RIGHT_FEED_BACK_POSITION_D": 0.0,
 
-        "FEED_FORWARD_LINEAR_S": 0.0,
-        "FEED_FORWARD_LINEAR_V": 0.0,
-        "FEED_FORWARD_LINEAR_A": 0.0,
+        "FEED_FORWARD_LINEAR_S": 1.0,
+        "FEED_FORWARD_LINEAR_V": 1.0,
+        "FEED_FORWARD_LINEAR_A": 1.0,
         "FEED_FORWARD_ANGULAR_S": 1.0,
         "FEED_FORWARD_ANGULAR_V": 1.5,
         "FEED_FORWARD_ANGULAR_A": 0.3                        
