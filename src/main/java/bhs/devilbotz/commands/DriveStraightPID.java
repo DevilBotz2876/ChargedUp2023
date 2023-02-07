@@ -4,22 +4,31 @@
 
 package bhs.devilbotz.commands;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * This command is a PID controller that drives the robot straight to a set distance.
+ */
 public class DriveStraightPID extends CommandBase {
   private DriveTrain drivetrain;
   private PIDController distance_pid;
   private PIDController straight_pid;
   private double distance;
-
+/**
+   * The constructor for the Drive Straight PID command.
+   *
+   * @param drivetrain The drive train subsystem.
+   * @param distance The distance (in meters) the robot needs to cover.
+   */
   public DriveStraightPID(DriveTrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
     this.distance = distance;
-    distance_pid = new PIDController(0.25, 0, 0.1);
-    straight_pid = new PIDController(0.1, 0, 0);
+    distance_pid = new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_K);
+    straight_pid = new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_K);
 
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
