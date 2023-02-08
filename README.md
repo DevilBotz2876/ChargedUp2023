@@ -9,7 +9,7 @@ Code for the FRC 2023 Robotics Competition
     * [WPILib Installation Guide](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html)
 * API Documentation
     * [WPILib API](https://github.wpilib.org/allwpilib/docs/release/java/index.html)
-    * [Talon SRC Drive Motors](https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/package-summary.html)
+    * [Talon SRX Motor Controller](https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/package-summary.html)
     * [NavX Gyro Sensor](https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/com/kauailabs/navx/frc/package-summary.html)
 
 ## Hardware Configuration
@@ -99,3 +99,65 @@ Code for the FRC 2023 Robotics Competition
           - Lower
       - Visual Camera?
   - LED Light (to indicate cone vs cube pickup to human @ loading station)
+
+## Desired Autonomous Routines
+The routines in **bold** are the most important/common routines we will use
+
+1. Routine 1: Sit still
+1. Routine 2: Mobility
+    1. Drive straight forwards towards the middle of the field
+    * [Parameters](#Parameters-Definitions)
+        * Delay
+        * Distance
+1. **Routine 3: Score and Mobility**
+    1. Score preloaded game piece
+    1. Drive straight forwards towards the middle of the field
+    * [Parameters](#Parameters-Definitions)
+        * Delay
+        * Distance
+        * ScoreLevel
+1. Routine 4: Dock and engage
+    1. Drive straight onto charge station and balance
+    1. Use PID to automatically balance
+    * [Parameters](#Parameters-Definitions)
+        * Delay
+1. **Routine 5: Mobility, dock, and engage**
+    1. Drive straight forwards towards the middle of the field over the charge station
+    1. Drive back onto the charge station
+    1. Use PID to automatically balance
+    * [Parameters](#Parameters-Definitions)
+        * Delay
+        * Distance
+1. Routine 6: Score, dock, and engage
+    1. Score preloaded game piece
+    1. Drive straight onto charge station and balance
+    1. Use PID to automatically balance
+    * [Parameters](#Parameters-Definitions)
+        * Delay
+        * ScoreLevel
+1. **Routine 7: Score, mobility, dock, and engage**
+    1. Score preloaded game piece
+    1. Drive straight forwards towards the middle of the field over the charge station
+    1. Drive back onto the charge station
+    1. Use PID to automatically balance
+    * [Parameters](#Parameters-Definitions)
+        * Delay
+        * Distance
+        * ScoreLevel
+1. Routine 8: Score, mobility, pick up a game piece from center field, dock, and engage
+    1. Score preloaded game piece
+    1. Drive straight forwards towards the middle of the field over the charge station
+    1. Pick up a game piece at center field
+    1. Drive back onto the charge station
+    1. Use PID to automatically balance
+    * [Parameters](#Parameters-Definitions)
+        * Delay
+        * Distance
+        * ScoreLevel
+        * GamePieceType
+### Parameters Definitions
+    Delay: Delay before robot starts moving, in seconds
+    Distance: Distance to leave the community, in feet/meters (TBD)
+    ScoreLevel: Either low, medium, or high
+    GamePieceType: Either cone or cube
+
