@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /** This command is a PID controller that drives the robot straight to a set distance. */
 public class DriveStraightPID extends CommandBase {
   private DriveTrain drivetrain;
-  private PIDController distance_pid;
-  private PIDController straight_pid;
+  private PIDController distancePid;
+  private PIDController straightPid;
   private double distance;
   /**
    * The constructor for the Drive Straight PID command.
