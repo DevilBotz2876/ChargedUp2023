@@ -25,9 +25,9 @@ public class DriveStraightPID extends CommandBase {
   public DriveStraightPID(DriveTrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
     this.distance = distance;
-    distance_pid =
+    distancePid =
         new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_K);
-    straight_pid =
+    straightPid =
         new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_K);
 
     addRequirements(drivetrain);
