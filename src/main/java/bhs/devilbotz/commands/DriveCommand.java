@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -79,11 +80,12 @@ public class DriveCommand extends CommandBase {
 
     // The joysticks are inverted, so negate the values
     final var calculatedSpeed =
-        -speedSlewRateLimiter.calculate(speed * Constants.DriveConstants.MAX_SPEED);
+        -speedSlewRateLimiter.calculate(speed * Robot.getSysIdConstant("MAX_SPEED").asDouble());
 
     // The rotation is inverted, so negate the value
     final var calculatedRot =
-        -rotationSlewRateLimiter.calculate(rot * Constants.DriveConstants.MAX_ANGULAR_SPEED);
+        -rotationSlewRateLimiter.calculate(
+            rot * Robot.getSysIdConstant("MAX_ANGULAR_SPEED").asDouble());
 
     drive.arcadeDrive(calculatedSpeed, calculatedRot);
   }
