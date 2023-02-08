@@ -27,7 +27,7 @@ public class DriveSetDistancePID extends CommandBase {
   public DriveSetDistancePID(DriveTrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
     this.distance = distance;
-    distance_pid =
+    distancePid =
         new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_K);
 
     addRequirements(drivetrain);
