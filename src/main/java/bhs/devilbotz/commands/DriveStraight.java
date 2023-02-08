@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DriveStraight extends CommandBase {
   private DriveTrain drivetrain;
   private double distance;
-/**
+  /**
    * The constructor for the Drive Straight command.
    *
    * @param drivetrain The drive train subsystem.

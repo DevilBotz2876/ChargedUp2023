@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * This command is a PID controller that drives the robot to a set distance.
- * (Command does not check if robot is going straight)
+ * This command is a PID controller that drives the robot to a set distance. (Command does not check
+ * if robot is going straight)
  */
 public class DriveSetDistancePID extends CommandBase {
   private DriveTrain drivetrain;
   private PIDController distance_pid;
   private double distance;
-/**
+  /**
    * The constructor for the Drive Straight PID command.
    *
    * @param drivetrain The drive train subsystem.
@@ -27,7 +27,8 @@ public class DriveSetDistancePID extends CommandBase {
   public DriveSetDistancePID(DriveTrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
     this.distance = distance;
-    distance_pid = new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_K);
+    distance_pid =
+        new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_K);
 
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
