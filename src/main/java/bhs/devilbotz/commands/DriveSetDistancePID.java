@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class DriveSetDistancePID extends CommandBase {
   private DriveTrain drivetrain;
-  private PIDController distance_pid;
+  private PIDController distancePid;
   private double distance;
   /**
    * The constructor for the Drive Straight PID command.
