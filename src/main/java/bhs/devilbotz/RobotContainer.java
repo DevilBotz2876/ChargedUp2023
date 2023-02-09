@@ -78,10 +78,35 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
-    Command autonomousCommand = autoCommands.get(autoMode);
+    Command autonomousCommand = null;
 
     if (autoMode == null) {
       System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
+    } else {
+      switch (autoMode) {
+        case SIT_STILL:
+          break;
+        case MOBILITY:
+          autonomousCommand =
+              new DriveStraightPID(driveTrain, ShuffleboardManager.autoDistance.getDouble(5));
+          break;
+        case SCORE_AND_MOBILITY:
+          break;
+        case DOCK_AND_ENGAGE:
+          break;
+        case MOBILITY_DOCK_AND_ENGAGE:
+          break;
+
+        case SCORE_DOCK_AND_ENGAGE:
+          break;
+
+        case SCORE_MOBILITY_DOCK_ENGAGE:
+          break;
+        case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
+          break;
+        default:
+          autonomousCommand = autoCommands.get(autoMode);
+      }
     }
 
     return autonomousCommand;

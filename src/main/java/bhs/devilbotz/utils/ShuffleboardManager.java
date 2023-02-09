@@ -27,6 +27,8 @@ public class ShuffleboardManager {
 
   public static SendableChooser<ScoreLevels> autoScoreLevelChooser = new SendableChooser<>();
   public static SendableChooser<GamePieceTypes> autoGamePieceTypeChooser = new SendableChooser<>();
+  public static GenericEntry autoDelay;
+  public static GenericEntry autoDistance;
 
   private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
   private static final ShuffleboardLayout autoMode =
@@ -84,9 +86,11 @@ public class ShuffleboardManager {
   }
 
   private void initAutoModePreferences() {
-    autoMode.add("Delay (in seconds)", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
+    autoDelay =
+        autoMode.add("Delay (in seconds)", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
 
-    autoMode.add("Distance (in meters)", 5).withWidget(BuiltInWidgets.kTextView).getEntry();
+    autoDistance =
+        autoMode.add("Distance (in meters)", 5).withWidget(BuiltInWidgets.kTextView).getEntry();
 
     autoScoreLevelChooser.setDefaultOption("Low", ScoreLevels.LOW);
     autoScoreLevelChooser.addOption("Mid", ScoreLevels.MID);
