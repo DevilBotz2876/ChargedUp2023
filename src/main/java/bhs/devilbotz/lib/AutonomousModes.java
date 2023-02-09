@@ -6,6 +6,15 @@ package bhs.devilbotz.lib;
  * @since 1/18/2023
  */
 public enum AutonomousModes {
+  SIT_STILL,
+  MOBILITY,
+  SCORE_AND_MOBILITY,
+  DOCK_AND_ENGAGE,
+  MOBILITY_DOCK_AND_ENGAGE,
+  SCORE_DOCK_AND_ENGAGE,
+  SCORE_MOBILITY_DOCK_ENGAGE,
+  SCORE_MOBILITY_PICK_DOCK_ENGAGE,
+
   /** Backup short moves the robot backwards a short distance and then stops. */
   BACKUP_SHORT,
   /**
