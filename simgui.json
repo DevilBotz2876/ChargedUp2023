@@ -2,27 +2,11 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
-      "/LiveWindow/Ungrouped/Talon SRX [1]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon SRX [2]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon SRX [3]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon SRX [4]": "Motor Controller",
-      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/Shuffleboard/Drive/Auto Mode": "String Chooser",
       "/Shuffleboard/Drive/Field": "Field2d"
     },
     "windows": {
-      "/Shuffleboard/Drive/Auto Mode": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/Drive/Field": {
-        "image": "2023-field.png",
         "window": {
           "visible": true
         }
@@ -30,9 +14,32 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "special": true,
     "transitory": {
-      "SmartDashboard": {
+      "Shuffleboard": {
+        ".metadata": {
+          "Drive": {
+            "open": true
+          },
+          "open": true
+        },
         "open": true
+      }
+    },
+    "tree": false
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "height": 326
+        }
+      ],
+      "window": {
+        "visible": false
       }
     }
   }

@@ -32,7 +32,7 @@ public class RobotContainer {
 
   private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
-  private final DriveTrain driveTrain = new DriveTrain();
+  public final DriveTrain driveTrain = new DriveTrain();
 
   private final Gripper gripper = new Gripper();
 
