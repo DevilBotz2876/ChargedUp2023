@@ -84,7 +84,7 @@ public class DriveTrain extends SubsystemBase {
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble());
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
-  public final Field2d field = new Field2d();
+  private final Field2d field = new Field2d();
 
   // Object for simulated inputs into Talon.
   private static final TalonSRXSimCollection leftMasterSim = leftMaster.getSimCollection();
