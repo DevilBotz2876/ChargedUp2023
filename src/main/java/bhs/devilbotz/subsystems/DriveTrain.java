@@ -209,7 +209,6 @@ public class DriveTrain extends SubsystemBase {
     // Sets the motor controllers to the correct mode & inverts the right side
     setupTalons();
     // Sets the initial position of the robot to (0, 0) and the initial angle to 0 degrees.
-    resetNavx();
     resetEncoders();
 
     ShuffleboardManager.putField(field);
@@ -232,7 +231,6 @@ public class DriveTrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    resetNavx();
     odometry.resetPosition(navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
     differentialDriveSim.setPose(pose);
   }
