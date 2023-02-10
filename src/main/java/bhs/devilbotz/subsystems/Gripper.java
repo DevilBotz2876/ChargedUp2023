@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * This subsystem controls the gripper.
  *
  * @since 1/25/2023
- * @author joshuamanoj & ParkerMeyers
+ * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Gripper extends SubsystemBase {
   private final DoubleSolenoid gripperSolenoid;
