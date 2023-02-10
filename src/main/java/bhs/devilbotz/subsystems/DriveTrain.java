@@ -14,10 +14,14 @@ import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
@@ -187,6 +191,15 @@ public class DriveTrain extends SubsystemBase {
     return nativeUnitsToDistanceMeters(10 * sensorCountsPer100ms);
   }
 
+  NetworkTableEntry xSimStart =
+      NetworkTableInstance.getDefault().getTable("Simulation").getEntry("x_start_pose");
+  NetworkTableEntry ySimStart =
+      NetworkTableInstance.getDefault().getTable("Simulation").getEntry("y_start_pose");
+  NetworkTableEntry rotSimStart =
+      NetworkTableInstance.getDefault().getTable("Simulation").getEntry("rot_start_pose");
+  NetworkTableEntry readSimStart =
+      NetworkTableInstance.getDefault().getTable("Simulation").getEntry("read_start_pose");
+
   /**
    * DriveTrain constructor This constructor sets up the drive train.
    *
@@ -196,7 +209,6 @@ public class DriveTrain extends SubsystemBase {
     // Sets the motor controllers to the correct mode & inverts the right side
     setupTalons();
     // Sets the initial position of the robot to (0, 0) and the initial angle to 0 degrees.
-    resetNavx();
     resetEncoders();
 
     ShuffleboardManager.putField(field);
@@ -205,6 +217,42 @@ public class DriveTrain extends SubsystemBase {
     // robot.
     odometry =
         new DifferentialDriveOdometry(navx.getRotation2d(), getLeftDistance(), getRightDistance());
+
+    xSimStart.setNumber(2.0);
+    ySimStart.setNumber(2.0);
+    rotSimStart.setNumber(0.0);
+    readSimStart.setBoolean(false);
+  }
+
+  /**
+   * Resets the odometry to the specified pose.
+   *
+   * @param pose The pose to which to set the odometry.
+   */
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    odometry.resetPosition(navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
+    differentialDriveSim.setPose(pose);
+  }
+
+  /**
+   * Resets the robot position to pose specified in network tables. Allows a user to choose robot
+   * starting position by entering x, y, and rotation values via Shuffleboard or Smartdashboard.
+   * User must toggle boolean to true to read from network tables. Otherwise the last position of
+   * robot on field is used. A user can also enable Test mode and drag/drop robot around field to
+   * any position.
+   */
+  public void resetRobotPosition() {
+    Pose2d newPose;
+    if (readSimStart.getBoolean(false)) {
+      double x = xSimStart.getDouble(1.0);
+      double y = ySimStart.getDouble(1.0);
+      Rotation2d rot = new Rotation2d(rotSimStart.getDouble(0.0));
+      newPose = new Pose2d(x, y, rot);
+    } else {
+      newPose = field.getRobotPose();
+    }
+    resetOdometry(newPose);
   }
 
   /**
