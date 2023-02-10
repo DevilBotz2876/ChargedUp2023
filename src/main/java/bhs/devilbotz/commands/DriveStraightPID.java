@@ -45,14 +45,14 @@ public class DriveStraightPID extends CommandBase {
   @Override
   public void execute() {
     // distance_pid.setTolerance(1);
-    double output = distance_pid.calculate(drivetrain.getAverageDistance(), distance);
-    double turnError = straight_pid.calculate(drivetrain.getYaw(), 0);
+    double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
+    double turnError = straightPid.calculate(drivetrain.getYaw(), 0);
     drivetrain.arcadeDrive(output, -turnError);
 
     SmartDashboard.putNumber("Distance output", output);
-    SmartDashboard.putNumber("Position Tolerance", distance_pid.getPositionTolerance());
-    SmartDashboard.putBoolean("at Setpoint", distance_pid.atSetpoint());
-    SmartDashboard.putNumber("Position Error", distance_pid.getPositionError());
+    SmartDashboard.putNumber("Position Tolerance", distancePid.getPositionTolerance());
+    SmartDashboard.putBoolean("at Setpoint", distancePid.atSetpoint());
+    SmartDashboard.putNumber("Position Error", distancePid.getPositionError());
     SmartDashboard.putNumber("Distance", drivetrain.getAverageDistance());
     SmartDashboard.putNumber("Turn output", turnError);
     SmartDashboard.putNumber("Yaw", drivetrain.getYaw());
@@ -69,7 +69,7 @@ public class DriveStraightPID extends CommandBase {
   @Override
   public boolean isFinished() {
     // return distance_pid.atSetpoint();
-    if (Math.abs(distance_pid.getPositionError()) < 0.001) {
+    if (Math.abs(distancePid.getPositionError()) < 0.001) {
       return true;
     }
     return false;
