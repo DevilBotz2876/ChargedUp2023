@@ -132,9 +132,27 @@ loadScripts(document, 'script');</script>
 <div class="block">Drives the robot with the given linear velocity and angular velocity.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRoll()" class="member-name-link">getRoll</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAverageDistance()" class="member-name-link">getAverageDistance</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLeftDistance()" class="member-name-link">getLeftDistance</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Get the left encoder distance.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRightDistance()" class="member-name-link">getRightDistance</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Get the right encoder distance.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRoll()" class="member-name-link">getRoll</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the current roll of the robot.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getYaw()" class="member-name-link">getYaw</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the current yaw of the robot.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#periodic()" class="member-name-link">periodic</a>()</code></div>
@@ -150,6 +168,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetNavx()" class="member-name-link">resetNavx</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Reset the NAVX</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetOdometry(edu.wpi.first.math.geometry.Pose2d)" class="member-name-link">resetOdometry</a><wbr>(edu.wpi.first.math.geometry.Pose2d&nbsp;pose)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Resets the odometry to the specified pose.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetRobotPosition()" class="member-name-link">resetRobotPosition</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Resets the robot position to pose specified in network tables.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSpeeds(edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds)" class="member-name-link">setSpeeds</a><wbr>(edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds&nbsp;speeds)</code></div>
@@ -209,6 +237,28 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="resetOdometry(edu.wpi.first.math.geometry.Pose2d)">
+<h3>resetOdometry</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">resetOdometry</span><wbr><span class="parameters">(edu.wpi.first.math.geometry.Pose2d&nbsp;pose)</span></div>
+<div class="block">Resets the odometry to the specified pose.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>pose</code> - The pose to which to set the odometry.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="resetRobotPosition()">
+<h3>resetRobotPosition</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">resetRobotPosition</span>()</div>
+<div class="block">Resets the robot position to pose specified in network tables. Allows a user to choose robot
+ starting position by entering x, y, and rotation values via Shuffleboard or Smartdashboard.
+ User must toggle boolean to true to read from network tables. Otherwise the last position of
+ robot on field is used. A user can also enable Test mode and drag/drop robot around field to
+ any position.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="periodic()">
 <h3>periodic</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">periodic</span>()</div>
@@ -243,6 +293,50 @@ loadScripts(document, 'script');</script>
 </ul>
 </dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getLeftDistance()">
+<h3>getLeftDistance</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getLeftDistance</span>()</div>
+<div class="block">Get the left encoder distance.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The left encoder distance in meters.</dd>
+<dt>Since:</dt>
+<dd>1/30/2023</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="#getRightDistance()"><code>getRightDistance()</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getRightDistance()">
+<h3>getRightDistance</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getRightDistance</span>()</div>
+<div class="block">Get the right encoder distance.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The right encoder distance in meters.</dd>
+<dt>Since:</dt>
+<dd>1/30/2023</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="#getLeftDistance()"><code>getLeftDistance()</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getAverageDistance()">
+<h3>getAverageDistance</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getAverageDistance</span>()</div>
 </section>
 </li>
 <li>
@@ -318,6 +412,17 @@ loadScripts(document, 'script');</script>
 <dd>The current roll of the robot in degrees.</dd>
 <dt>Since:</dt>
 <dd>1/30/2023</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getYaw()">
+<h3>getYaw</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getYaw</span>()</div>
+<div class="block">Gets the current yaw of the robot. It is the value of the gyro when it turns left and right</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The current yaw of the robot in degrees.</dd>
 </dl>
 </section>
 </li>
