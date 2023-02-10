@@ -211,6 +211,7 @@ public class Robot extends TimedRobot {
   /**
    * This method returns the requested robot specific system id configuration
    *
+   * @param name The system id constant name
    * @return JsonNode containing the value of the requested configuration value
    */
   public static JsonNode getSysIdConstant(String name) {
@@ -220,6 +221,7 @@ public class Robot extends TimedRobot {
   /**
    * This method returns the requested robot specific drive train configuration
    *
+   * @param name The drivetrain constant name
    * @return JsonNode containing the value of the requested configuration value
    */
   public static JsonNode getDriveTrainConstant(String name) {

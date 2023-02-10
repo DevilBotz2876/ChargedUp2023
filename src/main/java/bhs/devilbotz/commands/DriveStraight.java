@@ -6,6 +6,7 @@ package bhs.devilbotz.commands;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/** This command drives the robot straight to a set distance. */
 public class DriveStraight extends CommandBase {
   private DriveTrain drivetrain;
   private double distance;

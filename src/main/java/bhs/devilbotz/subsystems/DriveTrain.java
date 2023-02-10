@@ -371,6 +371,11 @@ public class DriveTrain extends SubsystemBase {
     return nativeUnitsToDistanceMeters(rightMaster.getSelectedSensorPosition());
   }
 
+  /**
+   * Get the average distance of both encoders
+   *
+   * @return the average distance of both encoders in meters
+   */
   public double getAverageDistance() {
     return (getLeftDistance() + getRightDistance()) / 2;
   }
