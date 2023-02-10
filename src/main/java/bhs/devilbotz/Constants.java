@@ -94,6 +94,7 @@ public final class Constants {
     /** The maximum acceleration of the robot in units per second */
     public static final double SLEW_RATE_LIMITER = 2.5;
 
+    /** The motor configuration for each side of the robot */
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
   }
 
@@ -111,6 +112,7 @@ public final class Constants {
     public static final int COMPRESSOR_CAN_ID = 10;
   }
 
+  /** SysID dependent constants */
   public static final class SysIdConstants {
     /** Create a linear system from our system identification gains. */
     public static final LinearSystem<N2, N2, N2> PLANT =

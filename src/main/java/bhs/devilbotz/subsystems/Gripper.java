@@ -58,12 +58,19 @@ public class Gripper extends SubsystemBase {
   @Override
   public void periodic() {}
 
+  /** Enables the compressor for the pnuematic gripper. Remains on until the robot is disabled. */
   public static void enableCompressor() {
     if (!pcmCompressor.isEnabled()) {
       pcmCompressor.enableDigital();
     }
   }
 
+  /**
+   * Returns true if the compressor pressure has reached the set value. The set value is controlled
+   * physically on the robot
+   * 
+   * @return true if pressue is at pre-configured set point
+   */
   public static boolean getAtSetpoint() {
     return pcmCompressor.getPressureSwitchValue();
   }
