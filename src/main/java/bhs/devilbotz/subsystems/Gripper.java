@@ -68,6 +68,8 @@ public class Gripper extends SubsystemBase {
   /**
    * Returns true if the compressor pressure has reached the set value. The set value is controlled
    * physically on the robot
+   * 
+   * @return true if pressue is at pre-configured set point
    */
   public static boolean getAtSetpoint() {
     return pcmCompressor.getPressureSwitchValue();
