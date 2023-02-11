@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * This subsystem controls the gripper.
  *
  * @since 1/25/2023
- * @author joshuamanoj & ParkerMeyers
+ * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Gripper extends SubsystemBase {
   private final DoubleSolenoid gripperSolenoid;
@@ -58,12 +58,19 @@ public class Gripper extends SubsystemBase {
   @Override
   public void periodic() {}
 
+  /** Enables the compressor for the pnuematic gripper. Remains on until the robot is disabled. */
   public static void enableCompressor() {
     if (!pcmCompressor.isEnabled()) {
       pcmCompressor.enableDigital();
     }
   }
 
+  /**
+   * Returns true if the compressor pressure has reached the set value. The set value is controlled
+   * physically on the robot
+   * 
+   * @return true if pressue is at pre-configured set point
+   */
   public static boolean getAtSetpoint() {
     return pcmCompressor.getPressureSwitchValue();
   }

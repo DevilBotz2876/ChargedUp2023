@@ -89,7 +89,9 @@ public class Robot extends TimedRobot {
 
   /** This method is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    robotContainer.driveTrain.resetRobotPosition();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -97,6 +99,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    robotContainer.driveTrain.resetRobotPosition();
+
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
     Gripper.enableCompressor();
 
@@ -112,6 +116,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotContainer.driveTrain.resetRobotPosition();
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -205,6 +211,7 @@ public class Robot extends TimedRobot {
   /**
    * This method returns the requested robot specific system id configuration
    *
+   * @param name The system id constant name
    * @return JsonNode containing the value of the requested configuration value
    */
   public static JsonNode getSysIdConstant(String name) {
@@ -214,6 +221,7 @@ public class Robot extends TimedRobot {
   /**
    * This method returns the requested robot specific drive train configuration
    *
+   * @param name The drivetrain constant name
    * @return JsonNode containing the value of the requested configuration value
    */
   public static JsonNode getDriveTrainConstant(String name) {

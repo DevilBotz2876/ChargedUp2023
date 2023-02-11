@@ -36,7 +36,36 @@ public final class Constants {
    * drive PID values
    */
   public static final double BALANCE_D = 0.00;
-
+  /**
+   * P value for the PID controller for the drive set distance and drive straight commands. ({@link
+   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
+   */
+  public static final double DISTANCE_P = 0.5;
+  /**
+   * I value for the PID controller for the drive set distance and drive straight commands. ({@link
+   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
+   */
+  public static final double DISTANCE_I = 0;
+  /**
+   * K value for the PID controller for the drive set distance and drive straight commands. ({@link
+   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
+   */
+  public static final double DISTANCE_K = 0.1;
+  /**
+   * P value for the PID controller for drive straight command. ({@link
+   * bhs.devilbotz.commands.DriveStraightPID})
+   */
+  public static final double STRAIGHT_P = 0.1;
+  /**
+   * I value for the PID controller for drive straight command. ({@link
+   * bhs.devilbotz.commands.DriveStraightPID}).
+   */
+  public static final double STRAIGHT_I = 0;
+  /**
+   * K value for the PID controller for drive straight command ({@link
+   * bhs.devilbotz.commands.DriveStraightPID}).
+   */
+  public static final double STRAIGHT_K = 0;
   /**
    * Operator constants are for the operator interface (joysticks, buttons, etc.).
    *
@@ -65,6 +94,7 @@ public final class Constants {
     /** The maximum acceleration of the robot in units per second */
     public static final double SLEW_RATE_LIMITER = 2.5;
 
+    /** The motor configuration for each side of the robot */
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
   }
 
@@ -82,6 +112,7 @@ public final class Constants {
     public static final int COMPRESSOR_CAN_ID = 10;
   }
 
+  /** SysID dependent constants */
   public static final class SysIdConstants {
     /** Create a linear system from our system identification gains. */
     public static final LinearSystem<N2, N2, N2> PLANT =
