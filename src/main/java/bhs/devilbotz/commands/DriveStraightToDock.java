@@ -7,23 +7,30 @@ package bhs.devilbotz.commands;
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** This command is a PID controller that drives the robot straight to a set distance. */
-public class DriveStraightPID extends CommandBase {
+public class DriveStraightToDock extends CommandBase {
   private DriveTrain drivetrain;
   private PIDController distancePid;
   private PIDController straightPid;
   private double distance;
   private double startAngle;
+  // private MedianFilter filter;
+  private LinearFilter filter;
+  private double filteredRoll;
+  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
+
   /**
    * The constructor for the Drive Straight PID command.
    *
    * @param drivetrain The drive train subsystem.
    * @param distance The distance (in meters) the robot needs to cover.
    */
-  public DriveStraightPID(DriveTrain drivetrain, double distance) {
+  public DriveStraightToDock(DriveTrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
     this.distance = distance;
     distancePid =
@@ -31,7 +38,8 @@ public class DriveStraightPID extends CommandBase {
     straightPid =
         new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_D);
     startAngle = drivetrain.getYaw();
-
+    // filter = new MedianFilter(5);
+    filter = LinearFilter.singlePoleIIR(0.1, 0.2);
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -39,7 +47,7 @@ public class DriveStraightPID extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("DriveStraightPID start");
+    System.out.println("DriveStraightToDock start");
     drivetrain.arcadeDrive(0, 0);
   }
 
@@ -49,7 +57,9 @@ public class DriveStraightPID extends CommandBase {
     // distance_pid.setTolerance(1);
     double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
-    drivetrain.arcadeDrive(output, -turnError);
+    drivetrain.arcadeDrive(speedSlewRateLimiter.calculate(output), -turnError);
+
+    filteredRoll = filter.calculate(drivetrain.getRoll());
 
     SmartDashboard.putNumber("Distance output", output);
     SmartDashboard.putNumber("Position Tolerance", distancePid.getPositionTolerance());
@@ -58,20 +68,25 @@ public class DriveStraightPID extends CommandBase {
     SmartDashboard.putNumber("Distance", drivetrain.getAverageDistance());
 
     SmartDashboard.putNumber("Turn output", turnError);
+    SmartDashboard.putNumber("FilterRoll", filteredRoll);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     drivetrain.arcadeDrive(0, 0);
-    System.out.println("DriveStraightPID Finished");
+    System.out.println("DriveStraightToDock Finished");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     // return distance_pid.atSetpoint();
-    if (Math.abs(distancePid.getPositionError()) < 0.001) {
+    double roll = Math.abs(drivetrain.getRoll());
+    // if (roll > 7){
+    //  roll = 0;
+    // }
+    if (Math.abs(distancePid.getPositionError()) < 0.1) {
       return true;
     }
     return false;

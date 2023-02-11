@@ -10,6 +10,7 @@ import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.DriveSetDistancePID;
 import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
+import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.commands.auto.TestAuto;
 import bhs.devilbotz.lib.AutonomousModes;
@@ -97,6 +98,10 @@ public class RobotContainer {
         case SCORE_AND_MOBILITY:
           break;
         case DOCK_AND_ENGAGE:
+          autonomousCommand =
+              new DriveStraightToDock(driveTrain, ShuffleboardManager.autoDistance.getDouble(2.5))
+                  .andThen(new BalancePID(driveTrain));
+          new BalancePID(driveTrain);
           break;
         case MOBILITY_DOCK_AND_ENGAGE:
           break;

@@ -25,7 +25,7 @@ public final class Constants {
    * P value for the PID controller for the balance command. TODO: Change this to work with the
    * drive PID values
    */
-  public static final double BALANCE_P = 0.39941;
+  public static final double BALANCE_P = 0.1;
   /**
    * I value for the PID controller for the balance command. TODO: Change this to work with the
    * drive PID values
@@ -35,12 +35,12 @@ public final class Constants {
    * D value for the PID controller for the balance command. TODO: Change this to work with the
    * drive PID values
    */
-  public static final double BALANCE_D = 0.00;
+  public static final double BALANCE_D = 0.03;
   /**
    * P value for the PID controller for the drive set distance and drive straight commands. ({@link
    * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
    */
-  public static final double DISTANCE_P = 0.5;
+  public static final double DISTANCE_P = 2;
   /**
    * I value for the PID controller for the drive set distance and drive straight commands. ({@link
    * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
@@ -50,7 +50,7 @@ public final class Constants {
    * K value for the PID controller for the drive set distance and drive straight commands. ({@link
    * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
    */
-  public static final double DISTANCE_K = 0.1;
+  public static final double DISTANCE_D = 0.1;
   /**
    * P value for the PID controller for drive straight command. ({@link
    * bhs.devilbotz.commands.DriveStraightPID})
@@ -65,7 +65,7 @@ public final class Constants {
    * K value for the PID controller for drive straight command ({@link
    * bhs.devilbotz.commands.DriveStraightPID}).
    */
-  public static final double STRAIGHT_K = 0;
+  public static final double STRAIGHT_D = 0;
   /**
    * Operator constants are for the operator interface (joysticks, buttons, etc.).
    *

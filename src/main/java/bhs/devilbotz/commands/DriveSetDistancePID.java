@@ -28,7 +28,7 @@ public class DriveSetDistancePID extends CommandBase {
     this.drivetrain = drivetrain;
     this.distance = distance;
     distancePid =
-        new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_K);
+        new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_D);
 
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
