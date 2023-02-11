@@ -122,4 +122,8 @@ public final class Constants {
             Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_V").asDouble(),
             Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_A").asDouble());
   }
+
+  public static class ArmConstants {
+    public static final int ARM_CAN_ID = 5;
+  }
 }
