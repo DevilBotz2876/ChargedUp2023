@@ -83,7 +83,7 @@ public class DriveTrain extends SubsystemBase {
   private final DifferentialDriveOdometry odometry;
 
   // Defines the feedforward of the drive train, which is used to calculate the voltage needed to
-  // move the robot
+  // move the robot.
   private final SimpleMotorFeedforward feedforward =
       new SimpleMotorFeedforward(
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_S").asDouble(),
@@ -122,7 +122,7 @@ public class DriveTrain extends SubsystemBase {
           // heading:          0.001 rad
           // l and r velocity: 0.1   m/s
           // l and r position: 0.005 m
-          VecBuilder.fill(0.000, 0.000, 0.000, 0.0, 0.0, 0.000, 0.000));
+          VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
   /**
    * Helper function to convert position (in meters) to Talon SRX encoder native units. Used for
@@ -514,13 +514,9 @@ public class DriveTrain extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    SmartDashboard.putNumber("Volts Left", leftVolts);
-    SmartDashboard.putNumber("Volts Right", rightVolts);
-
     // Sets the motor controller speeds.
     leftMaster.setVoltage(leftVolts);
     rightMaster.setVoltage(rightVolts);
-    //    m_drive.feed();
   }
 
   /**
@@ -542,13 +538,8 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   private void updateOdometry() {
-    Pose2d currentPose = odometry.getPoseMeters();
     odometry.update(navx.getRotation2d(), getLeftDistance(), getRightDistance());
-    field.setRobotPose(currentPose);
-
-    SmartDashboard.putNumber("Current X", currentPose.getX());
-    SmartDashboard.putNumber("Current Y", currentPose.getY());
-    SmartDashboard.putNumber("Current Angle", currentPose.getRotation().getDegrees());
+    field.setRobotPose(odometry.getPoseMeters());
   }
 
   /**
