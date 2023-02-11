@@ -11,6 +11,7 @@ import bhs.devilbotz.commands.DriveSetDistancePID;
 import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.auto.BalanceAuto;
+import bhs.devilbotz.commands.auto.TestAuto;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -70,6 +71,8 @@ public class RobotContainer {
     autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID, new DriveSetDistancePID(driveTrain, 10));
     autoCommands.put(
         AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
+
+    autoCommands.put(AutonomousModes.TEST, new TestAuto(driveTrain));
   }
 
   /**

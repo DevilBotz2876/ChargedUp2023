@@ -75,7 +75,7 @@ public class ShuffleboardManager {
     autoModeChooser.addOption(
         "Routine 8: Score, Mobility, Pick, Dock, and Engage",
         AutonomousModes.SCORE_MOBILITY_PICK_DOCK_ENGAGE);
-
+    autoModeChooser.addOption("Path Planner (Test)", AutonomousModes.TEST);
     autoModeChooser.addOption("Backup Short", AutonomousModes.BACKUP_SHORT);
     autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
     autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
