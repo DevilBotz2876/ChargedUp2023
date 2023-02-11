@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -572,10 +571,6 @@ public class DriveTrain extends SubsystemBase {
    *     Example</a>
    */
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    SmartDashboard.putNumber("Starting X", traj.getInitialPose().getX());
-    SmartDashboard.putNumber("Starting Y", traj.getInitialPose().getY());
-    SmartDashboard.putNumber("Starting Angle", traj.getInitialPose().getRotation().getDegrees());
-
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
