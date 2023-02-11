@@ -87,6 +87,13 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>1/18/2023</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href=https://github.com/BHSRobotix/ChargedUp2023#desired-autonomous-routines>Desired
+     Autonomous Routines</a></li>
+</ul>
+</dd>
 </dl>
 </section>
 <section class="summary">
@@ -125,17 +132,49 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Balance does NOT move the robot and then balances on the platform.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#DRIVE_DISTANCE" class="member-name-link">DRIVE_DISTANCE</a></code></div>
+<div class="col-first even-row-color"><code><a href="#DOCK_AND_ENGAGE" class="member-name-link">DOCK_AND_ENGAGE</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Drive straight onto charge station and balance</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#DRIVE_DISTANCE" class="member-name-link">DRIVE_DISTANCE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Drive Distance goes forward one meter</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#DRIVE_DISTANCE_PID" class="member-name-link">DRIVE_DISTANCE_PID</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#DRIVE_DISTANCE_PID" class="member-name-link">DRIVE_DISTANCE_PID</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Drive Distance goes forward one meter using PID for</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#DRIVE_STRAIGHT_DISTANCE_PID" class="member-name-link">DRIVE_STRAIGHT_DISTANCE_PID</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#DRIVE_STRAIGHT_DISTANCE_PID" class="member-name-link">DRIVE_STRAIGHT_DISTANCE_PID</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Drive Distance goes forward one meter using PID</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#MOBILITY" class="member-name-link">MOBILITY</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Drive straight forwards towards the middle of the field</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#MOBILITY_DOCK_AND_ENGAGE" class="member-name-link">MOBILITY_DOCK_AND_ENGAGE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Perform <a href="#MOBILITY"><code>MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</div>
+<div class="col-first even-row-color"><code><a href="#SCORE_AND_MOBILITY" class="member-name-link">SCORE_AND_MOBILITY</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Score preloaded game piece and then perform <a href="#MOBILITY"><code>MOBILITY</code></a></div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#SCORE_DOCK_AND_ENGAGE" class="member-name-link">SCORE_DOCK_AND_ENGAGE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Score preloaded game piece and then perform <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</div>
+<div class="col-first even-row-color"><code><a href="#SCORE_MOBILITY_DOCK_ENGAGE" class="member-name-link">SCORE_MOBILITY_DOCK_ENGAGE</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Perform <a href="#SCORE_AND_MOBILITY"><code>SCORE_AND_MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#SCORE_MOBILITY_PICK_DOCK_ENGAGE" class="member-name-link">SCORE_MOBILITY_PICK_DOCK_ENGAGE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Perform <a href="#SCORE_AND_MOBILITY"><code>SCORE_AND_MOBILITY</code></a>, pick up a game piece at center field, and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</div>
+<div class="col-first even-row-color"><code><a href="#SIT_STILL" class="member-name-link">SIT_STILL</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Don't do anything in autonomous mode.</div>
 </div>
 </div>
 </section>
@@ -182,6 +221,62 @@ the order they are declared.</div>
 <section class="constant-details" id="enum-constant-detail">
 <h2>Enum Constant Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="SIT_STILL">
+<h3>SIT_STILL</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">SIT_STILL</span></div>
+<div class="block">Don't do anything in autonomous mode. Sit still and let the other alliance members do the work.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="MOBILITY">
+<h3>MOBILITY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">MOBILITY</span></div>
+<div class="block">Drive straight forwards towards the middle of the field</div>
+</section>
+</li>
+<li>
+<section class="detail" id="SCORE_AND_MOBILITY">
+<h3>SCORE_AND_MOBILITY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">SCORE_AND_MOBILITY</span></div>
+<div class="block">Score preloaded game piece and then perform <a href="#MOBILITY"><code>MOBILITY</code></a></div>
+</section>
+</li>
+<li>
+<section class="detail" id="DOCK_AND_ENGAGE">
+<h3>DOCK_AND_ENGAGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">DOCK_AND_ENGAGE</span></div>
+<div class="block">Drive straight onto charge station and balance</div>
+</section>
+</li>
+<li>
+<section class="detail" id="MOBILITY_DOCK_AND_ENGAGE">
+<h3>MOBILITY_DOCK_AND_ENGAGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">MOBILITY_DOCK_AND_ENGAGE</span></div>
+<div class="block">Perform <a href="#MOBILITY"><code>MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</section>
+</li>
+<li>
+<section class="detail" id="SCORE_DOCK_AND_ENGAGE">
+<h3>SCORE_DOCK_AND_ENGAGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">SCORE_DOCK_AND_ENGAGE</span></div>
+<div class="block">Score preloaded game piece and then perform <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</section>
+</li>
+<li>
+<section class="detail" id="SCORE_MOBILITY_DOCK_ENGAGE">
+<h3>SCORE_MOBILITY_DOCK_ENGAGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">SCORE_MOBILITY_DOCK_ENGAGE</span></div>
+<div class="block">Perform <a href="#SCORE_AND_MOBILITY"><code>SCORE_AND_MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</section>
+</li>
+<li>
+<section class="detail" id="SCORE_MOBILITY_PICK_DOCK_ENGAGE">
+<h3>SCORE_MOBILITY_PICK_DOCK_ENGAGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">SCORE_MOBILITY_PICK_DOCK_ENGAGE</span></div>
+<div class="block">Perform <a href="#SCORE_AND_MOBILITY"><code>SCORE_AND_MOBILITY</code></a>, pick up a game piece at center field, and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</section>
+</li>
 <li>
 <section class="detail" id="BACKUP_SHORT">
 <h3>BACKUP_SHORT</h3>
