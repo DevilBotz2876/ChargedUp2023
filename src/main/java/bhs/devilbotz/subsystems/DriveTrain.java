@@ -295,17 +295,6 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  public void resetOdometry(Pose2d pose) {
-    resetEncoders();
-    resetNavx();
-    odometry.resetPosition(navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
-  }
-
-  /**
    * This method updates once per loop of the robot only in simulation mode. It is not run when
    * deployed to the physical robot.
    *
