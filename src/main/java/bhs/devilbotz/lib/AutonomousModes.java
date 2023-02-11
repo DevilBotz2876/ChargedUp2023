@@ -41,6 +41,7 @@ public enum AutonomousModes {
   BACKUP_FAR,
   /** Balance does NOT move the robot and then balances on the platform. */
   BALANCE,
+  TEST,
   /** Drive Distance goes forward one meter */
   DRIVE_DISTANCE,
   /** Drive Distance goes forward one meter using PID for */
