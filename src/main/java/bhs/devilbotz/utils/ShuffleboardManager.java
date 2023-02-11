@@ -62,7 +62,20 @@ public class ShuffleboardManager {
   }
 
   private void initAutoModeChooser() {
-    autoModeChooser.setDefaultOption("Test", AutonomousModes.TEST);
+    autoModeChooser.addOption("Routine 1: Sit Still", AutonomousModes.SIT_STILL);
+    autoModeChooser.setDefaultOption("Routine 2: Mobility", AutonomousModes.MOBILITY);
+    autoModeChooser.addOption("Routine 3: Score and Mobility", AutonomousModes.SCORE_AND_MOBILITY);
+    autoModeChooser.addOption("Routine 4: Dock and Engage", AutonomousModes.DOCK_AND_ENGAGE);
+    autoModeChooser.addOption(
+        "Routine 5: Mobility, Dock, and Engage", AutonomousModes.MOBILITY_DOCK_AND_ENGAGE);
+    autoModeChooser.addOption(
+        "Routine 6: Score, Dock, and Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
+    autoModeChooser.addOption(
+        "Routine 7: Score, Mobility, Dock, and Engage", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
+    autoModeChooser.addOption(
+        "Routine 8: Score, Mobility, Pick, Dock, and Engage",
+        AutonomousModes.SCORE_MOBILITY_PICK_DOCK_ENGAGE);
+    autoModeChooser.addOption("Path Planner (Test)", AutonomousModes.TEST);
     autoModeChooser.addOption("Backup Short", AutonomousModes.BACKUP_SHORT);
     autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
     autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
