@@ -34,7 +34,7 @@ public class RobotContainer {
 
   private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
-  public final DriveTrain driveTrain = new DriveTrain();
+  private final DriveTrain driveTrain = new DriveTrain();
 
   private final Gripper gripper = new Gripper();
 
@@ -128,5 +128,14 @@ public class RobotContainer {
    */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
+  }
+
+  /**
+   * Resets the robots position to the pose
+   *
+   * @see DriveTrain#resetRobotPosition()
+   */
+  public void resetRobotPosition() {
+    driveTrain.resetRobotPosition();
   }
 }
