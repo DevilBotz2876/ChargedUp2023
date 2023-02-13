@@ -11,7 +11,10 @@ import bhs.devilbotz.commands.DriveSetDistancePID;
 import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.auto.BalanceAuto;
+import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.lib.LEDModes;
+import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
@@ -38,6 +41,15 @@ public class RobotContainer {
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
+  private final Arduino arduino;
+  {
+    try {
+      arduino = new Arduino();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private final Joystick joystick =
       new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
 
@@ -58,10 +70,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
+    // driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
 
     // For testing
     new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
+    new JoystickButton(joystick, 2).onTrue(new SetLEDMode(arduino, LEDModes.SET_RED));
+    new JoystickButton(joystick, 3).onTrue(new SetLEDMode(arduino, LEDModes.CLEAR));
   }
 
   private void buildAutoCommands() {
@@ -95,5 +109,9 @@ public class RobotContainer {
    */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
+  }
+
+  public Arduino getArduino() {
+    return arduino;
   }
 }
