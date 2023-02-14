@@ -109,7 +109,7 @@ public final class Constants {
     /** The gripper double solenoid reverse channel */
     public static final int GRIPPER_SOLENOID_REVERSE = 1;
     /** The CAN ID for the gripper's pneumatic compressor */
-    public static final int COMPRESSOR_CAN_ID = 10;
+    public static final int COMPRESSOR_CAN_ID = 6;
   }
 
   /** SysID dependent constants */
@@ -121,5 +121,9 @@ public final class Constants {
             Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble(),
             Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_V").asDouble(),
             Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_A").asDouble());
+  }
+
+  public static final class ArmConstants {
+    public static final int ARM_MOTOR_CAN_ID = 5;
   }
 }
