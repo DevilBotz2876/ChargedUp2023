@@ -70,8 +70,6 @@ public class DriveStraightToDock extends CommandBase {
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
     drivetrain.arcadeDrive(speedSlewRateLimiter.calculate(output), -turnError);
 
-    filteredRoll = filter.calculate(drivetrain.getRoll());
-
     SmartDashboard.putNumber("Distance output", output);
     SmartDashboard.putNumber("Position Tolerance", distancePid.getPositionTolerance());
     SmartDashboard.putBoolean("at Setpoint", distancePid.atSetpoint());
