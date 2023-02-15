@@ -7,9 +7,8 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
-import bhs.devilbotz.commands.DriveSetDistancePID;
-import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
+import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.commands.auto.TestAuto;
 import bhs.devilbotz.lib.AutonomousModes;
@@ -67,8 +66,6 @@ public class RobotContainer {
 
   private void buildAutoCommands() {
     autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE, new DriveStraight(driveTrain, 10));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID, new DriveSetDistancePID(driveTrain, 10));
     autoCommands.put(
         AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
 
@@ -92,11 +89,20 @@ public class RobotContainer {
           break;
         case MOBILITY:
           autonomousCommand =
-              new DriveStraightPID(driveTrain, ShuffleboardManager.autoDistance.getDouble(5));
+              new DriveStraightPID(
+                  driveTrain,
+                  ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY));
           break;
         case SCORE_AND_MOBILITY:
           break;
         case DOCK_AND_ENGAGE:
+          autonomousCommand =
+              new DriveStraightToDock(
+                      driveTrain,
+                      ShuffleboardManager.autoDistance.getDouble(
+                          Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
+                  .andThen(new BalancePID(driveTrain));
+          new BalancePID(driveTrain);
           break;
         case MOBILITY_DOCK_AND_ENGAGE:
           break;

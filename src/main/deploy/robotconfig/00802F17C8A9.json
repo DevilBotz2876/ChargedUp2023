@@ -11,7 +11,16 @@
         "MOTOR_RIGHT_MASTER_CAN_ID": 4,
         "MOTOR_LEFT_FOLLOWER_CAN_ID": 1,
         "MOTOR_RIGHT_FOLLOWER_CAN_ID": 2,
-        "MOTOR_GEAR_RATIO": 8.45
+        "MOTOR_GEAR_RATIO": 8.45,
+        "BALANCE_P": 0.1,
+        "BALANCE_I": 0.0,
+        "BALANCE_D": 0.03,
+        "DISTANCE_P": 2,
+        "DISTANCE_I": 0,
+        "DISTANCE_D": 0.1,
+        "STRAIGHT_P": 0.1,
+        "STRAIGHT_I": 0,
+        "STRAIGHT_D": 0
     },
 
     "sysid": {
