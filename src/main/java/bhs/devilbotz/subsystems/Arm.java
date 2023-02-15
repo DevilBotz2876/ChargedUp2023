@@ -4,9 +4,10 @@
 
 package bhs.devilbotz.subsystems;
 
-import bhs.devilbotz.Constants;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import bhs.devilbotz.Constants.ArmConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -16,13 +17,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Arm extends SubsystemBase {
-  private final CANSparkMax armMotor;
+
+  /** Creates a new Arm. */
+  private CANSparkMax armMotor;
 
   /** The constructor for the arm subsystem. */
   public Arm() {
-    armMotor =
-        new CANSparkMax(
-            Constants.ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, MotorType.kBrushless);
+
   }
 
   /**

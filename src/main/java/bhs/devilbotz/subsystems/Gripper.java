@@ -5,6 +5,7 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.utils.RobotConfig;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -18,35 +19,45 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Gripper extends SubsystemBase {
-  private final DoubleSolenoid gripperSolenoid;
-  private static final Compressor pcmCompressor =
-      new Compressor(Constants.GripperConstants.COMPRESSOR_CAN_ID, PneumaticsModuleType.CTREPCM);
+  private DoubleSolenoid gripperSolenoid = null;
+  private Compressor pcmCompressor = null;
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
-    pcmCompressor.enableDigital();
-    pcmCompressor.disable();
+    if (RobotConfig.isCompBot()) {
+      pcmCompressor =
+          new Compressor(
+              Constants.GripperConstants.COMPRESSOR_CAN_ID, PneumaticsModuleType.CTREPCM);
+      pcmCompressor.enableDigital();
+      pcmCompressor.disable();
 
-    gripperSolenoid =
-        new DoubleSolenoid(
-            PneumaticsModuleType.CTREPCM,
-            Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
-            Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
+      gripperSolenoid =
+          new DoubleSolenoid(
+              PneumaticsModuleType.CTREPCM,
+              Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
+              Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
+    }
   }
 
   /** This method opens the gripper. */
   public void open() {
-    gripperSolenoid.set(Value.kForward);
+    if (RobotConfig.isCompBot()) {
+      gripperSolenoid.set(Value.kForward);
+    }
   }
 
   /** This method closes the gripper. */
   public void close() {
-    gripperSolenoid.set(Value.kReverse);
+    if (RobotConfig.isCompBot()) {
+      gripperSolenoid.set(Value.kReverse);
+    }
   }
 
   /** This method sets the grippers speed to 0. */
   public void stop() {
-    gripperSolenoid.set(Value.kOff);
+    if (RobotConfig.isCompBot()) {
+      gripperSolenoid.set(Value.kOff);
+    }
   }
 
   /**
@@ -59,19 +70,24 @@ public class Gripper extends SubsystemBase {
   public void periodic() {}
 
   /** Enables the compressor for the pnuematic gripper. Remains on until the robot is disabled. */
-  public static void enableCompressor() {
-    if (!pcmCompressor.isEnabled()) {
-      pcmCompressor.enableDigital();
+  public void enableCompressor() {
+    if (RobotConfig.isCompBot()) {
+      if (!pcmCompressor.isEnabled()) {
+        pcmCompressor.enableDigital();
+      }
     }
   }
 
   /**
    * Returns true if the compressor pressure has reached the set value. The set value is controlled
    * physically on the robot
-   * 
+   *
    * @return true if pressue is at pre-configured set point
    */
-  public static boolean getAtSetpoint() {
-    return pcmCompressor.getPressureSwitchValue();
+  public boolean getAtSetpoint() {
+    if (RobotConfig.isCompBot()) {
+      return pcmCompressor.getPressureSwitchValue();
+    }
+    return true;
   }
 }
