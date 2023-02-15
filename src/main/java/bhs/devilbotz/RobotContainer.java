@@ -7,8 +7,6 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
-import bhs.devilbotz.commands.DriveSetDistancePID;
-import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.auto.BalanceAuto;
@@ -68,8 +66,6 @@ public class RobotContainer {
 
   private void buildAutoCommands() {
     autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE, new DriveStraight(driveTrain, 10));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID, new DriveSetDistancePID(driveTrain, 10));
     autoCommands.put(
         AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
 

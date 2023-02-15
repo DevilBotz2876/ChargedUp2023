@@ -25,12 +25,6 @@ public class BalancePID extends CommandBase {
   // private double levelAngle;
   private final PIDController pid;
 
-  // NetworkTableEntry balanceP =
-  // NetworkTableInstance.getDefault().getTable("BalancePID").getEntry("BalanceP");
-  // NetworkTableEntry balanceI =
-  // NetworkTableInstance.getDefault().getTable("BalancePID").getEntry("BalanceI");
-  // NetworkTableEntry balanceD =
-  // NetworkTableInstance.getDefault().getTable("BalancePID").getEntry("BalanceD");
   /**
    * The constructor for the balance PID command.
    *
@@ -39,17 +33,11 @@ public class BalancePID extends CommandBase {
   public BalancePID(DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
-    // pid = new PIDController(Constants.BALANCE_P , Constants.BALANCE_I, Constants.BALANCE_D);
     pid =
         new PIDController(
             Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
             Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
             Robot.getDriveTrainConstant("BALANCE_D").asDouble());
-    // balanceP.setNumber(0);
-    // pid = new PIDController(balanceP.getDouble(Constants.BALANCE_P),
-    // balanceI.getDouble(Constants.BALANCE_I),
-    // balanceD.getDouble(Constants.BALANCE_D));
-    // SmartDashboard.putData(pid);
     addRequirements(drive);
   }
 
