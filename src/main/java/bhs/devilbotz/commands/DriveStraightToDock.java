@@ -4,7 +4,7 @@
 
 package bhs.devilbotz.commands;
 
-import bhs.devilbotz.Constants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
@@ -12,7 +12,10 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/** This command is a PID controller that drives the robot straight to a set distance. */
+/**
+ * This command is a PID controller that drives the robot straight to a set distance up a hill to
+ * dock with the charging port.
+ */
 public class DriveStraightToDock extends CommandBase {
   private DriveTrain drivetrain;
   private PIDController distancePid;
@@ -25,7 +28,7 @@ public class DriveStraightToDock extends CommandBase {
   private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
 
   /**
-   * The constructor for the Drive Straight PID command.
+   * The constructor for the Drive Straight To Dock PID command.
    *
    * @param drivetrain The drive train subsystem.
    * @param distance The distance (in meters) the robot needs to cover.
@@ -34,9 +37,17 @@ public class DriveStraightToDock extends CommandBase {
     this.drivetrain = drivetrain;
     this.distance = distance;
     distancePid =
-        new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_D);
+        // new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_D);
+        new PIDController(
+            Robot.getDriveTrainConstant("DISTANCE_P").asDouble(),
+            Robot.getDriveTrainConstant("DISTANCE_I").asDouble(),
+            Robot.getDriveTrainConstant("DISTANCE_D").asDouble());
     straightPid =
-        new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_D);
+        // new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_D);
+        new PIDController(
+            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
+            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
+            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
     startAngle = drivetrain.getYaw();
     // filter = new MedianFilter(5);
     filter = LinearFilter.singlePoleIIR(0.1, 0.2);
@@ -82,7 +93,7 @@ public class DriveStraightToDock extends CommandBase {
   @Override
   public boolean isFinished() {
     // return distance_pid.atSetpoint();
-    double roll = Math.abs(drivetrain.getRoll());
+    // double roll = Math.abs(drivetrain.getRoll());
     // if (roll > 7){
     //  roll = 0;
     // }

@@ -23,49 +23,67 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 public final class Constants {
   /**
    * P value for the PID controller for the balance command. TODO: Change this to work with the
-   * drive PID values
+   * drive PID values. This is now moved to BOT config file.
    */
   public static final double BALANCE_P = 0.1;
   /**
    * I value for the PID controller for the balance command. TODO: Change this to work with the
-   * drive PID values
+   * drive PID values. This is now moved to BOT config file.
    */
   public static final double BALANCE_I = 0.0;
   /**
    * D value for the PID controller for the balance command. TODO: Change this to work with the
-   * drive PID values
+   * drive PID values. This is now moved to BOT config file.
    */
   public static final double BALANCE_D = 0.03;
   /**
    * P value for the PID controller for the drive set distance and drive straight commands. ({@link
-   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
+   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID}).
+   * This is now moved to BOT config file.
    */
   public static final double DISTANCE_P = 2;
   /**
    * I value for the PID controller for the drive set distance and drive straight commands. ({@link
-   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
+   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID}).
+   * This is now moved to BOT config file.
    */
   public static final double DISTANCE_I = 0;
   /**
    * K value for the PID controller for the drive set distance and drive straight commands. ({@link
-   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID})
+   * bhs.devilbotz.commands.DriveStraightPID}) ({@link bhs.devilbotz.commands.DriveSetDistancePID}).
+   * This is now moved to BOT config file.
    */
   public static final double DISTANCE_D = 0.1;
   /**
    * P value for the PID controller for drive straight command. ({@link
-   * bhs.devilbotz.commands.DriveStraightPID})
+   * bhs.devilbotz.commands.DriveStraightPID}). This is now moved to BOT config file.
    */
   public static final double STRAIGHT_P = 0.1;
   /**
    * I value for the PID controller for drive straight command. ({@link
-   * bhs.devilbotz.commands.DriveStraightPID}).
+   * bhs.devilbotz.commands.DriveStraightPID}). This is now moved to BOT config file.
    */
   public static final double STRAIGHT_I = 0;
   /**
    * K value for the PID controller for drive straight command ({@link
-   * bhs.devilbotz.commands.DriveStraightPID}).
+   * bhs.devilbotz.commands.DriveStraightPID}). This is now moved to BOT config file.
    */
   public static final double STRAIGHT_D = 0;
+  /**
+   * This is the default distance the robot goes for the autonomous Mobility Routine ({@link
+   * bhs.devilbotz.RobotContainer}). The distance is in meters.
+   */
+  public static final double DEFAULT_DISTANCE_MOBILITY = 5;
+  /**
+   * This is the default distance the robot goes for the autonomous Dock and Engage Routine ({@link
+   * bhs.devilbotz.RobotContainer}). The distance is in meters.
+   */
+  public static final double DEFAULT_DISTANCE_DOCK_AND_ENGAGE = 2.5;
+  /**
+   * This the tolerance for the Balance PID Controler. This is used so that the robot does not go on
+   * balancing forever but stops when it hits the number listed in this constant.
+   */
+  public static final double BALANCE_PID_TOLERANCE = 3;
   /**
    * Operator constants are for the operator interface (joysticks, buttons, etc.).
    *

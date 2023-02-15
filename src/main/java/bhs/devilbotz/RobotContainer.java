@@ -93,13 +93,18 @@ public class RobotContainer {
           break;
         case MOBILITY:
           autonomousCommand =
-              new DriveStraightPID(driveTrain, ShuffleboardManager.autoDistance.getDouble(5));
+              new DriveStraightPID(
+                  driveTrain,
+                  ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY));
           break;
         case SCORE_AND_MOBILITY:
           break;
         case DOCK_AND_ENGAGE:
           autonomousCommand =
-              new DriveStraightToDock(driveTrain, ShuffleboardManager.autoDistance.getDouble(2.5))
+              new DriveStraightToDock(
+                      driveTrain,
+                      ShuffleboardManager.autoDistance.getDouble(
+                          Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
                   .andThen(new BalancePID(driveTrain));
           new BalancePID(driveTrain);
           break;

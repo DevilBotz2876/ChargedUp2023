@@ -5,6 +5,7 @@
 package bhs.devilbotz.commands;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -38,7 +39,12 @@ public class BalancePID extends CommandBase {
   public BalancePID(DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
-    pid = new PIDController(Constants.BALANCE_P, Constants.BALANCE_I, Constants.BALANCE_D);
+    // pid = new PIDController(Constants.BALANCE_P , Constants.BALANCE_I, Constants.BALANCE_D);
+    pid =
+        new PIDController(
+            Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
+            Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
+            Robot.getDriveTrainConstant("BALANCE_D").asDouble());
     // balanceP.setNumber(0);
     // pid = new PIDController(balanceP.getDouble(Constants.BALANCE_P),
     // balanceI.getDouble(Constants.BALANCE_I),
@@ -59,7 +65,7 @@ public class BalancePID extends CommandBase {
   public void execute() {
     double error = pid.calculate(drive.getRoll(), 0);
     double output = MathUtil.clamp(error, -0.5, 0.5);
-    if (Math.abs(drive.getRoll()) < 3) {
+    if (Math.abs(drive.getRoll()) < Constants.BALANCE_PID_TOLERANCE) {
       output = 0;
     }
     drive.arcadeDrive(-output, 0);
