@@ -3,6 +3,7 @@ package bhs.devilbotz.subsystems;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.utils.PhotonCameraWrapper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -14,20 +15,27 @@ import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.photonvision.EstimatedRobotPose;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * The DriveTrain subsystem controls the robot's drive train. It also handles: - The NAVX
@@ -73,8 +81,7 @@ public class DriveTrain extends SubsystemBase {
       new DifferentialDriveKinematics(Robot.getDriveTrainConstant("TRACK_WIDTH").asDouble());
 
   // Defines the odometry of the drive train, which is used to calculate the position of the robot.
-  private final DifferentialDriveOdometry odometry;
-
+  private final DifferentialDrivePoseEstimator poseEstimator;
   // Defines the feedforward of the drive train, which is used to calculate the voltage needed to
   // move the robot.
   private final SimpleMotorFeedforward feedforward =
@@ -85,6 +92,7 @@ public class DriveTrain extends SubsystemBase {
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
+  public PhotonCameraWrapper pcw;
 
   // Object for simulated inputs into Talon.
   private static final TalonSRXSimCollection leftMasterSim = leftMaster.getSimCollection();
@@ -101,7 +109,7 @@ public class DriveTrain extends SubsystemBase {
    *     DifferentialDrive Simulation Example</a>
    * @since 1/31/2023
    */
-  private DifferentialDrivetrainSim differentialDriveSim =
+  private final DifferentialDrivetrainSim differentialDriveSim =
       new DifferentialDrivetrainSim(
           // Create a linear system from our identification gains.
           SysIdConstants.PLANT,
@@ -134,9 +142,7 @@ public class DriveTrain extends SubsystemBase {
         positionMeters / (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
     double motorRotations =
         wheelRotations * Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
-    int sensorCounts =
-        (int) (motorRotations * Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt());
-    return sensorCounts;
+    return (int) (motorRotations * Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt());
   }
 
   /**
@@ -167,19 +173,17 @@ public class DriveTrain extends SubsystemBase {
    */
   private double nativeUnitsToDistanceMeters(double sensorCounts) {
     double motorRotations =
-        (double) sensorCounts / Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt();
+        sensorCounts / Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt();
     double wheelRotations =
         motorRotations / Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
-    double positionMeters =
-        wheelRotations * (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
-    return positionMeters;
+    return wheelRotations * (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
   }
 
   /**
    * Helper function to convert Talon SRX sensor counts per 100ms to meters/second. Used for
    * Simulation.
    *
-   * @param sensorCounts The robot's encoder count per 100ms
+   * @param sensorCountsPer100ms The robot's encoder count per 100ms
    * @return The robot's current velocity in meters per second
    * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
    * @see <a
@@ -206,6 +210,8 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   public DriveTrain() {
+    pcw = new PhotonCameraWrapper();
+
     // Sets the motor controllers to the correct mode & inverts the right side
     setupTalons();
     // Sets the initial position of the robot to (0, 0) and the initial angle to 0 degrees.
@@ -215,8 +221,8 @@ public class DriveTrain extends SubsystemBase {
 
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
-    odometry =
-        new DifferentialDriveOdometry(navx.getRotation2d(), getLeftDistance(), getRightDistance());
+    poseEstimator = new DifferentialDrivePoseEstimator(
+            kinematics, navx.getRotation2d(), getLeftDistance(), getRightDistance(), new Pose2d());
 
     xSimStart.setNumber(2.0);
     ySimStart.setNumber(2.0);
@@ -231,7 +237,7 @@ public class DriveTrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    odometry.resetPosition(navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
+    poseEstimator.resetPosition(navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
     differentialDriveSim.setPose(pose);
   }
 
@@ -279,14 +285,6 @@ public class DriveTrain extends SubsystemBase {
    */
   @Override
   public void simulationPeriodic() {
-    /**
-     * Simulate motors and integrated sensors
-     *
-     * @see <a
-     *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L144"</a>
-     * @since 1/30/2023
-     */
-
     // Pass the robot battery voltage to the simulated Talon SRXs
     leftMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
     rightMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
@@ -502,9 +500,38 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   private void updateOdometry() {
-    odometry.update(navx.getRotation2d(), getLeftDistance(), getRightDistance());
-    field.setRobotPose(odometry.getPoseMeters());
+    poseEstimator.update(
+            navx.getRotation2d(), getLeftDistance(), getRightDistance());
+
+    Optional<EstimatedRobotPose> result =
+            pcw.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
+
+    if (result.isPresent()) {
+      EstimatedRobotPose camPose = result.get();
+      poseEstimator.addVisionMeasurement(
+              camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+      field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
+      // create a line from the robot to the target using dots to form a line
+      /*
+      for (int i = 0; i < 100; i++) {
+        double t = i / 100.0;
+        Pose2d pose = new Pose2d(
+                camPose.estimatedPose.toPose2d().getTranslation().interpolate(
+                        poseEstimator.getEstimatedPosition().getTranslation(), t),
+                Rotation2d.fromDegrees(0));
+        field.getObject("Cam Est Pos Line " + i).setPose(pose);
+      }
+
+       */
+    } else {
+      // move it way off the screen to make it disappear
+      field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+    }
+
+    field.getObject("Actual Pos").setPose(differentialDriveSim.getPose());
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
   }
+
 
   /**
    * Gets the current roll of the robot.
@@ -522,5 +549,17 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getYaw() {
     return navx.getYaw();
+  }
+
+  public Pose2d getEstimatedPose() {
+    return poseEstimator.getEstimatedPosition();
+  }
+
+  public void addPathToField(Trajectory trajectory) {
+    field.getRobotObject().setTrajectory(trajectory);
+  }
+
+  public PhotonCameraWrapper getPhotonCameraWrapper() {
+    return pcw;
   }
 }

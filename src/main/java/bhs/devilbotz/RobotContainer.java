@@ -11,6 +11,7 @@ import bhs.devilbotz.commands.DriveSetDistancePID;
 import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.auto.BalanceAuto;
+import bhs.devilbotz.commands.driverassist.DriveToTarget;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -62,6 +63,7 @@ public class RobotContainer {
 
     // For testing
     new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
+    new JoystickButton(joystick, 2).onTrue(new DriveToTarget(driveTrain));
   }
 
   private void buildAutoCommands() {

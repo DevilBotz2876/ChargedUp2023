@@ -5,10 +5,14 @@
 
 package bhs.devilbotz;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -122,4 +126,21 @@ public final class Constants {
             Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_V").asDouble(),
             Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_A").asDouble());
   }
+
+  public static class FieldConstants {
+    static final double length = Units.feetToMeters(54);
+    static final double width = Units.feetToMeters(27);
+  }
+
+  public static class VisionConstants {
+    public static final Transform3d robotToCam =
+            new Transform3d(
+                    new Translation3d(0.5, 0.0, 0.5),
+                    new Rotation3d(
+                            0, 0,
+                            0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+    // from center.
+    public static final String cameraName = "YOUR CAMERA NAME";
+  }
+
 }

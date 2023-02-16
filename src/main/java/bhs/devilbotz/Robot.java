@@ -10,6 +10,7 @@ import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,6 +50,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    if (Robot.isSimulation()) {
+      NetworkTableInstance instance = NetworkTableInstance.getDefault();
+      instance.stopServer();
+      // set the NT server if simulating this code.
+      // "localhost" for photon on desktop, or "photonvision.local" / "[ip-address]" for coprocessor
+      instance.setServer("localhost");
+      instance.startClient4("Robot Simulation");
+    }
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
