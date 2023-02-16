@@ -18,9 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
   private final CANSparkMax armMotor;
 
-  /**
-   * The constructor for the arm subsystem.
-   */
+  /** The constructor for the arm subsystem. */
   public Arm() {
     armMotor =
         new CANSparkMax(
@@ -45,13 +43,11 @@ public class Arm extends SubsystemBase {
     armMotor.set(speed);
   }
 
-  /**
-   * This method stops the arm.
-   */
+  /** This method stops the arm. */
   public void stop() {
     armMotor.set(0);
     armMotor.stopMotor();
   }
 
-  //TODO: ADD LIMIT SWITCHES
+  // TODO: ADD LIMIT SWITCHES
 }
