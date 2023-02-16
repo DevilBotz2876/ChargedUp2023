@@ -7,7 +7,6 @@ package bhs.devilbotz.commands;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -22,9 +21,6 @@ public class DriveStraightToDock extends CommandBase {
   private PIDController straightPid;
   private double distance;
   private double startAngle;
-  // private MedianFilter filter;
-  private LinearFilter filter;
-  private double filteredRoll;
   private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
 
   /**
@@ -49,8 +45,6 @@ public class DriveStraightToDock extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
     startAngle = drivetrain.getYaw();
-    // filter = new MedianFilter(5);
-    filter = LinearFilter.singlePoleIIR(0.1, 0.2);
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -77,7 +71,6 @@ public class DriveStraightToDock extends CommandBase {
     SmartDashboard.putNumber("Distance", drivetrain.getAverageDistance());
 
     SmartDashboard.putNumber("Turn output", turnError);
-    SmartDashboard.putNumber("FilterRoll", filteredRoll);
   }
 
   // Called once the command ends or is interrupted.
