@@ -8,7 +8,7 @@ import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * This command closes the gripper.
+ * This command stops the arm.
  *
  * @since 1/25/2023
  * @author joshuamanoj
@@ -17,7 +17,7 @@ public class ArmStop extends CommandBase {
   private final Arm arm;
 
   /**
-   * The constructor for the arm close command.
+   * The constructor for the arm stop command.
    *
    * @param arm The arm subsystem.
    */

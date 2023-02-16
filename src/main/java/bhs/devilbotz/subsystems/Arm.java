@@ -16,10 +16,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Arm extends SubsystemBase {
-
   private final CANSparkMax armMotor;
 
-  /** The constructor for the gripper subsystem. */
+  /**
+   * The constructor for the arm subsystem.
+   */
   public Arm() {
     armMotor =
         new CANSparkMax(
@@ -35,16 +36,22 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {}
 
+  /**
+   * This method sets the speed of the arm.
+   *
+   * @param speed The speed of the arm.
+   */
   public void setSpeed(double speed) {
     armMotor.set(speed);
   }
 
+  /**
+   * This method stops the arm.
+   */
   public void stop() {
     armMotor.set(0);
     armMotor.stopMotor();
   }
 
-  public void setBrake(boolean brake) {
-    armMotor.setIdleMode(brake ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast);
-  }
+  //TODO: ADD LIMIT SWITCHES
 }
