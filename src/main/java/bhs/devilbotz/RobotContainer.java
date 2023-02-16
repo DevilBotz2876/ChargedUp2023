@@ -9,9 +9,16 @@ import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.DriveStraightToDock;
+import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmStop;
+import bhs.devilbotz.commands.arm.ArmUp;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.commands.auto.TestAuto;
+import bhs.devilbotz.commands.gripper.GripperClose;
+import bhs.devilbotz.commands.gripper.GripperIdle;
+import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
@@ -35,6 +42,8 @@ public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
 
   private final Gripper gripper = new Gripper();
+
+  private final Arm arm = new Arm();
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
@@ -62,6 +71,16 @@ public class RobotContainer {
 
     // For testing
     new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
+
+    new JoystickButton(joystick, 6).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
+    new JoystickButton(joystick, 7).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
+
+    new JoystickButton(joystick, 4)
+        .toggleOnTrue(new GripperOpen(gripper))
+        .onFalse(new GripperIdle(gripper));
+    new JoystickButton(joystick, 5)
+        .toggleOnTrue(new GripperClose(gripper))
+        .onFalse(new GripperIdle(gripper));
   }
 
   private void buildAutoCommands() {
