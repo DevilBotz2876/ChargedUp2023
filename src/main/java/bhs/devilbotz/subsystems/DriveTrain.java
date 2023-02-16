@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -228,6 +229,9 @@ public class DriveTrain extends SubsystemBase {
     ySimStart.setNumber(2.0);
     rotSimStart.setNumber(0.0);
     readSimStart.setBoolean(false);
+
+    SmartDashboard.putData("Left Velocity PID", leftPIDController);
+    SmartDashboard.putData("Right Velocity PID", rightPIDController);
   }
 
   /**

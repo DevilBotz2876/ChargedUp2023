@@ -38,6 +38,8 @@ public class DriveStraightPID extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
     startAngle = drivetrain.getYaw();
 
+    SmartDashboard.putData("Distance PID", distancePid);
+    SmartDashboard.putData("Straight PID", straightPid);
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }

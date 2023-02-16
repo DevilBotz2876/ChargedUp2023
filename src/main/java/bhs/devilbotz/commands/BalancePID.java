@@ -38,6 +38,7 @@ public class BalancePID extends CommandBase {
             Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
             Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
             Robot.getDriveTrainConstant("BALANCE_D").asDouble());
+    SmartDashboard.putData("Balance PID", pid);
     addRequirements(drive);
   }
 
