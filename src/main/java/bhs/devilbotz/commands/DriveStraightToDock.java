@@ -4,8 +4,8 @@
 
 package bhs.devilbotz.commands;
 
-import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.utils.RobotConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,15 +35,15 @@ public class DriveStraightToDock extends CommandBase {
     distancePid =
         // new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_D);
         new PIDController(
-            Robot.getDriveTrainConstant("DISTANCE_P").asDouble(),
-            Robot.getDriveTrainConstant("DISTANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("DISTANCE_D").asDouble());
+            RobotConfig.getDriveTrainConstant("DISTANCE_P").asDouble(),
+            RobotConfig.getDriveTrainConstant("DISTANCE_I").asDouble(),
+            RobotConfig.getDriveTrainConstant("DISTANCE_D").asDouble());
     straightPid =
         // new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_D);
         new PIDController(
-            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
+            RobotConfig.getDriveTrainConstant("STRAIGHT_P").asDouble(),
+            RobotConfig.getDriveTrainConstant("STRAIGHT_I").asDouble(),
+            RobotConfig.getDriveTrainConstant("STRAIGHT_D").asDouble());
     startAngle = drivetrain.getYaw();
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.

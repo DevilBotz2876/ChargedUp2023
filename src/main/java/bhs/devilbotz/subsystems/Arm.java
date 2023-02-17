@@ -4,9 +4,10 @@
 
 package bhs.devilbotz.subsystems;
 
-import bhs.devilbotz.Constants;
+import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.utils.RobotConfig;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -16,13 +17,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Arm extends SubsystemBase {
-  private final CANSparkMax armMotor;
+
+  /** Creates a new Arm. */
+  private CANSparkMax armMotor;
 
   /** The constructor for the arm subsystem. */
   public Arm() {
-    armMotor =
-        new CANSparkMax(
-            Constants.ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    if (RobotConfig.isCompBot()) {
+      armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, MotorType.kBrushless);
+    }
   }
 
   /**
@@ -40,13 +43,17 @@ public class Arm extends SubsystemBase {
    * @param speed The speed of the arm.
    */
   public void setSpeed(double speed) {
-    armMotor.set(speed);
+    if (RobotConfig.isCompBot()) {
+      armMotor.set(speed);
+    }
   }
 
   /** This method stops the arm. */
   public void stop() {
-    armMotor.set(0);
-    armMotor.stopMotor();
+    if (RobotConfig.isCompBot()) {
+      armMotor.set(0);
+      armMotor.stopMotor();
+    }
   }
 
   // TODO: ADD LIMIT SWITCHES
