@@ -4,11 +4,10 @@
 
 package bhs.devilbotz.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.utils.RobotConfig;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -27,7 +26,6 @@ public class Arm extends SubsystemBase {
     if (RobotConfig.isCompBot()) {
       armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, MotorType.kBrushless);
     }
-
   }
 
   /**
@@ -46,7 +44,7 @@ public class Arm extends SubsystemBase {
    */
   public void setSpeed(double speed) {
     if (RobotConfig.isCompBot()) {
-    armMotor.set(speed);
+      armMotor.set(speed);
     }
   }
 

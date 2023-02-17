@@ -5,7 +5,6 @@
 package bhs.devilbotz.commands;
 
 import bhs.devilbotz.Constants;
-import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.utils.RobotConfig;
 import edu.wpi.first.math.MathUtil;
