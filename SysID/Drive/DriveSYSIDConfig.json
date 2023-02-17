@@ -12,7 +12,7 @@
     "TalonSRX"
   ],
   "number of samples per average": 1,
-  "primary encoder inverted": false,
+  "primary encoder inverted": true,
   "primary encoder ports": [
     0,
     1
@@ -25,7 +25,7 @@
     false,
     false
   ],
-  "secondary encoder inverted": false,
+  "secondary encoder inverted": true,
   "secondary encoder ports": [
     2,
     3

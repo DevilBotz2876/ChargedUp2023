@@ -8,6 +8,7 @@ import bhs.devilbotz.Constants;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -18,35 +19,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Gripper extends SubsystemBase {
-  private final DoubleSolenoid gripperSolenoid;
-  private static final Compressor pcmCompressor =
-      new Compressor(Constants.GripperConstants.COMPRESSOR_CAN_ID, PneumaticsModuleType.CTREPCM);
+  private static final PneumaticHub pneumaticHub = new PneumaticHub(Constants.GripperConstants.COMPRESSOR_CAN_ID);
+  private final DoubleSolenoid doubleSolenoid = pneumaticHub.makeDoubleSolenoid(Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD, Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
-    pcmCompressor.enableDigital();
-    pcmCompressor.disable();
-
-    gripperSolenoid =
-        new DoubleSolenoid(
-            PneumaticsModuleType.CTREPCM,
-            Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
-            Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
+    pneumaticHub.disableCompressor();
   }
 
   /** This method opens the gripper. */
   public void open() {
-    gripperSolenoid.set(Value.kForward);
+    doubleSolenoid.set(Value.kForward);
   }
 
   /** This method closes the gripper. */
   public void close() {
-    gripperSolenoid.set(Value.kReverse);
+    doubleSolenoid.set(Value.kReverse);
   }
 
   /** This method sets the grippers speed to 0. */
   public void stop() {
-    gripperSolenoid.set(Value.kOff);
+    doubleSolenoid.set(Value.kOff);
   }
 
   /**
@@ -60,8 +53,8 @@ public class Gripper extends SubsystemBase {
 
   /** Enables the compressor for the pnuematic gripper. Remains on until the robot is disabled. */
   public static void enableCompressor() {
-    if (!pcmCompressor.isEnabled()) {
-      pcmCompressor.enableDigital();
+    if (!pneumaticHub.getCompressor()) {
+      pneumaticHub.enableCompressorDigital();
     }
   }
 
@@ -72,6 +65,6 @@ public class Gripper extends SubsystemBase {
    * @return true if pressue is at pre-configured set point
    */
   public static boolean getAtSetpoint() {
-    return pcmCompressor.getPressureSwitchValue();
+    return pneumaticHub.getPressureSwitch();
   }
 }
