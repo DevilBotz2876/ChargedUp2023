@@ -7,13 +7,13 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
-import bhs.devilbotz.commands.DriveSetDistancePID;
-import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
+import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmUp;
 import bhs.devilbotz.commands.auto.BalanceAuto;
+import bhs.devilbotz.commands.auto.TestAuto;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -39,7 +39,7 @@ public class RobotContainer {
 
   private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
-  public final DriveTrain driveTrain = new DriveTrain();
+  private final DriveTrain driveTrain = new DriveTrain();
 
   private final Gripper gripper = new Gripper();
 
@@ -85,10 +85,10 @@ public class RobotContainer {
 
   private void buildAutoCommands() {
     autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE, new DriveStraight(driveTrain, 10));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID, new DriveSetDistancePID(driveTrain, 10));
     autoCommands.put(
         AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
+
+    autoCommands.put(AutonomousModes.TEST, new TestAuto(driveTrain));
   }
 
   /**
@@ -98,10 +98,44 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
-    Command autonomousCommand = autoCommands.get(autoMode);
+    Command autonomousCommand = null;
 
     if (autoMode == null) {
       System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
+    } else {
+      switch (autoMode) {
+        case SIT_STILL:
+          break;
+        case MOBILITY:
+          autonomousCommand =
+              new DriveStraightPID(
+                  driveTrain,
+                  ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY));
+          break;
+        case SCORE_AND_MOBILITY:
+          break;
+        case DOCK_AND_ENGAGE:
+          autonomousCommand =
+              new DriveStraightToDock(
+                      driveTrain,
+                      ShuffleboardManager.autoDistance.getDouble(
+                          Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
+                  .andThen(new BalancePID(driveTrain));
+          new BalancePID(driveTrain);
+          break;
+        case MOBILITY_DOCK_AND_ENGAGE:
+          break;
+
+        case SCORE_DOCK_AND_ENGAGE:
+          break;
+
+        case SCORE_MOBILITY_DOCK_ENGAGE:
+          break;
+        case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
+          break;
+        default:
+          autonomousCommand = autoCommands.get(autoMode);
+      }
     }
 
     return autonomousCommand;
@@ -114,5 +148,14 @@ public class RobotContainer {
    */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
+  }
+
+  /**
+   * Resets the robots position to the pose
+   *
+   * @see DriveTrain#resetRobotPosition()
+   */
+  public void resetRobotPosition() {
+    driveTrain.resetRobotPosition();
   }
 }

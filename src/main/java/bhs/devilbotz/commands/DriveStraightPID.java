@@ -4,7 +4,7 @@
 
 package bhs.devilbotz.commands;
 
-import bhs.devilbotz.Constants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +16,7 @@ public class DriveStraightPID extends CommandBase {
   private PIDController distancePid;
   private PIDController straightPid;
   private double distance;
+  private double startAngle;
   /**
    * The constructor for the Drive Straight PID command.
    *
@@ -26,10 +27,19 @@ public class DriveStraightPID extends CommandBase {
     this.drivetrain = drivetrain;
     this.distance = distance;
     distancePid =
-        new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_K);
+        new PIDController(
+            Robot.getDriveTrainConstant("DISTANCE_P").asDouble(),
+            Robot.getDriveTrainConstant("DISTANCE_I").asDouble(),
+            Robot.getDriveTrainConstant("DISTANCE_D").asDouble());
     straightPid =
-        new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_K);
+        new PIDController(
+            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
+            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
+            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
+    startAngle = drivetrain.getYaw();
 
+    SmartDashboard.putData("Distance PID", distancePid);
+    SmartDashboard.putData("Straight PID", straightPid);
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -46,7 +56,7 @@ public class DriveStraightPID extends CommandBase {
   public void execute() {
     // distance_pid.setTolerance(1);
     double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
-    double turnError = straightPid.calculate(drivetrain.getYaw(), 0);
+    double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
     drivetrain.arcadeDrive(output, -turnError);
 
     SmartDashboard.putNumber("Distance output", output);
@@ -54,8 +64,8 @@ public class DriveStraightPID extends CommandBase {
     SmartDashboard.putBoolean("at Setpoint", distancePid.atSetpoint());
     SmartDashboard.putNumber("Position Error", distancePid.getPositionError());
     SmartDashboard.putNumber("Distance", drivetrain.getAverageDistance());
+
     SmartDashboard.putNumber("Turn output", turnError);
-    SmartDashboard.putNumber("Yaw", drivetrain.getYaw());
   }
 
   // Called once the command ends or is interrupted.

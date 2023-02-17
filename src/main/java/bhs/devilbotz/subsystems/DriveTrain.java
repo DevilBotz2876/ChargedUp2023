@@ -9,10 +9,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,6 +30,10 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -222,6 +229,9 @@ public class DriveTrain extends SubsystemBase {
     ySimStart.setNumber(2.0);
     rotSimStart.setNumber(0.0);
     readSimStart.setBoolean(false);
+
+    SmartDashboard.putData("Left Velocity PID", leftPIDController);
+    SmartDashboard.putData("Right Velocity PID", rightPIDController);
   }
 
   /**
@@ -266,6 +276,24 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // Updates the odometry of the drive train.
     updateOdometry();
+  }
+
+  /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
   }
 
   /**
@@ -417,8 +445,7 @@ public class DriveTrain extends SubsystemBase {
         rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
 
     // Sets the motor controller speeds.
-    leftMaster.setVoltage(leftOutput + leftFeedforward);
-    rightMaster.setVoltage(rightOutput + rightFeedforward);
+    tankDriveVolts(leftOutput + leftFeedforward, rightOutput + rightFeedforward);
   }
 
   /**
@@ -484,6 +511,18 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
+   * Controls the left and right sides of the drive directly with voltages.
+   *
+   * @param leftVolts the commanded left output
+   * @param rightVolts the commanded right output
+   */
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    // Sets the motor controller speeds.
+    leftMaster.setVoltage(leftVolts);
+    rightMaster.setVoltage(rightVolts);
+  }
+
+  /**
    * Sets the talon mode to either brake or coast.
    *
    * @param mode The mode to set the talons to.
@@ -522,5 +561,51 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getYaw() {
     return navx.getYaw();
+  }
+
+  /**
+   * Uses ramsete controller to follow the specified trajectory
+   *
+   * @param traj Requested trajectory
+   * @param isFirstPath Set to true if this is the first path being run in autonomous in order to
+   *     reset odometry before starting
+   * @return A sequential command that when executed, moves the robot along the specified trajectory
+   * @see <a
+   *     href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner
+   *     Example</a>
+   */
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              // Reset odometry for the first path you run during auto
+              if (isFirstPath) {
+                this.resetOdometry(traj.getInitialPose());
+              }
+            }),
+        new PPRamseteCommand(
+            traj,
+            this::getPose, // Pose supplier
+            new RamseteController(),
+            feedforward,
+            this.kinematics, // DifferentialDriveKinematics
+            this::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
+            new PIDController(
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble()),
+            new PIDController(
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble()),
+            this::tankDriveVolts, // Voltage biconsumer
+            true, // Should the path be automatically mirrored depending on alliance color.
+            // Optional, defaults to true
+            this // Requires this drive subsystem
+            ),
+        new InstantCommand(
+            () -> {
+              this.tankDriveVolts(0, 0);
+            }));
   }
 }
