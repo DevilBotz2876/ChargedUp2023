@@ -7,6 +7,7 @@ package bhs.devilbotz.commands;
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.utils.RobotConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,9 +36,9 @@ public class BalancePID extends CommandBase {
     this.drive = drive;
     pid =
         new PIDController(
-            Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_D").asDouble());
+            RobotConfig.getDriveTrainConstant("BALANCE_P").asDouble(),
+            RobotConfig.getDriveTrainConstant("BALANCE_I").asDouble(),
+            RobotConfig.getDriveTrainConstant("BALANCE_D").asDouble());
     SmartDashboard.putData("Balance PID", pid);
     addRequirements(drive);
   }
