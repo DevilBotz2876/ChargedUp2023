@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Gripper extends SubsystemBase {
-  private static final PneumaticHub pneumaticHub = null;
-  private final DoubleSolenoid doubleSolenoid = null;
+  private static PneumaticHub pneumaticHub = null;
+  private DoubleSolenoid doubleSolenoid = null;
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
@@ -27,9 +27,9 @@ public class Gripper extends SubsystemBase {
       pneumaticHub.disableCompressor();
       pneumaticHub = new PneumaticHub(Constants.GripperConstants.COMPRESSOR_CAN_ID);
       doubleSolenoid =
-        pneumaticHub.makeDoubleSolenoid(
-          Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
-          Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
+          pneumaticHub.makeDoubleSolenoid(
+              Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
+              Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
     }
   }
 
