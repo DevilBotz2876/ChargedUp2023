@@ -12,8 +12,6 @@ import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmUp;
-import bhs.devilbotz.commands.auto.BalanceAuto;
-import bhs.devilbotz.commands.auto.TestAuto;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -28,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import java.util.HashMap;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,9 +34,6 @@ import java.util.HashMap;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
-  private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
-
   private final DriveTrain driveTrain = new DriveTrain();
 
   private final Gripper gripper = new Gripper();
@@ -55,7 +49,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    buildAutoCommands();
   }
 
   /**
@@ -82,14 +75,6 @@ public class RobotContainer {
     new JoystickButton(joystick, 5)
         .toggleOnTrue(new GripperClose(gripper))
         .onFalse(new GripperIdle(gripper));
-  }
-
-  private void buildAutoCommands() {
-    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    autoCommands.put(
-        AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
-
-    autoCommands.put(AutonomousModes.TEST, new TestAuto(driveTrain));
   }
 
   /**
@@ -141,8 +126,10 @@ public class RobotContainer {
           break;
         case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
           break;
+        case TEST:
+          break;
         default:
-          autonomousCommand = autoCommands.get(autoMode);
+          break;
       }
     }
 
