@@ -2,7 +2,7 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
-import bhs.devilbotz.utils.RobotConfig;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -50,13 +50,13 @@ public class DriveTrain extends SubsystemBase {
   // Defines the motor controllers for both sides of the drive train (left and right).
 
   private static final WPI_TalonSRX leftMaster =
-      new WPI_TalonSRX(RobotConfig.getDriveTrainConstant("MOTOR_LEFT_MASTER_CAN_ID").asInt());
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_LEFT_MASTER_CAN_ID").asInt());
   private static final WPI_TalonSRX rightMaster =
-      new WPI_TalonSRX(RobotConfig.getDriveTrainConstant("MOTOR_RIGHT_MASTER_CAN_ID").asInt());
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_RIGHT_MASTER_CAN_ID").asInt());
   private static final WPI_TalonSRX leftFollower =
-      new WPI_TalonSRX(RobotConfig.getDriveTrainConstant("MOTOR_LEFT_FOLLOWER_CAN_ID").asInt());
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_LEFT_FOLLOWER_CAN_ID").asInt());
   private static final WPI_TalonSRX rightFollower =
-      new WPI_TalonSRX(RobotConfig.getDriveTrainConstant("MOTOR_RIGHT_FOLLOWER_CAN_ID").asInt());
+      new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_RIGHT_FOLLOWER_CAN_ID").asInt());
 
   // Defines the NAVX, which is a gyroscope that we use to track the robot's position.
   // It is attached to the robot via SPI (Serial Peripheral Interface).
@@ -66,30 +66,29 @@ public class DriveTrain extends SubsystemBase {
   // These are used to control the speed of the motors proportionally to the speed of the wheels.
   private final PIDController leftPIDController =
       new PIDController(
-          RobotConfig.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
-          RobotConfig.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
-          RobotConfig.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble());
+          Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble());
   private final PIDController rightPIDController =
       new PIDController(
-          RobotConfig.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
-          RobotConfig.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
-          RobotConfig.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble());
+          Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble());
 
   // Defines the kinematics of the drive train, which is used to calculate the speed of the wheels.
   private final DifferentialDriveKinematics kinematics =
-      new DifferentialDriveKinematics(RobotConfig.getDriveTrainConstant("TRACK_WIDTH").asDouble());
+      new DifferentialDriveKinematics(Robot.getDriveTrainConstant("TRACK_WIDTH").asDouble());
 
-  // Defines the odometry of the drive train, which is used to calculate the position of the
-  // RobotConfig.
+  // Defines the odometry of the drive train, which is used to calculate the position of the robot.
   private final DifferentialDriveOdometry odometry;
 
   // Defines the feedforward of the drive train, which is used to calculate the voltage needed to
-  // move the RobotConfig.
+  // move the robot.
   private final SimpleMotorFeedforward feedforward =
       new SimpleMotorFeedforward(
-          RobotConfig.getSysIdConstant("FEED_FORWARD_LINEAR_S").asDouble(),
-          RobotConfig.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
-          RobotConfig.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble());
+          Robot.getSysIdConstant("FEED_FORWARD_LINEAR_S").asDouble(),
+          Robot.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
+          Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble());
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
@@ -105,7 +104,7 @@ public class DriveTrain extends SubsystemBase {
    *     href="https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/drivesim-tutorial/drivetrain-model.html">Creating
    *     a Drivetrain Model</a>
    * @see <a
-   *     href="https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/RobotConfig.java#L6">CTRE
+   *     href="https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L6">CTRE
    *     DifferentialDrive Simulation Example</a>
    * @since 1/31/2023
    */
@@ -114,9 +113,9 @@ public class DriveTrain extends SubsystemBase {
           // Create a linear system from our identification gains.
           SysIdConstants.PLANT,
           DriveConstants.MOTOR_CONFIGURATION,
-          RobotConfig.getDriveTrainConstant("MOTOR_GEAR_RATIO").asDouble(),
-          RobotConfig.getDriveTrainConstant("TRACK_WIDTH").asDouble(),
-          RobotConfig.getDriveTrainConstant("WHEEL_RADIUS").asDouble(),
+          Robot.getDriveTrainConstant("MOTOR_GEAR_RATIO").asDouble(),
+          Robot.getDriveTrainConstant("TRACK_WIDTH").asDouble(),
+          Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble(),
 
           // The standard deviations for measurement noise:
           // x and y:          0.001 m
@@ -133,18 +132,17 @@ public class DriveTrain extends SubsystemBase {
    * @return The robot's current position in native units (sensorCount)
    * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureRawPosition(int)
    * @see <a
-   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/RobotConfig.java#L208">CTRE
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L208">CTRE
    *     Sample Code</a>
    * @since 1/31/2023
    */
   private int distanceToNativeUnits(double positionMeters) {
     double wheelRotations =
-        positionMeters
-            / (2 * Math.PI * RobotConfig.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
+        positionMeters / (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
     double motorRotations =
-        wheelRotations * RobotConfig.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
+        wheelRotations * Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
     int sensorCounts =
-        (int) (motorRotations * RobotConfig.getDriveTrainConstant("ENCODER_RESOLUTION").asInt());
+        (int) (motorRotations * Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt());
     return sensorCounts;
   }
 
@@ -155,7 +153,7 @@ public class DriveTrain extends SubsystemBase {
    * @return The robot's current velocity in native units (encoderCounts per 100ms)
    * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
    * @see <a
-   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/RobotConfig.java#L215">CTRE
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L215">CTRE
    *     Sample Code</a>
    * @since 1/31/2023
    */
@@ -170,18 +168,17 @@ public class DriveTrain extends SubsystemBase {
    * @return The robot's current position in meters
    * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
    * @see <a
-   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/RobotConfig.java#L223">CTRE
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L223">CTRE
    *     Sample Code</a>
    * @since 1/31/2023
    */
   private double nativeUnitsToDistanceMeters(double sensorCounts) {
     double motorRotations =
-        (double) sensorCounts / RobotConfig.getDriveTrainConstant("ENCODER_RESOLUTION").asInt();
+        (double) sensorCounts / Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt();
     double wheelRotations =
-        motorRotations / RobotConfig.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
+        motorRotations / Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
     double positionMeters =
-        wheelRotations
-            * (2 * Math.PI * RobotConfig.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
+        wheelRotations * (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
     return positionMeters;
   }
 
@@ -193,7 +190,7 @@ public class DriveTrain extends SubsystemBase {
    * @return The robot's current velocity in meters per second
    * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
    * @see <a
-   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/RobotConfig.java#L223">CTRE
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L223">CTRE
    *     Sample Code</a>
    * @since 1/31/2023
    */
@@ -224,7 +221,7 @@ public class DriveTrain extends SubsystemBase {
     ShuffleboardManager.putField(field);
 
     // Defines the odometry of the drive train, which is used to calculate the position of the
-    // RobotConfig.
+    // robot.
     odometry =
         new DifferentialDriveOdometry(navx.getRotation2d(), getLeftDistance(), getRightDistance());
 
@@ -269,7 +266,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * This method updates once per loop of the RobotConfig.
+   * This method updates once per loop of the robot.
    *
    * @see <a href="https://docs.wpilib.org/en/latest/docs/software/commandbased/index.html">Command
    *     Based Programming</a>
@@ -282,7 +279,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * Returns the currently-estimated pose of the RobotConfig.
+   * Returns the currently-estimated pose of the robot.
    *
    * @return The pose.
    */
@@ -291,7 +288,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * Returns the current wheel speeds of the RobotConfig.
+   * Returns the current wheel speeds of the robot.
    *
    * @return The current wheel speeds.
    */
@@ -301,7 +298,7 @@ public class DriveTrain extends SubsystemBase {
 
   /**
    * This method updates once per loop of the robot only in simulation mode. It is not run when
-   * deployed to the physical RobotConfig.
+   * deployed to the physical robot.
    *
    * @see <a
    *     href="https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/device-sim.html">Device
@@ -314,7 +311,7 @@ public class DriveTrain extends SubsystemBase {
      * Simulate motors and integrated sensors
      *
      * @see <a
-     *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/RobotConfig.java#L144"</a>
+     *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L144"</a>
      * @since 1/30/2023
      */
 
@@ -549,7 +546,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * Gets the current roll of the RobotConfig.
+   * Gets the current roll of the robot.
    *
    * @return The current roll of the robot in degrees.
    * @since 1/30/2023
@@ -558,8 +555,7 @@ public class DriveTrain extends SubsystemBase {
     return navx.getRoll();
   }
   /**
-   * Gets the current yaw of the RobotConfig. It is the value of the gyro when it turns left and
-   * right
+   * Gets the current yaw of the robot. It is the value of the gyro when it turns left and right
    *
    * @return The current yaw of the robot in degrees.
    */
@@ -595,13 +591,13 @@ public class DriveTrain extends SubsystemBase {
             this.kinematics, // DifferentialDriveKinematics
             this::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
             new PIDController(
-                RobotConfig.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
-                RobotConfig.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
-                RobotConfig.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble()),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble()),
             new PIDController(
-                RobotConfig.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
-                RobotConfig.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
-                RobotConfig.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble()),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble()),
             this::tankDriveVolts, // Voltage biconsumer
             true, // Should the path be automatically mirrored depending on alliance color.
             // Optional, defaults to true

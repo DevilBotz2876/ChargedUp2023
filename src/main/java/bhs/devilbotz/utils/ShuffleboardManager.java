@@ -3,6 +3,7 @@ package bhs.devilbotz.utils;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.ScoreLevels;
+import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -33,7 +34,7 @@ public class ShuffleboardManager {
   private static final ShuffleboardLayout autoMode =
       driveTab.getLayout("Autonomous", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
 
-  // private final GenericEntry gripperSetpoint;
+  private final GenericEntry gripperSetpoint;
   /** The constructor for the shuffleboard manager. */
   public ShuffleboardManager() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -48,13 +49,13 @@ public class ShuffleboardManager {
               }
             });
 
-    // gripperSetpoint =
-    //     driveTab
-    //         .add("Gripper Setpoint", .getAtSetpoint())
-    //         .withPosition(0, 1)
-    //         .withSize(1, 1)
-    //         .withWidget(BuiltInWidgets.kBooleanBox)
-    //         .getEntry();
+    gripperSetpoint =
+        driveTab
+            .add("Gripper Setpoint", Gripper.getAtSetpoint())
+            .withPosition(0, 1)
+            .withSize(1, 1)
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .getEntry();
 
     initAutoModeChooser();
     initAutoModePreferences();
@@ -108,7 +109,7 @@ public class ShuffleboardManager {
   /** Updates the values on the shuffleboard. */
   public void updateValues() {
     // update gripper setpoint using network tables
-    // gripperSetpoint.setBoolean(Gripper.getAtSetpoint());
+    gripperSetpoint.setBoolean(Gripper.getAtSetpoint());
   }
 
   /**

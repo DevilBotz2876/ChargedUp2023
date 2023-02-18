@@ -21,7 +21,6 @@ import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
-import bhs.devilbotz.utils.RobotConfig;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,8 +40,9 @@ public class RobotContainer {
 
   private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
-  private DriveTrain driveTrain = null;
-  private Gripper gripper = null;
+  private final DriveTrain driveTrain = new DriveTrain();
+
+  private final Gripper gripper = new Gripper();
 
   private final Arm arm = new Arm();
 
@@ -53,11 +53,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    driveTrain = new DriveTrain();
-    if (RobotConfig.isCompBot()) {
-      gripper = new Gripper();
-    }
-
     // Configure the trigger bindings
     configureBindings();
     buildAutoCommands();
@@ -170,11 +165,5 @@ public class RobotContainer {
    */
   public void resetRobotPosition() {
     driveTrain.resetRobotPosition();
-  }
-
-  public void enableCompressor() {
-    if (gripper != null) {
-      gripper.enableCompressor();
-    }
   }
 }
