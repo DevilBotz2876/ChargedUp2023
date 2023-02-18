@@ -5,6 +5,7 @@
 
 package bhs.devilbotz;
 
+import bhs.devilbotz.commands.ArcadeDriveOpenLoop;
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.DriveStraightPID;
@@ -64,8 +65,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    driveTrain.setDefaultCommand(
-        new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    //driveTrain.setDefaultCommand(new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY, rightJoystick::getX));
 
     new JoystickButton(leftJoystick, 1)
         .toggleOnTrue(new GripperClose(gripper))
