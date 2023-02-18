@@ -64,7 +64,7 @@ public final class Constants {
     public static final double JOYSTICK_DEADBAND = 0.035;
 
     /** The maximum acceleration of the RobotConfig in units per second */
-    public static final double SLEW_RATE_LIMITER = 2.5;
+    public static final double SLEW_RATE_LIMITER = 4;
 
     /** The motor configuration for each side of the RobotConfig */
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
