@@ -24,8 +24,8 @@ public class Gripper extends SubsystemBase {
   /** The constructor for the gripper subsystem. */
   public Gripper() {
     if (RobotConfig.isCompBot()) {
-      pneumaticHub.disableCompressor();
       pneumaticHub = new PneumaticHub(Constants.GripperConstants.COMPRESSOR_CAN_ID);
+      pneumaticHub.disableCompressor();
       doubleSolenoid =
           pneumaticHub.makeDoubleSolenoid(
               Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
