@@ -42,8 +42,12 @@ public class RobotContainer {
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
-  private final Joystick joystick =
-      new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
+  private final Joystick leftJoystick =
+          new Joystick(Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT);
+
+  private final Joystick rightJoystick =
+          new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -61,20 +65,31 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
+    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
 
-    // For testing
-    new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
+    new JoystickButton(leftJoystick, 1)
+            .toggleOnTrue(new GripperClose(gripper))
+            .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(joystick, 6).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
-    new JoystickButton(joystick, 7).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 2)
+            .toggleOnTrue(new GripperOpen(gripper))
+            .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(joystick, 4)
-        .toggleOnTrue(new GripperOpen(gripper))
-        .onFalse(new GripperIdle(gripper));
-    new JoystickButton(joystick, 5)
-        .toggleOnTrue(new GripperClose(gripper))
-        .onFalse(new GripperIdle(gripper));
+    new JoystickButton(leftJoystick, 5)
+            .whileTrue(new ArmUp(arm))
+            .onFalse(new ArmStop(arm));
+
+    new JoystickButton(leftJoystick, 4)
+            .whileTrue(new ArmDown(arm))
+            .onFalse(new ArmStop(arm));
+
+    /*
+    new JoystickButton(leftJoystick, 6)
+            .whileTrue( Cone Mode );
+
+    new JoystickButton(leftJoystick, 7)
+            .whileTrue( Cube Mode );
+    */
   }
 
   /**

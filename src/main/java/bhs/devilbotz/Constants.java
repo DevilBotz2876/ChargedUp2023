@@ -47,7 +47,8 @@ public final class Constants {
      * The port for the joystick on the driver station. This is the main joystick and is used for
      * driving
      */
-    public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int DRIVER_LEFT_CONTROLLER_PORT = 0;
+    public static final int DRIVER_RIGHT_CONTROLLER_PORT = 1;
   }
 
   /**
