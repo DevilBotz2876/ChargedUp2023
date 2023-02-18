@@ -20,7 +20,9 @@ import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -48,10 +50,19 @@ public class RobotContainer {
   private final Joystick rightJoystick =
       new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
 
+  // For debugging balance PID. Allows setting balance PID values on the fly
+  private final PIDController balancePid =
+      new PIDController(
+          Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
+          Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
+          Robot.getDriveTrainConstant("BALANCE_D").asDouble());
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    // For debugging balance PID. Allows setting balance PID values on the fly
+    SmartDashboard.putData("Balance PID", balancePid);
   }
 
   /**
@@ -126,8 +137,7 @@ public class RobotContainer {
                               driveTrain,
                               ShuffleboardManager.autoDistance.getDouble(
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                          .andThen(new BalancePID(driveTrain)));
-          new BalancePID(driveTrain);
+                          .andThen(new BalancePID(driveTrain, balancePid)));
           break;
         case MOBILITY_DOCK_AND_ENGAGE:
           break;

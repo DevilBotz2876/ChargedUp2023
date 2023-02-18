@@ -23,7 +23,19 @@ public class BalancePID extends CommandBase {
   // TODO: Add a feedforward term to the PID controller and tune pid
   private final DriveTrain drive;
   // private double levelAngle;
-  private final PIDController pid;
+  private final PIDController balancePid;
+
+  /**
+   * The constructor for the balance PID command.
+   *
+   * @param drive The drive train subsystem.
+   * @param balancePid The external PID for controlling balance
+   */
+  public BalancePID(DriveTrain drive, PIDController balancePid) {
+    this.drive = drive;
+    this.balancePid = balancePid;
+    addRequirements(drive);
+  }
 
   /**
    * The constructor for the balance PID command.
@@ -31,15 +43,12 @@ public class BalancePID extends CommandBase {
    * @param drive The drive train subsystem.
    */
   public BalancePID(DriveTrain drive) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.drive = drive;
-    pid =
+    this(
+        drive,
         new PIDController(
             Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
             Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_D").asDouble());
-    SmartDashboard.putData("Balance PID", pid);
-    addRequirements(drive);
+            Robot.getDriveTrainConstant("BALANCE_D").asDouble()));
   }
 
   // Called when the command is initially scheduled.
@@ -52,7 +61,7 @@ public class BalancePID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double error = pid.calculate(drive.getRoll(), 0);
+    double error = balancePid.calculate(drive.getRoll(), 0);
     double output = MathUtil.clamp(error, -0.5, 0.5);
     if (Math.abs(drive.getRoll()) < Constants.BALANCE_PID_TOLERANCE) {
       output = 0;
