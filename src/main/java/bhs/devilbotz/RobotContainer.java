@@ -128,6 +128,7 @@ public class RobotContainer {
           new BalancePID(driveTrain);
           break;
         case MOBILITY_DOCK_AND_ENGAGE:
+        autonomousCommand = new TestTwo(driveTrain).andThen(new BalancePID(driveTrain));
           break;
 
         case SCORE_DOCK_AND_ENGAGE:
