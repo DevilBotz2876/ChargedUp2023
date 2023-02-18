@@ -118,7 +118,7 @@ public class DriveTrain extends SubsystemBase {
    *     DifferentialDrive Simulation Example</a>
    * @since 1/31/2023
    */
-  private DifferentialDrivetrainSim differentialDriveSim =
+  private final DifferentialDrivetrainSim differentialDriveSim =
       new DifferentialDrivetrainSim(
           // Create a linear system from our identification gains.
           SysIdConstants.PLANT,
@@ -196,7 +196,7 @@ public class DriveTrain extends SubsystemBase {
    * Helper function to convert Talon SRX sensor counts per 100ms to meters/second. Used for
    * Simulation.
    *
-   * @param sensorCounts The robot's encoder count per 100ms
+   * @param sensorCountsPer100ms The robot's encoder count per 100ms
    * @return The robot's current velocity in meters per second
    * @see com.ctre.phoenix.motorcontrol.TalonSRXSimCollection#setQuadratureVelocity(int)
    * @see <a
