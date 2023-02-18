@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
   private final CANSparkMax armMotor;
   private final SlewRateLimiter armSlewRateLimiter =
-          new SlewRateLimiter(Constants.ArmConstants.ARM_SLEW_RATE_LIMITER);
+      new SlewRateLimiter(Constants.ArmConstants.ARM_SLEW_RATE_LIMITER);
 
   /** The constructor for the arm subsystem. */
   public Arm() {
