@@ -5,16 +5,15 @@
 
 package bhs.devilbotz;
 
-import bhs.devilbotz.utils.RobotConfig;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 
 /**
- * The Constants class provides a convenient place for teams to hold RobotConfig-wide numerical or
- * boolean constants. This class should not be used for any other purpose. All constants should be
- * declared globally (i.e. public static). Do not put anything functional in this class.
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
+ * globally (i.e. public static). Do not put anything functional in this class.
  *
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
@@ -59,14 +58,14 @@ public final class Constants {
   public static class DriveConstants {
     /**
      * The deadband for the joystick. This is the minimum value that the joystick must be at to move
-     * the RobotConfig.
+     * the robot.
      */
     public static final double JOYSTICK_DEADBAND = 0.035;
 
-    /** The maximum acceleration of the RobotConfig in units per second */
+    /** The maximum acceleration of the robot in units per second */
     public static final double SLEW_RATE_LIMITER = 2.5;
 
-    /** The motor configuration for each side of the RobotConfig */
+    /** The motor configuration for each side of the robot */
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
   }
 
@@ -89,10 +88,10 @@ public final class Constants {
     /** Create a linear system from our system identification gains. */
     public static final LinearSystem<N2, N2, N2> PLANT =
         LinearSystemId.identifyDrivetrainSystem(
-            RobotConfig.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
-            RobotConfig.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble(),
-            RobotConfig.getSysIdConstant("FEED_FORWARD_ANGULAR_V").asDouble(),
-            RobotConfig.getSysIdConstant("FEED_FORWARD_ANGULAR_A").asDouble());
+            Robot.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
+            Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble(),
+            Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_V").asDouble(),
+            Robot.getSysIdConstant("FEED_FORWARD_ANGULAR_A").asDouble());
   }
 
   public static final class ArmConstants {
