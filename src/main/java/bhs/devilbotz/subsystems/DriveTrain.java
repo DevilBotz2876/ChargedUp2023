@@ -89,6 +89,16 @@ public class DriveTrain extends SubsystemBase {
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_S").asDouble(),
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble());
+  private final SimpleMotorFeedforward leftFeedforward =
+      new SimpleMotorFeedforward(
+          Robot.getSysIdConstant("LEFT_FEED_FORWARD_LINEAR_S").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_FORWARD_LINEAR_V").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_FORWARD_LINEAR_A").asDouble());
+  private final SimpleMotorFeedforward rightFeedforward =
+      new SimpleMotorFeedforward(
+          Robot.getSysIdConstant("RIGHT_FEED_FORWARD_LINEAR_S").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_FORWARD_LINEAR_V").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_FORWARD_LINEAR_A").asDouble());
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
@@ -435,8 +445,8 @@ public class DriveTrain extends SubsystemBase {
    */
   public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
     // Calculates the desired voltages for the left and right sides of the drive train.
-    final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
-    final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
+    final double leftFeedforward = this.leftFeedforward.calculate(speeds.leftMetersPerSecond);
+    final double rightFeedforward = this.rightFeedforward.calculate(speeds.rightMetersPerSecond);
 
     // Calculates the PID output for the left and right sides of the drive train.
     final double leftOutput =
