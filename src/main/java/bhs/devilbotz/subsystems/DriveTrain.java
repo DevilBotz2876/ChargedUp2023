@@ -4,6 +4,7 @@ import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
@@ -28,6 +29,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -439,27 +441,6 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * Sets the desired wheel speeds using the PID controllers.
-   *
-   * @param speeds The desired wheel speeds in meters per second.
-   * @since 1/30/2023
-   */
-  public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-    // Calculates the desired voltages for the left and right sides of the drive train.
-    final double leftFeedforward = this.leftFeedforward.calculate(speeds.leftMetersPerSecond);
-    final double rightFeedforward = this.rightFeedforward.calculate(speeds.rightMetersPerSecond);
-
-    // Calculates the PID output for the left and right sides of the drive train.
-    final double leftOutput =
-        leftPIDController.calculate(getLeftVelocity(), speeds.leftMetersPerSecond);
-    final double rightOutput =
-        rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
-
-    // Sets the motor controller speeds.
-    tankDriveVolts(leftOutput + leftFeedforward, rightOutput + rightFeedforward);
-  }
-
-  /**
    * Sets up the talons This method sets up the motor controllers.
    *
    * @since 1/30/2023
@@ -510,6 +491,27 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
+   * Sets the desired wheel speeds using the PID controllers.
+   *
+   * @param speeds The desired wheel speeds in meters per second.
+   * @since 1/30/2023
+   */
+  public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+    // Calculates the desired voltages for the left and right sides of the drive train.
+    final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
+    final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
+
+    // Calculates the PID output for the left and right sides of the drive train.
+    final double leftOutput =
+        leftPIDController.calculate(getLeftVelocity(), speeds.leftMetersPerSecond);
+    final double rightOutput =
+        rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
+
+    // Sets the motor controller speeds.
+    tankDriveVolts(leftOutput + leftFeedforward, rightOutput + rightFeedforward);
+  }
+
+  /**
    * Drives the robot with the given linear velocity and angular velocity.
    *
    * @param speed Linear velocity in m/s.
@@ -519,6 +521,23 @@ public class DriveTrain extends SubsystemBase {
   public void arcadeDrive(double speed, double rot) {
     var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
     setSpeeds(wheelSpeeds);
+  }
+
+  public void tankDriveVelocity(double speed, double rot) {
+    var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
+    setSpeeds(wheelSpeeds);
+  }
+
+  public void arcadeDriveOpenLoop(double speed, double rotation) {
+    var speeds = DifferentialDrive.arcadeDriveIK(speed, rotation, true);
+    leftMaster.set(ControlMode.PercentOutput, speeds.left);
+    rightMaster.set(ControlMode.PercentOutput, speeds.right);
+  }
+
+  public void tankDriveOpenLoop(double left, double right) {
+    var speeds = DifferentialDrive.tankDriveIK(left, right, true);
+    leftMaster.set(ControlMode.PercentOutput, speeds.left);
+    rightMaster.set(ControlMode.PercentOutput, speeds.right);
   }
 
   /**
