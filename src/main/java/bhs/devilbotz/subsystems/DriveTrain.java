@@ -229,7 +229,7 @@ public class DriveTrain extends SubsystemBase {
     resetEncoders();
 
     ShuffleboardManager.putField(field);
-
+    SmartDashboard.putData("Gyro", navx);
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
     odometry =
@@ -242,6 +242,7 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putData("Left Velocity PID", leftPIDController);
     SmartDashboard.putData("Right Velocity PID", rightPIDController);
+    resetNavx();
   }
 
   /**
