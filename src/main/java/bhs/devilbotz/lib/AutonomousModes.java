@@ -29,23 +29,6 @@ public enum AutonomousModes {
    * #DOCK_AND_ENGAGE}
    */
   SCORE_MOBILITY_PICK_DOCK_ENGAGE,
-
-  /** Backup short moves the robot backwards a short distance and then stops. */
-  BACKUP_SHORT,
-  /**
-   * Backup and balance moves the robot backwards a short distance and then balances on the
-   * platform.
-   */
-  BACKUP_AND_BALANCE,
-  /** Backup far moves the robot backwards a long distance and then stops. */
-  BACKUP_FAR,
-  /** Balance does NOT move the robot and then balances on the platform. */
-  BALANCE,
-  TEST,
-  /** Drive Distance goes forward one meter */
-  DRIVE_DISTANCE,
-  /** Drive Distance goes forward one meter using PID for */
-  DRIVE_DISTANCE_PID,
-  /** Drive Distance goes forward one meter using PID */
-  DRIVE_STRAIGHT_DISTANCE_PID,
+  /** Placeholder For Testing New Autonomous Routines */
+  TEST
 }

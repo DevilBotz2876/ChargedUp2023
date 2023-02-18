@@ -1,8 +1,8 @@
 package bhs.devilbotz.commands;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
-import bhs.devilbotz.utils.RobotConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -71,22 +71,21 @@ public class DriveCommand extends CommandBase {
     double c = 1.1;
 
     /*
-    This is the equation that is used to calculate the speed of the robot. It is a cubic function
-    that is used to make the robot accelerate slower at the beginning of the joystick movement to allow
-    for more precise control.
+     This is the equation that is used to calculate the speed of the robot. It is a cubic function
+     that is used to make the robot accelerate slower at the beginning of the joystick movement to allow
+     for more precise control.
     */
     speed = (a * (speed * speed * speed) + (b - a) * speed) * c;
     rot = (a * (rot * rot * rot) + (b - a) * rot) * c;
 
-    // // The joysticks are inverted, so negate the values
+    // The joysticks are inverted, so negate the values
     final var calculatedSpeed =
-        -speedSlewRateLimiter.calculate(
-            speed * RobotConfig.getSysIdConstant("MAX_SPEED").asDouble());
+        -speedSlewRateLimiter.calculate(speed * Robot.getSysIdConstant("MAX_SPEED").asDouble());
 
     // The rotation is inverted, so negate the value
     final var calculatedRot =
         -rotationSlewRateLimiter.calculate(
-            rot * RobotConfig.getSysIdConstant("MAX_ANGULAR_SPEED").asDouble());
+            rot * Robot.getSysIdConstant("MAX_ANGULAR_SPEED").asDouble());
 
     drive.arcadeDrive(calculatedSpeed, calculatedRot);
   }
