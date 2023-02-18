@@ -8,12 +8,9 @@ import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * This command moves the arm down.
- *
- * @since 1/25/2023
- * @author joshuamanoj
+ * This command moves the arm to middle scoring position. Middle is determined by encoder position.
  */
-public class ArmDown extends CommandBase {
+public class ArmToMiddle extends CommandBase {
   private final Arm arm;
 
   /**
@@ -21,7 +18,7 @@ public class ArmDown extends CommandBase {
    *
    * @param arm The arm subsystem.
    */
-  public ArmDown(Arm arm) {
+  public ArmToMiddle(Arm arm) {
     this.arm = arm;
     addRequirements(arm);
   }
@@ -33,7 +30,13 @@ public class ArmDown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.down();
+    // TODO: not sure this works, needs more testing.
+    if (arm.atTop()) {
+      arm.down();
+    }
+    if (arm.atBottom()) {
+      arm.up();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -45,10 +48,6 @@ public class ArmDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO: When arm is fixed and can be retracted all the way change this to use limit switch only
-    // to end command.
-
-    // return arm.isBottomLimit();
-    return arm.isBottomLimit() || arm.atBottom();
+    return arm.atMiddle();
   }
 }

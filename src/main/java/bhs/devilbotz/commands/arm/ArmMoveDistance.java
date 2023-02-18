@@ -13,27 +13,38 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @since 1/25/2023
  * @author joshuamanoj
  */
-public class ArmDown extends CommandBase {
+public class ArmMoveDistance extends CommandBase {
   private final Arm arm;
+  private final double distance;
+  private double start, end;
 
   /**
-   * The constructor for the arm down command.
+   * The constructor
    *
    * @param arm The arm subsystem.
    */
-  public ArmDown(Arm arm) {
+  public ArmMoveDistance(Arm arm, double distance) {
     this.arm = arm;
+    this.distance = distance;
+
     addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    start = arm.getPosition();
+    end = start + distance;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.down();
+    if (distance > 0) {
+      arm.up();
+    } else if (distance < 0) {
+      arm.down();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -45,10 +56,7 @@ public class ArmDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO: When arm is fixed and can be retracted all the way change this to use limit switch only
-    // to end command.
-
-    // return arm.isBottomLimit();
-    return arm.isBottomLimit() || arm.atBottom();
+    double diff = arm.getPosition() - end;
+    return Math.abs(diff) < 2;
   }
 }

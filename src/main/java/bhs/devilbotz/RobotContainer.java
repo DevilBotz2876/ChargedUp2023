@@ -10,7 +10,11 @@ import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
+import bhs.devilbotz.commands.arm.ArmToBottom;
+import bhs.devilbotz.commands.arm.ArmToMiddle;
+import bhs.devilbotz.commands.arm.ArmToTop;
 import bhs.devilbotz.commands.arm.ArmUp;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
@@ -80,6 +84,18 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
 
     new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
+
+    new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
+    new JoystickButton(leftJoystick, 7)
+        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+    new JoystickButton(leftJoystick, 8).onTrue(new ArmToMiddle(arm));
+    new JoystickButton(leftJoystick, 9)
+        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+    new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
+    new JoystickButton(leftJoystick, 11)
+        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
     /*
     new JoystickButton(leftJoystick, 6)
