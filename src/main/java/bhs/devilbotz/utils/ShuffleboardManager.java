@@ -75,13 +75,7 @@ public class ShuffleboardManager {
     autoModeChooser.addOption(
         "Routine 8: Score, Mobility, Pick, Dock, and Engage",
         AutonomousModes.SCORE_MOBILITY_PICK_DOCK_ENGAGE);
-    autoModeChooser.addOption("Path Planner (Test)", AutonomousModes.TEST);
-    autoModeChooser.addOption("Backup Short", AutonomousModes.BACKUP_SHORT);
-    autoModeChooser.addOption("Backup and Balance", AutonomousModes.BACKUP_AND_BALANCE);
-    autoModeChooser.addOption("Backup Far", AutonomousModes.BACKUP_FAR);
-    autoModeChooser.addOption("Balance", AutonomousModes.BALANCE);
-    autoModeChooser.addOption("Drive Distance", AutonomousModes.DRIVE_DISTANCE);
-    autoModeChooser.addOption("Drive Distance PID", AutonomousModes.DRIVE_DISTANCE_PID);
+    autoModeChooser.addOption("Test", AutonomousModes.TEST);
     autoMode.add("Routine", autoModeChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
   }
 

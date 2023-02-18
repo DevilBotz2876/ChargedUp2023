@@ -12,8 +12,6 @@ import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmUp;
-import bhs.devilbotz.commands.auto.BalanceAuto;
-import bhs.devilbotz.commands.auto.TestAuto;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -24,10 +22,10 @@ import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import java.util.HashMap;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,9 +34,6 @@ import java.util.HashMap;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
-  private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
-
   private final DriveTrain driveTrain = new DriveTrain();
 
   private final Gripper gripper = new Gripper();
@@ -54,7 +49,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    buildAutoCommands();
   }
 
   /**
@@ -83,14 +77,6 @@ public class RobotContainer {
         .onFalse(new GripperIdle(gripper));
   }
 
-  private void buildAutoCommands() {
-    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    autoCommands.put(
-        AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
-
-    autoCommands.put(AutonomousModes.TEST, new TestAuto(driveTrain));
-  }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -108,19 +94,26 @@ public class RobotContainer {
           break;
         case MOBILITY:
           autonomousCommand =
-              new DriveStraightPID(
-                  driveTrain,
-                  ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY));
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(
+                      new DriveStraightPID(
+                          driveTrain,
+                          ShuffleboardManager.autoDistance.getDouble(
+                              Constants.DEFAULT_DISTANCE_MOBILITY)));
           break;
         case SCORE_AND_MOBILITY:
           break;
         case DOCK_AND_ENGAGE:
           autonomousCommand =
-              new DriveStraightToDock(
-                      driveTrain,
-                      ShuffleboardManager.autoDistance.getDouble(
-                          Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                  .andThen(new BalancePID(driveTrain));
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(
+                      new DriveStraightToDock(
+                              driveTrain,
+                              ShuffleboardManager.autoDistance.getDouble(
+                                  Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
+                          .andThen(new BalancePID(driveTrain)));
           new BalancePID(driveTrain);
           break;
         case MOBILITY_DOCK_AND_ENGAGE:
@@ -133,8 +126,10 @@ public class RobotContainer {
           break;
         case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
           break;
+        case TEST:
+          break;
         default:
-          autonomousCommand = autoCommands.get(autoMode);
+          break;
       }
     }
 
