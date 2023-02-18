@@ -51,8 +51,13 @@ public class ArcadeDriveOpenLoop extends CommandBase {
    */
   @Override
   public void execute() {
+    // double s = -speed.getAsDouble();
+    // double r = rotation.getAsDouble();
 
-    drive.arcadeDriveOpenLoop(-speed.getAsDouble(), rotation.getAsDouble());
+    double s = speedSlewRateLimiter.calculate(speed.getAsDouble());
+    double r = rotationSlewRateLimiter.calculate(rotation.getAsDouble());
+
+    drive.arcadeDriveOpenLoop(-s, r);
   }
 
   /**
