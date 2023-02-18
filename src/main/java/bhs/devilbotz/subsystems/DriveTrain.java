@@ -523,11 +523,6 @@ public class DriveTrain extends SubsystemBase {
     setSpeeds(wheelSpeeds);
   }
 
-  public void tankDriveVelocity(double speed, double rot) {
-    var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
-    setSpeeds(wheelSpeeds);
-  }
-
   public void arcadeDriveOpenLoop(double speed, double rotation) {
     var speeds = DifferentialDrive.arcadeDriveIK(speed, rotation, true);
     leftMaster.set(ControlMode.PercentOutput, speeds.left);
