@@ -98,5 +98,7 @@ public final class Constants {
 
   public static final class ArmConstants {
     public static final int ARM_MOTOR_CAN_ID = 5;
+
+    public static final int ARM_SLEW_RATE_LIMITER = 1;
   }
 }

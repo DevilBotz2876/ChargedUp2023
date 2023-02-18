@@ -7,6 +7,7 @@ package bhs.devilbotz.subsystems;
 import bhs.devilbotz.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -17,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Arm extends SubsystemBase {
   private final CANSparkMax armMotor;
+  private final SlewRateLimiter armSlewRateLimiter =
+          new SlewRateLimiter(Constants.ArmConstants.ARM_SLEW_RATE_LIMITER);
 
   /** The constructor for the arm subsystem. */
   public Arm() {
@@ -40,7 +43,7 @@ public class Arm extends SubsystemBase {
    * @param speed The speed of the arm.
    */
   public void setSpeed(double speed) {
-    armMotor.set(speed);
+    armMotor.set(armSlewRateLimiter.calculate(speed));
   }
 
   /** This method stops the arm. */
