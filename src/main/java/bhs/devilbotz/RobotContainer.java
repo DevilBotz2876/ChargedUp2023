@@ -25,6 +25,7 @@ import bhs.devilbotz.utils.RobotConfig;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -113,19 +114,26 @@ public class RobotContainer {
           break;
         case MOBILITY:
           autonomousCommand =
-              new DriveStraightPID(
-                  driveTrain,
-                  ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY));
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(
+                      new DriveStraightPID(
+                          driveTrain,
+                          ShuffleboardManager.autoDistance.getDouble(
+                              Constants.DEFAULT_DISTANCE_MOBILITY)));
           break;
         case SCORE_AND_MOBILITY:
           break;
         case DOCK_AND_ENGAGE:
           autonomousCommand =
-              new DriveStraightToDock(
-                      driveTrain,
-                      ShuffleboardManager.autoDistance.getDouble(
-                          Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                  .andThen(new BalancePID(driveTrain));
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(
+                      new DriveStraightToDock(
+                              driveTrain,
+                              ShuffleboardManager.autoDistance.getDouble(
+                                  Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
+                          .andThen(new BalancePID(driveTrain)));
           new BalancePID(driveTrain);
           break;
         case MOBILITY_DOCK_AND_ENGAGE:
