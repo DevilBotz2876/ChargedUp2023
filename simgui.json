@@ -7,6 +7,13 @@
     },
     "windows": {
       "/Shuffleboard/Drive/Field": {
+        "bottom": 544,
+        "height": 8.013679504394531,
+        "image": "2023-field.png",
+        "left": 46,
+        "right": 1088,
+        "top": 36,
+        "width": 16.541748046875,
         "window": {
           "visible": true
         }

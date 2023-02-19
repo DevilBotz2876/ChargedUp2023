@@ -72,7 +72,6 @@ public class DriveStraightToDock extends CommandBase {
     SmartDashboard.putNumber("Left distance", drivetrain.getLeftDistance());
     SmartDashboard.putNumber("Right Distance", drivetrain.getRightDistance());
 
-
     SmartDashboard.putNumber("Turn output", turnError);
   }
 

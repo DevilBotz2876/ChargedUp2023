@@ -12,7 +12,6 @@ import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmUp;
-import bhs.devilbotz.commands.auto.TestTwo;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -21,6 +20,9 @@ import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -129,7 +131,13 @@ public class RobotContainer {
           new BalancePID(driveTrain);
           break;
         case MOBILITY_DOCK_AND_ENGAGE:
-        autonomousCommand = new TestTwo(driveTrain).andThen(new BalancePID(driveTrain));
+          PathPlannerTrajectory testPath =
+              PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(1.0, 0.5));
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(driveTrain.followTrajectoryCommand(testPath, true))
+                  .andThen(new BalancePID(driveTrain));
           break;
 
         case SCORE_DOCK_AND_ENGAGE:
