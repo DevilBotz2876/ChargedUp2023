@@ -5,6 +5,7 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.Constants.ArmConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -30,14 +31,21 @@ public class Arm extends SubsystemBase {
         new CANSparkMax(
             Constants.ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    topLimitSwitch = new DigitalInput(1);
-    bottomLimitSwitch = new DigitalInput(0);
-    encoder = new Encoder(2, 3);
+    topLimitSwitch = new DigitalInput(ArmConstants.TOP_LIMIT_SWITCH_DIO_PORT);
+    bottomLimitSwitch = new DigitalInput(ArmConstants.BOTTOM_LIMIT_SWITCH_DIO_PORT);
+    encoder =
+        new Encoder(
+            ArmConstants.ENCODER_CHANNEL_A_DIO_PORT, ArmConstants.ENCODER_CHANNEL_B_DIO_PORT);
 
-    // TODO: when arm is fixed try using this to change numbers output by encoder.  With this set to
-    // true moving up will increase encoder value.  Moving down will decrease values.
-
-    // Nicer on the eyes to see positive numbers when moving up/down.
+    // TODO: when arm is fixed try using this to change numbers output by encoder.  ill increase
+    // encoder value.  Moving down will decrease values.
+    //
+    // Arm starts down inside chassis. This means encoder starts at zero here.  When moving the arm
+    // up it is
+    // nice to see positive numbers for position.  With this set to
+    // true moving arm up from initial position should return positive value.  TODO: check if
+    // switching DIO port wires will change sign of value.
+    //
     // encoder.setReverseDirection(true);
   }
 
