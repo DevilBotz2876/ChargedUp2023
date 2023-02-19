@@ -69,6 +69,8 @@ public class RobotContainer {
   private void configureBindings() {
     driveTrain.setDefaultCommand(
         new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
+    // rightJoystick::getX));
 
     new JoystickButton(leftJoystick, 1)
         .toggleOnTrue(new GripperClose(gripper))
