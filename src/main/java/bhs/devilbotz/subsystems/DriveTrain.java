@@ -498,8 +498,8 @@ public class DriveTrain extends SubsystemBase {
    */
   public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
     // Calculates the desired voltages for the left and right sides of the drive train.
-    final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
-    final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
+    final double leftFeedforward = this.leftFeedforward.calculate(speeds.leftMetersPerSecond);
+    final double rightFeedforward = this.rightFeedforward.calculate(speeds.rightMetersPerSecond);
 
     // Calculates the PID output for the left and right sides of the drive train.
     final double leftOutput =
