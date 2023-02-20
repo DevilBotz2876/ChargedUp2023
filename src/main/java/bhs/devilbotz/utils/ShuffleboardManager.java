@@ -1,5 +1,6 @@
 package bhs.devilbotz.utils;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.ScoreLevels;
@@ -84,7 +85,10 @@ public class ShuffleboardManager {
         autoMode.add("Delay (in seconds)", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
 
     autoDistance =
-        autoMode.add("Distance (in meters)", 5).withWidget(BuiltInWidgets.kTextView).getEntry();
+        autoMode
+            .add("Distance (in meters)", Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE)
+            .withWidget(BuiltInWidgets.kTextView)
+            .getEntry();
 
     autoScoreLevelChooser.setDefaultOption("Low", ScoreLevels.LOW);
     autoScoreLevelChooser.addOption("Mid", ScoreLevels.MID);
