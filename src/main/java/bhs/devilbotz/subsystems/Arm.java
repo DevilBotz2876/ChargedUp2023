@@ -4,11 +4,10 @@
 
 package bhs.devilbotz.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -77,12 +76,11 @@ public class Arm extends SubsystemBase {
   private final double POSITION_BOTTOM = 100;
   private final double POSITION_PORTAL = 300;
 
-  private  double topPosition = POSITION_TOP;
-  private  double middlePosition = POSITION_MIDDLE;
-  private  double bottomPosition = POSITION_BOTTOM;
+  private double topPosition = POSITION_TOP;
+  private double middlePosition = POSITION_MIDDLE;
+  private double bottomPosition = POSITION_BOTTOM;
   private double portalPosition = POSITION_PORTAL;
 
-  
   // When trying to reach a set position, how close is good enough? This value is used to determine
   // that. Smaller value tries to reach closer to target position.  Larger will stop arm further
   // away from exact position read by encoder.  Why do we need this? The arm is moving so trying to
@@ -91,12 +89,16 @@ public class Arm extends SubsystemBase {
 
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private NetworkTable table = inst.getTable("Arm");
-  
+
   private DoubleEntry ntTopPosition = table.getDoubleTopic("position/top").getEntry(POSITION_TOP);
-  private DoubleEntry ntMiddlePosition = table.getDoubleTopic("position/middle").getEntry(POSITION_MIDDLE);
-  private DoubleEntry ntBottomPosition = table.getDoubleTopic("position/bottom").getEntry(POSITION_BOTTOM);
-  private DoubleEntry ntPortalPosition = table.getDoubleTopic("position/portal").getEntry(POSITION_PORTAL);
-  private DoubleEntry ntCurrentPosition = table.getDoubleTopic("position/_current").getEntry(POSITION_PORTAL);
+  private DoubleEntry ntMiddlePosition =
+      table.getDoubleTopic("position/middle").getEntry(POSITION_MIDDLE);
+  private DoubleEntry ntBottomPosition =
+      table.getDoubleTopic("position/bottom").getEntry(POSITION_BOTTOM);
+  private DoubleEntry ntPortalPosition =
+      table.getDoubleTopic("position/portal").getEntry(POSITION_PORTAL);
+  private DoubleEntry ntCurrentPosition =
+      table.getDoubleTopic("position/_current").getEntry(POSITION_PORTAL);
 
   private BooleanEntry ntTopLimitSwitch = table.getBooleanTopic("limit/top").getEntry(false);
   private BooleanEntry ntBottomLimitSwitch = table.getBooleanTopic("limit/bottom").getEntry(false);
@@ -106,7 +108,7 @@ public class Arm extends SubsystemBase {
   private BooleanEntry ntBottom = table.getBooleanTopic("state/atBottom").getEntry(false);
   private BooleanEntry ntPortal = table.getBooleanTopic("state/atPortal").getEntry(false);
   private BooleanEntry ntMoving = table.getBooleanTopic("state/moving").getEntry(false);
-  
+
   /** The constructor for the arm subsystem. */
   public Arm() {
     ntTopPosition.setDefault(POSITION_TOP);
