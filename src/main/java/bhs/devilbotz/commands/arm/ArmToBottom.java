@@ -40,9 +40,6 @@ public class ArmToBottom extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO: when arm is fixed only check limit switch
-
-    // return arm.isBottomLimit();
     return (arm.atBottom() || arm.isBottomLimit());
   }
 }

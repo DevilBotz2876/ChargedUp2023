@@ -45,10 +45,6 @@ public class ArmDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO: When arm is fixed and can be retracted all the way change this to use limit switch only
-    // to end command.
-
-    // return arm.isBottomLimit();
     return arm.isBottomLimit() || arm.atBottom();
   }
 }

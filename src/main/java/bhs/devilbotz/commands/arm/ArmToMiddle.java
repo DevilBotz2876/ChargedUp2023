@@ -30,11 +30,9 @@ public class ArmToMiddle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO: not sure this works, needs more testing.
-    if (arm.atTop()) {
+    if (arm.aboveMiddle()) {
       arm.down();
-    }
-    if (arm.atBottom()) {
+    } else if (arm.belowMiddle()) {
       arm.up();
     }
   }
@@ -48,6 +46,11 @@ public class ArmToMiddle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Stop command in case the end position is out of range or encoder is broken or giving
+    // incorrect readings
+    if (arm.isBottomLimit() || arm.isTopLimit()) {
+      return true;
+    }
     return arm.atMiddle();
   }
 }

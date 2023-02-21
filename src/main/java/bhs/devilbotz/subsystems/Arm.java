@@ -4,13 +4,17 @@
 
 package bhs.devilbotz.subsystems;
 
-import bhs.devilbotz.Constants;
-import bhs.devilbotz.Constants.ArmConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+
+import bhs.devilbotz.Constants;
+import bhs.devilbotz.Constants.ArmConstants;
+import edu.wpi.first.networktables.BooleanEntry;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -64,8 +68,52 @@ public class Arm extends SubsystemBase {
   private final DigitalInput bottomLimitSwitch;
   private final Encoder encoder;
 
+  // These values are used to move the arm to known positions.  0 is considered starting
+  // position/bottom. Values increase as arm moves up.
+  //
+  // TODO: The numbers need to be tuned.
+  private final double POSITION_TOP = 400;
+  private final double POSITION_MIDDLE = 200;
+  private final double POSITION_BOTTOM = 100;
+  private final double POSITION_PORTAL = 300;
+
+  private  double topPosition = POSITION_TOP;
+  private  double middlePosition = POSITION_MIDDLE;
+  private  double bottomPosition = POSITION_BOTTOM;
+  private double portalPosition = POSITION_PORTAL;
+
+  
+  // When trying to reach a set position, how close is good enough? This value is used to determine
+  // that. Smaller value tries to reach closer to target position.  Larger will stop arm further
+  // away from exact position read by encoder.  Why do we need this? The arm is moving so trying to
+  // stop at exact position will result in some overshoot.
+  private final double positionError = 2;
+
+  private NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  private NetworkTable table = inst.getTable("Arm");
+  
+  private DoubleEntry ntTopPosition = table.getDoubleTopic("position/top").getEntry(POSITION_TOP);
+  private DoubleEntry ntMiddlePosition = table.getDoubleTopic("position/middle").getEntry(POSITION_MIDDLE);
+  private DoubleEntry ntBottomPosition = table.getDoubleTopic("position/bottom").getEntry(POSITION_BOTTOM);
+  private DoubleEntry ntPortalPosition = table.getDoubleTopic("position/portal").getEntry(POSITION_PORTAL);
+  private DoubleEntry ntCurrentPosition = table.getDoubleTopic("position/_current").getEntry(POSITION_PORTAL);
+
+  private BooleanEntry ntTopLimitSwitch = table.getBooleanTopic("limit/top").getEntry(false);
+  private BooleanEntry ntBottomLimitSwitch = table.getBooleanTopic("limit/bottom").getEntry(false);
+
+  private BooleanEntry ntTop = table.getBooleanTopic("state/atTop").getEntry(false);
+  private BooleanEntry ntMiddle = table.getBooleanTopic("state/atMiddle").getEntry(false);
+  private BooleanEntry ntBottom = table.getBooleanTopic("state/atBottom").getEntry(false);
+  private BooleanEntry ntPortal = table.getBooleanTopic("state/atPortal").getEntry(false);
+  private BooleanEntry ntMoving = table.getBooleanTopic("state/moving").getEntry(false);
+  
   /** The constructor for the arm subsystem. */
   public Arm() {
+    ntTopPosition.setDefault(POSITION_TOP);
+    ntMiddlePosition.setDefault(POSITION_MIDDLE);
+    ntBottomPosition.setDefault(POSITION_BOTTOM);
+    ntPortalPosition.setDefault(POSITION_PORTAL);
+
     armMotor =
         new CANSparkMax(
             Constants.ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -76,14 +124,11 @@ public class Arm extends SubsystemBase {
         new Encoder(
             ArmConstants.ENCODER_CHANNEL_A_DIO_PORT, ArmConstants.ENCODER_CHANNEL_B_DIO_PORT);
 
-    // TODO: when arm is fixed try using this to change numbers output by encoder.  ill increase
-    // encoder value.  Moving down will decrease values.
-    //
     // Arm starts down inside chassis. This means encoder starts at zero here.  When moving the arm
-    // up it is
-    // nice to see positive numbers for position.  With this set to
-    // true moving arm up from initial position should return positive value.  TODO: check if
-    // switching DIO port wires will change sign of value.
+    // up it is nice to see positive numbers for position.  With this set to
+    // true moving arm up from initial position should return positive value.
+    //
+    // TODO: check if switching DIO port wires will change sign of value.
     //
     // encoder.setReverseDirection(true);
   }
@@ -96,13 +141,24 @@ public class Arm extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("armTopLimit", isTopLimit());
-    SmartDashboard.putBoolean("armBotLimit", isBottomLimit());
-    SmartDashboard.putNumber("armPosition", encoder.getDistance());
+    ntTopLimitSwitch.set(isTopLimit());
+    ntBottomLimitSwitch.set(isBottomLimit());
+    ntTop.set(atTop());
+    ntMiddle.set(atMiddle());
+    ntBottom.set(atBottom());
+    ntPortal.set(atSubstationPortal());
+    ntCurrentPosition.set(getPosition());
+    ntMoving.set(isMoving());
 
-    // TODO: when arm is fixed change this to reset encoder position when at bottom
-    if (isTopLimit()) {
-      encoder.reset();
+    topPosition = ntTopPosition.get();
+    middlePosition = ntBottomPosition.get();
+    bottomPosition = ntBottomPosition.get();
+    portalPosition = ntPortalPosition.get();
+
+    // Only reset encoder position if arm hit bottom limit switch and is not moving.  The arm will
+    // be engaged with limit switch while moving.  We don't want to reset encoder multiple times.
+    if (isBottomLimit() && isMoving() == false) {
+      resetPosition();
     }
   }
 
@@ -127,31 +183,19 @@ public class Arm extends SubsystemBase {
     armMotor.set(-1);
   }
 
-  /**
-   * Check if arm is at bottom most position.
-   *
-   * @return true if at bottom, false if not.
-   */
-  public boolean atBottom() {
-    // TODO: when arm is fixed change this to check bottom limit switch
-    //
-    // return isBottomLimit();
-    return encoder.getDistance() >= 400;
-  }
-
-  /**
-   * Check if arm is at top most position.
-   *
-   * @return true if at top, false if not.
-   */
-  public boolean atTop() {
-    return isTopLimit();
-  }
-
   /** This method stops the arm. */
   public void stop() {
-    armMotor.set(0);
+    armMotor.set(0.0);
     armMotor.stopMotor();
+  }
+
+  /**
+   * Check if arm is moving or not based on motor state.
+   *
+   * @return true if arm is moving, false if not.
+   */
+  public boolean isMoving() {
+    return (armMotor.get() != 0.0);
   }
 
   /**
@@ -173,15 +217,56 @@ public class Arm extends SubsystemBase {
   }
 
   /**
+   * Check if arm is at bottom position to allow it to score a game piece in lower grid scoring
+   * node.
+   *
+   * @return true if at bottom, false if not.
+   */
+  public boolean atBottom() {
+    // Don't check for exact position, check if position is in some range.
+    return (getPosition() >= bottomPosition - positionError
+        || getPosition() <= bottomPosition + positionError);
+  }
+
+  /**
+   * Check if arm is at top position to allow it to score a game piece in top grid scoring node.
+   *
+   * @return true if at top, false if not.
+   */
+  public boolean atTop() {
+    // Don't check for exact position, check if position is in some range.
+    return (getPosition() >= topPosition - positionError
+        || getPosition() <= topPosition + positionError);
+  }
+
+  /**
    * Check if arm is at middle position based on encoder position. Middle is just high enough above
    * middle grid scoring node to allow cone or cube to be lined up.
    *
    * @return true if at middle position false if not.
    */
   public boolean atMiddle() {
-    // TODO: Just a random number for now.  Need to measure what real/good encoder value is to
-    // position arm right above middle scoring grid node.
-    return encoder.getDistance() >= 200 && encoder.getDistance() <= 205;
+    // Don't check for exact position, check if position is in some range.
+    return (getPosition() >= middlePosition - positionError
+        || getPosition() <= middlePosition + positionError);
+  }
+
+  /**
+   * Check if arm is above middle position based on encoder position.
+   *
+   * @return true if above middle position false if not.
+   */
+  public boolean aboveMiddle() {
+    return (getPosition() > middlePosition);
+  }
+
+  /**
+   * Check if arm is below middle position based on encoder position.
+   *
+   * @return true if below middle position false if not.
+   */
+  public boolean belowMiddle() {
+    return (getPosition() < middlePosition);
   }
 
   /**
@@ -190,10 +275,9 @@ public class Arm extends SubsystemBase {
    * @return true if at substation portal height, false if not.
    */
   public boolean atSubstationPortal() {
-    // TODO: Just a random number for now.  Need to measure what real/good encoder value is to
-    // position
-    // arm at height to pickup from portal
-    return encoder.getDistance() >= 200 && encoder.getDistance() <= 205;
+    // Don't check for exact position, check if position is in some range.
+    return (getPosition() >= portalPosition - positionError
+        || getPosition() <= portalPosition + positionError);
   }
 
   /**
@@ -203,5 +287,13 @@ public class Arm extends SubsystemBase {
    */
   public double getPosition() {
     return encoder.getDistance();
+  }
+
+  /**
+   * Reset encoder to zero. We consider arm down inside chassis as zero position. Use lower limit
+   * switch to determine when we reach that position. This should be called when arm is not moving.
+   */
+  private void resetPosition() {
+    encoder.reset();
   }
 }
