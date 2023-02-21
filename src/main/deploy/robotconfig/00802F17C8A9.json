@@ -3,7 +3,7 @@
     "id": "00802F17C8A9",
 
     "drivetrain" : {
-        "TRACK_WIDTH": 0.555,
+        "TRACK_WIDTH": 0.64602,
         "WHEEL_RADIUS": 0.0762,
         "ENCODER_RESOLUTION": 4096,
         "ENCODER_GEAR_RATIO": 1,
@@ -11,31 +11,44 @@
         "MOTOR_RIGHT_MASTER_CAN_ID": 4,
         "MOTOR_LEFT_FOLLOWER_CAN_ID": 1,
         "MOTOR_RIGHT_FOLLOWER_CAN_ID": 2,
-        "MOTOR_GEAR_RATIO": 8.45
+        "MOTOR_GEAR_RATIO": 8.45,
+        "BALANCE_P": 0.1,
+        "BALANCE_I": 0.0,
+        "BALANCE_D": 0.03,
+        "DISTANCE_P": 2,
+        "DISTANCE_I": 0,
+        "DISTANCE_D": 0.1,
+        "STRAIGHT_P": 0.1,
+        "STRAIGHT_I": 0,
+        "STRAIGHT_D": 0
     },
 
     "sysid": {
-        "MAX_SPEED": 1.0,
+        "MAX_SPEED": 2.0,
         "MAX_ANGULAR_SPEED": 6.28,
 
-        "LEFT_FEED_BACK_VELOCITY_P": 0.0,
+        "COMBINED_FEED_BACK_VELOCITY_P": 3.752,
+        "COMBINED_FEED_BACK_VELOCITY_I": 0.0,
+        "COMBINED_FEED_BACK_VELOCITY_D": 0.0,
+        "LEFT_FEED_BACK_VELOCITY_P": 4.4469,
         "LEFT_FEED_BACK_VELOCITY_I": 0.0,
         "LEFT_FEED_BACK_VELOCITY_D": 0.0,
-        "RIGHT_FEED_BACK_VELOCITY_P": 0.0,
+        "RIGHT_FEED_BACK_VELOCITY_P": 3.752,
         "RIGHT_FEED_BACK_VELOCITY_I": 0.0,
         "RIGHT_FEED_BACK_VELOCITY_D": 0.0,
-        "LEFT_FEED_BACK_POSITION_P": 0.0,
-        "LEFT_FEED_BACK_POSITION_I": 0.0,
-        "LEFT_FEED_BACK_POSITION_D": 0.0,
-        "RIGHT_FEED_BACK_POSITION_P": 0.0,
-        "RIGHT_FEED_BACK_POSITION_I": 0.0,
-        "RIGHT_FEED_BACK_POSITION_D": 0.0,
 
-        "FEED_FORWARD_LINEAR_S": 1.0,
-        "FEED_FORWARD_LINEAR_V": 1.0,
-        "FEED_FORWARD_LINEAR_A": 1.0,
-        "FEED_FORWARD_ANGULAR_S": 1.0,
-        "FEED_FORWARD_ANGULAR_V": 1.5,
-        "FEED_FORWARD_ANGULAR_A": 0.3                        
+        "FEED_FORWARD_LINEAR_S": 1.0049,
+        "FEED_FORWARD_LINEAR_V": 3.0881,
+        "FEED_FORWARD_LINEAR_A": 0.4649,
+        "LEFT_FEED_FORWARD_LINEAR_S": 0.97651,
+        "LEFT_FEED_FORWARD_LINEAR_V": 3.0942,
+        "LEFT_FEED_FORWARD_LINEAR_A": 0.24797,
+        "RIGHT_FEED_FORWARD_LINEAR_S": 1.0253,
+        "RIGHT_FEED_FORWARD_LINEAR_V": 3.0785,
+        "RIGHT_FEED_FORWARD_LINEAR_A": 0.23915,
+
+        "FEED_FORWARD_ANGULAR_S": 2.0498,
+        "FEED_FORWARD_ANGULAR_V": 3.292,
+        "FEED_FORWARD_ANGULAR_A": 0.55014                        
     }
 }

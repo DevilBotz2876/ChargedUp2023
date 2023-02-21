@@ -11,6 +11,7 @@ import bhs.devilbotz.utils.ShuffleboardManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -76,6 +77,8 @@ public class Robot extends TimedRobot {
 
     robotContainer = new RobotContainer();
     shuffleboardManager = robotContainer.getShuffleboardManager();
+
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -100,7 +103,7 @@ public class Robot extends TimedRobot {
   /** This method is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    robotContainer.driveTrain.resetRobotPosition();
+    robotContainer.resetRobotPosition();
   }
 
   @Override
@@ -109,7 +112,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    robotContainer.driveTrain.resetRobotPosition();
+    robotContainer.resetRobotPosition();
 
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
     Gripper.enableCompressor();
@@ -126,7 +129,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    robotContainer.driveTrain.resetRobotPosition();
+    robotContainer.resetRobotPosition();
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

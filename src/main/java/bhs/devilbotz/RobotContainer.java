@@ -10,14 +10,26 @@ import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.DriveSetDistancePID;
 import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
+import bhs.devilbotz.commands.DriveStraightToDock;
+import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmStop;
+import bhs.devilbotz.commands.arm.ArmUp;
+import bhs.devilbotz.commands.gripper.GripperClose;
+import bhs.devilbotz.commands.gripper.GripperIdle;
+import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.commands.auto.BalanceAuto;
 import bhs.devilbotz.commands.driverassist.DriveToTarget;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,16 +49,20 @@ public class RobotContainer {
 
   private final Gripper gripper = new Gripper();
 
+  private final Arm arm = new Arm();
+
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
-  private final Joystick joystick =
-      new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
+  private final Joystick leftJoystick =
+      new Joystick(Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT);
+
+  private final Joystick rightJoystick =
+      new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    buildAutoCommands();
   }
 
   /**
@@ -59,19 +75,34 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, joystick::getY, joystick::getX));
+    driveTrain.setDefaultCommand(
+        new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
+    // rightJoystick::getX));
 
+    new JoystickButton(leftJoystick, 1)
+        .toggleOnTrue(new GripperClose(gripper))
+        .onFalse(new GripperIdle(gripper));
+
+    new JoystickButton(leftJoystick, 2)
+        .toggleOnTrue(new GripperOpen(gripper))
+        .onFalse(new GripperIdle(gripper));
+
+    new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
+
+    new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
     // For testing
     new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
     new JoystickButton(joystick, 2).onTrue(new DriveToTarget(driveTrain));
   }
 
-  private void buildAutoCommands() {
-    autoCommands.put(AutonomousModes.BALANCE, new BalanceAuto(driveTrain));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE, new DriveStraight(driveTrain, 10));
-    autoCommands.put(AutonomousModes.DRIVE_DISTANCE_PID, new DriveSetDistancePID(driveTrain, 10));
-    autoCommands.put(
-        AutonomousModes.DRIVE_STRAIGHT_DISTANCE_PID, new DriveStraightPID(driveTrain, 10));
+    /*
+    new JoystickButton(leftJoystick, 6)
+            .whileTrue( Cone Mode );
+
+    new JoystickButton(leftJoystick, 7)
+            .whileTrue( Cube Mode );
+    */
   }
 
   /**
@@ -81,10 +112,60 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
-    Command autonomousCommand = autoCommands.get(autoMode);
+    Command autonomousCommand = null;
 
     if (autoMode == null) {
       System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
+    } else {
+      switch (autoMode) {
+        case SIT_STILL:
+          break;
+        case MOBILITY:
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(
+                      new DriveStraightPID(
+                          driveTrain,
+                          ShuffleboardManager.autoDistance.getDouble(
+                              Constants.DEFAULT_DISTANCE_MOBILITY)));
+          break;
+        case SCORE_AND_MOBILITY:
+          break;
+        case DOCK_AND_ENGAGE:
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(
+                      new DriveStraightToDock(
+                              driveTrain,
+                              ShuffleboardManager.autoDistance.getDouble(
+                                  Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
+                          .andThen(new BalancePID(driveTrain)));
+          new BalancePID(driveTrain);
+          break;
+        case MOBILITY_DOCK_AND_ENGAGE:
+          PathPlannerTrajectory testPath =
+              PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(1.0, 0.5));
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(driveTrain.followTrajectoryCommand(testPath, true))
+                  .andThen(new BalancePID(driveTrain));
+          break;
+
+        case SCORE_DOCK_AND_ENGAGE:
+          break;
+
+        case SCORE_MOBILITY_DOCK_ENGAGE:
+          break;
+        case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
+          break;
+        case TEST:
+          break;
+        default:
+          break;
+      }
     }
 
     return autonomousCommand;
@@ -97,5 +178,14 @@ public class RobotContainer {
    */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
+  }
+
+  /**
+   * Resets the robots position to the pose
+   *
+   * @see DriveTrain#resetRobotPosition()
+   */
+  public void resetRobotPosition() {
+    driveTrain.resetRobotPosition();
   }
 }

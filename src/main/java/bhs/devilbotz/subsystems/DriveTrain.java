@@ -5,21 +5,26 @@ import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.utils.PhotonCameraWrapper;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -28,9 +33,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.photonvision.EstimatedRobotPose;
 
@@ -89,6 +97,16 @@ public class DriveTrain extends SubsystemBase {
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_S").asDouble(),
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_V").asDouble(),
           Robot.getSysIdConstant("FEED_FORWARD_LINEAR_A").asDouble());
+  private final SimpleMotorFeedforward leftFeedforward =
+      new SimpleMotorFeedforward(
+          Robot.getSysIdConstant("LEFT_FEED_FORWARD_LINEAR_S").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_FORWARD_LINEAR_V").asDouble(),
+          Robot.getSysIdConstant("LEFT_FEED_FORWARD_LINEAR_A").asDouble());
+  private final SimpleMotorFeedforward rightFeedforward =
+      new SimpleMotorFeedforward(
+          Robot.getSysIdConstant("RIGHT_FEED_FORWARD_LINEAR_S").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_FORWARD_LINEAR_V").asDouble(),
+          Robot.getSysIdConstant("RIGHT_FEED_FORWARD_LINEAR_A").asDouble());
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
@@ -142,7 +160,9 @@ public class DriveTrain extends SubsystemBase {
         positionMeters / (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
     double motorRotations =
         wheelRotations * Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
-    return (int) (motorRotations * Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt());
+    int sensorCounts =
+        (int) (motorRotations * Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt());
+    return sensorCounts;
   }
 
   /**
@@ -173,10 +193,12 @@ public class DriveTrain extends SubsystemBase {
    */
   private double nativeUnitsToDistanceMeters(double sensorCounts) {
     double motorRotations =
-        sensorCounts / Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt();
+        (double) sensorCounts / Robot.getDriveTrainConstant("ENCODER_RESOLUTION").asInt();
     double wheelRotations =
         motorRotations / Robot.getDriveTrainConstant("ENCODER_GEAR_RATIO").asDouble();
-    return wheelRotations * (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
+    double positionMeters =
+        wheelRotations * (2 * Math.PI * Robot.getDriveTrainConstant("WHEEL_RADIUS").asDouble());
+    return positionMeters;
   }
 
   /**
@@ -218,7 +240,7 @@ public class DriveTrain extends SubsystemBase {
     resetEncoders();
 
     ShuffleboardManager.putField(field);
-
+    SmartDashboard.putData("Gyro", navx);
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
     poseEstimator = new DifferentialDrivePoseEstimator(
@@ -228,6 +250,10 @@ public class DriveTrain extends SubsystemBase {
     ySimStart.setNumber(2.0);
     rotSimStart.setNumber(0.0);
     readSimStart.setBoolean(false);
+
+    SmartDashboard.putData("Left Velocity PID", leftPIDController);
+    SmartDashboard.putData("Right Velocity PID", rightPIDController);
+    resetNavx();
   }
 
   /**
@@ -275,6 +301,24 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return poseEstimator.getEstimatedPosition();
+  }
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+  }
+
+  /**
    * This method updates once per loop of the robot only in simulation mode. It is not run when
    * deployed to the physical robot.
    *
@@ -285,6 +329,14 @@ public class DriveTrain extends SubsystemBase {
    */
   @Override
   public void simulationPeriodic() {
+    /**
+     * Simulate motors and integrated sensors
+     *
+     * @see <a
+     *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L144"</a>
+     * @since 1/30/2023
+     */
+
     // Pass the robot battery voltage to the simulated Talon SRXs
     leftMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
     rightMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
@@ -398,28 +450,6 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * Sets the desired wheel speeds using the PID controllers.
-   *
-   * @param speeds The desired wheel speeds in meters per second.
-   * @since 1/30/2023
-   */
-  public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-    // Calculates the desired voltages for the left and right sides of the drive train.
-    final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
-    final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
-
-    // Calculates the PID output for the left and right sides of the drive train.
-    final double leftOutput =
-        leftPIDController.calculate(getLeftVelocity(), speeds.leftMetersPerSecond);
-    final double rightOutput =
-        rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
-
-    // Sets the motor controller speeds.
-    leftMaster.setVoltage(leftOutput + leftFeedforward);
-    rightMaster.setVoltage(rightOutput + rightFeedforward);
-  }
-
-  /**
    * Sets up the talons This method sets up the motor controllers.
    *
    * @since 1/30/2023
@@ -470,6 +500,27 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
+   * Sets the desired wheel speeds using the PID controllers.
+   *
+   * @param speeds The desired wheel speeds in meters per second.
+   * @since 1/30/2023
+   */
+  public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+    // Calculates the desired voltages for the left and right sides of the drive train.
+    final double leftFeedforward = this.leftFeedforward.calculate(speeds.leftMetersPerSecond);
+    final double rightFeedforward = this.rightFeedforward.calculate(speeds.rightMetersPerSecond);
+
+    // Calculates the PID output for the left and right sides of the drive train.
+    final double leftOutput =
+        leftPIDController.calculate(getLeftVelocity(), speeds.leftMetersPerSecond);
+    final double rightOutput =
+        rightPIDController.calculate(getRightVelocity(), speeds.rightMetersPerSecond);
+
+    // Sets the motor controller speeds.
+    tankDriveVolts(leftOutput + leftFeedforward, rightOutput + rightFeedforward);
+  }
+
+  /**
    * Drives the robot with the given linear velocity and angular velocity.
    *
    * @param speed Linear velocity in m/s.
@@ -479,6 +530,30 @@ public class DriveTrain extends SubsystemBase {
   public void arcadeDrive(double speed, double rot) {
     var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
     setSpeeds(wheelSpeeds);
+  }
+
+  public void arcadeDriveOpenLoop(double speed, double rotation) {
+    var speeds = DifferentialDrive.arcadeDriveIK(speed, rotation, true);
+    leftMaster.set(ControlMode.PercentOutput, speeds.left);
+    rightMaster.set(ControlMode.PercentOutput, speeds.right);
+  }
+
+  public void tankDriveOpenLoop(double left, double right) {
+    var speeds = DifferentialDrive.tankDriveIK(left, right, true);
+    leftMaster.set(ControlMode.PercentOutput, speeds.left);
+    rightMaster.set(ControlMode.PercentOutput, speeds.right);
+  }
+
+  /**
+   * Controls the left and right sides of the drive directly with voltages.
+   *
+   * @param leftVolts the commanded left output
+   * @param rightVolts the commanded right output
+   */
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    // Sets the motor controller speeds.
+    leftMaster.setVoltage(leftVolts);
+    rightMaster.setVoltage(rightVolts);
   }
 
   /**
@@ -532,7 +607,6 @@ public class DriveTrain extends SubsystemBase {
     field.setRobotPose(poseEstimator.getEstimatedPosition());
   }
 
-
   /**
    * Gets the current roll of the robot.
    *
@@ -561,5 +635,51 @@ public class DriveTrain extends SubsystemBase {
 
   public PhotonCameraWrapper getPhotonCameraWrapper() {
     return pcw;
+  }
+
+  /**
+   * Uses ramsete controller to follow the specified trajectory
+   *
+   * @param traj Requested trajectory
+   * @param isFirstPath Set to true if this is the first path being run in autonomous in order to
+   *     reset odometry before starting
+   * @return A sequential command that when executed, moves the robot along the specified trajectory
+   * @see <a
+   *     href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner
+   *     Example</a>
+   */
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              // Reset odometry for the first path you run during auto
+              if (isFirstPath) {
+                this.resetOdometry(traj.getInitialPose());
+              }
+            }),
+        new PPRamseteCommand(
+            traj,
+            this::getPose, // Pose supplier
+            new RamseteController(),
+            feedforward,
+            this.kinematics, // DifferentialDriveKinematics
+            this::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
+            new PIDController(
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("LEFT_FEED_BACK_VELOCITY_D").asDouble()),
+            new PIDController(
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_P").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
+                Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble()),
+            this::tankDriveVolts, // Voltage biconsumer
+            true, // Should the path be automatically mirrored depending on alliance color.
+            // Optional, defaults to true
+            this // Requires this drive subsystem
+            ),
+        new InstantCommand(
+            () -> {
+              this.tankDriveVolts(0, 0);
+            }));
   }
 }
