@@ -7,18 +7,15 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
-import bhs.devilbotz.commands.DriveSetDistancePID;
-import bhs.devilbotz.commands.DriveStraight;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmUp;
+import bhs.devilbotz.commands.driverassist.DriveToTarget;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
-import bhs.devilbotz.commands.auto.BalanceAuto;
-import bhs.devilbotz.commands.driverassist.DriveToTarget;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -33,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.HashMap;
 
 /**
@@ -42,8 +40,6 @@ import java.util.HashMap;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
-  private final HashMap<AutonomousModes, Command> autoCommands = new HashMap<>();
 
   public final DriveTrain driveTrain = new DriveTrain();
 
@@ -92,9 +88,7 @@ public class RobotContainer {
 
     new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
     // For testing
-    new JoystickButton(joystick, 1).toggleOnTrue(new BalancePID(driveTrain));
-    new JoystickButton(joystick, 2).onTrue(new DriveToTarget(driveTrain));
-  }
+    new JoystickButton(rightJoystick, 2).onTrue(new DriveToTarget(driveTrain));
 
     /*
     new JoystickButton(leftJoystick, 6)
@@ -104,6 +98,8 @@ public class RobotContainer {
             .whileTrue( Cube Mode );
     */
   }
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

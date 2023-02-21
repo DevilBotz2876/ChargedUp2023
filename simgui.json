@@ -3,7 +3,15 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Drive/Auto Mode": "String Chooser",
-      "/Shuffleboard/Drive/Field": "Field2d"
+      "/Shuffleboard/Drive/Autonomous/Game Piece": "String Chooser",
+      "/Shuffleboard/Drive/Autonomous/Routine": "String Chooser",
+      "/Shuffleboard/Drive/Autonomous/Score Level": "String Chooser",
+      "/Shuffleboard/Drive/Field": "Field2d",
+      "/SmartDashboard/Distance PID": "PIDController",
+      "/SmartDashboard/Gyro": "Gyro",
+      "/SmartDashboard/Left Velocity PID": "PIDController",
+      "/SmartDashboard/Right Velocity PID": "PIDController",
+      "/SmartDashboard/Straight PID": "PIDController"
     },
     "windows": {
       "/Shuffleboard/Drive/Field": {
