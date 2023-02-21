@@ -28,6 +28,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -71,6 +72,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    arm.setDefaultCommand(new ArmStop(arm));
+
     driveTrain.setDefaultCommand(
         new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
@@ -99,6 +102,19 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
     new JoystickButton(leftJoystick, 11)
         .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+    SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
+    SmartDashboard.putData("gripperClose", new GripperClose(gripper));
+
+    SmartDashboard.putData("armUp", new ArmUp(arm));
+    SmartDashboard.putData("armDown", new ArmDown(arm));
+    SmartDashboard.putData("armToTop", new ArmToTop(arm));
+    SmartDashboard.putData("armToMiddle", new ArmToMiddle(arm));
+    SmartDashboard.putData("armToBottom", new ArmToBottom(arm));
+    SmartDashboard.putData("armMoveDistane", new ArmMoveDistance(arm, -10));
+    SmartDashboard.putData(
+        "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+    SmartDashboard.putData("arm", arm);
 
     /*
     new JoystickButton(leftJoystick, 6)
