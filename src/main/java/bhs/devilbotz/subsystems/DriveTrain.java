@@ -39,9 +39,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.photonvision.EstimatedRobotPose;
-
 import java.util.Optional;
+import org.photonvision.EstimatedRobotPose;
 
 /**
  * The DriveTrain subsystem controls the robot's drive train. It also handles: - The NAVX
@@ -241,7 +240,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putData("Gyro", navx);
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
-    poseEstimator = new DifferentialDrivePoseEstimator(
+    poseEstimator =
+        new DifferentialDrivePoseEstimator(
             kinematics, navx.getRotation2d(), getLeftDistance(), getRightDistance(), new Pose2d());
 
     xSimStart.setNumber(2.0);
@@ -573,16 +573,15 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   private void updateOdometry() {
-    poseEstimator.update(
-            navx.getRotation2d(), getLeftDistance(), getRightDistance());
+    poseEstimator.update(navx.getRotation2d(), getLeftDistance(), getRightDistance());
 
     Optional<EstimatedRobotPose> result =
-            pcw.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
+        pcw.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
 
     if (result.isPresent()) {
       EstimatedRobotPose camPose = result.get();
       poseEstimator.addVisionMeasurement(
-              camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+          camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
       field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
       // create a line from the robot to the target using dots to form a line
       /*

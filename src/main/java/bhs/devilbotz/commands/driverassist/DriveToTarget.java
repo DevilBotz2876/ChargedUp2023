@@ -8,10 +8,8 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveToTarget extends CommandBase {
@@ -30,7 +28,8 @@ public class DriveToTarget extends CommandBase {
     Pose2d targetPose = pcw.getClosestTarget(estimatedPose);
 
     // move the target back 2 feet
-    Translation2d twoFeetBack = targetPose.getTranslation().plus(new Translation2d(Units.feetToMeters(3.5), 0));
+    Translation2d twoFeetBack =
+        targetPose.getTranslation().plus(new Translation2d(Units.feetToMeters(3.5), 0));
 
     Rotation2d flippedRotation = targetPose.getRotation().plus(Rotation2d.fromDegrees(180));
 
@@ -39,8 +38,7 @@ public class DriveToTarget extends CommandBase {
             new PathConstraints(0.25, 0.3),
             new PathPoint(
                 estimatedPose.getTranslation(), estimatedPose.getRotation()), // position, heading
-            new PathPoint(
-                    twoFeetBack, flippedRotation) // position, heading
+            new PathPoint(twoFeetBack, flippedRotation) // position, heading
             );
     System.out.println("path generated");
     drive.addPathToField(traj1);
