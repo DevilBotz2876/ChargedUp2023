@@ -600,6 +600,7 @@ public class DriveTrain extends SubsystemBase {
    *     Example</a>
    */
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
@@ -624,7 +625,7 @@ public class DriveTrain extends SubsystemBase {
                 Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_I").asDouble(),
                 Robot.getSysIdConstant("RIGHT_FEED_BACK_VELOCITY_D").asDouble()),
             this::tankDriveVolts, // Voltage biconsumer
-            true, // Should the path be automatically mirrored depending on alliance color.
+            false, // Should the path be automatically mirrored depending on alliance color.
             // Optional, defaults to true
             this // Requires this drive subsystem
             ),
