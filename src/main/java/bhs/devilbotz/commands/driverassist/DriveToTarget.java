@@ -44,9 +44,6 @@ public class DriveToTarget extends CommandBase {
     drive.addPathToField(traj1);
     // execute
     drive.followTrajectoryCommand(traj1, true).schedule();
-
-    // Create pose estimator
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
