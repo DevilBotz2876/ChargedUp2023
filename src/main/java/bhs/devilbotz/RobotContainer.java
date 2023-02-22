@@ -60,8 +60,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    SmartDashboard.putData(driveTrain);
   }
-
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -164,7 +164,7 @@ public class RobotContainer {
                           .andThen(new BalancePID(driveTrain)));
           new BalancePID(driveTrain);
           break;
-        case MOBILITY_DOCK_AND_ENGAGE:
+        case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           PathPlannerTrajectory testPath =
               PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(1.0, 0.5));
           autonomousCommand =
@@ -173,7 +173,15 @@ public class RobotContainer {
                   .andThen(driveTrain.followTrajectoryCommand(testPath, true))
                   .andThen(new BalancePID(driveTrain));
           break;
-
+        case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
+          PathPlannerTrajectory WallZoneMobilityDockAndEngage =
+              PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(1.0, 0.5));
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(driveTrain.followTrajectoryCommand(WallZoneMobilityDockAndEngage, true))
+                  .andThen(new BalancePID(driveTrain));
+          break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
 
