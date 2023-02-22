@@ -123,32 +123,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Drive straight forwards towards the middle of the field</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#MOBILITY_DOCK_AND_ENGAGE" class="member-name-link">MOBILITY_DOCK_AND_ENGAGE</a></code></div>
+<div class="col-first even-row-color"><code><a href="#MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE" class="member-name-link">MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Perform <a href="#MOBILITY"><code>MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#SCORE_AND_MOBILITY" class="member-name-link">SCORE_AND_MOBILITY</a></code></div>
+<div class="col-first odd-row-color"><code><a href="#MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE" class="member-name-link">MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Perform <a href="#MOBILITY"><code>MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</div>
+<div class="col-first even-row-color"><code><a href="#SCORE_AND_MOBILITY" class="member-name-link">SCORE_AND_MOBILITY</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Score preloaded game piece and then perform <a href="#MOBILITY"><code>MOBILITY</code></a></div>
 </div>
-<div class="col-first even-row-color"><code><a href="#SCORE_DOCK_AND_ENGAGE" class="member-name-link">SCORE_DOCK_AND_ENGAGE</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#SCORE_DOCK_AND_ENGAGE" class="member-name-link">SCORE_DOCK_AND_ENGAGE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Score preloaded game piece and then perform <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#SCORE_MOBILITY_DOCK_ENGAGE" class="member-name-link">SCORE_MOBILITY_DOCK_ENGAGE</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#SCORE_MOBILITY_DOCK_ENGAGE" class="member-name-link">SCORE_MOBILITY_DOCK_ENGAGE</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Perform <a href="#SCORE_AND_MOBILITY"><code>SCORE_AND_MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
 </div>
-<div class="col-first even-row-color"><code><a href="#SCORE_MOBILITY_PICK_DOCK_ENGAGE" class="member-name-link">SCORE_MOBILITY_PICK_DOCK_ENGAGE</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#SCORE_MOBILITY_PICK_DOCK_ENGAGE" class="member-name-link">SCORE_MOBILITY_PICK_DOCK_ENGAGE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Perform <a href="#SCORE_AND_MOBILITY"><code>SCORE_AND_MOBILITY</code></a>, pick up a game piece at center field, and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#SIT_STILL" class="member-name-link">SIT_STILL</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#SIT_STILL" class="member-name-link">SIT_STILL</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Don't do anything in autonomous mode.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#TEST" class="member-name-link">TEST</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#TEST" class="member-name-link">TEST</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Placeholder For Testing New Autonomous Routines</div>
 </div>
 </div>
@@ -225,9 +229,16 @@ the order they are declared.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="MOBILITY_DOCK_AND_ENGAGE">
-<h3>MOBILITY_DOCK_AND_ENGAGE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">MOBILITY_DOCK_AND_ENGAGE</span></div>
+<section class="detail" id="MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE">
+<h3>MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE</span></div>
+<div class="block">Perform <a href="#MOBILITY"><code>MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
+</section>
+</li>
+<li>
+<section class="detail" id="MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE">
+<h3>MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></span>&nbsp;<span class="element-name">MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE</span></div>
 <div class="block">Perform <a href="#MOBILITY"><code>MOBILITY</code></a> and then <a href="#DOCK_AND_ENGAGE"><code>DOCK_AND_ENGAGE</code></a></div>
 </section>
 </li>
