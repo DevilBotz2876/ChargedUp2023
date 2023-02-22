@@ -335,3 +335,4 @@ bin/
 # Team 2876 entries
 .SysId/
 simgui-*.json
+networktables.json
