@@ -17,8 +17,8 @@ public class TankDriveOpenLoop extends CommandBase {
    * The constructor for the drive command.
    *
    * @param drive The drive train subsystem.
-   * @param speed The speed of the robot.
-   * @param rot The rotation of the robot.
+   * @param left The speed of the left side of the drive train.
+   * @param right The speed of the right side of the drive train.
    */
   public TankDriveOpenLoop(DriveTrain drive, DoubleSupplier left, DoubleSupplier right) {
     this.drive = drive;
