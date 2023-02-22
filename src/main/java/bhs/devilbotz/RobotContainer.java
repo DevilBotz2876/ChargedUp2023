@@ -66,8 +66,8 @@ public class RobotContainer {
     configureBindings();
     // For debugging balance PID. Allows setting balance PID values on the fly
     SmartDashboard.putData("Balance PID", balancePid);
+    SmartDashboard.putData(driveTrain);
   }
-
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
