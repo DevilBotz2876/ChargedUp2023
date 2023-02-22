@@ -18,7 +18,6 @@ public class PhotonCameraWrapper {
   private PhotonPoseEstimator photonPoseEstimator;
 
   public PhotonCameraWrapper() {
-    // Change the name of your camera here to whatever it is in the PhotonVision UI.
     photonCamera = new PhotonCamera(Constants.VisionConstants.cameraName);
 
     try {
