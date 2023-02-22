@@ -116,7 +116,7 @@ public final class Constants {
                 Units.inchesToMeters(17), Units.inchesToMeters(-12), Units.inchesToMeters(13)),
             new Rotation3d(
                 0, 0,
-                0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+                0)); // Cam mounted facing forward, 17 inches forward of center, 13 inches up, and -12 inches to the side
     // from center.
     public static final String cameraName = "Logitech_Webcam_C930e";
   }
