@@ -68,7 +68,9 @@ public class DriveStraightToDock extends CommandBase {
     SmartDashboard.putNumber("Position Tolerance", distancePid.getPositionTolerance());
     SmartDashboard.putBoolean("at Setpoint", distancePid.atSetpoint());
     SmartDashboard.putNumber("Position Error", distancePid.getPositionError());
-    SmartDashboard.putNumber("Distance", drivetrain.getAverageDistance());
+    SmartDashboard.putNumber("Average Distance", drivetrain.getAverageDistance());
+    SmartDashboard.putNumber("Left distance", drivetrain.getLeftDistance());
+    SmartDashboard.putNumber("Right Distance", drivetrain.getRightDistance());
 
     SmartDashboard.putNumber("Turn output", turnError);
   }

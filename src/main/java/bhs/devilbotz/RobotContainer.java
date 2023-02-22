@@ -21,6 +21,9 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.math.controller.PIDController;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -139,9 +142,24 @@ public class RobotContainer {
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
                           .andThen(new BalancePID(driveTrain, balancePid)));
           break;
-        case MOBILITY_DOCK_AND_ENGAGE:
+        case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
+          PathPlannerTrajectory testPath =
+              PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(1.0, 0.5));
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(driveTrain.followTrajectoryCommand(testPath, true))
+                  .andThen(new BalancePID(driveTrain));
           break;
-
+        case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
+          PathPlannerTrajectory WallZoneMobilityDockAndEngage =
+              PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(1.0, 0.5));
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(driveTrain.followTrajectoryCommand(WallZoneMobilityDockAndEngage, true))
+                  .andThen(new BalancePID(driveTrain));
+          break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
 
