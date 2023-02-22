@@ -27,6 +27,7 @@ import bhs.devilbotz.utils.ShuffleboardManager;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -56,10 +57,19 @@ public class RobotContainer {
   private final Joystick rightJoystick =
       new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
 
+  // For debugging balance PID. Allows setting balance PID values on the fly
+  private final PIDController balancePid =
+      new PIDController(
+          Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
+          Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
+          Robot.getDriveTrainConstant("BALANCE_D").asDouble());
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    // For debugging balance PID. Allows setting balance PID values on the fly
+    SmartDashboard.putData("Balance PID", balancePid);
     SmartDashboard.putData(driveTrain);
   }
   /**
@@ -161,8 +171,7 @@ public class RobotContainer {
                               driveTrain,
                               ShuffleboardManager.autoDistance.getDouble(
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                          .andThen(new BalancePID(driveTrain)));
-          new BalancePID(driveTrain);
+                          .andThen(new BalancePID(driveTrain, balancePid)));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           PathPlannerTrajectory testPath =
