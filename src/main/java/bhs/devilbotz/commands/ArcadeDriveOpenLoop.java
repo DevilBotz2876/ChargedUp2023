@@ -26,7 +26,7 @@ public class ArcadeDriveOpenLoop extends CommandBase {
    *
    * @param drive The drive train subsystem.
    * @param speed The speed of the robot.
-   * @param rot The rotation of the robot.
+   * @param rotation The rotation of the robot.
    */
   public ArcadeDriveOpenLoop(DriveTrain drive, DoubleSupplier speed, DoubleSupplier rotation) {
     this.drive = drive;
