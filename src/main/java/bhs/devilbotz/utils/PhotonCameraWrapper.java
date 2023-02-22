@@ -56,7 +56,6 @@ public class PhotonCameraWrapper {
   public Pose2d getClosestTarget(Pose2d robotPose) {
     List tags = photonPoseEstimator.getFieldTags().getTags();
     Pose2d closestTarget = null;
-    System.out.println("Number of tags: " + tags.size());
 
     for (int i = 1; i < tags.size() + 1; i++) {
       Pose2d target = photonPoseEstimator.getFieldTags().getTagPose(i).get().toPose2d();
