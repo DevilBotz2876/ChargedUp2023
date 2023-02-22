@@ -19,7 +19,9 @@ public enum AutonomousModes {
   /** Drive straight onto charge station and balance */
   DOCK_AND_ENGAGE,
   /** Perform {@link #MOBILITY} and then {@link #DOCK_AND_ENGAGE} */
-  MOBILITY_DOCK_AND_ENGAGE,
+  MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE,
+  /** Perform {@link #MOBILITY} and then {@link #DOCK_AND_ENGAGE} */
+  MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE,
   /** Score preloaded game piece and then perform {@link #DOCK_AND_ENGAGE} */
   SCORE_DOCK_AND_ENGAGE,
   /** Perform {@link #SCORE_AND_MOBILITY} and then {@link #DOCK_AND_ENGAGE} */

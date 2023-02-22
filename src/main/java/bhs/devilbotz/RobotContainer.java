@@ -23,7 +23,9 @@ import bhs.devilbotz.utils.ShuffleboardManager;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -51,12 +53,21 @@ public class RobotContainer {
   private final Joystick rightJoystick =
       new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
 
+  // For debugging balance PID. Allows setting balance PID values on the fly
+  private final PIDController balancePid =
+      new PIDController(
+          Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
+          Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
+          Robot.getDriveTrainConstant("BALANCE_D").asDouble());
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    // For debugging balance PID. Allows setting balance PID values on the fly
+    SmartDashboard.putData("Balance PID", balancePid);
+    SmartDashboard.putData(driveTrain);
   }
-
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -129,10 +140,9 @@ public class RobotContainer {
                               driveTrain,
                               ShuffleboardManager.autoDistance.getDouble(
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                          .andThen(new BalancePID(driveTrain)));
-          new BalancePID(driveTrain);
+                          .andThen(new BalancePID(driveTrain, balancePid)));
           break;
-        case MOBILITY_DOCK_AND_ENGAGE:
+        case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           PathPlannerTrajectory testPath =
               PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(1.0, 0.5));
           autonomousCommand =
@@ -141,7 +151,15 @@ public class RobotContainer {
                   .andThen(driveTrain.followTrajectoryCommand(testPath, true))
                   .andThen(new BalancePID(driveTrain));
           break;
-
+        case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
+          PathPlannerTrajectory WallZoneMobilityDockAndEngage =
+              PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(1.0, 0.5));
+          autonomousCommand =
+              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                  .asProxy()
+                  .andThen(driveTrain.followTrajectoryCommand(WallZoneMobilityDockAndEngage, true))
+                  .andThen(new BalancePID(driveTrain));
+          break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
 
