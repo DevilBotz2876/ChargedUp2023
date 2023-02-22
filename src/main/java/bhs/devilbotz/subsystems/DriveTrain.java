@@ -583,18 +583,6 @@ public class DriveTrain extends SubsystemBase {
       poseEstimator.addVisionMeasurement(
           camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
       field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
-      // create a line from the robot to the target using dots to form a line
-      /*
-      for (int i = 0; i < 100; i++) {
-        double t = i / 100.0;
-        Pose2d pose = new Pose2d(
-                camPose.estimatedPose.toPose2d().getTranslation().interpolate(
-                        poseEstimator.getEstimatedPosition().getTranslation(), t),
-                Rotation2d.fromDegrees(0));
-        field.getObject("Cam Est Pos Line " + i).setPose(pose);
-      }
-
-       */
     } else {
       // move it way off the screen to make it disappear
       field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
