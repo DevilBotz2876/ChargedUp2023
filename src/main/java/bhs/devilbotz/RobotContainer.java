@@ -38,7 +38,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
   public final DriveTrain driveTrain = new DriveTrain();
 
   private final Gripper gripper = new Gripper();
