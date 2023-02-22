@@ -42,9 +42,6 @@ public class DriveToTarget extends CommandBase {
             );
     System.out.println("path generated");
     drive.addPathToField(traj1);
-    // Generate a simple trajectory
-    // Simple path without holonomic rotation. Stationary start/end. Max velocity of 4 m/s and max
-    // accel of 3 m/s^2
     // execute
     drive.followTrajectoryCommand(traj1, true).schedule();
 
