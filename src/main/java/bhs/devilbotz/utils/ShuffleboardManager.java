@@ -68,13 +68,17 @@ public class ShuffleboardManager {
     autoModeChooser.addOption("Routine 3: Score and Mobility", AutonomousModes.SCORE_AND_MOBILITY);
     autoModeChooser.addOption("Routine 4: Dock and Engage", AutonomousModes.DOCK_AND_ENGAGE);
     autoModeChooser.addOption(
-        "Routine 5: Mobility, Dock, and Engage", AutonomousModes.MOBILITY_DOCK_AND_ENGAGE);
+        "Routine 5: Mobility, Dock, and Engage Wall Side",
+        AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE);
     autoModeChooser.addOption(
-        "Routine 6: Score, Dock, and Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
+        "Routine 6: Mobility, Dock, and Engage Human Side",
+        AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE);
     autoModeChooser.addOption(
-        "Routine 7: Score, Mobility, Dock, and Engage", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
+        "Routine 7: Score, Dock, and Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
     autoModeChooser.addOption(
-        "Routine 8: Score, Mobility, Pick, Dock, and Engage",
+        "Routine 8: Score, Mobility, Dock, and Engage", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
+    autoModeChooser.addOption(
+        "Routine 9: Score, Mobility, Pick, Dock, and Engage",
         AutonomousModes.SCORE_MOBILITY_PICK_DOCK_ENGAGE);
     autoModeChooser.addOption("Test", AutonomousModes.TEST);
     autoMode.add("Routine", autoModeChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
