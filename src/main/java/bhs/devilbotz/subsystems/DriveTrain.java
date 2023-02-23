@@ -107,7 +107,7 @@ public class DriveTrain extends SubsystemBase {
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
-  public PhotonCameraWrapper pcw;
+  private PhotonCameraWrapper pcw;
 
   // Object for simulated inputs into Talon.
   private static final TalonSRXSimCollection leftMasterSim = leftMaster.getSimCollection();
@@ -318,11 +318,13 @@ public class DriveTrain extends SubsystemBase {
 
   /**
    * This method updates once per loop of the robot only in simulation mode. It is not run when
-   * deployed to the physical robot.
+   * deployed to the physical robot. Simulate motors and integrated sensors
    *
    * @see <a
    *     href="https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/device-sim.html">Device
    *     Simulation</a>
+   * @see <a
+   *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L144"</a>
    * @since 1/30/2023
    */
   @Override
@@ -565,21 +567,25 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   private void updateOdometry() {
+    // Updates the odometry with the latest information from the encoders and gyro.
     poseEstimator.update(navx.getRotation2d(), getLeftDistance(), getRightDistance());
 
     Optional<EstimatedRobotPose> result =
         pcw.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
 
+    // If the camera sees the target, add the vision measurement to the pose estimator
     if (result.isPresent()) {
       EstimatedRobotPose camPose = result.get();
+      // Add the vision measurement to the pose estimator
       poseEstimator.addVisionMeasurement(
           camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+      // Add a marker to the field to show where the camera thinks the robot is
       field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
     } else {
-      // move it way off the screen to make it disappear
+      // Move the marker way off the screen to make it disappear
       field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
     }
-
+    // Add a marker to the field to show where the robot thinks it is
     field.getObject("Actual Pos").setPose(differentialDriveSim.getPose());
     field.setRobotPose(poseEstimator.getEstimatedPosition());
   }
@@ -600,15 +606,6 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getYaw() {
     return navx.getYaw();
-  }
-
-  /**
-   * Gets the current pose of the robot.
-   *
-   * @return The current pose of the robot.
-   */
-  public Pose2d getEstimatedPose() {
-    return poseEstimator.getEstimatedPosition();
   }
 
   /**

@@ -23,7 +23,7 @@ public class DriveToTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d estimatedPose = drive.getEstimatedPose();
+    Pose2d estimatedPose = drive.getPose();
     PhotonCameraWrapper pcw = drive.getPhotonCameraWrapper();
     Pose2d targetPose = pcw.getClosestTarget(estimatedPose);
 
