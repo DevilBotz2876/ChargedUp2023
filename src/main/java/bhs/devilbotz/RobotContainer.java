@@ -116,15 +116,8 @@ public class RobotContainer {
     SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
     SmartDashboard.putData("gripperClose", new GripperClose(gripper));
 
-    SmartDashboard.putData("armUp", new ArmUp(arm));
-    SmartDashboard.putData("armDown", new ArmDown(arm));
-    SmartDashboard.putData("armToTop", new ArmToTop(arm));
-    SmartDashboard.putData("armToMiddle", new ArmToMiddle(arm));
-    SmartDashboard.putData("armToBottom", new ArmToBottom(arm));
-    SmartDashboard.putData("armMoveDistane", new ArmMoveDistance(arm, -10));
     SmartDashboard.putData(
         "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
-    SmartDashboard.putData("arm", arm);
 
     /*
     new JoystickButton(leftJoystick, 6)
