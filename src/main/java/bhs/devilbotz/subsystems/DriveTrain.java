@@ -107,7 +107,7 @@ public class DriveTrain extends SubsystemBase {
 
   // Defines the field, which is used to display the robot's position on the field in Shuffleboard.
   private final Field2d field = new Field2d();
-  private PhotonCameraWrapper pcw;
+  private final PhotonCameraWrapper pcw;
 
   // Object for simulated inputs into Talon.
   private static final TalonSRXSimCollection leftMasterSim = leftMaster.getSimCollection();
