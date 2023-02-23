@@ -52,6 +52,10 @@ loadScripts(document, 'script');</script>
 <a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#aboveMiddle()" class="member-name-link">aboveMiddle()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is above middle position based on encoder position.</div>
+</dd>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#arcadeDrive(double,double)" class="member-name-link">arcadeDrive(double, double)</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>
 <div class="block">Drives the robot with the given linear velocity and angular velocity.</div>
@@ -68,7 +72,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/subsystems/Arm.html" class="type-name-link" title="class in bhs.devilbotz.subsystems">Arm</a> - Class in <a href="bhs/devilbotz/subsystems/package-summary.html">bhs.devilbotz.subsystems</a></dt>
 <dd>
-<div class="block">This subsystem controls the gripper.</div>
+<div class="block">This subsystem controls arm.</div>
 </dd>
 <dt><a href="bhs/devilbotz/subsystems/Arm.html#%3Cinit%3E()" class="member-name-link">Arm()</a> - Constructor for class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
 <dd>
@@ -86,6 +90,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The constructor for the arm down command.</div>
 </dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" class="type-name-link" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a> - Class in <a href="bhs/devilbotz/commands/arm/package-summary.html">bhs.devilbotz.commands.arm</a></dt>
+<dd>
+<div class="block">This command moves the arm a given distance.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,double)" class="member-name-link">ArmMoveDistance(Arm, double)</a> - Constructor for class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
+<dd>
+<div class="block">The constructor</div>
+</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html" class="type-name-link" title="class in bhs.devilbotz.commands.arm">ArmStop</a> - Class in <a href="bhs/devilbotz/commands/arm/package-summary.html">bhs.devilbotz.commands.arm</a></dt>
 <dd>
 <div class="block">This command stops the arm.</div>
@@ -94,6 +106,30 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The constructor for the arm stop command.</div>
 </dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToBottom.html" class="type-name-link" title="class in bhs.devilbotz.commands.arm">ArmToBottom</a> - Class in <a href="bhs/devilbotz/commands/arm/package-summary.html">bhs.devilbotz.commands.arm</a></dt>
+<dd>
+<div class="block">This command moves the arm to bottom position.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToBottom.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm)" class="member-name-link">ArmToBottom(Arm)</a> - Constructor for class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToBottom.html" title="class in bhs.devilbotz.commands.arm">ArmToBottom</a></dt>
+<dd>
+<div class="block">The constructor.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToMiddle.html" class="type-name-link" title="class in bhs.devilbotz.commands.arm">ArmToMiddle</a> - Class in <a href="bhs/devilbotz/commands/arm/package-summary.html">bhs.devilbotz.commands.arm</a></dt>
+<dd>
+<div class="block">This command moves the arm to middle scoring position.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToMiddle.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm)" class="member-name-link">ArmToMiddle(Arm)</a> - Constructor for class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToMiddle.html" title="class in bhs.devilbotz.commands.arm">ArmToMiddle</a></dt>
+<dd>
+<div class="block">The constructor for the arm down command.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToTop.html" class="type-name-link" title="class in bhs.devilbotz.commands.arm">ArmToTop</a> - Class in <a href="bhs/devilbotz/commands/arm/package-summary.html">bhs.devilbotz.commands.arm</a></dt>
+<dd>
+<div class="block">This command moves the arm up to highest position.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToTop.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm)" class="member-name-link">ArmToTop(Arm)</a> - Constructor for class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToTop.html" title="class in bhs.devilbotz.commands.arm">ArmToTop</a></dt>
+<dd>
+<div class="block">The constructor.</div>
+</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmUp.html" class="type-name-link" title="class in bhs.devilbotz.commands.arm">ArmUp</a> - Class in <a href="bhs/devilbotz/commands/arm/package-summary.html">bhs.devilbotz.commands.arm</a></dt>
 <dd>
 <div class="block">This command moves the arm up.</div>
@@ -101,6 +137,23 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/commands/arm/ArmUp.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm)" class="member-name-link">ArmUp(Arm)</a> - Constructor for class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmUp.html" title="class in bhs.devilbotz.commands.arm">ArmUp</a></dt>
 <dd>
 <div class="block">The constructor for the arm up command.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#atBottom()" class="member-name-link">atBottom()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is at bottom position to allow it to score a game piece in lower grid scoring
+ node.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#atMiddle()" class="member-name-link">atMiddle()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is at middle position based on encoder position.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#atSubstationPortal()" class="member-name-link">atSubstationPortal()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is at correct height to grab cone/cube from substation portal.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#atTop()" class="member-name-link">atTop()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is at top position to allow it to score a game piece in top grid scoring node.</div>
 </dd>
 <dt><a href="bhs/devilbotz/utils/ShuffleboardManager.html#autoDelay" class="member-name-link">autoDelay</a> - Static variable in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></dt>
 <dd>&nbsp;</dd>
@@ -154,6 +207,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The constructor for the balance PID command.</div>
 </dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#belowMiddle()" class="member-name-link">belowMiddle()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is below middle position based on encoder position.</div>
+</dd>
 <dt><a href="bhs/devilbotz/package-summary.html">bhs.devilbotz</a> - package bhs.devilbotz</dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/package-summary.html">bhs.devilbotz.commands</a> - package bhs.devilbotz.commands</dt>
@@ -169,6 +226,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/subsystems/package-summary.html">bhs.devilbotz.subsystems</a> - package bhs.devilbotz.subsystems</dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/utils/package-summary.html">bhs.devilbotz.utils</a> - package bhs.devilbotz.utils</dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/Constants.ArmConstants.html#BOTTOM_LIMIT_SWITCH_DIO_PORT" class="member-name-link">BOTTOM_LIMIT_SWITCH_DIO_PORT</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#buildShuffleboardTab()" class="member-name-link">buildShuffleboardTab()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:C">C</h2>
@@ -231,6 +292,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Drive straight onto charge station and balance</div>
 </dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#down()" class="member-name-link">down()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Move the arm down at set speed.</div>
+</dd>
 <dt><a href="bhs/devilbotz/commands/DriveCommand.html" class="type-name-link" title="class in bhs.devilbotz.commands">DriveCommand</a> - Class in <a href="bhs/devilbotz/commands/package-summary.html">bhs.devilbotz.commands</a></dt>
 <dd>
 <div class="block">This is the command that is used to drive the robot.</div>
@@ -279,13 +344,25 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Enables the compressor for the pnuematic gripper.</div>
 </dd>
+<dt><a href="bhs/devilbotz/Constants.ArmConstants.html#ENCODER_CHANNEL_A_DIO_PORT" class="member-name-link">ENCODER_CHANNEL_A_DIO_PORT</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/Constants.ArmConstants.html#ENCODER_CHANNEL_B_DIO_PORT" class="member-name-link">ENCODER_CHANNEL_B_DIO_PORT</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Called once the command ends or is interrupted.</div>
 </dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToBottom.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToBottom.html" title="class in bhs.devilbotz.commands.arm">ArmToBottom</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToMiddle.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToMiddle.html" title="class in bhs.devilbotz.commands.arm">ArmToMiddle</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToTop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToTop.html" title="class in bhs.devilbotz.commands.arm">ArmToTop</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmUp.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmUp.html" title="class in bhs.devilbotz.commands.arm">ArmUp</a></dt>
 <dd>&nbsp;</dd>
@@ -315,7 +392,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToBottom.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToBottom.html" title="class in bhs.devilbotz.commands.arm">ArmToBottom</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToMiddle.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToMiddle.html" title="class in bhs.devilbotz.commands.arm">ArmToMiddle</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToTop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToTop.html" title="class in bhs.devilbotz.commands.arm">ArmToTop</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmUp.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmUp.html" title="class in bhs.devilbotz.commands.arm">ArmUp</a></dt>
 <dd>&nbsp;</dd>
@@ -374,6 +459,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#getPose()" class="member-name-link">getPose()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>
 <div class="block">Returns the currently-estimated pose of the robot.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#getPosition()" class="member-name-link">getPosition()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Return current position of arm.</div>
 </dd>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#getRightDistance()" class="member-name-link">getRightDistance()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>
@@ -455,7 +544,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToBottom.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToBottom.html" title="class in bhs.devilbotz.commands.arm">ArmToBottom</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToMiddle.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToMiddle.html" title="class in bhs.devilbotz.commands.arm">ArmToMiddle</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToTop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToTop.html" title="class in bhs.devilbotz.commands.arm">ArmToTop</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmUp.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmUp.html" title="class in bhs.devilbotz.commands.arm">ArmUp</a></dt>
 <dd>&nbsp;</dd>
@@ -479,13 +576,25 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Called when the command is initially scheduled.</div>
 </dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#isBottomLimit()" class="member-name-link">isBottomLimit()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Return state of bottom limit switch</div>
+</dd>
 <dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Returns whether the command is finished.</div>
 </dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToBottom.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToBottom.html" title="class in bhs.devilbotz.commands.arm">ArmToBottom</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToMiddle.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToMiddle.html" title="class in bhs.devilbotz.commands.arm">ArmToMiddle</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/arm/ArmToTop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToTop.html" title="class in bhs.devilbotz.commands.arm">ArmToTop</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmUp.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmUp.html" title="class in bhs.devilbotz.commands.arm">ArmUp</a></dt>
 <dd>&nbsp;</dd>
@@ -508,6 +617,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Returns whether the command is finished.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#isMoving()" class="member-name-link">isMoving()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is moving or not based on motor state.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#isTopLimit()" class="member-name-link">isTopLimit()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Return state of top limit switch</div>
 </dd>
 </dl>
 <h2 class="title" id="I:J">J</h2>
@@ -739,9 +856,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This method is called periodically during test mode.</div>
 </dd>
+<dt><a href="bhs/devilbotz/Constants.ArmConstants.html#TOP_LIMIT_SWITCH_DIO_PORT" class="member-name-link">TOP_LIMIT_SWITCH_DIO_PORT</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#up()" class="member-name-link">up()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Move the arm up at set speed.</div>
+</dd>
 <dt><a href="bhs/devilbotz/utils/ShuffleboardManager.html#updateValues()" class="member-name-link">updateValues()</a> - Method in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></dt>
 <dd>
 <div class="block">Updates the values on the shuffleboard.</div>

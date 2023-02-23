@@ -83,11 +83,49 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Arm</span>
 <span class="extends-implements">extends edu.wpi.first.wpilibj2.command.SubsystemBase</span></div>
-<div class="block">This subsystem controls the gripper.</div>
-<dl class="notes">
-<dt>Since:</dt>
-<dd>1/25/2023</dd>
-</dl>
+<div class="block">This subsystem controls arm.
+
+ <p>The arm must start matches fully inside the robot chassis. The arm moves up using two (gas?)
+ struts. It is lowered by a motor turning a winch. A rope winds around the winch pulling the arm
+ down. In this design it is not possible to move the arm too far up and break it. But it is
+ possible for the rope around the winch to unwind completely and start winding itself again in the
+ opposite direction. This will result in 'up' commands moving the arm down (and vice versa). It is
+ also possible for the rope to become tangled around the winch/shaft if there is enough slack or
+ extra rope.
+
+ <p>It is possible to break the arm if it is lowered too far. The motor will be winding up the
+ rope and pulling the arm down into the chassis. The arm will hit a hard stop and the motor will
+ be pulling the arm against this hard stop. It is important therefore to detect when the arm
+ reaches top most position bottom most position. We will use limit switches to do this.
+
+ <p>There will also be an encoder mounted on the shoulder joint. Using an encoder on the shoulder
+ joint instead of on the motor or winch shaft should provide more accurate measurement of the arm
+ position. Measuring the rotations of the winch might be less accurate because the rope is winding
+ around it in an inconsistent manner. Maybe this is neglible?
+
+ <p>There are methods to move the arm up and down at a set speed. We do not intend to vary the
+ speed of the arm or expose speed control outside the arm subsystem. There are methods to detect
+ when arm reaches the top and bottom most positions. The intent of these methods is to use them in
+ arm Commands to move the arm up and down but stop when the top and bottom most positions are
+ reached.
+
+ <p>The encoder is not needed to do any control of the arm moving up or down. It can be used to
+ move the arm to known positions/heights. For example if we plan on picking up pieces from the
+ portal in the substation we should provide a Command that can move the arm to the correct height
+ to pickup cone/cube. We will need to determine what distance/position encoder reads to be at
+ correct height.
+
+ <p>There is a method to detect a 'middle' position, move a set distance, and to get the current
+ position. The idea here is to create a set of commands that can move the arm to a set position
+ just high enough above a low/mid/high grid scoring node to score a cube/cone. Then provide a
+ second command that can lower the arm and release the gripper to place/score the cube/cone. Not
+ sure this will be useful to the driver. Will need to experiment with this if time allows.
+
+ <p>There are two limit switches, one at top of range of motion and one at bottom of range of
+ motion. The limit switches are plugged into the roborio digital input/output ports.
+
+ <p>There is a quadrature encoder on the arm joint. The signal and power lines are plugged into
+ the roborio digital input/output ports.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -117,6 +155,65 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#aboveMiddle()" class="member-name-link">aboveMiddle</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if arm is above middle position based on encoder position.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#atBottom()" class="member-name-link">atBottom</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if arm is at bottom position to allow it to score a game piece in lower grid scoring
+ node.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#atMiddle()" class="member-name-link">atMiddle</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if arm is at middle position based on encoder position.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#atSubstationPortal()" class="member-name-link">atSubstationPortal</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if arm is at correct height to grab cone/cube from substation portal.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#atTop()" class="member-name-link">atTop</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if arm is at top position to allow it to score a game piece in top grid scoring node.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#belowMiddle()" class="member-name-link">belowMiddle</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if arm is below middle position based on encoder position.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buildShuffleboardTab()" class="member-name-link">buildShuffleboardTab</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#down()" class="member-name-link">down</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Move the arm down at set speed.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPosition()" class="member-name-link">getPosition</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Return current position of arm.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isBottomLimit()" class="member-name-link">isBottomLimit</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Return state of bottom limit switch</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isMoving()" class="member-name-link">isMoving</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if arm is moving or not based on motor state.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTopLimit()" class="member-name-link">isTopLimit</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Return state of top limit switch</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#periodic()" class="member-name-link">periodic</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -131,6 +228,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This method stops the arm.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#up()" class="member-name-link">up</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Move the arm up at set speed.</div>
 </div>
 </div>
 </div>
@@ -198,10 +300,142 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="up()">
+<h3>up</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">up</span>()</div>
+<div class="block">Move the arm up at set speed. There is no check/protection against moving arm too far up.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="down()">
+<h3>down</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">down</span>()</div>
+<div class="block">Move the arm down at set speed. There is no check/protection against moving arm too far down.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="stop()">
 <h3>stop</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">stop</span>()</div>
 <div class="block">This method stops the arm.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="isMoving()">
+<h3>isMoving</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isMoving</span>()</div>
+<div class="block">Check if arm is moving or not based on motor state.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if arm is moving, false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isTopLimit()">
+<h3>isTopLimit</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isTopLimit</span>()</div>
+<div class="block">Return state of top limit switch</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true limit switch is pressed, false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isBottomLimit()">
+<h3>isBottomLimit</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isBottomLimit</span>()</div>
+<div class="block">Return state of bottom limit switch</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true limit switch is pressed, false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="atBottom()">
+<h3>atBottom</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">atBottom</span>()</div>
+<div class="block">Check if arm is at bottom position to allow it to score a game piece in lower grid scoring
+ node.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if at bottom, false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="atTop()">
+<h3>atTop</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">atTop</span>()</div>
+<div class="block">Check if arm is at top position to allow it to score a game piece in top grid scoring node.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if at top, false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="atMiddle()">
+<h3>atMiddle</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">atMiddle</span>()</div>
+<div class="block">Check if arm is at middle position based on encoder position. Middle is just high enough above
+ middle grid scoring node to allow cone or cube to be lined up.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if at middle position false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="aboveMiddle()">
+<h3>aboveMiddle</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">aboveMiddle</span>()</div>
+<div class="block">Check if arm is above middle position based on encoder position.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if above middle position false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="belowMiddle()">
+<h3>belowMiddle</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">belowMiddle</span>()</div>
+<div class="block">Check if arm is below middle position based on encoder position.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if below middle position false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="atSubstationPortal()">
+<h3>atSubstationPortal</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">atSubstationPortal</span>()</div>
+<div class="block">Check if arm is at correct height to grab cone/cube from substation portal.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if at substation portal height, false if not.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getPosition()">
+<h3>getPosition</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getPosition</span>()</div>
+<div class="block">Return current position of arm.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>position of arm.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="buildShuffleboardTab()">
+<h3>buildShuffleboardTab</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">buildShuffleboardTab</span>()</div>
 </section>
 </li>
 </ul>
