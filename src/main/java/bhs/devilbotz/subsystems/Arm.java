@@ -132,7 +132,7 @@ public class Arm extends SubsystemBase {
     //
     // TODO: check if switching DIO port wires will change sign of value.
     //
-    // encoder.setReverseDirection(true);
+    encoder.setReverseDirection(true);
   }
 
   /**
