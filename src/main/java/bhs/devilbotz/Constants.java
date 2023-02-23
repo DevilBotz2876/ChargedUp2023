@@ -98,5 +98,9 @@ public final class Constants {
 
   public static final class ArmConstants {
     public static final int ARM_MOTOR_CAN_ID = 5;
+    public static final int BOTTOM_LIMIT_SWITCH_DIO_PORT = 0;
+    public static final int TOP_LIMIT_SWITCH_DIO_PORT = 1;
+    public static final int ENCODER_CHANNEL_A_DIO_PORT = 2; // TODO: add what color tape on wire
+    public static final int ENCODER_CHANNEL_B_DIO_PORT = 3; // TODO: add what color tape on wire
   }
 }

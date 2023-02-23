@@ -7,21 +7,16 @@ package bhs.devilbotz.commands.arm;
 import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * This command moves the arm down.
- *
- * @since 1/25/2023
- * @author joshuamanoj
- */
-public class ArmDown extends CommandBase {
+/** This command moves the arm to bottom position. Bottom is determined by limit switch. */
+public class ArmToBottom extends CommandBase {
   private final Arm arm;
 
   /**
-   * The constructor for the arm down command.
+   * The constructor.
    *
    * @param arm The arm subsystem.
    */
-  public ArmDown(Arm arm) {
+  public ArmToBottom(Arm arm) {
     this.arm = arm;
     addRequirements(arm);
   }
@@ -45,6 +40,6 @@ public class ArmDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.isBottomLimit() || arm.atBottom();
+    return (arm.atBottom() || arm.isBottomLimit());
   }
 }
