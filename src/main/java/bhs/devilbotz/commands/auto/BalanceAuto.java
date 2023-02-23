@@ -1,6 +1,5 @@
 package bhs.devilbotz.commands.auto;
 
-import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 

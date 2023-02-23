@@ -5,10 +5,7 @@
 
 package bhs.devilbotz;
 
-import bhs.devilbotz.commands.BalancePID;
 import bhs.devilbotz.commands.DriveCommand;
-import bhs.devilbotz.commands.DriveStraightPID;
-import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
@@ -16,6 +13,9 @@ import bhs.devilbotz.commands.arm.ArmToBottom;
 import bhs.devilbotz.commands.arm.ArmToMiddle;
 import bhs.devilbotz.commands.arm.ArmToTop;
 import bhs.devilbotz.commands.arm.ArmUp;
+import bhs.devilbotz.commands.auto.BalancePID;
+import bhs.devilbotz.commands.auto.DriveStraightPID;
+import bhs.devilbotz.commands.auto.DriveStraightToDock;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
