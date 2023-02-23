@@ -586,7 +586,7 @@ public class DriveTrain extends SubsystemBase {
       field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
     }
     // Add a marker to the field to show where the robot thinks it is
-    field.getObject("Actual Pos").setPose(differentialDriveSim.getPose());
+    // field.getObject("Actual Pos").setPose(differentialDriveSim.getPose());
     field.setRobotPose(poseEstimator.getEstimatedPosition());
   }
 
