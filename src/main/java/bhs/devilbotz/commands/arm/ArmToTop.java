@@ -8,20 +8,18 @@ import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * This command moves the arm down.
- *
- * @since 1/25/2023
- * @author joshuamanoj
+ * This command moves the arm up to highest position. Arm stops when it hits limit switch or reaches
+ * set position based on encoder.
  */
-public class ArmDown extends CommandBase {
+public class ArmToTop extends CommandBase {
   private final Arm arm;
 
   /**
-   * The constructor for the arm down command.
+   * The constructor.
    *
    * @param arm The arm subsystem.
    */
-  public ArmDown(Arm arm) {
+  public ArmToTop(Arm arm) {
     this.arm = arm;
     addRequirements(arm);
   }
@@ -33,7 +31,7 @@ public class ArmDown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.down();
+    arm.up();
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +43,6 @@ public class ArmDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.isBottomLimit() || arm.atBottom();
+    return (arm.isTopLimit() || arm.atTop());
   }
 }

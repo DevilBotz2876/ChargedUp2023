@@ -10,7 +10,11 @@ import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.DriveStraightPID;
 import bhs.devilbotz.commands.DriveStraightToDock;
 import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
+import bhs.devilbotz.commands.arm.ArmToBottom;
+import bhs.devilbotz.commands.arm.ArmToMiddle;
+import bhs.devilbotz.commands.arm.ArmToTop;
 import bhs.devilbotz.commands.arm.ArmUp;
 import bhs.devilbotz.commands.driverassist.DriveToTarget;
 import bhs.devilbotz.commands.gripper.GripperClose;
@@ -79,6 +83,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    arm.setDefaultCommand(new ArmStop(arm));
+
     driveTrain.setDefaultCommand(
         new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
@@ -97,6 +103,24 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
     // For testing
     new JoystickButton(rightJoystick, 2).onTrue(new DriveToTarget(driveTrain));
+
+    new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
+    new JoystickButton(leftJoystick, 7)
+        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+    new JoystickButton(leftJoystick, 8).onTrue(new ArmToMiddle(arm));
+    new JoystickButton(leftJoystick, 9)
+        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+    new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
+    new JoystickButton(leftJoystick, 11)
+        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+    SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
+    SmartDashboard.putData("gripperClose", new GripperClose(gripper));
+
+    SmartDashboard.putData(
+        "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
     /*
     new JoystickButton(leftJoystick, 6)
