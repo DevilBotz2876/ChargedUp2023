@@ -327,14 +327,6 @@ public class DriveTrain extends SubsystemBase {
    */
   @Override
   public void simulationPeriodic() {
-    /**
-     * Simulate motors and integrated sensors
-     *
-     * @see <a
-     *     href="https://github.com/crosstheroadelec/Phoenix-Examples-Languages/blob/ccbc278d944dae78c73b342003e65138934a1112/Java%20General/DifferentialDrive_Simulation/src/main/java/frc/robot/Robot.java#L144"</a>
-     * @since 1/30/2023
-     */
-
     // Pass the robot battery voltage to the simulated Talon SRXs
     leftMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
     rightMasterSim.setBusVoltage(RobotController.getBatteryVoltage());
@@ -610,14 +602,29 @@ public class DriveTrain extends SubsystemBase {
     return navx.getYaw();
   }
 
+  /**
+   * Gets the current pose of the robot.
+   *
+   * @return The current pose of the robot.
+   */
   public Pose2d getEstimatedPose() {
     return poseEstimator.getEstimatedPosition();
   }
 
+  /**
+   * Adds a Trajectory to the field widget for visualization
+   *
+   * @param trajectory The trajectory to add to the field
+   */
   public void addPathToField(Trajectory trajectory) {
     field.getObject("traj").setTrajectory(trajectory);
   }
 
+  /**
+   * Gets the photon vision camera wrapper
+   *
+   * @return The instance of photon vision camera wrapper
+   */
   public PhotonCameraWrapper getPhotonCameraWrapper() {
     return pcw;
   }
@@ -663,9 +670,6 @@ public class DriveTrain extends SubsystemBase {
             // Optional, defaults to true
             this // Requires this drive subsystem
             ),
-        new InstantCommand(
-            () -> {
-              this.tankDriveVolts(0, 0);
-            }));
+        new InstantCommand(() -> this.tankDriveVolts(0, 0)));
   }
 }
