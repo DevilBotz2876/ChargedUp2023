@@ -7,30 +7,18 @@ package bhs.devilbotz.commands.arm;
 import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * This command stops the arm.
- *
- * @since 1/25/2023
- * @author joshuamanoj
- */
-public class ArmStop extends CommandBase {
+public class ArmIdle extends CommandBase {
   private final Arm arm;
 
-  /**
-   * The constructor for the arm stop command.
-   *
-   * @param arm The arm subsystem.
-   */
-  public ArmStop(Arm arm) {
+  /** Creates a new ArmIdle. */
+  public ArmIdle(Arm arm) {
     this.arm = arm;
     addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    arm.stop();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -43,6 +31,6 @@ public class ArmStop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
