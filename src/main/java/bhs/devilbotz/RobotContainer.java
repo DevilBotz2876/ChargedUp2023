@@ -51,7 +51,7 @@ public class RobotContainer {
 
   private final Arm arm = new Arm();
 
-  private final CameraManager cameraManager = new CameraManager();
+  private CameraManager cameraManager = null;
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
@@ -70,6 +70,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    if (Robot.isReal())
+    {
+      cameraManager = new CameraManager();
+    }
+
     // Configure the trigger bindings
     configureBindings();
 
