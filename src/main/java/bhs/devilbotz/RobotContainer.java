@@ -22,6 +22,7 @@ import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.Arm;
+import bhs.devilbotz.subsystems.CameraManager;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
@@ -50,6 +51,8 @@ public class RobotContainer {
 
   private final Arm arm = new Arm();
 
+  private final CameraManager cameraManager = new CameraManager();
+
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
   private final Joystick leftJoystick =
@@ -75,7 +78,6 @@ public class RobotContainer {
     SmartDashboard.putData(driveTrain);
 
     arm.setDefaultCommand(new ArmIdle(arm));
-    gripper.setDefaultCommand(new GripperIdle(gripper));
     driveTrain.setDefaultCommand(
         new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
@@ -93,12 +95,12 @@ public class RobotContainer {
   private void configureBindings() {
 
     new JoystickButton(leftJoystick, 1)
-        .toggleOnTrue(new GripperClose(gripper))
-        .onFalse(new GripperIdle(gripper));
+        .onTrue(new GripperClose(gripper))
+            .onFalse(new GripperIdle(gripper));
 
     new JoystickButton(leftJoystick, 2)
-        .toggleOnTrue(new GripperOpen(gripper))
-        .onFalse(new GripperIdle(gripper));
+        .onTrue(new GripperOpen(gripper))
+            .onFalse(new GripperIdle(gripper));
 
     new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
 

@@ -32,16 +32,19 @@ public class Gripper extends SubsystemBase {
   /** This method opens the gripper. */
   public void open() {
     doubleSolenoid.set(Value.kForward);
+    System.out.println("Opening");
   }
 
   /** This method closes the gripper. */
   public void close() {
     doubleSolenoid.set(Value.kReverse);
+    System.out.println("Closing");
   }
 
   /** This method sets the grippers speed to 0. */
   public void stop() {
     doubleSolenoid.set(Value.kOff);
+    System.out.println("Stopping");
   }
 
   /**
