@@ -30,7 +30,7 @@ public final class Constants {
    * This is the default distance the robot goes for the autonomous Dock and Engage Routine ({@link
    * bhs.devilbotz.RobotContainer}). The distance is in meters.
    */
-  public static final double DEFAULT_DISTANCE_DOCK_AND_ENGAGE = 2.5;
+  public static final double DEFAULT_DISTANCE_DOCK_AND_ENGAGE = 2.0;
   /**
    * This the tolerance for the Balance PID Controler. This is used so that the robot does not go on
    * balancing forever but stops when it hits the number listed in this constant. The value is

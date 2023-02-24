@@ -600,7 +600,7 @@ public class DriveTrain extends SubsystemBase {
    *     Example</a>
    */
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    field.getObject("path").setTrajectory(traj);
+    //field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {

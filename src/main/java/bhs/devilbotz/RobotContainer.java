@@ -170,7 +170,7 @@ public class RobotContainer {
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           PathPlannerTrajectory testPath =
-              PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(1.0, 0.5));
+              PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(2.0, 1));
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
@@ -179,7 +179,7 @@ public class RobotContainer {
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           PathPlannerTrajectory WallZoneMobilityDockAndEngage =
-              PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(1.0, 0.5));
+              PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(2, 1));
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
