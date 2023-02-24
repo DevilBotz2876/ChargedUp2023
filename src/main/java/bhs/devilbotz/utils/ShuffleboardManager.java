@@ -63,24 +63,24 @@ public class ShuffleboardManager {
   }
 
   private void initAutoModeChooser() {
-    autoModeChooser.addOption("Routine 1: Sit Still", AutonomousModes.SIT_STILL);
-    autoModeChooser.setDefaultOption("Routine 2: Mobility", AutonomousModes.MOBILITY);
-    autoModeChooser.addOption("Routine 3: Score and Mobility", AutonomousModes.SCORE_AND_MOBILITY);
-    autoModeChooser.addOption("Routine 4: Dock and Engage", AutonomousModes.DOCK_AND_ENGAGE);
+    autoModeChooser.addOption("Sit Still", AutonomousModes.SIT_STILL);
+    autoModeChooser.setDefaultOption("Mobility", AutonomousModes.MOBILITY);
+//    autoModeChooser.addOption("Routine 3: Score and Mobility", AutonomousModes.SCORE_AND_MOBILITY);
+    autoModeChooser.addOption("Dock/Engage (Middle)", AutonomousModes.DOCK_AND_ENGAGE);
     autoModeChooser.addOption(
-        "Routine 5: Mobility, Dock, and Engage Wall Side",
+        "Mobility/Dock/Engage (Wall)",
         AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE);
     autoModeChooser.addOption(
-        "Routine 6: Mobility, Dock, and Engage Human Side",
+        "Mobility/Dock/Engage (Human)",
         AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE);
-    autoModeChooser.addOption(
-        "Routine 7: Score, Dock, and Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
-    autoModeChooser.addOption(
-        "Routine 8: Score, Mobility, Dock, and Engage", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
-    autoModeChooser.addOption(
-        "Routine 9: Score, Mobility, Pick, Dock, and Engage",
-        AutonomousModes.SCORE_MOBILITY_PICK_DOCK_ENGAGE);
-    autoModeChooser.addOption("Test", AutonomousModes.TEST);
+//    autoModeChooser.addOption(
+//        "Routine 7: Score, Dock, and Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
+//    autoModeChooser.addOption(
+//       "Routine 8: Score, Mobility, Dock, and Engage", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
+//    autoModeChooser.addOption(
+//        "Routine 9: Score, Mobility, Pick, Dock, and Engage",
+//        AutonomousModes.SCORE_MOBILITY_PICK_DOCK_ENGAGE);
+//    autoModeChooser.addOption("Test", AutonomousModes.TEST);
     autoMode.add("Routine", autoModeChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
   }
 
@@ -126,6 +126,4 @@ public class ShuffleboardManager {
         .withPosition(2, 0)
         .withSize(5, 3);
   }
-
-
 }

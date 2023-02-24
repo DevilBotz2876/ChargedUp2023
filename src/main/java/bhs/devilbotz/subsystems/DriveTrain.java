@@ -290,7 +290,6 @@ public class DriveTrain extends SubsystemBase {
     // Updates the odometry of the drive train.
     updateOdometry();
     SmartDashboard.putNumber("Roll", navx.getRoll());
-
   }
 
   /**
@@ -602,7 +601,7 @@ public class DriveTrain extends SubsystemBase {
    *     Example</a>
    */
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    //field.getObject("path").setTrajectory(traj);
+    // field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {

@@ -30,6 +30,8 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,8 +72,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    if (Robot.isReal())
-    {
+    if (Robot.isReal()) {
       cameraManager = new CameraManager();
     }
 
@@ -101,11 +102,11 @@ public class RobotContainer {
 
     new JoystickButton(leftJoystick, 1)
         .onTrue(new GripperClose(gripper))
-            .onFalse(new GripperIdle(gripper));
+        .onFalse(new GripperIdle(gripper));
 
     new JoystickButton(leftJoystick, 2)
         .onTrue(new GripperOpen(gripper))
-            .onFalse(new GripperIdle(gripper));
+        .onFalse(new GripperIdle(gripper));
 
     new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
 
@@ -146,6 +147,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
     Command autonomousCommand = null;
+    PathPlannerTrajectory path = null;
 
     if (autoMode == null) {
       System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
@@ -177,21 +179,27 @@ public class RobotContainer {
                           .andThen(new BalancePID(driveTrain, balancePid)));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
-          PathPlannerTrajectory testPath =
-              PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(2.0, 1));
+          if (Alliance.Blue == DriverStation.getAlliance()) {
+            path = PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(2.5, 1));
+          } else {
+            path = PathPlanner.loadPath("MobilityRedHumanSideToDock", new PathConstraints(2.5, 1));
+          }
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(testPath, true))
+                  .andThen(driveTrain.followTrajectoryCommand(path, true))
                   .andThen(new BalancePID(driveTrain));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
-          PathPlannerTrajectory WallZoneMobilityDockAndEngage =
-              PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(2, 1));
+          if (Alliance.Blue == DriverStation.getAlliance()) {
+            path = PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(2.5, 1));
+          } else {
+            path = PathPlanner.loadPath("MobilityRedWallSideToDock", new PathConstraints(2.5, 1));
+          }
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(WallZoneMobilityDockAndEngage, true))
+                  .andThen(driveTrain.followTrajectoryCommand(path, true))
                   .andThen(new BalancePID(driveTrain));
           break;
         case SCORE_DOCK_AND_ENGAGE:
