@@ -7,6 +7,7 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmIdle;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmToBottom;
@@ -69,9 +70,17 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
     // For debugging balance PID. Allows setting balance PID values on the fly
     SmartDashboard.putData("Balance PID", balancePid);
     SmartDashboard.putData(driveTrain);
+
+    arm.setDefaultCommand(new ArmIdle(arm));
+    gripper.setDefaultCommand(new GripperIdle(gripper));
+    driveTrain.setDefaultCommand(
+        new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
+    // rightJoystick::getX));
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -83,12 +92,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    arm.setDefaultCommand(new ArmStop(arm));
-
-    driveTrain.setDefaultCommand(
-        new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
-    // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
-    // rightJoystick::getX));
 
     new JoystickButton(leftJoystick, 1)
         .toggleOnTrue(new GripperClose(gripper))

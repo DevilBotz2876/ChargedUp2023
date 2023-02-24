@@ -244,7 +244,7 @@ public class Arm extends SubsystemBase {
   public boolean atBottom() {
     // Don't check for exact position, check if position is in some range.
     return (getPosition() >= bottomPosition - positionError
-        || getPosition() <= bottomPosition + positionError);
+        && getPosition() <= bottomPosition + positionError);
   }
 
   /**
@@ -255,7 +255,7 @@ public class Arm extends SubsystemBase {
   public boolean atTop() {
     // Don't check for exact position, check if position is in some range.
     return (getPosition() >= topPosition - positionError
-        || getPosition() <= topPosition + positionError);
+        && getPosition() <= topPosition + positionError);
   }
 
   /**
@@ -267,7 +267,7 @@ public class Arm extends SubsystemBase {
   public boolean atMiddle() {
     // Don't check for exact position, check if position is in some range.
     return (getPosition() >= middlePosition - positionError
-        || getPosition() <= middlePosition + positionError);
+        && getPosition() <= middlePosition + positionError);
   }
 
   /**
@@ -296,7 +296,7 @@ public class Arm extends SubsystemBase {
   public boolean atSubstationPortal() {
     // Don't check for exact position, check if position is in some range.
     return (getPosition() >= portalPosition - positionError
-        || getPosition() <= portalPosition + positionError);
+        && getPosition() <= portalPosition + positionError);
   }
 
   /**
