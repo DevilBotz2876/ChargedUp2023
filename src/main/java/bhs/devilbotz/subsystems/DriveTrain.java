@@ -289,6 +289,8 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // Updates the odometry of the drive train.
     updateOdometry();
+    SmartDashboard.putNumber("Roll", navx.getRoll());
+
   }
 
   /**
@@ -577,7 +579,7 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   public double getRoll() {
-    return navx.getRoll();
+    return -navx.getRoll();
   }
   /**
    * Gets the current yaw of the robot. It is the value of the gyro when it turns left and right
