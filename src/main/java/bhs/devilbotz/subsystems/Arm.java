@@ -84,10 +84,22 @@ public class Arm extends SubsystemBase {
   // position/bottom. Values increase as arm moves up.
   //
   // TODO: The numbers need to be tuned.
-  private final double POSITION_TOP = 400;
-  private final double POSITION_MIDDLE = 200;
-  private final double POSITION_BOTTOM = 100;
-  private final double POSITION_PORTAL = 300;
+  private final double POSITION_TOP = 558;
+  private final double POSITION_MIDDLE = 468;
+  private final double POSITION_BOTTOM = 258;
+  private final double POSITION_PORTAL = 465;
+
+  /* 
+   * low cone: 258
+   * middle cone: 468
+   * high cone: 558
+   * 
+   * cube
+   * low: 180
+   * middle: 354
+   * high: 440
+   * 
+   */
 
   private double topPosition = POSITION_TOP;
   private double middlePosition = POSITION_MIDDLE;
