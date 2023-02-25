@@ -72,7 +72,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    if (Robot.isReal()) {
+    if (Robot.checkCapability("hasCamera")) {
       cameraManager = new CameraManager();
     }
 
