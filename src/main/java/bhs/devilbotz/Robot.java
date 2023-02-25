@@ -163,6 +163,9 @@ public class Robot extends TimedRobot {
     String robotConfigFilePathPrefix =
         Filesystem.getDeployDirectory() + File.separator + "robotconfig" + File.separator;
     String robotUniqueId = getMacAddress();
+    if (Robot.isSimulation()) {
+      robotUniqueId = "simulation";
+    }
     String robotConfigFilePathSuffix = ".json";
 
     if (Files.exists(
@@ -229,6 +232,10 @@ public class Robot extends TimedRobot {
   }
 
   public static boolean checkCapability(String name) {
-    return robotConfig.get("capabilities").get(name).asBoolean(false);
+    try {
+      return robotConfig.get("capabilities").get(name).asBoolean(false);
+    } catch (Exception e) {
+      return false;
+    }
   }
 }

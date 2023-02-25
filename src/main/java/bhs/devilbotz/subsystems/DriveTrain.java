@@ -581,7 +581,7 @@ public class DriveTrain extends SubsystemBase {
     double roll = navx.getRoll();
     if (Robot.checkCapability("hasInvertedRoll")) {
       roll = -roll;
-    } 
+    }
     return roll;
   }
   /**
