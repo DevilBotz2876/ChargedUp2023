@@ -227,4 +227,8 @@ public class Robot extends TimedRobot {
   public static JsonNode getDriveTrainConstant(String name) {
     return robotConfig.get("drivetrain").get(name);
   }
+
+  public static boolean checkCapability(String name) {
+    return robotConfig.get("capabilities").get(name).asBoolean(false);
+  }
 }

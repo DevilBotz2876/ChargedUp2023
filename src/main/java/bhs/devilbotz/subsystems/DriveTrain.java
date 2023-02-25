@@ -578,7 +578,11 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   public double getRoll() {
-    return -navx.getRoll();
+    double roll = navx.getRoll();
+    if (Robot.checkCapability("hasInvertedRoll")) {
+      roll = -roll;
+    } 
+    return roll;
   }
   /**
    * Gets the current yaw of the robot. It is the value of the gyro when it turns left and right
