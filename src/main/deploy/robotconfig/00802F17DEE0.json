@@ -3,7 +3,8 @@
     "id": "00802F17DEE0",
 
     "capabilities" : {
-        "hasInvertedRoll": true
+        "hasInvertedRoll": true,
+        "hasInvertedDriveEncoderSensorPhase": true
     },
 
     "drivetrain" : {
