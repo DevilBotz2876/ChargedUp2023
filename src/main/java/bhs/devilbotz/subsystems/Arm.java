@@ -89,16 +89,16 @@ public class Arm extends SubsystemBase {
   private final double POSITION_BOTTOM = 258;
   private final double POSITION_PORTAL = 465;
 
-  /* 
+  /*
    * low cone: 258
    * middle cone: 468
    * high cone: 558
-   * 
+   *
    * cube
    * low: 180
    * middle: 354
    * high: 440
-   * 
+   *
    */
 
   private double topPosition = POSITION_TOP;
