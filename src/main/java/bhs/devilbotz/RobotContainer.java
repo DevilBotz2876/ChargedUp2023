@@ -22,7 +22,6 @@ import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.Arm;
-import bhs.devilbotz.subsystems.CameraManager;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
@@ -53,8 +52,6 @@ public class RobotContainer {
 
   private final Arm arm = new Arm();
 
-  private CameraManager cameraManager = null;
-
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
   private final Joystick leftJoystick =
@@ -72,10 +69,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    if (Robot.checkCapability("hasCamera")) {
-      cameraManager = new CameraManager();
-    }
-
     // Configure the trigger bindings
     configureBindings();
 
