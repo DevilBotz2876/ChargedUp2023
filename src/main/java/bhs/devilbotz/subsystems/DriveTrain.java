@@ -288,7 +288,6 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // Updates the odometry of the drive train.
     updateOdometry();
-    SmartDashboard.putNumber("Roll", navx.getRoll());
   }
 
   /**
