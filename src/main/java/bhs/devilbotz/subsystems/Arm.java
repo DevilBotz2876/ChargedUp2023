@@ -15,17 +15,33 @@ import bhs.devilbotz.commands.arm.ArmToTop;
 import bhs.devilbotz.commands.arm.ArmUp;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Map;
 
@@ -79,6 +95,15 @@ public class Arm extends SubsystemBase {
   private final DigitalInput topLimitSwitch;
   private final DigitalInput bottomLimitSwitch;
   private final Encoder encoder;
+
+  private SingleJointedArmSim armSim;
+  private EncoderSim encoderSim;
+  private DIOSim dioTop;
+  private DIOSim dioBottom;
+  private Mechanism2d mech2d;
+  private MechanismRoot2d armPivot;
+  private MechanismLigament2d armTower;
+  private MechanismLigament2d arm;
 
   // These values are used to move the arm to known positions.  0 is considered starting
   // position/bottom. Values increase as arm moves up.
@@ -160,6 +185,57 @@ public class Arm extends SubsystemBase {
     encoder.setReverseDirection(true);
 
     buildShuffleboardTab();
+
+    if (RobotBase.isSimulation()) {
+      setupSimulation();
+    }
+  }
+
+  private void setupSimulation() {
+    double encoderDistPerPulse = 2.0 * Math.PI / 4096;
+    // double encoderDistPerPulse = 2.0 * Math.PI / 8192;
+    // double encoderDistPerPulse = 2.0 * Math.PI / 1024;
+    // encoder.setDistancePerPulse(encoderDistPerPulse);
+    encoderSim = new EncoderSim(encoder);
+
+    dioTop = new DIOSim(topLimitSwitch);
+    dioBottom = new DIOSim(bottomLimitSwitch);
+    dioTop.setValue(false);
+    dioBottom.setValue(false);
+
+    DCMotor armGearbox = DCMotor.getNEO(1);
+    double armLength = Units.inchesToMeters(48);
+    double armMass = 8.0; // kg
+    double minAngle = Units.degreesToRadians(-80);
+    double maxAngle = Units.degreesToRadians(120);
+
+    armSim =
+        new SingleJointedArmSim(
+            armGearbox,
+            100,
+            SingleJointedArmSim.estimateMOI(armLength, armMass),
+            armLength,
+            minAngle,
+            maxAngle,
+            false,
+            VecBuilder.fill(encoderDistPerPulse) // Add noise with a std-dev of 1 tick
+            );
+
+    mech2d = new Mechanism2d(60, 60);
+    armPivot = mech2d.getRoot("ArmPivot", 30, 30);
+    armTower = armPivot.append(new MechanismLigament2d("ArmTower", 30, -90));
+    arm =
+        armPivot.append(
+            new MechanismLigament2d(
+                "Arm",
+                30,
+                Units.radiansToDegrees(armSim.getAngleRads()),
+                6,
+                new Color8Bit(Color.kYellow)));
+
+    armTower.setColor(new Color8Bit(Color.kBlue));
+
+    SmartDashboard.putData("Arm Sim", mech2d);
   }
 
   /**
@@ -191,6 +267,53 @@ public class Arm extends SubsystemBase {
     if (isBottomLimit() && isMoving() == false) {
       resetPosition();
     }
+  }
+
+  /** Update the simulation model. */
+  public void simulationPeriodic() {
+    // In this method, we update our simulation of what our arm is doing
+    // First, we set our "inputs" (voltages)
+    armSim.setInput(armMotor.get() * RobotController.getBatteryVoltage());
+
+    // Next, we update it. The standard loop time is 20ms.
+    armSim.update(0.020);
+
+    // Set our simulated encoder's readings.  The range of movement setup in sim results in a range
+    // of 0-200 degrees.
+    //
+    double distance = 3 * (Units.radiansToDegrees(armSim.getAngleRads()) + 80);
+    encoderSim.setDistance(distance);
+
+    // Set simulated battery voltage
+    // SimBattery estimates loaded battery voltages
+    RoboRioSim.setVInVoltage(
+        BatterySim.calculateDefaultBatteryLoadedVoltage(armSim.getCurrentDrawAmps()));
+
+    // Update the Mechanism Arm angle based on the simulated arm angle
+    arm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
+
+    if (distance > 590) {
+      dioTop.setValue(false);
+    } else {
+      dioTop.setValue(true);
+    }
+    if (distance < 10) {
+      dioBottom.setValue(false);
+    } else {
+      dioBottom.setValue(true);
+    }
+
+    // if (armSim.wouldHitUpperLimit(armSim.getAngleRads())) {
+    //   dioTop.setValue(true);
+    // } else {
+    //   dioTop.setValue(false);
+    // }
+    // if (armSim.wouldHitLowerLimit(armSim.getAngleRads())) {
+    //   dioBottom.setValue(true);
+    // } else {
+    //   dioBottom.setValue(false);
+    // }
+
   }
 
   /**
