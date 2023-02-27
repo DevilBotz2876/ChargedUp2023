@@ -45,6 +45,6 @@ public class ArmDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.isBottomLimit() || arm.atBottom();
+    return arm.isBottomLimit();
   }
 }

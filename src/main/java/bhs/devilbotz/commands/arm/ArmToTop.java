@@ -43,6 +43,6 @@ public class ArmToTop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (arm.isTopLimit() || arm.atTop());
+    return (arm.isTopLimit());
   }
 }

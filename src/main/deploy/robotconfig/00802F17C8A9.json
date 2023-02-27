@@ -2,6 +2,10 @@
     "name" : "Practice BOT",
     "id": "00802F17C8A9",
 
+    "capabilities" : {
+        "hasInvertedDriveEncoderSensorPhase": true
+    },
+
     "drivetrain" : {
         "TRACK_WIDTH": 0.64602,
         "WHEEL_RADIUS": 0.0762,
