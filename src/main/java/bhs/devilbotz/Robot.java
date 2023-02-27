@@ -234,6 +234,12 @@ public class Robot extends TimedRobot {
     return robotConfig.get("drivetrain").get(name);
   }
 
+  /**
+   * This method returns the requested robot specific capabilities
+   *
+   * @param name The capability name
+   * @return true if the capability is supported, otherwise false
+   */
   public static boolean checkCapability(String name) {
     try {
       return robotConfig.get("capabilities").get(name).asBoolean(false);
