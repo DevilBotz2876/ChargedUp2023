@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -48,9 +49,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
 
-  private final Gripper gripper = new Gripper();
+  private static final Gripper gripper = new Gripper();
 
-  private final Arm arm = new Arm();
+  private static final Arm arm = new Arm();
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
@@ -77,6 +78,8 @@ public class RobotContainer {
     SmartDashboard.putData(driveTrain);
 
     arm.setDefaultCommand(new ArmIdle(arm));
+    gripper.setDefaultCommand(new GripperIdle(gripper));
+
     driveTrain.setDefaultCommand(
         new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
@@ -103,7 +106,9 @@ public class RobotContainer {
 
     new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
 
-    new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 4)
+        .whileTrue(new ArmDown(arm, gripper))
+        .onFalse(new ArmStop(arm));
 
     new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
     new JoystickButton(leftJoystick, 7)
@@ -228,5 +233,21 @@ public class RobotContainer {
    */
   public void resetRobotPosition() {
     driveTrain.resetRobotPosition();
+  }
+
+  /**
+   * Initialize gripper to known/same position
+   */
+  public void initGripper() {
+    gripper.close();
+  }
+
+  /**
+   * Create a command to move arm down.  This is a workaround/hack to allow Shuffleboard to add arm movement command that requires both arm and gripper.  The arm Shuffleboard tab is setup in the Arm subsystem which has no idea about the Gripper subsystem.
+   * 
+   * @return command to move arm down
+   */
+  public static CommandBase createArmDownCommand() {
+    return new ArmDown(arm, gripper);
   }
 }

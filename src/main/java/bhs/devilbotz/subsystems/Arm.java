@@ -6,7 +6,7 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
-import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmToBottom;
@@ -89,6 +89,12 @@ public class Arm extends SubsystemBase {
   private final double POSITION_BOTTOM = 258;
   private final double POSITION_PORTAL = 465;
 
+  // Note this value is well above the frame/bumpers, not right above them.  When the arm is moving
+  // down there is momentum and time involved.  You need to
+  // start closing the gripper and give it time to close before the moving arm is near the
+  // frame/bummpers.
+  private final double POSITION_GRIPPER_CLOSE = 190;
+
   /*
    * low cone: 258
    * middle cone: 468
@@ -105,6 +111,7 @@ public class Arm extends SubsystemBase {
   private double middlePosition = POSITION_MIDDLE;
   private double bottomPosition = POSITION_BOTTOM;
   private double portalPosition = POSITION_PORTAL;
+  private double gripperClosePosition = POSITION_GRIPPER_CLOSE;
 
   // When trying to reach a set position, how close is good enough? This value is used to determine
   // that. Smaller value tries to reach closer to target position.  Larger will stop arm further
@@ -283,6 +290,19 @@ public class Arm extends SubsystemBase {
   }
 
   /**
+   * Check if arm is at/nearing position where the gripper needs to be closed. The arm cannot be
+   * fully stowed inside robot unless gripper is closed. We do not want to check/return if the
+   * position is less than the gripper close position. If we did this, then the gripper would never
+   * be able to open while arm is in low positions.
+   *
+   * @return true if at middle position false if not.
+   */
+  public boolean atGripperClose() {
+    return (getPosition() >= gripperClosePosition - positionError
+        && getPosition() <= gripperClosePosition + positionError);
+  }
+
+  /**
    * Check if arm is above middle position based on encoder position.
    *
    * @return true if above middle position false if not.
@@ -339,7 +359,7 @@ public class Arm extends SubsystemBase {
 
     cmdList.add(new ArmStop(this)).withPosition(0, 0);
     cmdList.add(new ArmUp(this)).withPosition(0, 1);
-    cmdList.add(new ArmDown(this)).withPosition(0, 2);
+    cmdList.add(RobotContainer.createArmDownCommand()).withPosition(0, 2);
     cmdList.add(new ArmMoveDistance(this, -10)).withPosition(0, 3);
 
     cmdList.add(new ArmToTop(this)).withPosition(1, 0);
