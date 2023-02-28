@@ -5,7 +5,6 @@
 
 package bhs.devilbotz;
 
-import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmIdle;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
@@ -54,11 +53,11 @@ public class RobotContainer {
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
-  private final Joystick leftJoystick =
-      new Joystick(Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT);
+  private final Joystick leftJoystick = null;
+  //     new Joystick(Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT);
 
-  private final Joystick rightJoystick =
-      new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
+  private final Joystick rightJoystick = null;
+  //     new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
 
   // For debugging balance PID. Allows setting balance PID values on the fly
   private final PIDController balancePid =
@@ -70,15 +69,18 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
+    // configureBindings();
 
     // For debugging balance PID. Allows setting balance PID values on the fly
     SmartDashboard.putData("Balance PID", balancePid);
     SmartDashboard.putData(driveTrain);
 
     arm.setDefaultCommand(new ArmIdle(arm));
-    driveTrain.setDefaultCommand(
-        new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    gripper.setDefaultCommand(new GripperIdle(gripper));
+
+    // driveTrain.setDefaultCommand(
+    //     new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
     // rightJoystick::getX));
   }

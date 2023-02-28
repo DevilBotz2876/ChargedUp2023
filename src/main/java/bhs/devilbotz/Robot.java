@@ -202,6 +202,9 @@ public class Robot extends TimedRobot {
     try {
       NetworkInterface network = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
       byte[] mac = network.getHardwareAddress();
+      if (Robot.isSimulation()) {
+        return "simulation";
+      }
 
       StringBuilder macString = new StringBuilder();
       for (byte m : mac) {
@@ -210,6 +213,7 @@ public class Robot extends TimedRobot {
       return macString.toString();
       // TODO: Implement checking for the practice bot
     } catch (SocketException | UnknownHostException e) {
+
       throw new RuntimeException(e);
     }
   }
