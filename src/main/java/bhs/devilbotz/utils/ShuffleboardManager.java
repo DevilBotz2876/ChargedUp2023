@@ -5,6 +5,7 @@ import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -34,6 +35,8 @@ public class ShuffleboardManager {
   private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
   private static final ShuffleboardLayout autoMode =
       driveTab.getLayout("Autonomous", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
+  private static final ShuffleboardLayout cameras =
+      driveTab.getLayout("Cameras", BuiltInLayouts.kList).withPosition(5, 0).withSize(4, 4);
 
   private final GenericEntry gripperSetpoint;
   /** The constructor for the shuffleboard manager. */
@@ -124,6 +127,10 @@ public class ShuffleboardManager {
         .add("Field", field)
         .withWidget(BuiltInWidgets.kField)
         .withPosition(2, 0)
-        .withSize(5, 3);
+        .withSize(3, 2);
+  }
+
+  public void putCamera(String name, UsbCamera camera) {
+    cameras.add(name, camera);
   }
 }

@@ -24,6 +24,7 @@ import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.utils.CameraManager;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -54,6 +55,8 @@ public class RobotContainer {
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
+  private CameraManager cameraManager = null;
+
   private final Joystick leftJoystick =
       new Joystick(Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT);
 
@@ -71,6 +74,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    cameraManager = new CameraManager(shuffleboardManager);
 
     // For debugging balance PID. Allows setting balance PID values on the fly
     SmartDashboard.putData("Balance PID", balancePid);

@@ -67,8 +67,6 @@ public class Robot extends TimedRobot {
 
     robotContainer = new RobotContainer();
     shuffleboardManager = robotContainer.getShuffleboardManager();
-
-    CameraServer.startAutomaticCapture();
   }
 
   /**
