@@ -49,7 +49,16 @@ public class Gripper extends SubsystemBase {
     doubleSolenoid.set(Value.kReverse);
   }
 
-  /** This method sets the grippers speed to 0. */
+  /**
+   * This method deactivates the gripper solenoid. It should be ok to leave the solenoid in
+   * fwd/reverse. Reading thru this thread on CD explains why:
+   * https://www.chiefdelphi.com/t/do-you-need-to-set-a-double-solenoid-to-off-after-bringing-it-in/368798
+   * Based on comments in that thread we should be fine leaving the solenoid actuated/firing all the
+   * time. We want do do this to prevent the gripper from flapping if the gate in the solenoid
+   * moves/slips while the robot is moving around. There is also a delay involved to make sure the
+   * solenoid fired before disabling it. This makes the code more complicated. Ff we can get by with
+   * just leaving the solenoid firing all the time we should do so.
+   */
   public void stop() {
     doubleSolenoid.set(Value.kOff);
   }
