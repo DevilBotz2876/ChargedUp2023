@@ -9,6 +9,7 @@ import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -24,6 +25,7 @@ public class BalancePID extends CommandBase {
   private final DriveTrain drive;
   // private double levelAngle;
   private final PIDController balancePid;
+  Timer timer = new Timer();
 
   /**
    * The constructor for the balance PID command.
@@ -51,20 +53,28 @@ public class BalancePID extends CommandBase {
             Robot.getDriveTrainConstant("BALANCE_D").asDouble()));
   }
 
+
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.println("BalancePID start");
     drive.arcadeDrive(0, 0);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double error = balancePid.calculate(drive.getRoll(), 0);
-    double output = MathUtil.clamp(error, -0.5, 0.5);
+    double output = MathUtil.clamp(error, -0.25, 0.25);
     if (Math.abs(drive.getRoll()) < Constants.BALANCE_PID_TOLERANCE) {
       output = 0;
+      timer.start();
+    }
+    else {
+      timer.stop();
+      timer.reset();
     }
     drive.arcadeDrive(-output, 0);
 
@@ -83,6 +93,9 @@ public class BalancePID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+      if(timer.hasElapsed(1)) {
+        return true;
+      }
     return false;
   }
 }
