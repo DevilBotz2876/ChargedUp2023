@@ -235,16 +235,16 @@ public class RobotContainer {
     driveTrain.resetRobotPosition();
   }
 
-  /**
-   * Initialize gripper to known/same position
-   */
+  /** Initialize gripper to known/same position */
   public void initGripper() {
     gripper.close();
   }
 
   /**
-   * Create a command to move arm down.  This is a workaround/hack to allow Shuffleboard to add arm movement command that requires both arm and gripper.  The arm Shuffleboard tab is setup in the Arm subsystem which has no idea about the Gripper subsystem.
-   * 
+   * Create a command to move arm down. This is a workaround/hack to allow Shuffleboard to add arm
+   * movement command that requires both arm and gripper. The arm Shuffleboard tab is setup in the
+   * Arm subsystem which has no idea about the Gripper subsystem.
+   *
    * @return command to move arm down
    */
   public static CommandBase createArmDownCommand() {
