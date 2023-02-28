@@ -12,6 +12,7 @@ import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmToBottom;
 import bhs.devilbotz.commands.arm.ArmToMiddle;
 import bhs.devilbotz.commands.arm.ArmToTop;
+import bhs.devilbotz.commands.arm.ArmToPortal;
 import bhs.devilbotz.commands.arm.ArmUp;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -282,6 +283,10 @@ public class Arm extends SubsystemBase {
         && getPosition() <= middlePosition + positionError);
   }
 
+  public boolean atPortal() {
+    return getPosition() >= portalPosition - positionError && getPosition() <= middlePosition + positionError;
+  }
+
   /**
    * Check if arm is above middle position based on encoder position.
    *
@@ -298,6 +303,22 @@ public class Arm extends SubsystemBase {
    */
   public boolean belowMiddle() {
     return (getPosition() < middlePosition);
+  }
+
+  /**
+   * Check if arm is above portal position based on encoder position.
+   * @return true is above portal position false if not.
+   */
+  public boolean abovePortal() {
+    return (getPosition() > portalPosition);
+  }
+
+  /**
+   * Check if arm is below portal position based on encoder position.
+   * @return true if below portal position false if not
+   */
+  public boolean belowPortal() {
+    return (getPosition() < portalPosition);
   }
 
   /**
