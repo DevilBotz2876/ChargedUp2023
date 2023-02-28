@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This command moves the arm down.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm)" class="member-name-link">ArmDown(Arm)</a> - Constructor for class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
+<dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,bhs.devilbotz.subsystems.Gripper)" class="member-name-link">ArmDown(Arm, Gripper)</a> - Constructor for class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
 <dd>
 <div class="block">The constructor for the arm down command.</div>
 </dd>
@@ -148,6 +148,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Check if arm is at bottom position to allow it to score a game piece in lower grid scoring
  node.</div>
+</dd>
+<dt><a href="bhs/devilbotz/subsystems/Arm.html#atGripperClose()" class="member-name-link">atGripperClose()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
+<dd>
+<div class="block">Check if arm is at/nearing position where the gripper needs to be closed.</div>
 </dd>
 <dt><a href="bhs/devilbotz/subsystems/Arm.html#atMiddle()" class="member-name-link">atMiddle()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
 <dd>
@@ -280,6 +284,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/Constants.SysIdConstants.html" class="type-name-link" title="class in bhs.devilbotz">Constants.SysIdConstants</a> - Class in <a href="bhs/devilbotz/package-summary.html">bhs.devilbotz</a></dt>
 <dd>
 <div class="block">SysID dependent constants</div>
+</dd>
+<dt><a href="bhs/devilbotz/RobotContainer.html#createArmDownCommand()" class="member-name-link">createArmDownCommand()</a> - Static method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
+<dd>
+<div class="block">Create a command to move arm down.</div>
 </dd>
 <dt><a href="bhs/devilbotz/lib/GamePieceTypes.html#CUBE" class="member-name-link">CUBE</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/GamePieceTypes.html" title="enum class in bhs.devilbotz.lib">GamePieceTypes</a></dt>
 <dd>&nbsp;</dd>
@@ -554,6 +562,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
+<dt><a href="bhs/devilbotz/RobotContainer.html#initGripper()" class="member-name-link">initGripper()</a> - Method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
+<dd>
+<div class="block">Initialize gripper to known/same position</div>
+</dd>
 <dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Called when the command is initially scheduled.</div>
@@ -833,7 +845,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/subsystems/Gripper.html#stop()" class="member-name-link">stop()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Gripper.html" title="class in bhs.devilbotz.subsystems">Gripper</a></dt>
 <dd>
-<div class="block">This method sets the grippers speed to 0.</div>
+<div class="block">This method deactivates the gripper solenoid.</div>
 </dd>
 <dt><a href="bhs/devilbotz/Constants.SysIdConstants.html#%3Cinit%3E()" class="member-name-link">SysIdConstants()</a> - Constructor for class bhs.devilbotz.<a href="bhs/devilbotz/Constants.SysIdConstants.html" title="class in bhs.devilbotz">Constants.SysIdConstants</a></dt>
 <dd>&nbsp;</dd>
