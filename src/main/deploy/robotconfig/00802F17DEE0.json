@@ -25,7 +25,10 @@
         "DISTANCE_D": 0.1,
         "STRAIGHT_P": 0.1,
         "STRAIGHT_I": 0,
-        "STRAIGHT_D": 0
+        "STRAIGHT_D": 0,
+        "ROTATE_P" : 0.1,
+        "ROTATE_I": 0,
+        "ROTATE_D": 0
     },
 
     "sysid": {
