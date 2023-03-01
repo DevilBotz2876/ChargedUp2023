@@ -6,13 +6,6 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
-import bhs.devilbotz.RobotContainer;
-import bhs.devilbotz.commands.arm.ArmMoveDistance;
-import bhs.devilbotz.commands.arm.ArmStop;
-import bhs.devilbotz.commands.arm.ArmToBottom;
-import bhs.devilbotz.commands.arm.ArmToMiddle;
-import bhs.devilbotz.commands.arm.ArmToTop;
-import bhs.devilbotz.commands.arm.ArmUp;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.networktables.BooleanEntry;
@@ -21,13 +14,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.Map;
 
 /**
  * This subsystem controls arm.
@@ -165,8 +152,6 @@ public class Arm extends SubsystemBase {
     // TODO: check if switching DIO port wires will change sign of value.
     //
     encoder.setReverseDirection(true);
-
-    buildShuffleboardTab();
   }
 
   /**
@@ -348,68 +333,15 @@ public class Arm extends SubsystemBase {
     encoder.reset();
   }
 
-  public void buildShuffleboardTab() {
-    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+  public DigitalInput getBottomLimitSwitch() {
+    return bottomLimitSwitch;
+  }
 
-    ShuffleboardContainer cmdList =
-        tab.getLayout("ArmCmds", BuiltInLayouts.kGrid)
-            .withPosition(0, 0)
-            .withSize(2, 4)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
+  public DigitalInput getTopLimitSwitch() {
+    return topLimitSwitch;
+  }
 
-    cmdList.add(new ArmStop(this)).withPosition(0, 0);
-    cmdList.add(new ArmUp(this)).withPosition(0, 1);
-    cmdList.add(RobotContainer.createArmDownCommand()).withPosition(0, 2);
-    cmdList.add(new ArmMoveDistance(this, -10)).withPosition(0, 3);
-
-    cmdList.add(new ArmToTop(this)).withPosition(1, 0);
-    cmdList.add(new ArmToMiddle(this)).withPosition(1, 1);
-    cmdList.add(new ArmToBottom(this)).withPosition(1, 2);
-
-    tab.add("Arm subsystem", this).withPosition(2, 0);
-    tab.add(this.encoder).withPosition(2, 1);
-
-    ShuffleboardContainer limitsList =
-        tab.getLayout("Limit Switches", BuiltInLayouts.kGrid)
-            .withPosition(2, 2)
-            .withSize(2, 2)
-            .withProperties(Map.of("Number of columns", 1, "Number of rows", 2));
-
-    limitsList.add("top dio " + topLimitSwitch.getChannel(), topLimitSwitch);
-    limitsList.add("bottom dio " + bottomLimitSwitch.getChannel(), bottomLimitSwitch);
-
-    ShuffleboardContainer list =
-        tab.getLayout("Position", BuiltInLayouts.kGrid)
-            .withPosition(4, 0)
-            .withSize(2, 4)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
-
-    list.addBoolean("atTop", () -> atTop())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 0);
-
-    list.addBoolean("atPortal", () -> atSubstationPortal())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 1);
-
-    list.addBoolean("atMiddle", () -> atMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 2);
-
-    list.addBoolean("atBottom", () -> atBottom())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 3);
-
-    list.addBoolean("aboveMiddle", () -> aboveMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 1);
-
-    list.addBoolean("belowMiddle", () -> belowMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 2);
-
-    list.addBoolean("isMoving", () -> isMoving())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 3);
+  public Encoder getEncoder() {
+    return encoder;
   }
 }
