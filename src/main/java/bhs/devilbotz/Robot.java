@@ -5,12 +5,15 @@
 
 package bhs.devilbotz;
 
+import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +40,8 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
 
+  private DriverStation.Alliance alliance = DriverStation.Alliance.Invalid;
+
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
    * useful for simulation
@@ -52,7 +57,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-
     try {
       String robotConfigPath = getRobotConfigFilePath();
       File robotConfigFile = new File(robotConfigPath);
@@ -97,11 +101,21 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (DriverStation.getAlliance() != alliance) {
+      alliance = DriverStation.getAlliance();
+      if (alliance == DriverStation.Alliance.Red) {
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
+      } else if (alliance == DriverStation.Alliance.Blue) {
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
+      }
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_AUTONOMOUS).schedule();
     robotContainer.resetRobotPosition();
 
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
@@ -119,6 +133,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotContainer.resetRobotPosition();
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
+    } else {
+      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
+    }
     robotContainer.resetRobotPosition();
 
     // This makes sure that the autonomous stops running when
