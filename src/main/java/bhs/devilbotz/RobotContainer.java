@@ -195,7 +195,8 @@ public class RobotContainer {
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
                   .andThen(driveTrain.followTrajectoryCommand(path, true))
-                  .andThen(new BalancePID(driveTrain));
+                  .andThen(new BalancePID(driveTrain))
+                  .andThen(new RotateDegrees(driveTrain, 90));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {
@@ -207,7 +208,8 @@ public class RobotContainer {
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
                   .andThen(driveTrain.followTrajectoryCommand(path, true))
-                  .andThen(new BalancePID(driveTrain));
+                  .andThen(new BalancePID(driveTrain))
+                  .andThen(new RotateDegrees(driveTrain, 90));
           break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
