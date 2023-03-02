@@ -274,6 +274,11 @@ public class Arm extends SubsystemBase {
         && getPosition() <= middlePosition + positionError);
   }
 
+  public boolean atPortal() {
+    return getPosition() >= portalPosition - positionError
+        && getPosition() <= portalPosition + positionError;
+  }
+
   /**
    * Check if arm is at/nearing position where the gripper needs to be closed. The arm cannot be
    * fully stowed inside robot unless gripper is closed. We do not want to check/return if the
@@ -303,6 +308,24 @@ public class Arm extends SubsystemBase {
    */
   public boolean belowMiddle() {
     return (getPosition() < middlePosition);
+  }
+
+  /**
+   * Check if arm is above portal position based on encoder position.
+   *
+   * @return true is above portal position false if not.
+   */
+  public boolean abovePortal() {
+    return (getPosition() > portalPosition);
+  }
+
+  /**
+   * Check if arm is below portal position based on encoder position.
+   *
+   * @return true if below portal position false if not
+   */
+  public boolean belowPortal() {
+    return (getPosition() < portalPosition);
   }
 
   /**
