@@ -284,7 +284,7 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean atPortal() {
-    return getPosition() >= portalPosition - positionError && getPosition() <= middlePosition + positionError;
+    return getPosition() >= portalPosition - positionError && getPosition() <= portalPosition + positionError;
   }
 
   /**
@@ -366,6 +366,7 @@ public class Arm extends SubsystemBase {
     cmdList.add(new ArmToTop(this)).withPosition(1, 0);
     cmdList.add(new ArmToMiddle(this)).withPosition(1, 1);
     cmdList.add(new ArmToBottom(this)).withPosition(1, 2);
+    cmdList.add(new ArmToPortal(this)).withPosition(1, 3);
 
     tab.add("Arm subsystem", this).withPosition(2, 0);
     tab.add(this.encoder).withPosition(2, 1);
