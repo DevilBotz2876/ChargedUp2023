@@ -32,7 +32,7 @@
         "ROTATE_P" : 0.05,
         "ROTATE_I": 0,
         "ROTATE_D": 0,
-        "ROTATE_PID_TOLERANCE": 1,        
+        "ROTATE_PID_TOLERANCE": 5,        
         "DOCK_MAX_SPEED_ON_GROUND": 1,
         "DOCK_MAX_SPEED_ON_RAMP": 0.50,
         "DOCK_MIN_ON_RAMP_COUNT": 10,
