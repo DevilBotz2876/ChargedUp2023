@@ -56,7 +56,7 @@ public class ArmToMiddle extends CommandBase {
   public boolean isFinished() {
     // Stop command in case the end position is out of range or encoder is broken or giving
     // incorrect readings
-    
+
     return arm.atMiddle();
   }
 }
