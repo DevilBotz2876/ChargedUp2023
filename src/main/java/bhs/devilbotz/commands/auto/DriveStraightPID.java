@@ -7,6 +7,7 @@ package bhs.devilbotz.commands.auto;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -17,6 +18,7 @@ public class DriveStraightPID extends CommandBase {
   private PIDController straightPid;
   private double distance;
   private double startAngle;
+  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
   /**
    * The constructor for the Drive Straight PID command.
    *
@@ -37,6 +39,7 @@ public class DriveStraightPID extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
     startAngle = drivetrain.getYaw();
+    distancePid.setTolerance(0.1);
 
     SmartDashboard.putData("Distance PID", distancePid);
     SmartDashboard.putData("Straight PID", straightPid);
@@ -54,10 +57,9 @@ public class DriveStraightPID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // distance_pid.setTolerance(1);
     double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
-    drivetrain.arcadeDrive(output, -turnError);
+    drivetrain.arcadeDrive(speedSlewRateLimiter.calculate(output), -turnError);
 
     SmartDashboard.putNumber("Distance output", output);
     SmartDashboard.putNumber("Position Tolerance", distancePid.getPositionTolerance());
@@ -78,10 +80,6 @@ public class DriveStraightPID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return distance_pid.atSetpoint();
-    if (Math.abs(distancePid.getPositionError()) < 0.001) {
-      return true;
-    }
-    return false;
+    return distancePid.atSetpoint();
   }
 }

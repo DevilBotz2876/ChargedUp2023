@@ -182,7 +182,8 @@ public class RobotContainer {
                               driveTrain,
                               ShuffleboardManager.autoDistance.getDouble(
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                          .andThen(new BalancePID(driveTrain, balancePid)).andThen(new RotateDegrees(driveTrain, 90)));
+                          .andThen(new BalancePID(driveTrain, balancePid))
+                          .andThen(new RotateDegrees(driveTrain, 90)));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {

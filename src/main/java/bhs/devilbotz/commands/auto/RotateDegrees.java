@@ -6,28 +6,27 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RotateDegrees extends CommandBase {
-    private DriveTrain drivetrain;
-    private PIDController rotatePid;
-    private double startAngle;
-    private double targetAngle;
+  private DriveTrain drivetrain;
+  private PIDController rotatePid;
+  private double startAngle;
+  private double targetAngle;
 
-    public RotateDegrees(DriveTrain drivetrain, int degrees)
-    {
-        this.drivetrain = drivetrain;
-        rotatePid = new PIDController(
+  public RotateDegrees(DriveTrain drivetrain, int degrees) {
+    this.drivetrain = drivetrain;
+    rotatePid =
+        new PIDController(
             Robot.getDriveTrainConstant("ROTATE_P").asDouble(),
             Robot.getDriveTrainConstant("ROTATE_I").asDouble(),
             Robot.getDriveTrainConstant("ROTATE_D").asDouble());
-        rotatePid.setTolerance(1);
-        startAngle = drivetrain.getYaw();
-        targetAngle = startAngle + degrees;
-        addRequirements(drivetrain);
-    }
+    rotatePid.setTolerance(1);
+    startAngle = drivetrain.getYaw();
+    targetAngle = startAngle + degrees;
+    addRequirements(drivetrain);
+  }
 
-  private void addRequirements(DriveTrain drivetrain2) {
-    }
+  private void addRequirements(DriveTrain drivetrain2) {}
 
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.println("RotateDegrees start");

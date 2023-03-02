@@ -53,14 +53,11 @@ public class BalancePID extends CommandBase {
             Robot.getDriveTrainConstant("BALANCE_D").asDouble()));
   }
 
-
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.println("BalancePID start");
     drive.arcadeDrive(0, 0);
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -71,8 +68,7 @@ public class BalancePID extends CommandBase {
     if (Math.abs(drive.getRoll()) < Constants.BALANCE_PID_TOLERANCE) {
       output = 0;
       timer.start();
-    }
-    else {
+    } else {
       timer.stop();
       timer.reset();
     }
@@ -93,9 +89,9 @@ public class BalancePID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      if(timer.hasElapsed(0.5)) {
-        return true;
-      }
+    if (timer.hasElapsed(0.5)) {
+      return true;
+    }
     return false;
   }
 }
