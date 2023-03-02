@@ -20,8 +20,15 @@ import bhs.devilbotz.commands.auto.DriveStraightToDock;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
+import bhs.devilbotz.commands.DriveSetDistancePID;
+import bhs.devilbotz.commands.DriveStraight;
+import bhs.devilbotz.commands.DriveStraightPID;
+import bhs.devilbotz.commands.auto.BalanceAuto;
+import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.subsystems.Arm;
+import bhs.devilbotz.lib.LEDModes;
+import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
@@ -72,6 +79,17 @@ public class RobotContainer {
           Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
           Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
           Robot.getDriveTrainConstant("BALANCE_D").asDouble());
+  private final Arduino arduino;
+  {
+    try {
+      arduino = new Arduino();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private final Joystick joystick =
+      new Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -231,6 +249,10 @@ public class RobotContainer {
    */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
+  }
+
+  public Arduino getArduino() {
+    return arduino;
   }
 
   /**
