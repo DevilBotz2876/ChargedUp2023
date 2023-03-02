@@ -6,93 +6,105 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  * This command is a PID controller that drives the robot straight to a set distance up a hill to
  * dock with the charging port.
  */
-public class DriveStraightToDock extends CommandBase {
-  private DriveTrain drivetrain;
-  private PIDController distancePid;
-  private PIDController straightPid;
-  private double distance;
-  private double startAngle;
-  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
+public class DriveStraightToDock extends DriveStraightPID {
+  private enum DockState {
+    ON_GROUND,
+    ON_RAMP,
+    LEVELING_OFF
+  }
 
+  private DockState currentState = DockState.ON_GROUND;
   /**
    * The constructor for the Drive Straight To Dock PID command.
    *
    * @param drivetrain The drive train subsystem.
-   * @param distance The distance (in meters) the robot needs to cover.
+   * @param distance The MAX distance (in meters) the robot needs to cover. We end when the distance
+   *     is reached OR we've detected that we are physically on the dock
    */
   public DriveStraightToDock(DriveTrain drivetrain, double distance) {
-    this.drivetrain = drivetrain;
-    this.distance = distance;
-    distancePid =
-        // new PIDController(Constants.DISTANCE_P, Constants.DISTANCE_I, Constants.DISTANCE_D);
-        new PIDController(
-            Robot.getDriveTrainConstant("DISTANCE_P").asDouble(),
-            Robot.getDriveTrainConstant("DISTANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("DISTANCE_D").asDouble());
-    straightPid =
-        // new PIDController(Constants.STRAIGHT_P, Constants.STRAIGHT_I, Constants.STRAIGHT_D);
-        new PIDController(
-            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
-    startAngle = drivetrain.getYaw();
-    addRequirements(drivetrain);
+    super(drivetrain, distance);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    System.out.println("DriveStraightToDock start");
-    drivetrain.arcadeDrive(0, 0);
-  }
+  int onRampCount = 0;
+  double previousRoll;
+  int levelingRampCount = 0;
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // distance_pid.setTolerance(1);
-    double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
-    double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
-    drivetrain.arcadeDrive(speedSlewRateLimiter.calculate(output), -turnError);
+    double currentRoll = drivetrain.getRoll();
 
-    SmartDashboard.putNumber("Distance output", output);
-    SmartDashboard.putNumber("Position Tolerance", distancePid.getPositionTolerance());
-    SmartDashboard.putBoolean("at Setpoint", distancePid.atSetpoint());
-    SmartDashboard.putNumber("Position Error", distancePid.getPositionError());
-    SmartDashboard.putNumber("Average Distance", drivetrain.getAverageDistance());
-    SmartDashboard.putNumber("Left distance", drivetrain.getLeftDistance());
-    SmartDashboard.putNumber("Right Distance", drivetrain.getRightDistance());
+    switch (currentState) {
+      case ON_GROUND:
+        /* We start in the ON_GROUND state. We see if the currentRoll is within the expected ramp angle.
+         * Empirically, the roll is between min/max when on the ramp.
+         * When approaching the ramp, we cap the max speed to prevent crashing into the ramp
+         */
+        setMaxSpeed(Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_GROUND").asDouble(0.75));
 
-    SmartDashboard.putNumber("Turn output", turnError);
-  }
+        if ((currentRoll > Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))
+            && (currentRoll < Robot.getDriveTrainConstant("DOCK_MAX_RAMP_ROLL").asDouble(15))) {
+          onRampCount++;
+          System.out.println("#### Maybe On Ramp (onRampCount: " + onRampCount + ") ####");
+        } else {
+          onRampCount = 0;
+          System.out.println("#### Not on Ramp ####");
+        }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    drivetrain.arcadeDrive(0, 0);
-    System.out.println("DriveStraightToDock Finished");
+        /* If we've been on the ramp long enough (roll is within expected window), we assume we are on the ramp and transition states */
+        if (onRampCount > Robot.getDriveTrainConstant("DOCK_MIN_ON_RAMP_COUNT").asInt(10)) {
+          System.out.println("#### On Ramp! ####");
+          currentState = DockState.ON_RAMP;
+        }
+        break;
+
+      case ON_RAMP:
+        /* When we think we are on the ramp, we reduce the maxSpeed so that we don't go so fast that we overshoot and cause the
+         * ramp to teeter quickly to the other side
+         * While the roll is decreasing and the currentRoll is less than the empirical ramp roll we assume we are leveling off.
+         */
+        setMaxSpeed(Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_RAMP").asDouble(0.50));
+        double deltaRoll = currentRoll - previousRoll;
+        if ((deltaRoll < 0)
+            && (currentRoll < Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))) {
+          levelingRampCount++;
+          System.out.println(
+              "#### Maybe Leveling Off (levelingRampCount: " + levelingRampCount + ") ####");
+        } else {
+          levelingRampCount = 0;
+          System.out.println("#### Not Leveling Off ####");
+        }
+
+        /* If we've been leveling off long enough, we assume we are almost balanced */
+        if (levelingRampCount > Robot.getDriveTrainConstant("DOCK_MIN_LEVELING_COUNT").asInt(2)) {
+          System.out.println("#### Leveling Off! ####");
+          currentState = DockState.LEVELING_OFF;
+        }
+        break;
+
+      case LEVELING_OFF:
+        setMaxSpeed(0.01);
+        return;
+    }
+
+    /* We save the current roll so we can calculate the deltaRoll next time */
+    previousRoll = currentRoll;
+
+    /* Execute the base class's execute function to drive straight */
+    super.execute();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return distance_pid.atSetpoint();
-    // double roll = Math.abs(drivetrain.getRoll());
-    // if (roll > 7){
-    //  roll = 0;
-    // }
-    if (Math.abs(distancePid.getPositionError()) < 0.1) {
-      return true;
-    }
-    return false;
+    /* We are finished when we are in the LEVELING_OFF state.
+     * As a backup, we also assume we are finished when the total distance has been traveled
+     */
+    return ((DockState.LEVELING_OFF == currentState) || super.isFinished());
   }
 }
