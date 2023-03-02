@@ -13,15 +13,24 @@ public class ArmToPortal extends CommandBase {
 
       // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (arm.abovePortal()) {
       arm.down();
+
+      if (arm.isBottomLimit()) {
+        arm.up();
+      }
     } else if (arm.belowPortal()) {
       arm.up();
+
+      if (arm.isTopLimit()) {
+        arm.down();
+      }
     }
   }
 
@@ -36,9 +45,6 @@ public class ArmToPortal extends CommandBase {
    public boolean isFinished() {
      // Stop command in case the end position is out of range or encoder is broken or giving
      // incorrect readings
-     if (arm.isBottomLimit() || arm.isTopLimit()) {
-       return true;
-     }
      return arm.atPortal();
    }
 }
