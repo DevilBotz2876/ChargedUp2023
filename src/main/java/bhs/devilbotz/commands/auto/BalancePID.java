@@ -65,10 +65,18 @@ public class BalancePID extends CommandBase {
   public void execute() {
     double error = balancePid.calculate(drive.getRoll(), 0);
     double output = MathUtil.clamp(error, -0.25, 0.25);
+
     if (Math.abs(drive.getRoll()) < Constants.BALANCE_PID_TOLERANCE) {
+      /* When the robot is within the balance tolerance we:
+       *  1) stop the robot from moving
+       *  2) start a timer to measure how long we've been balanced
+       */ 
       output = 0;
       timer.start();
     } else {
+      /* When the robot is *not* within the balance tolerance we:
+       *  1) stop and reset the timer
+       */ 
       timer.stop();
       timer.reset();
     }
@@ -89,6 +97,7 @@ public class BalancePID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Empirically, if we've been balanced for at least 1/2 second, we assume we are done
     if (timer.hasElapsed(0.5)) {
       return true;
     }
