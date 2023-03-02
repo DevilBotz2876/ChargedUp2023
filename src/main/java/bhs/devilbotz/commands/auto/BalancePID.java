@@ -70,13 +70,13 @@ public class BalancePID extends CommandBase {
       /* When the robot is within the balance tolerance we:
        *  1) stop the robot from moving
        *  2) start a timer to measure how long we've been balanced
-       */ 
+       */
       output = 0;
       timer.start();
     } else {
       /* When the robot is *not* within the balance tolerance we:
        *  1) stop and reset the timer
-       */ 
+       */
       timer.stop();
       timer.reset();
     }
