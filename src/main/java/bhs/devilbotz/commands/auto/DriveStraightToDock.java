@@ -4,6 +4,7 @@
 
 package bhs.devilbotz.commands.auto;
 
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 
 /**
@@ -41,11 +42,13 @@ public class DriveStraightToDock extends DriveStraightPID {
     switch (currentState) {
       case ON_GROUND:
         /* We start in the ON_GROUND state. We see if the currentRoll is within the expected ramp angle.
-         * Empirically, the roll is between 10 and 15 when on the ramp.
+         * Empirically, the roll is between min/max when on the ramp.
          * When approaching the ramp, we cap the max speed to prevent crashing into the ramp
          */
-        maxSpeed = 0.75;
-        if ((currentRoll > 10) && (currentRoll < 15)) {
+        setMaxSpeed(Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_GROUND").asDouble(0.75));
+
+        if ((currentRoll > Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))
+            && (currentRoll < Robot.getDriveTrainConstant("DOCK_MAX_RAMP_ROLL").asDouble(15))) {
           onRampCount++;
           System.out.println("#### Maybe On Ramp (onRampCount: " + onRampCount + ") ####");
         } else {
@@ -54,7 +57,7 @@ public class DriveStraightToDock extends DriveStraightPID {
         }
 
         /* If we've been on the ramp long enough (roll is within expected window), we assume we are on the ramp and transition states */
-        if (onRampCount > 10) {
+        if (onRampCount > Robot.getDriveTrainConstant("DOCK_MIN_ON_RAMP_COUNT").asInt(10)) {
           System.out.println("#### On Ramp! ####");
           currentState = DockState.ON_RAMP;
         }
@@ -65,9 +68,10 @@ public class DriveStraightToDock extends DriveStraightPID {
          * ramp to teeter quickly to the other side
          * While the roll is decreasing and the currentRoll is less than the empirical ramp roll we assume we are leveling off.
          */
-        maxSpeed = 0.50;
+        setMaxSpeed(Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_RAMP").asDouble(0.50));
         double deltaRoll = currentRoll - previousRoll;
-        if ((deltaRoll < 0) && (currentRoll < 10)) {
+        if ((deltaRoll < 0)
+            && (currentRoll < Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))) {
           levelingRampCount++;
           System.out.println(
               "#### Maybe Leveling Off (levelingRampCount: " + levelingRampCount + ") ####");
@@ -77,14 +81,14 @@ public class DriveStraightToDock extends DriveStraightPID {
         }
 
         /* If we've been leveling off long enough, we assume we are almost balanced */
-        if (levelingRampCount > 2) {
+        if (levelingRampCount > Robot.getDriveTrainConstant("DOCK_MIN_LEVELING_COUNT").asInt(2)) {
           System.out.println("#### Leveling Off! ####");
           currentState = DockState.LEVELING_OFF;
         }
         break;
 
       case LEVELING_OFF:
-        maxSpeed = 0.01;
+        setMaxSpeed(0.01);
         return;
     }
 

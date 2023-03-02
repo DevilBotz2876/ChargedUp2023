@@ -20,7 +20,7 @@ public class DriveStraightPID extends CommandBase {
   private double distance;
   private double startAngle;
   private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1, 0, 0);
-  protected double maxSpeed = 0; // in meters/sec
+  private double maxSpeed = 0; // in meters/sec
   /**
    * The constructor for the Drive Straight PID command.
    *
@@ -87,5 +87,14 @@ public class DriveStraightPID extends CommandBase {
   @Override
   public boolean isFinished() {
     return distancePid.atSetpoint();
+  }
+
+  /**
+   * Sets the max speed for driving straight
+   *
+   * @param maxSpeed max speed in meters/second. 0 indicates no speed limit.
+   */
+  protected void setMaxSpeed(double maxSpeed) {
+    this.maxSpeed = maxSpeed;
   }
 }

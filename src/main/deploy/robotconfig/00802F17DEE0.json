@@ -30,7 +30,14 @@
         "STRAIGHT_D": 0,
         "ROTATE_P" : 0.1,
         "ROTATE_I": 0,
-        "ROTATE_D": 0
+        "ROTATE_D": 0,
+        "DOCK_MAX_SPEED_ON_GROUND": 0.75,
+        "DOCK_MAX_SPEED_ON_RAMP": 0.50,
+        "DOCK_MIN_ON_RAMP_COUNT": 10,
+        "DOCK_MIN_LEVELING_COUNT": 2,
+        "DOCK_MIN_RAMP_ROLL": 10,
+        "DOCK_MAX_RAMP_ROLL": 15
+
     },
 
     "sysid": {
