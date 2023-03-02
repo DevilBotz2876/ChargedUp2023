@@ -11,30 +11,96 @@ import bhs.devilbotz.subsystems.DriveTrain;
  * dock with the charging port.
  */
 public class DriveStraightToDock extends DriveStraightPID {
+  private enum DockState {
+    ON_GROUND,
+    ON_RAMP,
+    LEVELING_OFF
+  }
 
+  private DockState currentState = DockState.ON_GROUND;
   /**
    * The constructor for the Drive Straight To Dock PID command.
    *
    * @param drivetrain The drive train subsystem.
-   * @param distance The distance (in meters) the robot needs to cover.
+   * @param distance The MAX distance (in meters) the robot needs to cover. We end when the distance
+   *     is reached OR we've detected that we are physically on the dock
    */
   public DriveStraightToDock(DriveTrain drivetrain, double distance) {
     super(drivetrain, distance);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
+  int onRampCount = 0;
+  double previousRoll;
+  int levelingRampCount = 0;
+
+  @Override
+  public void execute() {
+    double currentRoll = drivetrain.getRoll();
+
+    switch (currentState) {
+      case ON_GROUND:
+        /* We start in the ON_GROUND state. We see if the currentRoll is within the expected ramp angle.
+         * Empirically, the roll is between 10 and 15 when on the ramp.
+         * When approaching the ramp, we cap the max speed to prevent crashing into the ramp
+         */
+        maxSpeed = 0.75;
+        if ((currentRoll > 10) && (currentRoll < 15)) {
+          onRampCount++;
+          System.out.println("#### Maybe On Ramp (onRampCount: " + onRampCount + ") ####");
+        } else {
+          onRampCount = 0;
+          System.out.println("#### Not on Ramp ####");
+        }
+
+        /* If we've been on the ramp long enough (roll is within expected window), we assume we are on the ramp and transition states */
+        if (onRampCount > 10) {
+          System.out.println("#### On Ramp! ####");
+          currentState = DockState.ON_RAMP;
+        }
+        break;
+
+      case ON_RAMP:
+        /* When we think we are on the ramp, we reduce the maxSpeed so that we don't go so fast that we overshoot and cause the
+         * ramp to teeter quickly to the other side
+         * While the roll is decreasing and the currentRoll is less than the empirical ramp roll we assume we are leveling off.
+         */
+        maxSpeed = 0.50;
+        double deltaRoll = currentRoll - previousRoll;
+        if ((deltaRoll < 0) && (currentRoll < 10)) {
+          levelingRampCount++;
+          System.out.println(
+              "#### Maybe Leveling Off (levelingRampCount: " + levelingRampCount + ") ####");
+        } else {
+          levelingRampCount = 0;
+          System.out.println("#### Not Leveling Off ####");
+        }
+
+        /* If we've been leveling off long enough, we assume we are almost balanced */
+        if (levelingRampCount > 2) {
+          System.out.println("#### Leveling Off! ####");
+          currentState = DockState.LEVELING_OFF;
+        }
+        break;
+
+      case LEVELING_OFF:
+        maxSpeed = 0.01;
+        return;
+    }
+
+    /* We save the current roll so we can calculate the deltaRoll next time */
+    previousRoll = currentRoll;
+
+    /* Execute the base class's execute function to drive straight */
+    super.execute();
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return super.isFinished();
-    // return distance_pid.atSetpoint();
-    // double roll = Math.abs(drivetrain.getRoll());
-    // if (roll > 7){
-    //  roll = 0;
-    // }
-    //    if (Math.abs(distancePid.getPositionError()) < 0.1) {
-    //      return true;
-    //    }
-    //    return false;
+    /* We are finished when we are in the LEVELING_OFF state.
+     * As a backup, we also assume we are finished when the total distance has been traveled
+     */
+    return ((DockState.LEVELING_OFF == currentState) || super.isFinished());
   }
 }
