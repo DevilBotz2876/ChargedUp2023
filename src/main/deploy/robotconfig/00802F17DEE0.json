@@ -20,12 +20,26 @@
         "BALANCE_P": 0.1,
         "BALANCE_I": 0.0,
         "BALANCE_D": 0.03,
+        "BALANCE_MAX_SPEED": 0.50,
+        "BALANCE_MIN_DURATION": 0.5,
         "DISTANCE_P": 2,
         "DISTANCE_I": 0,
         "DISTANCE_D": 0.1,
+        "DISTANCE_PID_TOLERANCE": 0.1,        
         "STRAIGHT_P": 0.1,
         "STRAIGHT_I": 0,
-        "STRAIGHT_D": 0
+        "STRAIGHT_D": 0,
+        "ROTATE_P" : 0.05,
+        "ROTATE_I": 0,
+        "ROTATE_D": 0,
+        "ROTATE_PID_TOLERANCE": 5,        
+        "DOCK_MAX_SPEED_ON_GROUND": 1.25,
+        "DOCK_MAX_SPEED_ON_RAMP": 1,
+        "DOCK_MIN_ON_RAMP_COUNT": 10,
+        "DOCK_MIN_LEVELING_COUNT": 2,
+        "DOCK_MIN_RAMP_ROLL": 10,
+        "DOCK_MAX_RAMP_ROLL": 15
+
     },
 
     "sysid": {

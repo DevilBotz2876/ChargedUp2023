@@ -10,6 +10,7 @@ import bhs.devilbotz.commands.arm.*;
 import bhs.devilbotz.commands.auto.BalancePID;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
 import bhs.devilbotz.commands.auto.DriveStraightToDock;
+import bhs.devilbotz.commands.auto.RotateDegrees;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -180,7 +181,8 @@ public class RobotContainer {
                               driveTrain,
                               ShuffleboardManager.autoDistance.getDouble(
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                          .andThen(new BalancePID(driveTrain, balancePid)));
+                          .andThen(new BalancePID(driveTrain, balancePid))
+                          .andThen(new RotateDegrees(driveTrain, 90)));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {
@@ -192,7 +194,8 @@ public class RobotContainer {
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
                   .andThen(driveTrain.followTrajectoryCommand(path, true))
-                  .andThen(new BalancePID(driveTrain));
+                  .andThen(new BalancePID(driveTrain))
+                  .andThen(new RotateDegrees(driveTrain, 90));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {
@@ -204,7 +207,8 @@ public class RobotContainer {
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
                   .andThen(driveTrain.followTrajectoryCommand(path, true))
-                  .andThen(new BalancePID(driveTrain));
+                  .andThen(new BalancePID(driveTrain))
+                  .andThen(new RotateDegrees(driveTrain, 90));
           break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
