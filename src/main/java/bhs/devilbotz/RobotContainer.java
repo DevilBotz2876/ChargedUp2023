@@ -6,14 +6,7 @@
 package bhs.devilbotz;
 
 import bhs.devilbotz.commands.DriveCommand;
-import bhs.devilbotz.commands.arm.ArmDown;
-import bhs.devilbotz.commands.arm.ArmIdle;
-import bhs.devilbotz.commands.arm.ArmMoveDistance;
-import bhs.devilbotz.commands.arm.ArmStop;
-import bhs.devilbotz.commands.arm.ArmToBottom;
-import bhs.devilbotz.commands.arm.ArmToMiddle;
-import bhs.devilbotz.commands.arm.ArmToTop;
-import bhs.devilbotz.commands.arm.ArmUp;
+import bhs.devilbotz.commands.arm.*;
 import bhs.devilbotz.commands.auto.BalancePID;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
 import bhs.devilbotz.commands.auto.DriveStraightToDock;
@@ -22,6 +15,7 @@ import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -33,11 +27,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -73,6 +63,15 @@ public class RobotContainer {
           Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
           Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
           Robot.getDriveTrainConstant("BALANCE_D").asDouble());
+  private final Arduino arduino;
+
+  {
+    try {
+      arduino = new Arduino();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -235,6 +234,10 @@ public class RobotContainer {
    */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
+  }
+
+  public Arduino getArduino() {
+    return arduino;
   }
 
   /**
