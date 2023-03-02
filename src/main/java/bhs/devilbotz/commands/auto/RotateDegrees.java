@@ -18,7 +18,7 @@ public class RotateDegrees extends CommandBase {
             Robot.getDriveTrainConstant("ROTATE_P").asDouble(),
             Robot.getDriveTrainConstant("ROTATE_I").asDouble(),
             Robot.getDriveTrainConstant("ROTATE_D").asDouble());
-    rotatePid.setTolerance(1);
+    rotatePid.setTolerance(Robot.getDriveTrainConstant("ROTATE_PID_TOLERANCE").asDouble());
     startAngle = drivetrain.getYaw();
     targetAngle = startAngle + degrees;
     addRequirements(drivetrain);
