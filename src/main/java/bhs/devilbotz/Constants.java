@@ -102,5 +102,11 @@ public final class Constants {
     public static final int TOP_LIMIT_SWITCH_DIO_PORT = 1;
     public static final int ENCODER_CHANNEL_A_DIO_PORT = 2; // TODO: add what color tape on wire
     public static final int ENCODER_CHANNEL_B_DIO_PORT = 3; // TODO: add what color tape on wire
+
+    public static final double POSITION_TOP = 558;
+    public static final double POSITION_MIDDLE = 468;
+    public static final double POSITION_BOTTOM = 258;
+    public static final double POSITION_PORTAL = 465;
+    public static final double POSITION_GRIPPER_CLOSE = 190;
   }
 }

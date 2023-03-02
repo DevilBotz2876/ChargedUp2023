@@ -1,26 +1,17 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * This command moves the arm up to highest position. Arm stops when it hits limit switch or reaches
- * set position based on encoder.
- */
-public class ArmToTop extends CommandBase {
+public class ArmToPosition extends CommandBase {
   private final Arm arm;
+  private final double targetPosition;
+  private final double targetPositionTolerance;
 
-  /**
-   * The constructor.
-   *
-   * @param arm The arm subsystem.
-   */
-  public ArmToTop(Arm arm) {
+  public ArmToPosition(Arm arm, double targetPosition) {
     this.arm = arm;
+    this.targetPosition = targetPosition;
+    targetPositionTolerance = 5;
     addRequirements(arm);
   }
 
@@ -31,7 +22,13 @@ public class ArmToTop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.up();
+    double currentPosition = arm.getPosition();
+
+    if (currentPosition < targetPosition) {
+      arm.up();
+    } else if (currentPosition > targetPosition) {
+      arm.down();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +40,8 @@ public class ArmToTop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (arm.isTopLimit());
+    double currentPosition = arm.getPosition();
+    return (currentPosition >= targetPosition)
+        && (currentPosition < targetPosition + targetPositionTolerance);
   }
 }

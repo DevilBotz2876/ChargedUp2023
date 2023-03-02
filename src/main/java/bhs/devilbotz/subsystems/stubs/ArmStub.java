@@ -65,7 +65,7 @@ public class ArmStub extends Arm {
 
   @Override
   public boolean isTopLimit() {
-    return (position >= topPosition + 25);
+    return (position >= topPosition + 10);
   }
 
   @Override

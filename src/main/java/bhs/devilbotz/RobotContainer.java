@@ -5,14 +5,13 @@
 
 package bhs.devilbotz;
 
+import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmIdle;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
-import bhs.devilbotz.commands.arm.ArmToBottom;
-import bhs.devilbotz.commands.arm.ArmToMiddle;
-import bhs.devilbotz.commands.arm.ArmToTop;
+import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.arm.ArmUp;
 import bhs.devilbotz.commands.auto.BalancePID;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
@@ -124,15 +123,17 @@ public class RobotContainer {
         .whileTrue(new ArmDown(arm, gripper))
         .onFalse(new ArmStop(arm));
 
-    new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
+    new JoystickButton(leftJoystick, 6).onTrue(new ArmToPosition(arm, ArmConstants.POSITION_TOP));
     new JoystickButton(leftJoystick, 7)
         .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
-    new JoystickButton(leftJoystick, 8).onTrue(new ArmToMiddle(arm));
+    new JoystickButton(leftJoystick, 8)
+        .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE));
     new JoystickButton(leftJoystick, 9)
         .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
-    new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
+    new JoystickButton(leftJoystick, 10)
+        .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM));
     new JoystickButton(leftJoystick, 11)
         .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
@@ -268,9 +269,13 @@ public class RobotContainer {
     cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
     cmdList.add(new ArmMoveDistance(arm, -10)).withPosition(0, 3);
 
-    cmdList.add(new ArmToTop(arm)).withPosition(1, 0);
-    cmdList.add(new ArmToMiddle(arm)).withPosition(1, 1);
-    cmdList.add(new ArmToBottom(arm)).withPosition(1, 2);
+    cmdList.add("ArmToTop", new ArmToPosition(arm, ArmConstants.POSITION_TOP)).withPosition(1, 0);
+    cmdList
+        .add("ArmToMiddle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE))
+        .withPosition(1, 1);
+    cmdList
+        .add("ArmToBottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM))
+        .withPosition(1, 2);
 
     tab.add("Arm subsystem", arm).withPosition(2, 0);
     tab.add(arm.getEncoder()).withPosition(2, 1);
