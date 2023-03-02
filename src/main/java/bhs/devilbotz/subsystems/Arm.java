@@ -4,17 +4,8 @@
 
 package bhs.devilbotz.subsystems;
 
-import bhs.devilbotz.Constants;
-import bhs.devilbotz.Constants.ArmConstants;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.DoubleEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * This subsystem controls arm.
@@ -61,12 +52,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * <p>There is a quadrature encoder on the arm joint. The signal and power lines are plugged into
  * the roborio digital input/output ports.
  */
-public class Arm extends SubsystemBase {
-  private final CANSparkMax armMotor;
-  private final DigitalInput topLimitSwitch;
-  private final DigitalInput bottomLimitSwitch;
-  private final Encoder encoder;
-
+public class Arm extends ArmBase {
   // These values are used to move the arm to known positions.  0 is considered starting
   // position/bottom. Values increase as arm moves up.
   //
@@ -94,9 +80,9 @@ public class Arm extends SubsystemBase {
    *
    */
 
-  private double topPosition = POSITION_TOP;
+  protected double topPosition = POSITION_TOP;
   private double middlePosition = POSITION_MIDDLE;
-  private double bottomPosition = POSITION_BOTTOM;
+  protected double bottomPosition = POSITION_BOTTOM;
   private double portalPosition = POSITION_PORTAL;
   private double gripperClosePosition = POSITION_GRIPPER_CLOSE;
 
@@ -104,10 +90,7 @@ public class Arm extends SubsystemBase {
   // that. Smaller value tries to reach closer to target position.  Larger will stop arm further
   // away from exact position read by encoder.  Why do we need this? The arm is moving so trying to
   // stop at exact position will result in some overshoot.
-  private final double positionError = 2;
-
-  private NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  private NetworkTable table = inst.getTable("Arm");
+  private final double positionError = 10;
 
   private DoubleEntry ntTopPosition = table.getDoubleTopic("position/top").getEntry(POSITION_TOP);
   private DoubleEntry ntMiddlePosition =
@@ -119,9 +102,6 @@ public class Arm extends SubsystemBase {
   private DoubleEntry ntCurrentPosition =
       table.getDoubleTopic("position/_current").getEntry(POSITION_PORTAL);
 
-  private BooleanEntry ntTopLimitSwitch = table.getBooleanTopic("limit/top").getEntry(false);
-  private BooleanEntry ntBottomLimitSwitch = table.getBooleanTopic("limit/bottom").getEntry(false);
-
   private BooleanEntry ntTop = table.getBooleanTopic("state/atTop").getEntry(false);
   private BooleanEntry ntMiddle = table.getBooleanTopic("state/atMiddle").getEntry(false);
   private BooleanEntry ntBottom = table.getBooleanTopic("state/atBottom").getEntry(false);
@@ -130,28 +110,11 @@ public class Arm extends SubsystemBase {
 
   /** The constructor for the arm subsystem. */
   public Arm() {
+    super();
     ntTopPosition.setDefault(POSITION_TOP);
     ntMiddlePosition.setDefault(POSITION_MIDDLE);
     ntBottomPosition.setDefault(POSITION_BOTTOM);
     ntPortalPosition.setDefault(POSITION_PORTAL);
-
-    armMotor =
-        new CANSparkMax(
-            Constants.ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    topLimitSwitch = new DigitalInput(ArmConstants.TOP_LIMIT_SWITCH_DIO_PORT);
-    bottomLimitSwitch = new DigitalInput(ArmConstants.BOTTOM_LIMIT_SWITCH_DIO_PORT);
-    encoder =
-        new Encoder(
-            ArmConstants.ENCODER_CHANNEL_A_DIO_PORT, ArmConstants.ENCODER_CHANNEL_B_DIO_PORT);
-
-    // Arm starts down inside chassis. This means encoder starts at zero here.  When moving the arm
-    // up it is nice to see positive numbers for position.  With this set to
-    // true moving arm up from initial position should return positive value.
-    //
-    // TODO: check if switching DIO port wires will change sign of value.
-    //
-    encoder.setReverseDirection(true);
   }
 
   /**
@@ -162,8 +125,6 @@ public class Arm extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    ntTopLimitSwitch.set(isTopLimit());
-    ntBottomLimitSwitch.set(isBottomLimit());
     ntTop.set(atTop());
     ntMiddle.set(atMiddle());
     ntBottom.set(atBottom());
@@ -177,66 +138,7 @@ public class Arm extends SubsystemBase {
     portalPosition = ntPortalPosition.get();
 
     // System.out.println("test ntmiddle" + ntMiddle.getTopic().getName());
-
-    // Only reset encoder position if arm hit bottom limit switch and is not moving.  The arm will
-    // be engaged with limit switch while moving.  We don't want to reset encoder multiple times.
-    if (isBottomLimit() && isMoving() == false) {
-      resetPosition();
-    }
-  }
-
-  /**
-   * This method sets the speed of the arm.
-   *
-   * @param speed The speed of the arm.
-   */
-  public void setSpeed(double speed) {
-    armMotor.set(speed);
-  }
-
-  /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
-  public void up() {
-    armMotor.set(1);
-  }
-
-  /**
-   * Move the arm down at set speed. There is no check/protection against moving arm too far down.
-   */
-  public void down() {
-    armMotor.set(-1);
-  }
-
-  /** This method stops the arm. */
-  public void stop() {
-    armMotor.set(0.0);
-    armMotor.stopMotor();
-  }
-
-  /**
-   * Check if arm is moving or not based on motor state.
-   *
-   * @return true if arm is moving, false if not.
-   */
-  public boolean isMoving() {
-    return (armMotor.get() != 0.0);
-  }
-
-  /**
-   * Return state of top limit switch
-   *
-   * @return true limit switch is pressed, false if not.
-   */
-  public boolean isTopLimit() {
-    return !topLimitSwitch.get();
-  }
-
-  /**
-   * Return state of bottom limit switch
-   *
-   * @return true limit switch is pressed, false if not.
-   */
-  public boolean isBottomLimit() {
-    return !bottomLimitSwitch.get();
+    super.periodic();
   }
 
   /**
@@ -337,34 +239,5 @@ public class Arm extends SubsystemBase {
     // Don't check for exact position, check if position is in some range.
     return (getPosition() >= portalPosition - positionError
         && getPosition() <= portalPosition + positionError);
-  }
-
-  /**
-   * Return current position of arm.
-   *
-   * @return position of arm.
-   */
-  public double getPosition() {
-    return encoder.getDistance();
-  }
-
-  /**
-   * Reset encoder to zero. We consider arm down inside chassis as zero position. Use lower limit
-   * switch to determine when we reach that position. This should be called when arm is not moving.
-   */
-  private void resetPosition() {
-    encoder.reset();
-  }
-
-  public DigitalInput getBottomLimitSwitch() {
-    return bottomLimitSwitch;
-  }
-
-  public DigitalInput getTopLimitSwitch() {
-    return topLimitSwitch;
-  }
-
-  public Encoder getEncoder() {
-    return encoder;
   }
 }
