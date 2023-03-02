@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -40,6 +39,8 @@ public class Robot extends TimedRobot {
   private ShuffleboardManager shuffleboardManager;
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
+
+  private DriverStation.Alliance alliance = DriverStation.Alliance.Invalid;
 
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
@@ -100,11 +101,21 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (DriverStation.getAlliance() != alliance) {
+      alliance = DriverStation.getAlliance();
+      if (alliance == DriverStation.Alliance.Red) {
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
+      } else if (alliance == DriverStation.Alliance.Blue) {
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
+      }
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_AUTONOMOUS).schedule();
     robotContainer.resetRobotPosition();
 
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
@@ -128,7 +139,7 @@ public class Robot extends TimedRobot {
     } else {
       new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
     }
-    robotContainer.driveTrain.resetRobotPosition();
+    robotContainer.resetRobotPosition();
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
