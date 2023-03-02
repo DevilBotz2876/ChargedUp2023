@@ -129,6 +129,12 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    // Every time the robot is enabled in teleop initialize gripper to same/set position.
+    // We want the gripper to be in same starting position every time
+    // so driver does not have to remember/see what gripper position is.
+    // If there is not enough stored air in tanks then this will do nothing.
+    robotContainer.initGripper();
   }
 
   /** This method is called periodically during operator control. */

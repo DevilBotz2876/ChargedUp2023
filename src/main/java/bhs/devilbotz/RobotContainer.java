@@ -32,12 +32,18 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -77,10 +83,14 @@ public class RobotContainer {
     SmartDashboard.putData(driveTrain);
 
     arm.setDefaultCommand(new ArmIdle(arm));
+    gripper.setDefaultCommand(new GripperIdle(gripper));
+
     driveTrain.setDefaultCommand(
         new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
     // rightJoystick::getX));
+
+    buildArmShuffleboardTab();
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -103,7 +113,9 @@ public class RobotContainer {
 
     new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
 
-    new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 4)
+        .whileTrue(new ArmDown(arm, gripper))
+        .onFalse(new ArmStop(arm));
 
     new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
     new JoystickButton(leftJoystick, 7)
@@ -228,5 +240,76 @@ public class RobotContainer {
    */
   public void resetRobotPosition() {
     driveTrain.resetRobotPosition();
+  }
+
+  /** Initialize gripper to known/same position */
+  public void initGripper() {
+    gripper.close();
+  }
+
+  public void buildArmShuffleboardTab() {
+    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+
+    ShuffleboardContainer cmdList =
+        tab.getLayout("ArmCmds", BuiltInLayouts.kGrid)
+            .withPosition(0, 0)
+            .withSize(2, 4)
+            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
+
+    cmdList.add(new ArmStop(arm)).withPosition(0, 0);
+    cmdList.add(new ArmUp(arm)).withPosition(0, 1);
+    cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
+    cmdList.add(new ArmMoveDistance(arm, -10)).withPosition(0, 3);
+
+    cmdList.add(new ArmToTop(arm)).withPosition(1, 0);
+    cmdList.add(new ArmToMiddle(arm)).withPosition(1, 1);
+    cmdList.add(new ArmToBottom(arm)).withPosition(1, 2);
+
+    tab.add("Arm subsystem", arm).withPosition(2, 0);
+    tab.add(arm.getEncoder()).withPosition(2, 1);
+
+    ShuffleboardContainer limitsList =
+        tab.getLayout("Limit Switches", BuiltInLayouts.kGrid)
+            .withPosition(2, 2)
+            .withSize(2, 2)
+            .withProperties(Map.of("Number of columns", 1, "Number of rows", 2));
+
+    limitsList.add("top dio " + arm.getTopLimitSwitch().getChannel(), arm.getTopLimitSwitch());
+    limitsList.add(
+        "bottom dio " + arm.getBottomLimitSwitch().getChannel(), arm.getBottomLimitSwitch());
+
+    ShuffleboardContainer list =
+        tab.getLayout("Position", BuiltInLayouts.kGrid)
+            .withPosition(4, 0)
+            .withSize(2, 4)
+            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
+
+    list.addBoolean("atTop", () -> arm.atTop())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(0, 0);
+
+    list.addBoolean("atPortal", () -> arm.atSubstationPortal())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(0, 1);
+
+    list.addBoolean("atMiddle", () -> arm.atMiddle())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(0, 2);
+
+    list.addBoolean("atBottom", () -> arm.atBottom())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(0, 3);
+
+    list.addBoolean("aboveMiddle", () -> arm.aboveMiddle())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(1, 1);
+
+    list.addBoolean("belowMiddle", () -> arm.belowMiddle())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(1, 2);
+
+    list.addBoolean("isMoving", () -> arm.isMoving())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(1, 3);
   }
 }

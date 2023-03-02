@@ -6,14 +6,6 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
-import bhs.devilbotz.commands.arm.ArmDown;
-import bhs.devilbotz.commands.arm.ArmMoveDistance;
-import bhs.devilbotz.commands.arm.ArmStop;
-import bhs.devilbotz.commands.arm.ArmToBottom;
-import bhs.devilbotz.commands.arm.ArmToMiddle;
-import bhs.devilbotz.commands.arm.ArmToPortal;
-import bhs.devilbotz.commands.arm.ArmToTop;
-import bhs.devilbotz.commands.arm.ArmUp;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.networktables.BooleanEntry;
@@ -22,13 +14,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.Map;
 
 /**
  * This subsystem controls arm.
@@ -90,6 +76,12 @@ public class Arm extends SubsystemBase {
   private final double POSITION_BOTTOM = 258;
   private final double POSITION_PORTAL = 465;
 
+  // Note this value is well above the frame/bumpers, not right above them.  When the arm is moving
+  // down there is momentum and time involved.  You need to
+  // start closing the gripper and give it time to close before the moving arm is near the
+  // frame/bummpers.
+  private final double POSITION_GRIPPER_CLOSE = 190;
+
   /*
    * low cone: 258
    * middle cone: 468
@@ -106,6 +98,7 @@ public class Arm extends SubsystemBase {
   private double middlePosition = POSITION_MIDDLE;
   private double bottomPosition = POSITION_BOTTOM;
   private double portalPosition = POSITION_PORTAL;
+  private double gripperClosePosition = POSITION_GRIPPER_CLOSE;
 
   // When trying to reach a set position, how close is good enough? This value is used to determine
   // that. Smaller value tries to reach closer to target position.  Larger will stop arm further
@@ -159,8 +152,6 @@ public class Arm extends SubsystemBase {
     // TODO: check if switching DIO port wires will change sign of value.
     //
     encoder.setReverseDirection(true);
-
-    buildShuffleboardTab();
   }
 
   /**
@@ -289,6 +280,19 @@ public class Arm extends SubsystemBase {
   }
 
   /**
+   * Check if arm is at/nearing position where the gripper needs to be closed. The arm cannot be
+   * fully stowed inside robot unless gripper is closed. We do not want to check/return if the
+   * position is less than the gripper close position. If we did this, then the gripper would never
+   * be able to open while arm is in low positions.
+   *
+   * @return true if at middle position false if not.
+   */
+  public boolean atGripperClose() {
+    return (getPosition() >= gripperClosePosition - positionError
+        && getPosition() <= gripperClosePosition + positionError);
+  }
+
+  /**
    * Check if arm is above middle position based on encoder position.
    *
    * @return true if above middle position false if not.
@@ -352,69 +356,15 @@ public class Arm extends SubsystemBase {
     encoder.reset();
   }
 
-  public void buildShuffleboardTab() {
-    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+  public DigitalInput getBottomLimitSwitch() {
+    return bottomLimitSwitch;
+  }
 
-    ShuffleboardContainer cmdList =
-        tab.getLayout("ArmCmds", BuiltInLayouts.kGrid)
-            .withPosition(0, 0)
-            .withSize(2, 4)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
+  public DigitalInput getTopLimitSwitch() {
+    return topLimitSwitch;
+  }
 
-    cmdList.add(new ArmStop(this)).withPosition(0, 0);
-    cmdList.add(new ArmUp(this)).withPosition(0, 1);
-    cmdList.add(new ArmDown(this)).withPosition(0, 2);
-    cmdList.add(new ArmMoveDistance(this, -10)).withPosition(0, 3);
-
-    cmdList.add(new ArmToTop(this)).withPosition(1, 0);
-    cmdList.add(new ArmToMiddle(this)).withPosition(1, 1);
-    cmdList.add(new ArmToBottom(this)).withPosition(1, 2);
-    cmdList.add(new ArmToPortal(this)).withPosition(1, 3);
-
-    tab.add("Arm subsystem", this).withPosition(2, 0);
-    tab.add(this.encoder).withPosition(2, 1);
-
-    ShuffleboardContainer limitsList =
-        tab.getLayout("Limit Switches", BuiltInLayouts.kGrid)
-            .withPosition(2, 2)
-            .withSize(2, 2)
-            .withProperties(Map.of("Number of columns", 1, "Number of rows", 2));
-
-    limitsList.add("top dio " + topLimitSwitch.getChannel(), topLimitSwitch);
-    limitsList.add("bottom dio " + bottomLimitSwitch.getChannel(), bottomLimitSwitch);
-
-    ShuffleboardContainer list =
-        tab.getLayout("Position", BuiltInLayouts.kGrid)
-            .withPosition(4, 0)
-            .withSize(2, 4)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
-
-    list.addBoolean("atTop", () -> atTop())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 0);
-
-    list.addBoolean("atPortal", () -> atSubstationPortal())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 1);
-
-    list.addBoolean("atMiddle", () -> atMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 2);
-
-    list.addBoolean("atBottom", () -> atBottom())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 3);
-
-    list.addBoolean("aboveMiddle", () -> aboveMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 1);
-
-    list.addBoolean("belowMiddle", () -> belowMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 2);
-
-    list.addBoolean("isMoving", () -> isMoving())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 3);
+  public Encoder getEncoder() {
+    return encoder;
   }
 }
