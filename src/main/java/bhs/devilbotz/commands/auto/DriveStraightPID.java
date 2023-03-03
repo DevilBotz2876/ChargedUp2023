@@ -19,7 +19,7 @@ public class DriveStraightPID extends CommandBase {
   private PIDController straightPid;
   private double distance;
   private double startAngle;
-  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1, 0, 0);
+  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
   private double maxSpeed = 0; // in meters/sec
   /**
    * The constructor for the Drive Straight PID command.
@@ -40,7 +40,6 @@ public class DriveStraightPID extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
-    startAngle = drivetrain.getYaw();
     distancePid.setTolerance(Robot.getDriveTrainConstant("DISTANCE_PID_TOLERANCE").asDouble());
 
     SmartDashboard.putData("Distance PID", distancePid);
@@ -54,6 +53,7 @@ public class DriveStraightPID extends CommandBase {
   public void initialize() {
     System.out.println("DriveStraightPID start");
     drivetrain.arcadeDrive(0, 0);
+    startAngle = drivetrain.getYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,6 +62,8 @@ public class DriveStraightPID extends CommandBase {
     double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
     double speed = speedSlewRateLimiter.calculate(output);
+    SmartDashboard.putNumber("Output", output);
+    SmartDashboard.putNumber("Speed", speed);
     if (0 != maxSpeed) {
       speed = MathUtil.clamp(speed, -maxSpeed, maxSpeed);
     }
