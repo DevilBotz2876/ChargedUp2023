@@ -7,11 +7,13 @@ public class ArmToPosition extends CommandBase {
   private final Arm arm;
   private final double targetPosition;
   private final double targetPositionTolerance;
+  private boolean bReachedLimit;
 
   public ArmToPosition(Arm arm, double targetPosition) {
     this.arm = arm;
     this.targetPosition = targetPosition;
     targetPositionTolerance = 5;
+    bReachedLimit = false;
     addRequirements(arm);
   }
 
@@ -25,9 +27,21 @@ public class ArmToPosition extends CommandBase {
     double currentPosition = arm.getPosition();
 
     if (currentPosition < targetPosition) {
-      arm.up();
+      if (arm.isTopLimit()) {
+        bReachedLimit = true;
+      } else {
+        arm.up();
+      }
     } else if (currentPosition > targetPosition) {
-      arm.down();
+      if (arm.isBottomLimit()) {
+        bReachedLimit = true;
+      } else {
+        arm.down();
+      }
+    }
+
+    if (bReachedLimit) {
+      arm.stop();
     }
   }
 
@@ -41,6 +55,10 @@ public class ArmToPosition extends CommandBase {
   @Override
   public boolean isFinished() {
     double currentPosition = arm.getPosition();
+
+    if (bReachedLimit) {
+      return true;
+    }
     return (currentPosition >= targetPosition)
         && (currentPosition < targetPosition + targetPositionTolerance);
   }
