@@ -19,6 +19,7 @@ public class DriveStraightPID extends CommandBase {
   private PIDController straightPid;
   private double distance;
   private double startAngle;
+  private double startDistance;
   private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
   private double maxSpeed = 0; // in meters/sec
   /**
@@ -54,12 +55,13 @@ public class DriveStraightPID extends CommandBase {
     System.out.println("DriveStraightPID start");
     drivetrain.arcadeDrive(0, 0);
     startAngle = drivetrain.getYaw();
+    startDistance = drivetrain.getAverageDistance();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
+    double output = distancePid.calculate(drivetrain.getAverageDistance()-startDistance, distance);
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
     double speed = speedSlewRateLimiter.calculate(output);
     SmartDashboard.putNumber("Output", output);
