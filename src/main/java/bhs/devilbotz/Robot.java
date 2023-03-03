@@ -66,7 +66,8 @@ public class Robot extends TimedRobot {
       System.out.println("\tname: " + robotConfig.get("name").asText());
       System.out.println("\tid: " + robotConfig.get("id").asText());
     } catch (Exception ex) {
-      System.out.println(ex.toString());
+      // System.out.println(ex.toString());
+      throw new RuntimeException(ex);
     }
 
     robotContainer = new RobotContainer();
@@ -98,16 +99,16 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
-    setLEDAlliance();
+    // new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_LOADING).ignoringDisable(true).schedule();
   }
 
   private void setLEDAlliance() {
     if (DriverStation.getAlliance() != alliance) {
       alliance = DriverStation.getAlliance();
       if (alliance == DriverStation.Alliance.Red) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).ignoringDisable(true).schedule();
       } else if (alliance == DriverStation.Alliance.Blue) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).ignoringDisable(true).schedule();
       }
     }
   }
@@ -230,6 +231,7 @@ public class Robot extends TimedRobot {
    *     original code</a>
    */
   private static String getMacAddress() {
+    /*
     try {
       NetworkInterface network = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
       byte[] mac = network.getHardwareAddress();
@@ -239,10 +241,16 @@ public class Robot extends TimedRobot {
         macString.append(String.format("%02X", m).replace("-", ""));
       }
       return macString.toString();
+
+     */
+    return "00802F17DEE0";
       // TODO: Implement checking for the practice bot
+    /*
     } catch (SocketException | UnknownHostException e) {
       throw new RuntimeException(e);
     }
+
+     */
   }
 
   /**

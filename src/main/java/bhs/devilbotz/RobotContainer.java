@@ -186,9 +186,9 @@ public class RobotContainer {
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {
-            path = PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(2.5, 1));
+            path = PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(2.5, 2));
           } else {
-            path = PathPlanner.loadPath("MobilityRedHumanSideToDock", new PathConstraints(2.5, 1));
+            path = PathPlanner.loadPath("MobilityRedHumanSideToDock", new PathConstraints(2.5, 2));
           }
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
@@ -199,9 +199,9 @@ public class RobotContainer {
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {
-            path = PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(2.5, 1));
+            path = PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(2.5, 2));
           } else {
-            path = PathPlanner.loadPath("MobilityRedWallSideToDock", new PathConstraints(2.5, 1));
+            path = PathPlanner.loadPath("MobilityRedWallSideToDock", new PathConstraints(2.5, 2));
           }
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
