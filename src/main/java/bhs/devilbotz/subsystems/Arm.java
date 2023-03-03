@@ -6,6 +6,10 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.Robot;
+import bhs.devilbotz.RobotContainer;
+import bhs.devilbotz.commands.led.SetLEDMode;
+import bhs.devilbotz.lib.LEDModes;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.networktables.BooleanEntry;
@@ -128,8 +132,11 @@ public class Arm extends SubsystemBase {
   private BooleanEntry ntPortal = table.getBooleanTopic("state/atPortal").getEntry(false);
   private BooleanEntry ntMoving = table.getBooleanTopic("state/moving").getEntry(false);
 
+  private RobotContainer robotContainer;
+
   /** The constructor for the arm subsystem. */
-  public Arm() {
+  public Arm(RobotContainer robotContainer) {
+    this.robotContainer = robotContainer;
     ntTopPosition.setDefault(POSITION_TOP);
     ntMiddlePosition.setDefault(POSITION_MIDDLE);
     ntBottomPosition.setDefault(POSITION_BOTTOM);
@@ -197,6 +204,7 @@ public class Arm extends SubsystemBase {
   /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
   public void up() {
     armMotor.set(1);
+    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_UP).schedule();
   }
 
   /**
@@ -204,12 +212,15 @@ public class Arm extends SubsystemBase {
    */
   public void down() {
     armMotor.set(-1);
+    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_DOWN).schedule();
+
   }
 
   /** This method stops the arm. */
   public void stop() {
     armMotor.set(0.0);
     armMotor.stopMotor();
+    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_IDLE).schedule();
   }
 
   /**

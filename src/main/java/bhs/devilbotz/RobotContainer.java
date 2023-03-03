@@ -47,7 +47,7 @@ public class RobotContainer {
 
   private final Gripper gripper = new Gripper();
 
-  private final Arm arm = new Arm();
+  private final Arm arm = new Arm(this);
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
