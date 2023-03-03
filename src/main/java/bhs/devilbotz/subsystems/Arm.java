@@ -6,7 +6,6 @@ package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
-import bhs.devilbotz.Robot;
 import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.LEDModes;
@@ -213,7 +212,6 @@ public class Arm extends SubsystemBase {
   public void down() {
     armMotor.set(-1);
     new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_DOWN).schedule();
-
   }
 
   /** This method stops the arm. */
