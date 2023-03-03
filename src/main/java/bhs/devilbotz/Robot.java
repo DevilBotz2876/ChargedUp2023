@@ -70,11 +70,14 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
     shuffleboardManager = robotContainer.getShuffleboardManager();
 
-    UsbCamera armCamera = CameraServer.startAutomaticCapture(0);
-
-    armCamera.setResolution(240, 135);
-    armCamera.setFPS(20);
-    armCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
+    if (Robot.checkCapability("hasCamera"))
+    {
+      UsbCamera armCamera = CameraServer.startAutomaticCapture(0);
+      
+      armCamera.setResolution(240, 135);
+      armCamera.setFPS(20);
+      armCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
+    }
   }
 
   /**
