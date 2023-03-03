@@ -1,12 +1,16 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.subsystems.Arm;
+import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ArmToPosition extends CommandBase {
   private final Arm arm;
   private final double targetPosition;
   private final double targetPositionTolerance;
+
+  private Gripper gripper;
+  private double gripperClosePosition;
   private boolean bReachedLimit;
 
   public ArmToPosition(Arm arm, double targetPosition) {
@@ -14,7 +18,17 @@ public class ArmToPosition extends CommandBase {
     this.targetPosition = targetPosition;
     targetPositionTolerance = 5;
     bReachedLimit = false;
+    gripper = null;
+    gripperClosePosition = 0;
     addRequirements(arm);
+  }
+
+  public ArmToPosition(
+      Arm arm, double targetPosition, Gripper gripper, double gripperClosePosition) {
+    this(arm, targetPosition);
+    this.gripper = gripper;
+    this.gripperClosePosition = gripperClosePosition;
+    addRequirements(gripper);
   }
 
   // Called when the command is initially scheduled.
@@ -37,6 +51,9 @@ public class ArmToPosition extends CommandBase {
         bReachedLimit = true;
       } else {
         arm.down();
+        if ((null != gripper) && (currentPosition < gripperClosePosition)) {
+          gripper.close();
+        }
       }
     }
 
