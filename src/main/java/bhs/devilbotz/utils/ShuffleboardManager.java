@@ -128,10 +128,14 @@ public class ShuffleboardManager {
       selected = autoGamePieceTypeChooser.getSelected();
       switch (selected) {
         case CONE:
-          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CUBE).ignoringDisable(true).schedule();
+          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CUBE)
+              .ignoringDisable(true)
+              .schedule();
           break;
         case CUBE:
-          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CONE).ignoringDisable(true).schedule();
+          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CONE)
+              .ignoringDisable(true)
+              .schedule();
           break;
         case NONE:
           robotContainer.setLEDAlliance();

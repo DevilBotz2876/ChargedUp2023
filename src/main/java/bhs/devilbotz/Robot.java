@@ -21,10 +21,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.io.File;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -42,7 +38,6 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
   private DriverStation.Alliance alliance = null;
-
 
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
@@ -105,7 +100,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
-    // new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_LOADING).ignoringDisable(true).schedule();
+    // new SetLEDMode(robotContainer.getArduino(),
+    // LEDModes.SET_LOADING).ignoringDisable(true).schedule();
   }
 
   @Override
@@ -113,9 +109,13 @@ public class Robot extends TimedRobot {
     if (DriverStation.getAlliance() != alliance) {
       alliance = DriverStation.getAlliance();
       if (alliance == DriverStation.Alliance.Red) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).ignoringDisable(true).schedule();
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED)
+            .ignoringDisable(true)
+            .schedule();
       } else if (alliance == DriverStation.Alliance.Blue) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).ignoringDisable(true).schedule();
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE)
+            .ignoringDisable(true)
+            .schedule();
       }
     }
   }
@@ -250,7 +250,7 @@ public class Robot extends TimedRobot {
 
      */
     return "00802F17DEE0";
-      // TODO: Implement checking for the practice bot
+    // TODO: Implement checking for the practice bot
     /*
     } catch (SocketException | UnknownHostException e) {
       throw new RuntimeException(e);
