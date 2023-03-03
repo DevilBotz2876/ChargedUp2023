@@ -14,7 +14,9 @@ import bhs.devilbotz.commands.auto.RotateDegrees;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
+import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -34,6 +36,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import java.sql.Driver;
 import java.util.Map;
 
 /**
@@ -49,7 +53,7 @@ public class RobotContainer {
 
   private final Arm arm = new Arm(this);
 
-  private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
+  private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager(this);
 
   private final Joystick leftJoystick =
       new Joystick(Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT);
@@ -318,5 +322,14 @@ public class RobotContainer {
     list.addBoolean("isMoving", () -> arm.isMoving())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(1, 3);
+  }
+
+  public void setLEDAlliance() {
+    Alliance alliance = DriverStation.getAlliance();
+    if (alliance == DriverStation.Alliance.Red) {
+      new SetLEDMode(arduino, LEDModes.SET_RED).ignoringDisable(true).schedule();
+    } else if (alliance == DriverStation.Alliance.Blue) {
+      new SetLEDMode(arduino, LEDModes.SET_BLUE).ignoringDisable(true).schedule();
+    }
   }
 }

@@ -13,6 +13,8 @@ import bhs.devilbotz.utils.ShuffleboardManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -39,8 +41,8 @@ public class Robot extends TimedRobot {
   private ShuffleboardManager shuffleboardManager;
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
-
   private DriverStation.Alliance alliance = null;
+
 
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
@@ -73,7 +75,11 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
     shuffleboardManager = robotContainer.getShuffleboardManager();
 
-    CameraServer.startAutomaticCapture();
+    UsbCamera armCamera = CameraServer.startAutomaticCapture(0);
+
+    armCamera.setResolution(240, 135);
+    armCamera.setFPS(20);
+    armCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
   }
 
   /**
@@ -102,7 +108,8 @@ public class Robot extends TimedRobot {
     // new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_LOADING).ignoringDisable(true).schedule();
   }
 
-  private void setLEDAlliance() {
+  @Override
+  public void disabledPeriodic() {
     if (DriverStation.getAlliance() != alliance) {
       alliance = DriverStation.getAlliance();
       if (alliance == DriverStation.Alliance.Red) {
@@ -111,11 +118,6 @@ public class Robot extends TimedRobot {
         new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).ignoringDisable(true).schedule();
       }
     }
-  }
-
-  @Override
-  public void disabledPeriodic() {
-    setLEDAlliance();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -165,7 +167,9 @@ public class Robot extends TimedRobot {
 
   /** This method is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    shuffleboardManager.updateValuesTeleop();
+  }
 
   @Override
   public void testInit() {
@@ -241,6 +245,8 @@ public class Robot extends TimedRobot {
         macString.append(String.format("%02X", m).replace("-", ""));
       }
       return macString.toString();
+      ]
+
 
      */
     return "00802F17DEE0";

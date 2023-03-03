@@ -1,8 +1,11 @@
 package bhs.devilbotz.utils;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.RobotContainer;
+import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
+import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.networktables.GenericEntry;
@@ -35,10 +38,15 @@ public class ShuffleboardManager {
   private static final ShuffleboardLayout autoMode =
       driveTab.getLayout("Autonomous", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
 
+  private GamePieceTypes selected = GamePieceTypes.CUBE;
+
+  private final RobotContainer robotContainer;
+
   private final GenericEntry gripperSetpoint;
   /** The constructor for the shuffleboard manager. */
-  public ShuffleboardManager() {
+  public ShuffleboardManager(RobotContainer robotContainer) {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    this.robotContainer = robotContainer;
     int connListenerHandle =
         inst.addConnectionListener(
             true,
@@ -103,6 +111,7 @@ public class ShuffleboardManager {
 
     autoGamePieceTypeChooser.setDefaultOption("Cube", GamePieceTypes.CUBE);
     autoGamePieceTypeChooser.addOption("Cone", GamePieceTypes.CONE);
+    autoGamePieceTypeChooser.addOption("OFF", GamePieceTypes.NONE);
     autoMode
         .add("Game Piece", autoGamePieceTypeChooser)
         .withWidget(BuiltInWidgets.kSplitButtonChooser);
@@ -112,6 +121,23 @@ public class ShuffleboardManager {
   public void updateValues() {
     // update gripper setpoint using network tables
     gripperSetpoint.setBoolean(Gripper.getAtSetpoint());
+  }
+
+  public void updateValuesTeleop() {
+    if (selected != autoGamePieceTypeChooser.getSelected()) {
+      selected = autoGamePieceTypeChooser.getSelected();
+      switch (selected) {
+        case CONE:
+          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CUBE).ignoringDisable(true).schedule();
+          break;
+        case CUBE:
+          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CONE).ignoringDisable(true).schedule();
+          break;
+        case NONE:
+          robotContainer.setLEDAlliance();
+          break;
+      }
+    }
   }
 
   /**
