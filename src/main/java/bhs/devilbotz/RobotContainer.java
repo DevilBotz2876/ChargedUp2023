@@ -196,6 +196,11 @@ public class RobotContainer {
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
                   .andThen(driveTrain.followTrajectoryCommand(path, true))
+                  .andThen(
+                      new DriveStraightToDock(
+                              driveTrain,
+                              2))
+                          .andThen(new BalancePID(driveTrain, balancePid))                  
                   .andThen(new BalancePID(driveTrain))
                   .andThen(new RotateDegrees(driveTrain, 90));
           break;
@@ -209,6 +214,11 @@ public class RobotContainer {
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
                   .andThen(driveTrain.followTrajectoryCommand(path, true))
+                  .andThen(
+                      new DriveStraightToDock(
+                              driveTrain,
+                              2))
+                          .andThen(new BalancePID(driveTrain, balancePid))
                   .andThen(new BalancePID(driveTrain))
                   .andThen(new RotateDegrees(driveTrain, 90));
           break;
