@@ -59,4 +59,10 @@ public class SetLEDMode extends CommandBase {
   public boolean isFinished() {
     return sentMessage;
   }
+
+  // runs while disabled true
+  @Override
+  public boolean runsWhenDisabled() {
+    return true;
+  }
 }

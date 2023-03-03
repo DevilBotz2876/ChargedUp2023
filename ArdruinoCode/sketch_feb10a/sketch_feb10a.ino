@@ -16,21 +16,15 @@ void setup() {
   ws2812fx.init();
   clear_leds();
   Serial.begin(9600);
-  setCone();
+  setLoading();
   
   ws2812fx.start();
-  armUp();
 }
 
 void loop() {
   ws2812fx.service();
+
   
-  if (millis() >= 2000 && millis() <= 2005) {
-  armIdle();
-  Serial.println(millis());
-  }
-  
-  /*
   if (Serial.available()){
     byte value = Serial.read();
 
@@ -66,7 +60,7 @@ void loop() {
       ws2812fx.start();
     }
   }
-  */
+  
   
 }
 
@@ -117,7 +111,6 @@ void armDown(){
 }
 
 void armIdle(){
-  ws2812fx.setSegment(1, 165, 227, 1, BLACK, -1, true);
-  ws2812fx.setSegment(2, 66, 124, 1, BLACK, -1, false);
-
-  }
+  ws2812fx.removeActiveSegment(1);
+  ws2812fx.removeActiveSegment(2);
+}

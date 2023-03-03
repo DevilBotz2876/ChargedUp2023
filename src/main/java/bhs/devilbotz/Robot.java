@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
 
-  private DriverStation.Alliance alliance = DriverStation.Alliance.Invalid;
+  private DriverStation.Alliance alliance = null;
 
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
@@ -98,10 +98,10 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
+    setLEDAlliance();
   }
 
-  @Override
-  public void disabledPeriodic() {
+  private void setLEDAlliance() {
     if (DriverStation.getAlliance() != alliance) {
       alliance = DriverStation.getAlliance();
       if (alliance == DriverStation.Alliance.Red) {
@@ -110,6 +110,11 @@ public class Robot extends TimedRobot {
         new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
       }
     }
+  }
+
+  @Override
+  public void disabledPeriodic() {
+    setLEDAlliance();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
