@@ -284,61 +284,15 @@ public class RobotContainer {
     cmdList.add(new ArmStop(arm)).withPosition(0, 0);
     cmdList.add(new ArmUp(arm)).withPosition(0, 1);
     cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
-    cmdList.add(new ArmMoveDistance(arm, -10)).withPosition(0, 3);
 
-    cmdList.add("ArmToTop", new ArmToPosition(arm, ArmConstants.POSITION_TOP)).withPosition(1, 0);
+    cmdList.add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP)).withPosition(1, 0);
     cmdList
-        .add("ArmToMiddle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE))
+        .add("To Middle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE))
         .withPosition(1, 1);
     cmdList
-        .add("ArmToBottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM))
+        .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM))
         .withPosition(1, 2);
 
     tab.add("Arm subsystem", arm).withPosition(2, 0);
-    tab.add(arm.getEncoder()).withPosition(2, 1);
-
-    ShuffleboardContainer limitsList =
-        tab.getLayout("Limit Switches", BuiltInLayouts.kGrid)
-            .withPosition(2, 2)
-            .withSize(2, 2)
-            .withProperties(Map.of("Number of columns", 1, "Number of rows", 2));
-
-    limitsList.add("top dio " + arm.getTopLimitSwitch().getChannel(), arm.getTopLimitSwitch());
-    limitsList.add(
-        "bottom dio " + arm.getBottomLimitSwitch().getChannel(), arm.getBottomLimitSwitch());
-
-    ShuffleboardContainer list =
-        tab.getLayout("Position", BuiltInLayouts.kGrid)
-            .withPosition(4, 0)
-            .withSize(2, 4)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
-
-    list.addBoolean("atTop", () -> arm.atTop())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 0);
-
-    list.addBoolean("atPortal", () -> arm.atSubstationPortal())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 1);
-
-    list.addBoolean("atMiddle", () -> arm.atMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 2);
-
-    list.addBoolean("atBottom", () -> arm.atBottom())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 3);
-
-    list.addBoolean("aboveMiddle", () -> arm.aboveMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 1);
-
-    list.addBoolean("belowMiddle", () -> arm.belowMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 2);
-
-    list.addBoolean("isMoving", () -> arm.isMoving())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 3);
   }
 }

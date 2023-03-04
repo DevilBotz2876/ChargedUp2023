@@ -35,7 +35,7 @@ public class ArmStub extends Arm {
       default:
         break;
     }
-    SmartDashboard.putNumber("Arm Position", position);
+    super.periodic();
   }
 
   @Override
@@ -65,7 +65,7 @@ public class ArmStub extends Arm {
 
   @Override
   public boolean isTopLimit() {
-    return (position >= topPosition + 10);
+    return (position >= 1000);
   }
 
   @Override

@@ -4,8 +4,10 @@ import bhs.devilbotz.Constants.ArmConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.networktables.BooleanEntry;
+import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +23,9 @@ public class ArmBase extends SubsystemBase {
 
   private BooleanEntry ntTopLimitSwitch = table.getBooleanTopic("limit/top").getEntry(false);
   private BooleanEntry ntBottomLimitSwitch = table.getBooleanTopic("limit/bottom").getEntry(false);
-
+  private DoubleEntry ntPosition = table.getDoubleTopic("position").getEntry(0);
+  private StringEntry ntState = table.getStringTopic("state").getEntry("Unknown");
+  
   public ArmBase() {
     armMotor =
         new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -52,6 +56,7 @@ public class ArmBase extends SubsystemBase {
   public void periodic() {
     ntTopLimitSwitch.set(isTopLimit());
     ntBottomLimitSwitch.set(isBottomLimit());
+    ntPosition.set(getPosition());
 
     // Only reset encoder position if arm hit bottom limit switch and is not moving.  The arm will
     // be engaged with limit switch while moving.  We don't want to reset encoder multiple times.
@@ -71,6 +76,7 @@ public class ArmBase extends SubsystemBase {
 
   /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
   public void up() {
+    ntState.set("Moving: Up");
     armMotor.set(1);
   }
 
@@ -78,11 +84,13 @@ public class ArmBase extends SubsystemBase {
    * Move the arm down at set speed. There is no check/protection against moving arm too far down.
    */
   public void down() {
+    ntState.set("Moving: Down");
     armMotor.set(-1);
   }
 
   /** This method stops the arm. */
   public void stop() {
+    ntState.set("Stopped");
     armMotor.set(0.0);
     armMotor.stopMotor();
   }
@@ -114,14 +122,6 @@ public class ArmBase extends SubsystemBase {
     return !bottomLimitSwitch.get();
   }
 
-  public DigitalInput getBottomLimitSwitch() {
-    return bottomLimitSwitch;
-  }
-
-  public DigitalInput getTopLimitSwitch() {
-    return topLimitSwitch;
-  }
-
   /**
    * Return current position of arm.
    *
@@ -137,9 +137,5 @@ public class ArmBase extends SubsystemBase {
    */
   protected void resetPosition() {
     encoder.reset();
-  }
-
-  public Encoder getEncoder() {
-    return encoder;
   }
 }

@@ -53,14 +53,6 @@ import edu.wpi.first.networktables.DoubleEntry;
  * the roborio digital input/output ports.
  */
 public class Arm extends ArmBase {
-  // These values are used to move the arm to known positions.  0 is considered starting
-  // position/bottom. Values increase as arm moves up.
-  //
-  // TODO: The numbers need to be tuned.
-  private final double POSITION_TOP = 558;
-  private final double POSITION_MIDDLE = 468;
-  private final double POSITION_BOTTOM = 258;
-  private final double POSITION_PORTAL = 465;
 
   // Note this value is well above the frame/bumpers, not right above them.  When the arm is moving
   // down there is momentum and time involved.  You need to
@@ -68,117 +60,8 @@ public class Arm extends ArmBase {
   // frame/bummpers.
   private final double POSITION_GRIPPER_CLOSE = 190;
 
-  /*
-   * low cone: 258
-   * middle cone: 468
-   * high cone: 558
-   *
-   * cube
-   * low: 180
-   * middle: 354
-   * high: 440
-   *
-   */
-
-  protected double topPosition = POSITION_TOP;
-  private double middlePosition = POSITION_MIDDLE;
-  protected double bottomPosition = POSITION_BOTTOM;
-  private double portalPosition = POSITION_PORTAL;
-  private double gripperClosePosition = POSITION_GRIPPER_CLOSE;
-
-  // When trying to reach a set position, how close is good enough? This value is used to determine
-  // that. Smaller value tries to reach closer to target position.  Larger will stop arm further
-  // away from exact position read by encoder.  Why do we need this? The arm is moving so trying to
-  // stop at exact position will result in some overshoot.
-  private final double positionError = 10;
-
-  private DoubleEntry ntTopPosition = table.getDoubleTopic("position/top").getEntry(POSITION_TOP);
-  private DoubleEntry ntMiddlePosition =
-      table.getDoubleTopic("position/middle").getEntry(POSITION_MIDDLE);
-  private DoubleEntry ntBottomPosition =
-      table.getDoubleTopic("position/bottom").getEntry(POSITION_BOTTOM);
-  private DoubleEntry ntPortalPosition =
-      table.getDoubleTopic("position/portal").getEntry(POSITION_PORTAL);
-  private DoubleEntry ntCurrentPosition =
-      table.getDoubleTopic("position/_current").getEntry(POSITION_PORTAL);
-
-  private BooleanEntry ntTop = table.getBooleanTopic("state/atTop").getEntry(false);
-  private BooleanEntry ntMiddle = table.getBooleanTopic("state/atMiddle").getEntry(false);
-  private BooleanEntry ntBottom = table.getBooleanTopic("state/atBottom").getEntry(false);
-  private BooleanEntry ntPortal = table.getBooleanTopic("state/atPortal").getEntry(false);
-  private BooleanEntry ntMoving = table.getBooleanTopic("state/moving").getEntry(false);
-
   /** The constructor for the arm subsystem. */
   public Arm() {
-    super();
-    ntTopPosition.setDefault(POSITION_TOP);
-    ntMiddlePosition.setDefault(POSITION_MIDDLE);
-    ntBottomPosition.setDefault(POSITION_BOTTOM);
-    ntPortalPosition.setDefault(POSITION_PORTAL);
-  }
-
-  /**
-   * This method updates once per loop of the robot.
-   *
-   * @see <a href="https://docs.wpilib.org/en/latest/docs/software/commandbased/index.html">Command
-   *     Based Programming</a>
-   */
-  @Override
-  public void periodic() {
-    ntTop.set(atTop());
-    ntMiddle.set(atMiddle());
-    ntBottom.set(atBottom());
-    ntPortal.set(atSubstationPortal());
-    ntCurrentPosition.set(getPosition());
-    ntMoving.set(isMoving());
-
-    topPosition = ntTopPosition.get();
-    middlePosition = ntBottomPosition.get();
-    bottomPosition = ntBottomPosition.get();
-    portalPosition = ntPortalPosition.get();
-
-    // System.out.println("test ntmiddle" + ntMiddle.getTopic().getName());
-    super.periodic();
-  }
-
-  /**
-   * Check if arm is at bottom position to allow it to score a game piece in lower grid scoring
-   * node.
-   *
-   * @return true if at bottom, false if not.
-   */
-  public boolean atBottom() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= bottomPosition - positionError
-        && getPosition() <= bottomPosition + positionError);
-  }
-
-  /**
-   * Check if arm is at top position to allow it to score a game piece in top grid scoring node.
-   *
-   * @return true if at top, false if not.
-   */
-  public boolean atTop() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= topPosition - positionError
-        && getPosition() <= topPosition + positionError);
-  }
-
-  /**
-   * Check if arm is at middle position based on encoder position. Middle is just high enough above
-   * middle grid scoring node to allow cone or cube to be lined up.
-   *
-   * @return true if at middle position false if not.
-   */
-  public boolean atMiddle() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= middlePosition - positionError
-        && getPosition() <= middlePosition + positionError);
-  }
-
-  public boolean atPortal() {
-    return getPosition() >= portalPosition - positionError
-        && getPosition() <= portalPosition + positionError;
   }
 
   /**
@@ -190,54 +73,6 @@ public class Arm extends ArmBase {
    * @return true if at middle position false if not.
    */
   public boolean atGripperClose() {
-    return (getPosition() >= gripperClosePosition - positionError
-        && getPosition() <= gripperClosePosition + positionError);
-  }
-
-  /**
-   * Check if arm is above middle position based on encoder position.
-   *
-   * @return true if above middle position false if not.
-   */
-  public boolean aboveMiddle() {
-    return (getPosition() > middlePosition);
-  }
-
-  /**
-   * Check if arm is below middle position based on encoder position.
-   *
-   * @return true if below middle position false if not.
-   */
-  public boolean belowMiddle() {
-    return (getPosition() < middlePosition);
-  }
-
-  /**
-   * Check if arm is above portal position based on encoder position.
-   *
-   * @return true is above portal position false if not.
-   */
-  public boolean abovePortal() {
-    return (getPosition() > portalPosition);
-  }
-
-  /**
-   * Check if arm is below portal position based on encoder position.
-   *
-   * @return true if below portal position false if not
-   */
-  public boolean belowPortal() {
-    return (getPosition() < portalPosition);
-  }
-
-  /**
-   * Check if arm is at correct height to grab cone/cube from substation portal.
-   *
-   * @return true if at substation portal height, false if not.
-   */
-  public boolean atSubstationPortal() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= portalPosition - positionError
-        && getPosition() <= portalPosition + positionError);
+    return false;
   }
 }
