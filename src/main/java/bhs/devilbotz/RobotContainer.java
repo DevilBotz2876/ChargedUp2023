@@ -180,7 +180,7 @@ public class RobotContainer {
                   .andThen(
                       new InstantCommand(
                           () -> {
-                            driveTrain.arcadeDrive(0, 0);
+                            driveTrain.tankDriveVolts(0, 0);
                           }));
           break;
         case SCORE_AND_MOBILITY:
@@ -199,7 +199,7 @@ public class RobotContainer {
                   .andThen(
                       new InstantCommand(
                           () -> {
-                            driveTrain.arcadeDrive(0, 0);
+                            driveTrain.tankDriveVolts(0, 0);
                           }));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
@@ -225,7 +225,7 @@ public class RobotContainer {
                     .andThen(
                         new InstantCommand(
                             () -> {
-                              driveTrain.arcadeDrive(0, 0);
+                              driveTrain.tankDriveVolts(0, 0);
                             }));
           }
           break;

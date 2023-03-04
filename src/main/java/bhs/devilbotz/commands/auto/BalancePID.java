@@ -90,7 +90,6 @@ public class BalancePID extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.arcadeDrive(0, 0);
     System.out.println("BalancePID Finished");
   }
 
