@@ -88,8 +88,11 @@ public class RobotContainer {
     arm.setDefaultCommand(new ArmIdle(arm));
     gripper.setDefaultCommand(new GripperIdle(gripper));
 
-    driveTrain.setDefaultCommand(
-        new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    if (DriverStation.isJoystickConnected(
+        Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
+      driveTrain.setDefaultCommand(
+          new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    }
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
     // rightJoystick::getX));
 
@@ -105,32 +108,34 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    if (DriverStation.isJoystickConnected(
+        Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
+      new JoystickButton(leftJoystick, 1)
+          .onTrue(new GripperClose(gripper))
+          .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(leftJoystick, 1)
-        .onTrue(new GripperClose(gripper))
-        .onFalse(new GripperIdle(gripper));
+      new JoystickButton(leftJoystick, 2)
+          .onTrue(new GripperOpen(gripper))
+          .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(leftJoystick, 2)
-        .onTrue(new GripperOpen(gripper))
-        .onFalse(new GripperIdle(gripper));
+      new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
 
-    new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
+      new JoystickButton(leftJoystick, 4)
+          .whileTrue(new ArmDown(arm, gripper))
+          .onFalse(new ArmStop(arm));
 
-    new JoystickButton(leftJoystick, 4)
-        .whileTrue(new ArmDown(arm, gripper))
-        .onFalse(new ArmStop(arm));
+      new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
+      new JoystickButton(leftJoystick, 7)
+          .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
-    new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
-    new JoystickButton(leftJoystick, 7)
-        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+      new JoystickButton(leftJoystick, 8).onTrue(new ArmToMiddle(arm));
+      new JoystickButton(leftJoystick, 9)
+          .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
-    new JoystickButton(leftJoystick, 8).onTrue(new ArmToMiddle(arm));
-    new JoystickButton(leftJoystick, 9)
-        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
-
-    new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
-    new JoystickButton(leftJoystick, 11)
-        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+      new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
+      new JoystickButton(leftJoystick, 11)
+          .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+    }
 
     SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
     SmartDashboard.putData("gripperClose", new GripperClose(gripper));
