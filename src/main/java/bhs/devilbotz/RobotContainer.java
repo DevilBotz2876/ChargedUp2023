@@ -92,6 +92,10 @@ public class RobotContainer {
         Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
       driveTrain.setDefaultCommand(
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    } else {
+      System.err.println("#####################################");
+      System.err.println("### Right Joystick NOT Connected ####");
+      System.err.println("#####################################");
     }
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
     // rightJoystick::getX));
@@ -135,6 +139,10 @@ public class RobotContainer {
       new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
       new JoystickButton(leftJoystick, 11)
           .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+    } else {
+      System.err.println("####################################");
+      System.err.println("### Left Joystick NOT Connected ####");
+      System.err.println("####################################");
     }
 
     SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
