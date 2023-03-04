@@ -44,7 +44,7 @@ public class DriveStraightPID extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
     distancePid.setTolerance(Robot.getDriveTrainConstant("DISTANCE_PID_TOLERANCE").asDouble());
-
+    straightPid.enableContinuousInput(0, 360);
     SmartDashboard.putData("Distance PID", distancePid);
     SmartDashboard.putData("Straight PID", straightPid);
     addRequirements(drivetrain);
