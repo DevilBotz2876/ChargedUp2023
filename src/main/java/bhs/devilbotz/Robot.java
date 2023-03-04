@@ -21,6 +21,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.io.File;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -205,6 +209,10 @@ public class Robot extends TimedRobot {
         Filesystem.getDeployDirectory() + File.separator + "robotconfig" + File.separator;
     String robotUniqueId = getMacAddress();
     if (Robot.isSimulation()) {
+      /* Default to using competition bot */
+      System.err.println("###########################");
+      System.err.println("### Simulation Detected ###");
+      System.err.println("###########################");
       robotUniqueId = "simulation";
     }
     String robotConfigFilePathSuffix = ".json";
@@ -237,28 +245,26 @@ public class Robot extends TimedRobot {
    *     original code</a>
    */
   private static String getMacAddress() {
-    /*
     try {
       NetworkInterface network = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
       byte[] mac = network.getHardwareAddress();
 
-      StringBuilder macString = new StringBuilder();
-      for (byte m : mac) {
-        macString.append(String.format("%02X", m).replace("-", ""));
+      if (null != mac) {
+        StringBuilder macString = new StringBuilder();
+        for (byte m : mac) {
+          macString.append(String.format("%02X", m).replace("-", ""));
+        }
+        return macString.toString();
+      } else {
+        throw new UnknownHostException("Cannot get mac address");
       }
-      return macString.toString();
-      ]
-
-
-     */
-    return "00802F17DEE0";
-    // TODO: Implement checking for the practice bot
-    /*
     } catch (SocketException | UnknownHostException e) {
-      throw new RuntimeException(e);
+      /* Default to using competition bot */
+      System.err.println("##############################################################");
+      System.err.println("### Cannot get mac address, defaulting to competition bot! ###");
+      System.err.println("##############################################################");
+      return robotUniqueIdDefault;
     }
-
-     */
   }
 
   /**
