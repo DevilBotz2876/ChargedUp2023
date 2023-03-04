@@ -31,7 +31,6 @@ public class RotateDegrees extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("RotateDegrees start");
-    drivetrain.arcadeDrive(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,7 +43,6 @@ public class RotateDegrees extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.arcadeDrive(0, 0);
     System.out.println("RotateDegrees Finished");
   }
 

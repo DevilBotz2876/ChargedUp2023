@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -170,7 +171,12 @@ public class RobotContainer {
                       new DriveStraightPID(
                           driveTrain,
                           ShuffleboardManager.autoDistance.getDouble(
-                              Constants.DEFAULT_DISTANCE_MOBILITY)));
+                              Constants.DEFAULT_DISTANCE_MOBILITY)))
+                  .andThen(
+                      new InstantCommand(
+                          () -> {
+                            driveTrain.arcadeDrive(0, 0);
+                          }));
           break;
         case SCORE_AND_MOBILITY:
           break;
@@ -184,7 +190,12 @@ public class RobotContainer {
                               ShuffleboardManager.autoDistance.getDouble(
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
                           .andThen(new BalancePID(driveTrain, balancePid))
-                          .andThen(new RotateDegrees(driveTrain, 90)));
+                          .andThen(new RotateDegrees(driveTrain, 90)))
+                  .andThen(
+                      new InstantCommand(
+                          () -> {
+                            driveTrain.arcadeDrive(0, 0);
+                          }));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {
@@ -195,14 +206,15 @@ public class RobotContainer {
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(path, true))
+                  .andThen(driveTrain.followTrajectoryCommand(path, true, false))
+                  .andThen(new DriveStraightToDock(driveTrain, 2))
+                  .andThen(new BalancePID(driveTrain, balancePid))
+                  .andThen(new RotateDegrees(driveTrain, 90))
                   .andThen(
-                      new DriveStraightToDock(
-                              driveTrain,
-                              2))
-                          .andThen(new BalancePID(driveTrain, balancePid))                  
-                  .andThen(new BalancePID(driveTrain))
-                  .andThen(new RotateDegrees(driveTrain, 90));
+                      new InstantCommand(
+                          () -> {
+                            driveTrain.arcadeDrive(0, 0);
+                          }));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           if (Alliance.Blue == DriverStation.getAlliance()) {
@@ -213,14 +225,15 @@ public class RobotContainer {
           autonomousCommand =
               Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
                   .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(path, true))
+                  .andThen(driveTrain.followTrajectoryCommand(path, true, false))
+                  .andThen(new DriveStraightToDock(driveTrain, 2))
+                  .andThen(new BalancePID(driveTrain, balancePid))
+                  .andThen(new RotateDegrees(driveTrain, 90))
                   .andThen(
-                      new DriveStraightToDock(
-                              driveTrain,
-                              2))
-                          .andThen(new BalancePID(driveTrain, balancePid))
-                  .andThen(new BalancePID(driveTrain))
-                  .andThen(new RotateDegrees(driveTrain, 90));
+                      new InstantCommand(
+                          () -> {
+                            driveTrain.arcadeDrive(0, 0);
+                          }));
           break;
         case SCORE_DOCK_AND_ENGAGE:
           break;

@@ -600,7 +600,8 @@ public class DriveTrain extends SubsystemBase {
    *     href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner
    *     Example</a>
    */
-  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+  public Command followTrajectoryCommand(
+      PathPlannerTrajectory traj, boolean isFirstPath, boolean stopAtEnd) {
     // field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
         new InstantCommand(
@@ -632,7 +633,9 @@ public class DriveTrain extends SubsystemBase {
             ),
         new InstantCommand(
             () -> {
-              this.tankDriveVolts(0, 0);
+              if (stopAtEnd) {
+                this.tankDriveVolts(0, 0);
+              }
             }));
   }
 }

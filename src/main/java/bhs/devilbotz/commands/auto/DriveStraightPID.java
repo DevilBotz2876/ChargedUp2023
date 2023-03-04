@@ -53,7 +53,6 @@ public class DriveStraightPID extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("DriveStraightPID start");
-    drivetrain.arcadeDrive(0, 0);
     startAngle = drivetrain.getYaw();
     startDistance = drivetrain.getAverageDistance();
   }
@@ -61,7 +60,8 @@ public class DriveStraightPID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double output = distancePid.calculate(drivetrain.getAverageDistance()-startDistance, distance);
+    double output =
+        distancePid.calculate(drivetrain.getAverageDistance() - startDistance, distance);
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
     double speed = speedSlewRateLimiter.calculate(output);
     SmartDashboard.putNumber("Output", output);
@@ -83,7 +83,6 @@ public class DriveStraightPID extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.arcadeDrive(0, 0);
     System.out.println("DriveStraightPID Finished");
   }
 
