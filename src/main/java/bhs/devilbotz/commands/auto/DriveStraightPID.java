@@ -5,6 +5,7 @@
 package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,7 +21,7 @@ public class DriveStraightPID extends CommandBase {
   private double distance;
   private double startAngle;
   private double startDistance;
-  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1);
+  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMITER*2);
   private double maxSpeed = 0; // in meters/sec
   /**
    * The constructor for the Drive Straight PID command.
