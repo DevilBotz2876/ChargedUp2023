@@ -229,6 +229,7 @@ public class DriveTrain extends SubsystemBase {
     setupTalons();
     // Sets the initial position of the robot to (0, 0) and the initial angle to 0 degrees.
     resetEncoders();
+    resetNavx();
 
     ShuffleboardManager.putField(field);
     SmartDashboard.putData("Gyro", navx);
@@ -244,7 +245,6 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putData("Left Velocity PID", leftPIDController);
     SmartDashboard.putData("Right Velocity PID", rightPIDController);
-    resetNavx();
   }
 
   /**
