@@ -198,42 +198,31 @@ public class RobotContainer {
                           }));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
-          if (Alliance.Blue == DriverStation.getAlliance()) {
-            path = PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(2.5, 2));
-          } else {
-            path = PathPlanner.loadPath("MobilityRedHumanSideToDock", new PathConstraints(2.5, 2));
-          }
-          autonomousCommand =
-              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-                  .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(path, true, false))
-                  .andThen(new DriveStraightToDock(driveTrain, 2))
-                  .andThen(new BalancePID(driveTrain, balancePid))
-                  .andThen(new RotateDegrees(driveTrain, 90))
-                  .andThen(
-                      new InstantCommand(
-                          () -> {
-                            driveTrain.arcadeDrive(0, 0);
-                          }));
-          break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
-          if (Alliance.Blue == DriverStation.getAlliance()) {
-            path = PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(2.5, 2));
-          } else {
-            path = PathPlanner.loadPath("MobilityRedWallSideToDock", new PathConstraints(2.5, 2));
+          {
+            // Figure out which path to load based on alliance color and autoMode
+            String pathName;
+            if (AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE == autoMode) {
+              pathName = "MobilityBlueHumanSideToDock";
+            } else {
+              pathName = "MobilityBlueWallSideToDock";
+            }
+            path = PathPlanner.loadPath(pathName, new PathConstraints(2.5, 2));
+            // set the velocity at the end of the path fast enough to dock
+            path.getEndState().velocityMetersPerSecond = 1.5;
+            autonomousCommand =
+                Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                    .asProxy()
+                    .andThen(driveTrain.followTrajectoryCommand(path, true, false))
+                    .andThen(new DriveStraightToDock(driveTrain, 2))
+                    .andThen(new BalancePID(driveTrain, balancePid))
+                    .andThen(new RotateDegrees(driveTrain, 90))
+                    .andThen(
+                        new InstantCommand(
+                            () -> {
+                              driveTrain.arcadeDrive(0, 0);
+                            }));
           }
-          autonomousCommand =
-              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-                  .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(path, true, false))
-                  .andThen(new DriveStraightToDock(driveTrain, 2))
-                  .andThen(new BalancePID(driveTrain, balancePid))
-                  .andThen(new RotateDegrees(driveTrain, 90))
-                  .andThen(
-                      new InstantCommand(
-                          () -> {
-                            driveTrain.arcadeDrive(0, 0);
-                          }));
           break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
