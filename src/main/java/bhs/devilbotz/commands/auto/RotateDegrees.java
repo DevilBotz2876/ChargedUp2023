@@ -23,8 +23,8 @@ public class RotateDegrees extends CommandBase {
     rotatePid.enableContinuousInput(0, 360);
     startAngle = drivetrain.getYaw();
     targetAngle = startAngle + degrees;
-    SmartDashboard.putNumber("rotate/startAngle", startAngle);    
-    SmartDashboard.putNumber("rotate/targetAngle", targetAngle);    
+    SmartDashboard.putNumber("rotate/startAngle", startAngle);
+    SmartDashboard.putNumber("rotate/targetAngle", targetAngle);
     addRequirements(drivetrain);
   }
 
