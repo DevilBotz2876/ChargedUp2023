@@ -344,16 +344,10 @@ public class RobotContainer {
 
   public void setLEDModeAlliance() {
     if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
-      setLEDModeWhenDisabled(LEDModes.SET_RED);
       setLEDMode(LEDModes.SET_RED);
     } else {
-      setLEDModeWhenDisabled(LEDModes.SET_BLUE);
       setLEDMode(LEDModes.SET_BLUE);
     }
-  }
-
-  public void setLEDModeWhenDisabled(LEDModes mode) {
-    new SetLEDMode(arduino, mode).ignoringDisable(true).schedule();
   }
 
   public void setLEDMode(LEDModes mode) {

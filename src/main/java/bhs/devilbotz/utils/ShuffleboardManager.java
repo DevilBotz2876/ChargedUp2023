@@ -127,10 +127,10 @@ public class ShuffleboardManager {
       selected = autoGamePieceTypeChooser.getSelected();
       switch (selected) {
         case CONE:
-          robotContainer.setLEDModeWhenDisabled(LEDModes.SET_CONE);
+          robotContainer.setLEDMode(LEDModes.SET_CONE);
           break;
         case CUBE:
-          robotContainer.setLEDModeWhenDisabled(LEDModes.SET_CUBE);
+          robotContainer.setLEDMode(LEDModes.SET_CUBE);
           break;
         case NONE:
           robotContainer.setLEDModeAlliance();
