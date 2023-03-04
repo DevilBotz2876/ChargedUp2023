@@ -3,6 +3,7 @@ package bhs.devilbotz.commands.auto;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RotateDegrees extends CommandBase {
@@ -22,6 +23,8 @@ public class RotateDegrees extends CommandBase {
     rotatePid.enableContinuousInput(0, 360);
     startAngle = drivetrain.getYaw();
     targetAngle = startAngle + degrees;
+    SmartDashboard.putNumber("rotate/startAngle", startAngle);    
+    SmartDashboard.putNumber("rotate/targetAngle", targetAngle);    
     addRequirements(drivetrain);
   }
 
@@ -36,13 +39,17 @@ public class RotateDegrees extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double turnError = rotatePid.calculate(drivetrain.getYaw(), targetAngle);
+    double currentAngle = drivetrain.getYaw();
+    SmartDashboard.putNumber("rotate/currentAngle", currentAngle);
+    double turnError = rotatePid.calculate(currentAngle, targetAngle);
     drivetrain.arcadeDrive(0, -turnError);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    double currentAngle = drivetrain.getYaw();
+    SmartDashboard.putNumber("rotate/currentAngle", currentAngle);
     System.out.println("RotateDegrees Finished");
   }
 
