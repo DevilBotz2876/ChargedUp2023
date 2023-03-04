@@ -7,7 +7,6 @@ package bhs.devilbotz.subsystems;
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.RobotContainer;
-import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.LEDModes;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -203,7 +202,7 @@ public class Arm extends SubsystemBase {
   /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
   public void up() {
     armMotor.set(1);
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_UP).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
   /**
@@ -211,14 +210,14 @@ public class Arm extends SubsystemBase {
    */
   public void down() {
     armMotor.set(-1);
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_DOWN).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
   /** This method stops the arm. */
   public void stop() {
     armMotor.set(0.0);
     armMotor.stopMotor();
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_IDLE).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_ARM_IDLE);
   }
 
   /**

@@ -5,7 +5,6 @@
 
 package bhs.devilbotz;
 
-import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Gripper;
@@ -106,30 +105,20 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
-    // new SetLEDMode(robotContainer.getArduino(),
-    // LEDModes.SET_LOADING).ignoringDisable(true).schedule();
   }
 
   @Override
   public void disabledPeriodic() {
     if (DriverStation.getAlliance() != alliance) {
       alliance = DriverStation.getAlliance();
-      if (alliance == DriverStation.Alliance.Red) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED)
-            .ignoringDisable(true)
-            .schedule();
-      } else if (alliance == DriverStation.Alliance.Blue) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE)
-            .ignoringDisable(true)
-            .schedule();
-      }
+      robotContainer.setLEDModeAlliance();
     }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_AUTONOMOUS).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_AUTONOMOUS);
     robotContainer.resetRobotPosition();
 
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
@@ -148,11 +137,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     robotContainer.resetRobotPosition();
-    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
-      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
-    } else {
-      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
-    }
+    robotContainer.setLEDModeAlliance();
     robotContainer.resetRobotPosition();
 
     // This makes sure that the autonomous stops running when

@@ -27,7 +27,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -263,10 +262,6 @@ public class RobotContainer {
     return shuffleboardManager;
   }
 
-  public Arduino getArduino() {
-    return arduino;
-  }
-
   /**
    * Resets the robots position to the pose
    *
@@ -347,12 +342,21 @@ public class RobotContainer {
         .withPosition(1, 3);
   }
 
-  public void setLEDAlliance() {
-    Alliance alliance = DriverStation.getAlliance();
-    if (alliance == DriverStation.Alliance.Red) {
-      new SetLEDMode(arduino, LEDModes.SET_RED).ignoringDisable(true).schedule();
-    } else if (alliance == DriverStation.Alliance.Blue) {
-      new SetLEDMode(arduino, LEDModes.SET_BLUE).ignoringDisable(true).schedule();
+  public void setLEDModeAlliance() {
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+      setLEDModeWhenDisabled(LEDModes.SET_RED);
+      setLEDMode(LEDModes.SET_RED);
+    } else {
+      setLEDModeWhenDisabled(LEDModes.SET_BLUE);
+      setLEDMode(LEDModes.SET_BLUE);
     }
+  }
+
+  public void setLEDModeWhenDisabled(LEDModes mode) {
+    new SetLEDMode(arduino, mode).ignoringDisable(true).schedule();
+  }
+
+  public void setLEDMode(LEDModes mode) {
+    new SetLEDMode(arduino, mode).schedule();
   }
 }

@@ -2,7 +2,6 @@ package bhs.devilbotz.utils;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.RobotContainer;
-import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
@@ -128,17 +127,13 @@ public class ShuffleboardManager {
       selected = autoGamePieceTypeChooser.getSelected();
       switch (selected) {
         case CONE:
-          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CONE)
-              .ignoringDisable(true)
-              .schedule();
+          robotContainer.setLEDModeWhenDisabled(LEDModes.SET_CONE);
           break;
         case CUBE:
-          new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_CUBE)
-              .ignoringDisable(true)
-              .schedule();
+          robotContainer.setLEDModeWhenDisabled(LEDModes.SET_CUBE);
           break;
         case NONE:
-          robotContainer.setLEDAlliance();
+          robotContainer.setLEDModeAlliance();
           break;
       }
     }
