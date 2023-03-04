@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class RotateDegrees extends CommandBase {
   private DriveTrain drivetrain;
   private PIDController rotatePid;
+  private double rotationAmount;
   private double startAngle;
   private double targetAngle;
 
@@ -21,8 +22,7 @@ public class RotateDegrees extends CommandBase {
             Robot.getDriveTrainConstant("ROTATE_D").asDouble());
     rotatePid.setTolerance(Robot.getDriveTrainConstant("ROTATE_PID_TOLERANCE").asDouble());
     rotatePid.enableContinuousInput(0, 360);
-    startAngle = drivetrain.getYaw();
-    targetAngle = startAngle + degrees;
+    this.rotationAmount = degrees;
     SmartDashboard.putNumber("rotate/startAngle", startAngle);
     SmartDashboard.putNumber("rotate/targetAngle", targetAngle);
     addRequirements(drivetrain);
@@ -33,6 +33,8 @@ public class RotateDegrees extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    startAngle = drivetrain.getYaw();
+    targetAngle = startAngle + rotationAmount;
     System.out.println("RotateDegrees start");
   }
 
