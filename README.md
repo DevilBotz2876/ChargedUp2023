@@ -190,6 +190,11 @@ The routines in **bold** are the most important/common routines we will use
     * Gripper Safety
         * Auto close if arm moving down near bottom
         * Auto close if at bottom limit and the arm moving up
+* Driver Assist
+    * Prepare for Pickup
+    * Pickup from Ground
+    * Prepare for Scoring
+    * AutoScore
 * LEDs
    * Setting alliance changes LEDs to match red/blue
    * Starting autonomous changes LEDs to green
