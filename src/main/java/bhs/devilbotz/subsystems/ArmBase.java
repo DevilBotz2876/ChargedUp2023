@@ -32,6 +32,7 @@ public class ArmBase extends SubsystemBase {
   DIOSim bottomLimitSwitchSim;
   SingleJointedArmSim armSim;
 
+  // Network Table Based Debug Status
   protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
   protected NetworkTable table = inst.getTable("Arm");
 
@@ -59,26 +60,26 @@ public class ArmBase extends SubsystemBase {
     //
     encoder.setReverseDirection(true);
 
-    if (Robot.isSimulation()) {
-      setupSimulation();
-    }
+    setupSimulation();
   }
 
   void setupSimulation() {
-    encoderSim = new EncoderSim(encoder);
-    encoderSim.setCount(0);
+    if (Robot.isSimulation()) {
+      encoderSim = new EncoderSim(encoder);
+      encoderSim.setCount(0);
 
-    topLimitSwitchSim = new DIOSim(topLimitSwitch);
-    bottomLimitSwitchSim = new DIOSim(bottomLimitSwitch);
-    topLimitSwitchSim.setValue(false);
-    bottomLimitSwitchSim.setValue(false);
+      topLimitSwitchSim = new DIOSim(topLimitSwitch);
+      bottomLimitSwitchSim = new DIOSim(bottomLimitSwitch);
+      topLimitSwitchSim.setValue(false);
+      bottomLimitSwitchSim.setValue(false);
 
-    DCMotor armGearbox = DCMotor.getNEO(1);
-    double armLength = Units.inchesToMeters(48);
-    double minAngle = Units.degreesToRadians(0);
-    double maxAngle = Units.degreesToRadians(100);
-    armSim =
-        new SingleJointedArmSim(armGearbox, 400, .1, armLength, minAngle, maxAngle, false, null);
+      DCMotor armGearbox = DCMotor.getNEO(1);
+      double armLength = Units.inchesToMeters(48);
+      double minAngle = Units.degreesToRadians(0);
+      double maxAngle = Units.degreesToRadians(100);
+      armSim =
+          new SingleJointedArmSim(armGearbox, 400, .1, armLength, minAngle, maxAngle, false, null);
+    }
   }
 
   /**
