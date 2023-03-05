@@ -107,6 +107,7 @@ public final class Constants {
     public static final double POSITION_MIDDLE = 468;
     public static final double POSITION_BOTTOM = 258;
     public static final double POSITION_PORTAL = 465;
+    public static final double POSITION_DRIVE = 300;
     public static final double POSITION_GRIPPER_CLOSE = 190;
 
     public static final double POSITION_TOLERANCE = 20;

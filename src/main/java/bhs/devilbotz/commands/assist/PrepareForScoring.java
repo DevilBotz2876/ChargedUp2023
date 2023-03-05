@@ -1,32 +1,38 @@
 package bhs.devilbotz.commands.assist;
 
+import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+/**
+ * This command will:
+ *
+ * <ol>
+ *   <li>Move the arm to the desired scoring position
+ * </ol>
+ *
+ * @see bhs.devilbotz.commands.assist.AutoScore
+ */
 public class PrepareForScoring extends SequentialCommandGroup {
-  private final double CONE_POSITION_TOP = 558;
-  private final double CONE_POSITION_MIDDLE = 468;
-  private final double CONE_POSITION_BOTTOM = 258;
-  private final double CONE_POSITION_PORTAL = 465;
-
   public PrepareForScoring(Arm arm, ScoreLevels level, GamePieceTypes gamePiece) {
     super();
-    double targetArmPosition;
+    double targetArmPosition = ArmConstants.POSITION_TOP;
     // TODO: fill in arm position based on level/gamePiece
     switch (gamePiece) {
       case CUBE:
         {
           switch (level) {
             case LOW:
-              targetArmPosition = CONE_POSITION_BOTTOM;
+              targetArmPosition = ArmConstants.POSITION_BOTTOM;
               break;
             case MID:
-              targetArmPosition = CONE_POSITION_MIDDLE;
+              targetArmPosition = ArmConstants.POSITION_MIDDLE;
               break;
             case HIGH:
-              targetArmPosition = CONE_POSITION_TOP;
+              targetArmPosition = ArmConstants.POSITION_TOP;
             default:
               break;
           }
@@ -38,19 +44,19 @@ public class PrepareForScoring extends SequentialCommandGroup {
         {
           switch (level) {
             case LOW:
-              targetArmPosition = CONE_POSITION_BOTTOM;
+              targetArmPosition = ArmConstants.POSITION_BOTTOM;
               break;
             case MID:
-              targetArmPosition = CONE_POSITION_MIDDLE;
+              targetArmPosition = ArmConstants.POSITION_MIDDLE;
               break;
             case HIGH:
             default:
-              targetArmPosition = CONE_POSITION_TOP;
+              targetArmPosition = ArmConstants.POSITION_TOP;
               break;
           }
         }
         break;
     }
-    // TODO: addCommands(new ArmToPosition(arm, targetArmPoisition));
+    addCommands(new ArmToPosition(arm, targetArmPosition));
   }
 }

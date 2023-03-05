@@ -13,6 +13,10 @@ import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.arm.ArmUp;
+import bhs.devilbotz.commands.assist.AutoScore;
+import bhs.devilbotz.commands.assist.PickupFromGround;
+import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
+import bhs.devilbotz.commands.assist.PrepareForScoring;
 import bhs.devilbotz.commands.auto.BalancePID;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
 import bhs.devilbotz.commands.auto.DriveStraightToDock;
@@ -22,7 +26,9 @@ import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
+import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -98,6 +104,12 @@ public class RobotContainer {
       driveTrain.setDefaultCommand(
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     } else {
+      driveTrain.setDefaultCommand(
+          new InstantCommand(
+              () -> {
+                driveTrain.tankDriveVolts(0, 0);
+              },
+              driveTrain));
       System.err.println("#####################################");
       System.err.println("### Right Joystick NOT Connected ####");
       System.err.println("#####################################");
@@ -293,13 +305,13 @@ public class RobotContainer {
     gripper.close();
   }
 
-  public void buildArmShuffleboardTab() {
+  private void buildArmShuffleboardTab() {
     ShuffleboardTab tab = Shuffleboard.getTab("Arm");
 
     ShuffleboardContainer cmdList =
-        tab.getLayout("ArmCmds", BuiltInLayouts.kGrid)
+        tab.getLayout("Arm Commands", BuiltInLayouts.kGrid)
             .withPosition(0, 0)
-            .withSize(2, 4)
+            .withSize(4, 4)
             .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
 
     cmdList.add(new ArmStop(arm)).withPosition(0, 0);
@@ -314,23 +326,42 @@ public class RobotContainer {
         .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM))
         .withPosition(1, 2);
 
-    tab.add("Arm subsystem", arm).withPosition(2, 0);
+    tab.add("Arm subsystem", arm).withPosition(0, 4);
+    tab.add("Drivetrain subsystem", arm).withPosition(7, 2);
     buildGripperShuffleboardTab();
+    buildDriverAssistShuffleboardTab();
   }
 
-  public void buildGripperShuffleboardTab() {
+  private void buildGripperShuffleboardTab() {
     ShuffleboardTab tab = Shuffleboard.getTab("Arm");
 
-    tab.add("Gripper subsystem", gripper).withPosition(6, 0);
-
     ShuffleboardContainer cmdList =
-        tab.getLayout("GripCmds", BuiltInLayouts.kGrid)
-            .withPosition(6, 1)
-            .withSize(2, 1)
+        tab.getLayout("Grippers Commands", BuiltInLayouts.kGrid)
+            .withPosition(0, 5)
+            .withSize(4, 1)
             .withProperties(Map.of("Number of columns", 2, "Number of rows", 1));
 
     cmdList.add(new GripperOpen(gripper)).withPosition(0, 0);
     cmdList.add(new GripperClose(gripper)).withPosition(1, 0);
+
+    tab.add("Gripper subsystem", gripper).withPosition(7, 4);
+  }
+
+  private void buildDriverAssistShuffleboardTab() {
+    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+
+    ShuffleboardContainer cmdList =
+        tab.getLayout("Driver Assist", BuiltInLayouts.kGrid)
+            .withPosition(4, 0)
+            .withSize(3, 6)
+            .withProperties(Map.of("Number of columns", 1, "Number of rows", 4));
+
+    cmdList.add(new PrepareForGroundPickup(arm, gripper)).withPosition(0, 0);
+    cmdList.add(new PickupFromGround(arm, gripper, driveTrain)).withPosition(0, 1);
+    cmdList
+        .add(new PrepareForScoring(arm, ScoreLevels.HIGH, GamePieceTypes.CONE))
+        .withPosition(0, 2);
+    cmdList.add(new AutoScore(arm, gripper, driveTrain)).withPosition(0, 3);
   }
 
   public void setLEDModeAlliance() {

@@ -9,17 +9,39 @@ import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+/**
+ * This command will:
+ *
+ * <ol>
+ *   <li>Open the gripper
+ *   <li>Drive backwards the specified distance
+ *   <li>Get ready for pickup of another piece (close grip, lower arm, open grip)
+ *   <li>Rotate 180 degrees
+ * </ol>
+ *
+ * Note: This class assume the robot and arm are already positioned to score!
+ *
+ * @see bhs.devilbotz.commands.assist.PrepareForScoring
+ */
 public class AutoScore extends SequentialCommandGroup {
-  private final double driveBackDistance = -0.5; // in meters
+  private final double driveBackDistance = -0.3; // in meters
 
   public AutoScore(Arm arm, Gripper gripper, DriveTrain drivetrain) {
     super();
+    // Open the gripper
     addCommands(new GripperOpen(gripper));
     addCommands(new DriveStraightPID(drivetrain, driveBackDistance));
-    addCommands(new InstantCommand(() -> {
-        drivetrain.tankDriveVolts(0, 0);
-      }));
+    addCommands(
+        new InstantCommand(
+            () -> {
+              drivetrain.tankDriveVolts(0, 0);
+            }));
     addCommands(new PrepareForGroundPickup(arm, gripper));
     addCommands(new RotateDegrees(drivetrain, 180));
+    addCommands(
+        new InstantCommand(
+            () -> {
+              drivetrain.tankDriveVolts(0, 0);
+            }));
   }
 }
