@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands.arm;
 
+import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -16,7 +17,7 @@ public class ArmToPosition extends CommandBase {
   public ArmToPosition(Arm arm, double targetPosition) {
     this.arm = arm;
     this.targetPosition = targetPosition;
-    targetPositionTolerance = 5;
+    targetPositionTolerance = ArmConstants.POSITION_TOLERANCE;
     bReachedLimit = false;
     gripper = null;
     gripperClosePosition = 0;

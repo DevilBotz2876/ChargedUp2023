@@ -1,8 +1,11 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.Robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -10,6 +13,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmBase extends SubsystemBase {
@@ -18,6 +25,13 @@ public class ArmBase extends SubsystemBase {
   private final DigitalInput bottomLimitSwitch;
   private final Encoder encoder;
 
+  // Simulation Variables
+  // create a sim controller for the encoder
+  EncoderSim encoderSim;
+  DIOSim topLimitSwitchSim;
+  DIOSim bottomLimitSwitchSim;
+  SingleJointedArmSim armSim;
+
   protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
   protected NetworkTable table = inst.getTable("Arm");
 
@@ -25,7 +39,7 @@ public class ArmBase extends SubsystemBase {
   private BooleanEntry ntBottomLimitSwitch = table.getBooleanTopic("limit/bottom").getEntry(false);
   private DoubleEntry ntPosition = table.getDoubleTopic("position").getEntry(0);
   private StringEntry ntState = table.getStringTopic("state").getEntry("Unknown");
-  
+
   public ArmBase() {
     armMotor =
         new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -44,6 +58,27 @@ public class ArmBase extends SubsystemBase {
     // TODO: check if switching DIO port wires will change sign of value.
     //
     encoder.setReverseDirection(true);
+
+    if (Robot.isSimulation()) {
+      setupSimulation();
+    }
+  }
+
+  void setupSimulation() {
+    encoderSim = new EncoderSim(encoder);
+    encoderSim.setCount(0);
+
+    topLimitSwitchSim = new DIOSim(topLimitSwitch);
+    bottomLimitSwitchSim = new DIOSim(bottomLimitSwitch);
+    topLimitSwitchSim.setValue(false);
+    bottomLimitSwitchSim.setValue(false);
+
+    DCMotor armGearbox = DCMotor.getNEO(1);
+    double armLength = Units.inchesToMeters(48);
+    double minAngle = Units.degreesToRadians(0);
+    double maxAngle = Units.degreesToRadians(100);
+    armSim =
+        new SingleJointedArmSim(armGearbox, 400, .1, armLength, minAngle, maxAngle, false, null);
   }
 
   /**
@@ -63,6 +98,28 @@ public class ArmBase extends SubsystemBase {
     if (isBottomLimit() && isMoving() == false) {
       resetPosition();
     }
+  }
+
+  /** Update the simulation model. */
+  public void simulationPeriodic() {
+    // In this method, we update our simulation of what our arm is doing
+    // First, we set our "inputs" (voltages)
+    armSim.setInput(armMotor.get() * RobotController.getBatteryVoltage());
+
+    // Next, we update it. The standard loop time is 20ms.
+    armSim.update(0.020);
+
+    // Set our simulated encoder's readings.  The range of movement setup in sim results in a range
+    // of 0-200 degrees.
+    //
+    double distance = 8 * (Units.radiansToDegrees(armSim.getAngleRads()));
+    encoderSim.setDistance(distance);
+
+    topLimitSwitchSim.setValue(!armSim.hasHitUpperLimit());
+    bottomLimitSwitchSim.setValue(!armSim.hasHitLowerLimit());
+
+    // Update the Mechanism Arm angle based on the simulated arm angle
+    //    arm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
   }
 
   /**

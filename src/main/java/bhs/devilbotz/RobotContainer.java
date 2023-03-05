@@ -25,7 +25,6 @@ import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
-import bhs.devilbotz.subsystems.stubs.ArmStub;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -82,11 +81,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    if (Robot.checkCapability("hasArm")) {
-      arm = new Arm();
-    } else {
-      arm = new ArmStub();
-    }
+    arm = new Arm();
 
     // Configure the trigger bindings
     configureBindings();

@@ -4,9 +4,6 @@
 
 package bhs.devilbotz.subsystems;
 
-import edu.wpi.first.networktables.BooleanEntry;
-import edu.wpi.first.networktables.DoubleEntry;
-
 /**
  * This subsystem controls arm.
  *
@@ -61,8 +58,7 @@ public class Arm extends ArmBase {
   private final double POSITION_GRIPPER_CLOSE = 190;
 
   /** The constructor for the arm subsystem. */
-  public Arm() {
-  }
+  public Arm() {}
 
   /**
    * Check if arm is at/nearing position where the gripper needs to be closed. The arm cannot be
@@ -73,6 +69,7 @@ public class Arm extends ArmBase {
    * @return true if at middle position false if not.
    */
   public boolean atGripperClose() {
+    // TODO: put this in the proper place
     return false;
   }
 }
