@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class PickupFromGround extends SequentialCommandGroup {
   public PickupFromGround(Arm arm, Gripper gripper, DriveTrain drivetrain) {
     super();
+    // Close the gripper
     addCommands(new GripperClose(gripper));
     // Drive backward
     addCommands(new DriveStraightPID(drivetrain, -.3));

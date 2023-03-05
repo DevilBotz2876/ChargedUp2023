@@ -1,5 +1,7 @@
 package bhs.devilbotz.commands.assist;
 
+import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
 import bhs.devilbotz.commands.auto.RotateDegrees;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -28,15 +30,20 @@ public class AutoScore extends SequentialCommandGroup {
 
   public AutoScore(Arm arm, Gripper gripper, DriveTrain drivetrain) {
     super();
+    // Lower the arm slightly
+    addCommands(new ArmToPosition(arm, arm.getPosition() - ArmConstants.POSITION_SCORING_DELTA));
     // Open the gripper
     addCommands(new GripperOpen(gripper));
+    // backup
     addCommands(new DriveStraightPID(drivetrain, driveBackDistance));
     addCommands(
         new InstantCommand(
             () -> {
               drivetrain.tankDriveVolts(0, 0);
             }));
+    // get ready for next piece
     addCommands(new PrepareForGroundPickup(arm, gripper));
+    // rotate 180 degrees
     addCommands(new RotateDegrees(drivetrain, 180));
     addCommands(
         new InstantCommand(
