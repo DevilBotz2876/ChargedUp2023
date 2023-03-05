@@ -232,7 +232,6 @@ public class DriveTrain extends SubsystemBase {
     resetNavx();
 
     ShuffleboardManager.putField(field);
-    SmartDashboard.putData("Gyro", navx);
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
     odometry =
@@ -245,6 +244,12 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putData("Left Velocity PID", leftPIDController);
     SmartDashboard.putData("Right Velocity PID", rightPIDController);
+
+    SmartDashboard.putData("HW/Drive Train/Talon/Left/Master", leftMaster);
+    SmartDashboard.putData("HW/Drive Train/Talon/Left/Follower", leftFollower);
+    SmartDashboard.putData("HW/Drive Train/Talon/Right/Master", rightMaster);
+    SmartDashboard.putData("HW/Drive Train/Talon/Right/Follower", rightFollower);
+    SmartDashboard.putData("HW/Drive Train/NavX/Gyro", navx);
   }
 
   /**
@@ -289,6 +294,11 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // Updates the odometry of the drive train.
     updateOdometry();
+    SmartDashboard.putNumber("HW/Drive Train/NavX/Roll", getRoll());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Left/Velocity", getLeftVelocity());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Right/Velocity", getRightVelocity());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Left/Distance", getLeftDistance());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Right/Distance", getRightDistance());
   }
 
   /**
