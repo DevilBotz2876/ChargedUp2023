@@ -161,3 +161,37 @@ The routines in **bold** are the most important/common routines we will use
     ScoreLevel: Either low, medium, or high
     GamePieceType: Either cone or cube
 
+## Testing Checklist
+* Autonomous
+    * Mobility
+        * Forward
+        * Reverse
+    * Dock & Engage
+        * Forward
+        * Reverse
+    * Mobility Dock & Engage
+        * Red Alliance
+            * Wall Side
+            * Human Side
+        * Blue Alliance
+            * Wall Side
+            * Human Side
+* Arm/Gripper
+    * Basic
+        * Arm Up (stops at upper limit switch)
+        * Arm Down (stops at bottom limit switch)
+        * Gripper Open
+        * Gripper Close
+    * Auto Position
+        * Top
+        * Middle
+        * Bottom
+        * Shelf
+    * Gripper Safety
+        * Auto close if arm moving down near bottom
+        * Auto close if at bottom limit and the arm moving up
+* LEDs
+   * Setting alliance changes LEDs to match red/blue
+   * Starting autonomous changes LEDs to green
+   * Moving Arm Up
+   * Moving Arm Down
