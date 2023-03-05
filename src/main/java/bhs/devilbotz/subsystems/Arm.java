@@ -68,8 +68,8 @@ public class Arm extends ArmBase {
    *
    * @return true if at middle position false if not.
    */
-  public boolean atGripperClose() {
-    // TODO: put this in the proper place
-    return false;
-  }
+//  public boolean atGripperClose() {
+//    // TODO: put this in the proper place
+//    return false;
+//  }
 }

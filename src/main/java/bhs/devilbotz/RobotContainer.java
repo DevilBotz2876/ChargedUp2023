@@ -119,10 +119,10 @@ public class RobotContainer {
         .onTrue(new GripperOpen(gripper))
         .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm, gripper)).onFalse(new ArmStop(arm));
 
     new JoystickButton(leftJoystick, 4)
-        .whileTrue(new ArmDown(arm, gripper))
+        .whileTrue(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE))
         .onFalse(new ArmStop(arm));
 
     new JoystickButton(leftJoystick, 6)
@@ -133,12 +133,16 @@ public class RobotContainer {
         .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
     new JoystickButton(leftJoystick, 8)
-        .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE));
+        .onTrue(
+            new ArmToPosition(
+                arm, ArmConstants.POSITION_MIDDLE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
     new JoystickButton(leftJoystick, 9)
         .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
     new JoystickButton(leftJoystick, 10)
-        .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM));
+        .onTrue(
+            new ArmToPosition(
+                arm, ArmConstants.POSITION_BOTTOM, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
     new JoystickButton(leftJoystick, 11)
         .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
@@ -277,8 +281,8 @@ public class RobotContainer {
             .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
 
     cmdList.add(new ArmStop(arm)).withPosition(0, 0);
-    cmdList.add(new ArmUp(arm)).withPosition(0, 1);
-    cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
+    cmdList.add(new ArmUp(arm, gripper)).withPosition(0, 1);
+    cmdList.add(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE)).withPosition(0, 2);
 
     cmdList.add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP)).withPosition(1, 0);
     cmdList
@@ -289,7 +293,7 @@ public class RobotContainer {
         .withPosition(1, 2);
 
     tab.add("Arm subsystem", arm).withPosition(2, 0);
-    buildGripperShuffleboardTab();    
+    buildGripperShuffleboardTab();
   }
 
   public void buildGripperShuffleboardTab() {
@@ -305,5 +309,5 @@ public class RobotContainer {
 
     cmdList.add(new GripperOpen(gripper)).withPosition(0, 0);
     cmdList.add(new GripperClose(gripper)).withPosition(1, 0);
-  }  
+  }
 }

@@ -45,6 +45,10 @@ public class ArmToPosition extends CommandBase {
       if (arm.isTopLimit()) {
         bReachedLimit = true;
       } else {
+        if ((null != gripper) && arm.isBottomLimit()) {
+          // We want to close the gripper if it is at the bottom and want to move up
+          gripper.close();
+        }
         arm.up();
       }
     } else if (currentPosition > targetPosition) {

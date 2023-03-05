@@ -5,21 +5,13 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
-import bhs.devilbotz.Robot;
-import bhs.devilbotz.commands.gripper.GripperClose;
-import bhs.devilbotz.commands.gripper.GripperOpen;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.Map;
 
 /**
  * This subsystem controls the gripper.

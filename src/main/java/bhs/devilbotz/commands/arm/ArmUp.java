@@ -5,6 +5,7 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.subsystems.Arm;
+import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -15,15 +16,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class ArmUp extends CommandBase {
   private final Arm arm;
+  private final Gripper gripper;
 
   /**
    * The constructor for the arm up command.
    *
    * @param arm The arm subsystem.
    */
-  public ArmUp(Arm arm) {
+  public ArmUp(Arm arm, Gripper gripper) {
     this.arm = arm;
+    this.gripper = gripper;
     addRequirements(arm);
+    addRequirements(gripper); // TODO: This will prevent the gripper from opening/closing while moving up
   }
 
   // Called when the command is initially scheduled.
@@ -33,6 +37,10 @@ public class ArmUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (arm.isBottomLimit()) 
+    {
+      gripper.close();
+    }
     arm.up();
   }
 
