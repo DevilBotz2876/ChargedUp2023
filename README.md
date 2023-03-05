@@ -20,10 +20,10 @@ Code for the FRC 2023 Robotics Competition
             - Follower: Talon SRX (on CAN ID 1)
         - Right:
             - Master: Talon SRX (on CAN ID 4) - Inverted
-            - Follower: Talon SRX (on CAN ID 2) - Inverted  
+            - Follower: Talon SRX (on CAN ID 2) - Inverted
     - Gear Box
         - Toughbox Mini Classic
-            - Counts Per Revolution: 4096 
+            - Counts Per Revolution: 4096
             - Encoder Ratio: 1:1
         - Wheels
             - 6" Diameter (0.1524 meters)
