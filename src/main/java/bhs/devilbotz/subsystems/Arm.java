@@ -1,8 +1,23 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package bhs.devilbotz.subsystems;
+
+import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.Robot;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanEntry;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * This subsystem controls arm.
@@ -37,11 +52,11 @@ package bhs.devilbotz.subsystems;
  * to pickup cone/cube. We will need to determine what distance/position encoder reads to be at
  * correct height.
  *
- * <p>There is a method to detect a 'middle' position, move a set distance, and to get the current
- * position. The idea here is to create a set of commands that can move the arm to a set position
- * just high enough above a low/mid/high grid scoring node to score a cube/cone. Then provide a
- * second command that can lower the arm and release the gripper to place/score the cube/cone. Not
- * sure this will be useful to the driver. Will need to experiment with this if time allows.
+ * <p>There is a method to get the current position. The idea here is to create a set of commands
+ * that can move the arm to a set position just high enough above a low/mid/high grid scoring node
+ * to score a cube/cone. Then provide a second command that can lower the arm and release the
+ * gripper to place/score the cube/cone. Not sure this will be useful to the driver. Will need to
+ * experiment with this if time allows.
  *
  * <p>There are two limit switches, one at top of range of motion and one at bottom of range of
  * motion. The limit switches are plugged into the roborio digital input/output ports.
@@ -49,27 +64,181 @@ package bhs.devilbotz.subsystems;
  * <p>There is a quadrature encoder on the arm joint. The signal and power lines are plugged into
  * the roborio digital input/output ports.
  */
-public class Arm extends ArmBase {
+public class Arm extends SubsystemBase {
+  private final CANSparkMax armMotor;
+  private final DigitalInput topLimitSwitch;
+  private final DigitalInput bottomLimitSwitch;
+  private final Encoder encoder;
 
-  // Note this value is well above the frame/bumpers, not right above them.  When the arm is moving
-  // down there is momentum and time involved.  You need to
-  // start closing the gripper and give it time to close before the moving arm is near the
-  // frame/bummpers.
-  private final double POSITION_GRIPPER_CLOSE = 190;
+  // Simulation Variables
+  // create a sim controller for the encoder
+  EncoderSim encoderSim;
+  DIOSim topLimitSwitchSim;
+  DIOSim bottomLimitSwitchSim;
+  SingleJointedArmSim armSim;
 
-  /** The constructor for the arm subsystem. */
-  public Arm() {}
+  // Network Table Based Debug Status
+  protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  protected NetworkTable table = inst.getTable("Arm");
+
+  private BooleanEntry ntTopLimitSwitch = table.getBooleanTopic("limit/top").getEntry(false);
+  private BooleanEntry ntBottomLimitSwitch = table.getBooleanTopic("limit/bottom").getEntry(false);
+  private DoubleEntry ntPosition = table.getDoubleTopic("position").getEntry(0);
+  private StringEntry ntState = table.getStringTopic("state").getEntry("Unknown");
+
+  public Arm() {
+    armMotor =
+        new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    topLimitSwitch = new DigitalInput(ArmConstants.TOP_LIMIT_SWITCH_DIO_PORT);
+    bottomLimitSwitch = new DigitalInput(ArmConstants.BOTTOM_LIMIT_SWITCH_DIO_PORT);
+
+    encoder =
+        new Encoder(
+            ArmConstants.ENCODER_CHANNEL_A_DIO_PORT, ArmConstants.ENCODER_CHANNEL_B_DIO_PORT);
+
+    // Arm starts down inside chassis. This means encoder starts at zero here.  When moving the arm
+    // up it is nice to see positive numbers for position.  With this set to
+    // true moving arm up from initial position should return positive value.
+    //
+    // TODO: check if switching DIO port wires will change sign of value.
+    //
+    encoder.setReverseDirection(true);
+
+    setupSimulation();
+  }
+
+  void setupSimulation() {
+    if (Robot.isSimulation()) {
+      encoderSim = new EncoderSim(encoder);
+      encoderSim.setCount(0);
+
+      topLimitSwitchSim = new DIOSim(topLimitSwitch);
+      bottomLimitSwitchSim = new DIOSim(bottomLimitSwitch);
+      topLimitSwitchSim.setValue(false);
+      bottomLimitSwitchSim.setValue(false);
+
+      DCMotor armGearbox = DCMotor.getNEO(1);
+      double armLength = Units.inchesToMeters(48);
+      double minAngle = Units.degreesToRadians(0);
+      double maxAngle = Units.degreesToRadians(100);
+      armSim =
+          new SingleJointedArmSim(armGearbox, 400, .1, armLength, minAngle, maxAngle, false, null);
+    }
+  }
 
   /**
-   * Check if arm is at/nearing position where the gripper needs to be closed. The arm cannot be
-   * fully stowed inside robot unless gripper is closed. We do not want to check/return if the
-   * position is less than the gripper close position. If we did this, then the gripper would never
-   * be able to open while arm is in low positions.
+   * This method updates once per loop of the robot.
    *
-   * @return true if at middle position false if not.
+   * @see <a href="https://docs.wpilib.org/en/latest/docs/software/commandbased/index.html">Command
+   *     Based Programming</a>
    */
-//  public boolean atGripperClose() {
-//    // TODO: put this in the proper place
-//    return false;
-//  }
+  @Override
+  public void periodic() {
+    ntTopLimitSwitch.set(isTopLimit());
+    ntBottomLimitSwitch.set(isBottomLimit());
+    ntPosition.set(getPosition());
+
+    // Only reset encoder position if arm hit bottom limit switch and is not moving.  The arm will
+    // be engaged with limit switch while moving.  We don't want to reset encoder multiple times.
+    if (isBottomLimit() && isMoving() == false) {
+      resetPosition();
+    }
+  }
+
+  /** Update the simulation model. */
+  public void simulationPeriodic() {
+    // In this method, we update our simulation of what our arm is doing
+    // First, we set our "inputs" (voltages)
+    armSim.setInput(armMotor.get() * RobotController.getBatteryVoltage());
+
+    // Next, we update it. The standard loop time is 20ms.
+    armSim.update(0.020);
+
+    // Set our simulated encoder's readings.  The range of movement setup in sim results in a range
+    // of 0-200 degrees.
+    //
+    double distance = 8 * (Units.radiansToDegrees(armSim.getAngleRads()));
+    encoderSim.setDistance(distance);
+
+    topLimitSwitchSim.setValue(!armSim.hasHitUpperLimit());
+    bottomLimitSwitchSim.setValue(!armSim.hasHitLowerLimit());
+
+    // Update the Mechanism Arm angle based on the simulated arm angle
+    //    arm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
+  }
+
+  /**
+   * This method sets the speed of the arm.
+   *
+   * @param speed The speed of the arm.
+   */
+  public void setSpeed(double speed) {
+    armMotor.set(speed);
+  }
+
+  /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
+  public void up() {
+    ntState.set("Moving: Up");
+    armMotor.set(1);
+  }
+
+  /**
+   * Move the arm down at set speed. There is no check/protection against moving arm too far down.
+   */
+  public void down() {
+    ntState.set("Moving: Down");
+    armMotor.set(-1);
+  }
+
+  /** This method stops the arm. */
+  public void stop() {
+    ntState.set("Stopped");
+    armMotor.set(0.0);
+    armMotor.stopMotor();
+  }
+
+  /**
+   * Check if arm is moving or not based on motor state.
+   *
+   * @return true if arm is moving, false if not.
+   */
+  public boolean isMoving() {
+    return (armMotor.get() != 0.0);
+  }
+
+  /**
+   * Return state of top limit switch
+   *
+   * @return true limit switch is pressed, false if not.
+   */
+  public boolean isTopLimit() {
+    return !topLimitSwitch.get();
+  }
+
+  /**
+   * Return state of bottom limit switch
+   *
+   * @return true limit switch is pressed, false if not.
+   */
+  public boolean isBottomLimit() {
+    return !bottomLimitSwitch.get();
+  }
+
+  /**
+   * Return current position of arm.
+   *
+   * @return position of arm.
+   */
+  public double getPosition() {
+    return encoder.getDistance();
+  }
+
+  /**
+   * Reset encoder to zero. We consider arm down inside chassis as zero position. Use lower limit
+   * switch to determine when we reach that position. This should be called when arm is not moving.
+   */
+  protected void resetPosition() {
+    encoder.reset();
+  }
 }

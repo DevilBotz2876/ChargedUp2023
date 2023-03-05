@@ -27,7 +27,8 @@ public class ArmUp extends CommandBase {
     this.arm = arm;
     this.gripper = gripper;
     addRequirements(arm);
-    addRequirements(gripper); // TODO: This will prevent the gripper from opening/closing while moving up
+    addRequirements(
+        gripper); // TODO: This will prevent the gripper from opening/closing while moving up
   }
 
   // Called when the command is initially scheduled.
@@ -37,8 +38,7 @@ public class ArmUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (arm.isBottomLimit()) 
-    {
+    if (arm.isBottomLimit()) {
       gripper.close();
     }
     arm.up();

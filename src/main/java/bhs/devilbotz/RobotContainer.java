@@ -119,7 +119,9 @@ public class RobotContainer {
         .onTrue(new GripperOpen(gripper))
         .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm, gripper)).onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 5)
+        .whileTrue(new ArmUp(arm, gripper))
+        .onFalse(new ArmStop(arm));
 
     new JoystickButton(leftJoystick, 4)
         .whileTrue(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE))
