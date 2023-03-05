@@ -1,7 +1,13 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.RobotContainer;
+import bhs.devilbotz.lib.LEDModes;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -87,7 +93,10 @@ public class Arm extends SubsystemBase {
   private DoubleEntry ntPosition = table.getDoubleTopic("position").getEntry(0);
   private StringEntry ntState = table.getStringTopic("state").getEntry("Unknown");
 
-  public Arm() {
+  private RobotContainer robotContainer;
+
+  public Arm(RobotContainer robotContainer) {
+    this.robotContainer = robotContainer;
     armMotor =
         new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
@@ -185,6 +194,7 @@ public class Arm extends SubsystemBase {
   public void up() {
     ntState.set("Moving: Up");
     armMotor.set(1);
+    robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
   /**
@@ -193,6 +203,7 @@ public class Arm extends SubsystemBase {
   public void down() {
     ntState.set("Moving: Down");
     armMotor.set(-1);
+    robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
   /** This method stops the arm. */
@@ -200,6 +211,7 @@ public class Arm extends SubsystemBase {
     ntState.set("Stopped");
     armMotor.set(0.0);
     armMotor.stopMotor();
+    robotContainer.setLEDMode(LEDModes.SET_ARM_IDLE);
   }
 
   /**

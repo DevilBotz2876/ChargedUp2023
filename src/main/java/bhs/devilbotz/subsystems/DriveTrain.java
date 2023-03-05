@@ -26,6 +26,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -228,6 +229,7 @@ public class DriveTrain extends SubsystemBase {
     setupTalons();
     // Sets the initial position of the robot to (0, 0) and the initial angle to 0 degrees.
     resetEncoders();
+    resetNavx();
 
     ShuffleboardManager.putField(field);
     SmartDashboard.putData("Gyro", navx);
@@ -243,7 +245,6 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putData("Left Velocity PID", leftPIDController);
     SmartDashboard.putData("Right Velocity PID", rightPIDController);
-    resetNavx();
   }
 
   /**
@@ -600,18 +601,21 @@ public class DriveTrain extends SubsystemBase {
    *     href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner
    *     Example</a>
    */
-  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+  public Command followTrajectoryCommand(
+      PathPlannerTrajectory traj, boolean isFirstPath, boolean stopAtEnd) {
+    final PathPlannerTrajectory translatedTraj =
+        PathPlannerTrajectory.transformTrajectoryForAlliance(traj, DriverStation.getAlliance());
     // field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
               // Reset odometry for the first path you run during auto
               if (isFirstPath) {
-                this.resetOdometry(traj.getInitialPose());
+                this.resetOdometry(translatedTraj.getInitialPose());
               }
             }),
         new PPRamseteCommand(
-            traj,
+            translatedTraj,
             this::getPose, // Pose supplier
             new RamseteController(),
             feedforward,
@@ -632,7 +636,9 @@ public class DriveTrain extends SubsystemBase {
             ),
         new InstantCommand(
             () -> {
-              this.tankDriveVolts(0, 0);
+              if (stopAtEnd) {
+                this.tankDriveVolts(0, 0);
+              }
             }));
   }
 }

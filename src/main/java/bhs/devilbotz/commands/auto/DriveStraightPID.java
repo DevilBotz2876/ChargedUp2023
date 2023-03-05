@@ -4,6 +4,7 @@
 
 package bhs.devilbotz.commands.auto;
 
+import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
@@ -19,7 +20,9 @@ public class DriveStraightPID extends CommandBase {
   private PIDController straightPid;
   private double distance;
   private double startAngle;
-  private final SlewRateLimiter speedSlewRateLimiter = new SlewRateLimiter(1, 0, 0);
+  private double startDistance;
+  private final SlewRateLimiter speedSlewRateLimiter =
+      new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMITER * 2);
   private double maxSpeed = 0; // in meters/sec
   /**
    * The constructor for the Drive Straight PID command.
@@ -40,9 +43,8 @@ public class DriveStraightPID extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
-    startAngle = drivetrain.getYaw();
     distancePid.setTolerance(Robot.getDriveTrainConstant("DISTANCE_PID_TOLERANCE").asDouble());
-
+    straightPid.enableContinuousInput(0, 360);
     SmartDashboard.putData("Distance PID", distancePid);
     SmartDashboard.putData("Straight PID", straightPid);
     addRequirements(drivetrain);
@@ -53,15 +55,19 @@ public class DriveStraightPID extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("DriveStraightPID start");
-    drivetrain.arcadeDrive(0, 0);
+    startAngle = drivetrain.getYaw();
+    startDistance = drivetrain.getAverageDistance();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double output = distancePid.calculate(drivetrain.getAverageDistance(), distance);
+    double output =
+        distancePid.calculate(drivetrain.getAverageDistance() - startDistance, distance);
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
     double speed = speedSlewRateLimiter.calculate(output);
+    SmartDashboard.putNumber("Output", output);
+    SmartDashboard.putNumber("Speed", speed);
     if (0 != maxSpeed) {
       speed = MathUtil.clamp(speed, -maxSpeed, maxSpeed);
     }
@@ -79,7 +85,6 @@ public class DriveStraightPID extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.arcadeDrive(0, 0);
     System.out.println("DriveStraightPID Finished");
   }
 
