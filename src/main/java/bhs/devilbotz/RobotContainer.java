@@ -289,5 +289,21 @@ public class RobotContainer {
         .withPosition(1, 2);
 
     tab.add("Arm subsystem", arm).withPosition(2, 0);
+    buildGripperShuffleboardTab();    
   }
+
+  public void buildGripperShuffleboardTab() {
+    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+
+    tab.add("Gripper subsystem", gripper).withPosition(6, 0);
+
+    ShuffleboardContainer cmdList =
+        tab.getLayout("GripCmds", BuiltInLayouts.kGrid)
+            .withPosition(6, 1)
+            .withSize(2, 1)
+            .withProperties(Map.of("Number of columns", 2, "Number of rows", 1));
+
+    cmdList.add(new GripperOpen(gripper)).withPosition(0, 0);
+    cmdList.add(new GripperClose(gripper)).withPosition(1, 0);
+  }  
 }

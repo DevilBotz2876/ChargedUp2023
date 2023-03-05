@@ -36,35 +36,15 @@ public class Gripper extends SubsystemBase {
           Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
           Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
 
-  // Simulation variables
-  //  PneumaticsBaseSim pneumaticHubSim;
-  //  DoubleSolenoidSim doubleSolenoidSim;
-
   // Network Table Based Debug Status
-
   protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
   protected NetworkTable table = inst.getTable("Gripper");
-
   private StringEntry ntState = table.getStringTopic("state").getEntry("Unknown");
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
     pneumaticHub.disableCompressor();
-
-    buildShuffleboardTab();
-    setupSimulation();
     ntState.set("Unknown");
-  }
-
-  private void setupSimulation() {
-    if (Robot.isSimulation()) {
-      //      pneumaticHubSim =
-      // PneumaticsBaseSim.getForType(Constants.GripperConstants.COMPRESSOR_CAN_ID,
-      // PneumaticsModuleType.REVPH);
-      //      doubleSolenoidSim = new DoubleSolenoidSim(pneumaticHubSim,
-      // Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
-      // Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
-    }
   }
 
   /** This method opens the gripper. */
@@ -110,9 +90,6 @@ public class Gripper extends SubsystemBase {
     }
   }
 
-  /** Update the simulation model. */
-  public void simulationPeriodic() {}
-
   /**
    * Returns true if the compressor pressure has reached the set value. The set value is controlled
    * physically on the robot
@@ -121,29 +98,5 @@ public class Gripper extends SubsystemBase {
    */
   public static boolean getAtSetpoint() {
     return pneumaticHub.getPressureSwitch();
-  }
-
-  public void buildShuffleboardTab() {
-
-    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
-
-    tab.add("Gripper subsystem", this).withPosition(6, 0);
-
-    ShuffleboardContainer cmdList =
-        tab.getLayout("GripCmds", BuiltInLayouts.kGrid)
-            .withPosition(6, 1)
-            .withSize(2, 1)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 1));
-
-    cmdList.add(new GripperOpen(this)).withPosition(0, 0);
-    cmdList.add(new GripperClose(this)).withPosition(1, 0);
-
-    ShuffleboardContainer state =
-        tab.getLayout("GripState", BuiltInLayouts.kGrid)
-            .withPosition(6, 2)
-            .withSize(2, 2)
-            .withProperties(Map.of("Number of columns", 1, "Number of rows", 1));
-
-    state.add(doubleSolenoid);
   }
 }
