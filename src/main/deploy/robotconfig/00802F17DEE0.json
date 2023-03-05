@@ -4,8 +4,7 @@
 
     "capabilities" : {
         "hasInvertedRoll": true,
-        "hasInvertedDriveEncoderSensorPhase": true,
-        "hasArm": true
+        "hasInvertedDriveEncoderSensorPhase": true
     },
 
     "drivetrain" : {

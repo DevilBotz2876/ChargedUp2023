@@ -53,7 +53,7 @@ public class RobotContainer {
 
   private final Gripper gripper = new Gripper();
 
-  private Arm arm;
+  private final Arm arm = new Arm();
 
   private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
 
@@ -81,8 +81,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    arm = new Arm();
-
     // Configure the trigger bindings
     configureBindings();
 
