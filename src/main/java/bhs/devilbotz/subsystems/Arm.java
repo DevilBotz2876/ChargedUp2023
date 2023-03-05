@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -105,6 +106,9 @@ public class Arm extends SubsystemBase {
     //
     encoder.setReverseDirection(true);
 
+    SmartDashboard.putData("HW/Arm/limit/top", topLimitSwitch);
+    SmartDashboard.putData("HW/Arm/limit/bottom", bottomLimitSwitch);
+    SmartDashboard.putData("HW/Arm/encoder", encoder);
     setupSimulation();
   }
 
