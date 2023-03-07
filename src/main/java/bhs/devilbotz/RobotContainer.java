@@ -117,7 +117,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 4)
         .whileTrue(new ArmDown(arm, gripper))
         .onFalse(new ArmStop(arm));
-    new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm)).onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 4).whileTrue(new ArmDown(arm, gripper)).onFalse(new ArmStop(arm));
     // For testing
     new JoystickButton(rightJoystick, 2).onTrue(new DriveToTarget(driveTrain));
 
