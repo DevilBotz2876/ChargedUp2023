@@ -8,10 +8,12 @@ package bhs.devilbotz;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,6 +28,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.opencv.core.Mat;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -66,8 +69,9 @@ public class Robot extends TimedRobot {
       System.out.println("\tname: " + robotConfig.get("name").asText());
       System.out.println("\tid: " + robotConfig.get("id").asText());
     } catch (Exception ex) {
-      // System.out.println(ex.toString());
-      throw new RuntimeException(ex);
+      System.out.println(ex.toString());
+      new Alert("Failed to load robot config. Robot will not function", Alert.AlertType.ERROR)
+          .set(true);
     }
 
     robotContainer = new RobotContainer();
@@ -79,6 +83,15 @@ public class Robot extends TimedRobot {
       armCamera.setResolution(240, 135);
       armCamera.setFPS(20);
       armCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
+    } else {
+      Alert cameraAlert =
+          new Alert("Robot is a simulation. Camera will display black.", Alert.AlertType.WARNING);
+      cameraAlert.set(true);
+      // Create a blank video source to simulate the camera
+      CvSource armCameraSource = CameraServer.putVideo("Test", 320, 240);
+      armCameraSource.putFrame(new Mat(320, 240, 0));
+
+      ShuffleboardManager.putCamera(armCameraSource);
     }
   }
 
@@ -176,7 +189,10 @@ public class Robot extends TimedRobot {
 
   /** This method is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    Alert simulationAlert = new Alert("Robot is a simulation", Alert.AlertType.INFO);
+    simulationAlert.set(true);
+  }
 
   /** This method is called periodically whilst in simulation. */
   @Override
@@ -214,8 +230,16 @@ public class Robot extends TimedRobot {
               + robotUniqueId
               + " not found, using default robot "
               + robotUniqueIdDefault);
+      new Alert(
+              "Robot Config not found for this robot! Using the default robot.",
+              Alert.AlertType.WARNING)
+          .set(true);
       return robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix;
     } else {
+      new Alert(
+              "Can't find a valid robot config JSON file in: " + robotConfigFilePathPrefix,
+              Alert.AlertType.ERROR)
+          .set(true);
       throw new Exception(
           "Can't find a valid robot config JSON file in: " + robotConfigFilePathPrefix);
     }
@@ -246,10 +270,8 @@ public class Robot extends TimedRobot {
         throw new UnknownHostException("Cannot get mac address");
       }
     } catch (SocketException | UnknownHostException e) {
+      new Alert("Can't get MAC address", Alert.AlertType.ERROR).set(true);
       /* Default to using competition bot */
-      System.err.println("##############################################################");
-      System.err.println("### Cannot get mac address, defaulting to competition bot! ###");
-      System.err.println("##############################################################");
       return robotUniqueIdDefault;
     }
   }

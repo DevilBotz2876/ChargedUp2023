@@ -7,6 +7,7 @@ import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -67,6 +68,10 @@ public class ShuffleboardManager {
 
     initAutoModeChooser();
     initAutoModePreferences();
+  }
+
+  public static void putAlerts(String group, Alert.SendableAlerts sendableAlerts) {
+    driveTab.add(group, sendableAlerts).withPosition(2, 2).withSize(3, 2);
   }
 
   private void initAutoModeChooser() {
@@ -149,6 +154,10 @@ public class ShuffleboardManager {
         .add("Field", field)
         .withWidget(BuiltInWidgets.kField)
         .withPosition(2, 0)
-        .withSize(5, 3);
+        .withSize(3, 2);
+  }
+
+  public static void putCamera(VideoSource videoSource) {
+    driveTab.add("Camera", videoSource).withPosition(5, 0).withSize(4, 4);
   }
 }
