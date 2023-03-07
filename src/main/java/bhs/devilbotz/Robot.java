@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   private ShuffleboardManager shuffleboardManager;
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
-  private DriverStation.Alliance alliance = null;
+  private DriverStation.Alliance currentAlliance = null;
 
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
@@ -109,8 +109,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (DriverStation.getAlliance() != alliance) {
-      alliance = DriverStation.getAlliance();
+    // We check if the alliance has changed in disable perioic update the LEDs accordingly.  We
+    // remember what the LED was last set to to prevent constantly sending the LED commands.
+    if (DriverStation.getAlliance() != currentAlliance) {
+      currentAlliance = DriverStation.getAlliance();
       robotContainer.setLEDModeAlliance();
     }
   }
