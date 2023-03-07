@@ -90,17 +90,53 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">This command is a PID controller that balances the robot on the charge platform.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DockAndEngage.html" title="class in bhs.devilbotz.commands.auto">DockAndEngage</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Drive to the dock and will stop when either:
+       
+         specified distance is reached OR
+         ramp climb has been detected and leveling off
+       
+   Balance on the dock
+   Rotate 90 degrees
+ </div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">This command is a PID controller that drives the robot straight to a set distance.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">This command is a PID controller that drives the robot straight to a set distance up a hill to
  dock with the charging port.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Mobility.html" title="class in bhs.devilbotz.commands.auto">Mobility</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Drive straight the specified distance
+ </div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MobilityDockAndEngage.html" title="class in bhs.devilbotz.commands.auto">MobilityDockAndEngage</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Load the requested trajectory (wall or human side)
+   Translate the path depending on alliance (red or blue)
+   Execute the requested trajectory
+   Dock and Engage
+ </div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
 </div>
 </div>
 </li>

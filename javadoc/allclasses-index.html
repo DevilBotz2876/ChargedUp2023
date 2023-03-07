@@ -98,6 +98,7 @@ loadScripts(document, 'script');</script>
 <div class="block">This command will:
 
  
+   Lower the arm slightly
    Open the gripper
    Drive backwards the specified distance
    Get ready for pickup of another piece (close grip, lower arm, open grip)
@@ -110,28 +111,47 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">This command is a PID controller that balances the robot on the charge platform.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.html" title="class in bhs.devilbotz">Constants</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="bhs/devilbotz/lib/CommunityLocation.html" title="enum class in bhs.devilbotz.lib">CommunityLocation</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">The community location where the robot is starting from</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.html" title="class in bhs.devilbotz">Constants</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  constants.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.DriveConstants.html" title="class in bhs.devilbotz">Constants.DriveConstants</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.DriveConstants.html" title="class in bhs.devilbotz">Constants.DriveConstants</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Drive constants are for the drive train subsystem characteristics.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.GripperConstants.html" title="class in bhs.devilbotz">Constants.GripperConstants</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.GripperConstants.html" title="class in bhs.devilbotz">Constants.GripperConstants</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Gripper constants are for the gripper subsystem</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.OperatorConstants.html" title="class in bhs.devilbotz">Constants.OperatorConstants</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.OperatorConstants.html" title="class in bhs.devilbotz">Constants.OperatorConstants</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Operator constants are for the operator interface (joysticks, buttons, etc.).</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.SysIdConstants.html" title="class in bhs.devilbotz">Constants.SysIdConstants</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Constants.SysIdConstants.html" title="class in bhs.devilbotz">Constants.SysIdConstants</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SysID dependent constants</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/auto/DockAndEngage.html" title="class in bhs.devilbotz.commands.auto">DockAndEngage</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Drive to the dock and will stop when either:
+       
+         specified distance is reached OR
+         ramp climb has been detected and leveling off
+       
+   Balance on the dock
+   Rotate 90 degrees
+ </div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/DriveCommand.html" title="class in bhs.devilbotz.commands">DriveCommand</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -175,6 +195,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Main.html" title="class in bhs.devilbotz">Main</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Do NOT add any static variables to this class, or any initialization at all.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/auto/Mobility.html" title="class in bhs.devilbotz.commands.auto">Mobility</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Drive straight the specified distance
+ </div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html" title="class in bhs.devilbotz.commands.auto">MobilityDockAndEngage</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Load the requested trajectory (wall or human side)
+   Translate the path depending on alliance (red or blue)
+   Execute the requested trajectory
+   Dock and Engage
+ </div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/assist/PickupFromGround.html" title="class in bhs.devilbotz.commands.assist">PickupFromGround</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

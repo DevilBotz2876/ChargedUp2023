@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#arcadeDrive(double,double)" class="member-name-link">arcadeDrive(double, double)</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
@@ -151,6 +151,7 @@ loadScripts(document, 'script');</script>
 <div class="block">This command will:
 
  
+   Lower the arm slightly
    Open the gripper
    Drive backwards the specified distance
    Get ready for pickup of another piece (close grip, lower arm, open grip)
@@ -207,6 +208,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
+<dt><a href="bhs/devilbotz/lib/CommunityLocation.html#CHARGE_STATION" class="member-name-link">CHARGE_STATION</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/CommunityLocation.html" title="enum class in bhs.devilbotz.lib">CommunityLocation</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/Robot.html#checkCapability(java.lang.String)" class="member-name-link">checkCapability(String)</a> - Static method in class bhs.devilbotz.<a href="bhs/devilbotz/Robot.html" title="class in bhs.devilbotz">Robot</a></dt>
 <dd>
 <div class="block">This method returns the requested robot specific capabilities</div>
@@ -216,6 +219,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/subsystems/Gripper.html#close()" class="member-name-link">close()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Gripper.html" title="class in bhs.devilbotz.subsystems">Gripper</a></dt>
 <dd>
 <div class="block">This method closes the gripper.</div>
+</dd>
+<dt><a href="bhs/devilbotz/lib/CommunityLocation.html" class="type-name-link" title="enum class in bhs.devilbotz.lib">CommunityLocation</a> - Enum Class in <a href="bhs/devilbotz/lib/package-summary.html">bhs.devilbotz.lib</a></dt>
+<dd>
+<div class="block">The community location where the robot is starting from</div>
 </dd>
 <dt><a href="bhs/devilbotz/Constants.GripperConstants.html#COMPRESSOR_CAN_ID" class="member-name-link">COMPRESSOR_CAN_ID</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.GripperConstants.html" title="class in bhs.devilbotz">Constants.GripperConstants</a></dt>
 <dd>
@@ -270,6 +277,25 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/lib/AutonomousModes.html#DOCK_AND_ENGAGE" class="member-name-link">DOCK_AND_ENGAGE</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></dt>
 <dd>
 <div class="block">Drive straight onto charge station and balance</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/DockAndEngage.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">DockAndEngage</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dd>
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Drive to the dock and will stop when either:
+       
+         specified distance is reached OR
+         ramp climb has been detected and leveling off
+       
+   Balance on the dock
+   Rotate 90 degrees
+ </div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/DockAndEngage.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,double)" class="member-name-link">DockAndEngage(DriveTrain, double, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DockAndEngage.html" title="class in bhs.devilbotz.commands.auto">DockAndEngage</a></dt>
+<dd>
+<div class="block">Creates a sequential command that implements the Dock and Engage routine</div>
 </dd>
 <dt><a href="bhs/devilbotz/subsystems/Arm.html#down()" class="member-name-link">down()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
 <dd>
@@ -518,6 +544,8 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="bhs/devilbotz/lib/ScoreLevels.html#HIGH" class="member-name-link">HIGH</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/ScoreLevels.html" title="enum class in bhs.devilbotz.lib">ScoreLevels</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/lib/CommunityLocation.html#HUMAN" class="member-name-link">HUMAN</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/CommunityLocation.html" title="enum class in bhs.devilbotz.lib">CommunityLocation</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
@@ -648,6 +676,19 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/lib/ScoreLevels.html#MID" class="member-name-link">MID</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/ScoreLevels.html" title="enum class in bhs.devilbotz.lib">ScoreLevels</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/auto/Mobility.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">Mobility</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dd>
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Drive straight the specified distance
+ </div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/Mobility.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,double)" class="member-name-link">Mobility(DriveTrain, double, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/Mobility.html" title="class in bhs.devilbotz.commands.auto">Mobility</a></dt>
+<dd>
+<div class="block">Creates a sequential command that implements the Mobility routine</div>
+</dd>
 <dt><a href="bhs/devilbotz/lib/AutonomousModes.html#MOBILITY" class="member-name-link">MOBILITY</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></dt>
 <dd>
 <div class="block">Drive straight forwards towards the middle of the field</div>
@@ -659,6 +700,22 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/lib/AutonomousModes.html#MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE" class="member-name-link">MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></dt>
 <dd>
 <div class="block">Perform <a href="bhs/devilbotz/lib/AutonomousModes.html#MOBILITY"><code>AutonomousModes.MOBILITY</code></a> and then <a href="bhs/devilbotz/lib/AutonomousModes.html#DOCK_AND_ENGAGE"><code>AutonomousModes.DOCK_AND_ENGAGE</code></a></div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">MobilityDockAndEngage</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dd>
+<div class="block">This command will:
+
+ 
+   Wait the specified seconds
+   Load the requested trajectory (wall or human side)
+   Translate the path depending on alliance (red or blue)
+   Execute the requested trajectory
+   Dock and Engage
+ </div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,bhs.devilbotz.lib.CommunityLocation,edu.wpi.first.wpilibj.DriverStation.Alliance)" class="member-name-link">MobilityDockAndEngage(DriveTrain, double, CommunityLocation, DriverStation.Alliance)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html" title="class in bhs.devilbotz.commands.auto">MobilityDockAndEngage</a></dt>
+<dd>
+<div class="block">Creates a sequential command that implements the Mobility, Dock and Engage routine</div>
 </dd>
 <dt><a href="bhs/devilbotz/Constants.DriveConstants.html#MOTOR_CONFIGURATION" class="member-name-link">MOTOR_CONFIGURATION</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.DriveConstants.html" title="class in bhs.devilbotz">Constants.DriveConstants</a></dt>
 <dd>
@@ -910,6 +967,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This method stops the arm.</div>
 </dd>
+<dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#stop()" class="member-name-link">stop()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/Gripper.html#stop()" class="member-name-link">stop()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Gripper.html" title="class in bhs.devilbotz.subsystems">Gripper</a></dt>
 <dd>
 <div class="block">This method deactivates the gripper solenoid.</div>
@@ -975,6 +1034,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
+<dt><a href="bhs/devilbotz/lib/CommunityLocation.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/CommunityLocation.html" title="enum class in bhs.devilbotz.lib">CommunityLocation</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="bhs/devilbotz/lib/GamePieceTypes.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/GamePieceTypes.html" title="enum class in bhs.devilbotz.lib">GamePieceTypes</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
@@ -988,6 +1051,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
 <dt><a href="bhs/devilbotz/lib/AutonomousModes.html#values()" class="member-name-link">values()</a> - Static method in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="bhs/devilbotz/lib/CommunityLocation.html#values()" class="member-name-link">values()</a> - Static method in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/CommunityLocation.html" title="enum class in bhs.devilbotz.lib">CommunityLocation</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
@@ -1008,7 +1076,12 @@ the order they are declared.</div>
 the order they are declared.</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<h2 class="title" id="I:W">W</h2>
+<dl class="index">
+<dt><a href="bhs/devilbotz/lib/CommunityLocation.html#WALL" class="member-name-link">WALL</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/CommunityLocation.html" title="enum class in bhs.devilbotz.lib">CommunityLocation</a></dt>
+<dd>&nbsp;</dd>
+</dl>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
 </div>
 </div>
 </body>
