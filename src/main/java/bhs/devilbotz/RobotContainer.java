@@ -5,8 +5,18 @@
 
 package bhs.devilbotz;
 
+import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.commands.DriveCommand;
-import bhs.devilbotz.commands.arm.*;
+import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmIdle;
+import bhs.devilbotz.commands.arm.ArmMoveDistance;
+import bhs.devilbotz.commands.arm.ArmStop;
+import bhs.devilbotz.commands.arm.ArmToPosition;
+import bhs.devilbotz.commands.arm.ArmUp;
+import bhs.devilbotz.commands.assist.AutoScore;
+import bhs.devilbotz.commands.assist.PickupFromGround;
+import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
+import bhs.devilbotz.commands.assist.PrepareForScoring;
 import bhs.devilbotz.commands.auto.BalancePID;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
 import bhs.devilbotz.commands.auto.DriveStraightToDock;
@@ -14,7 +24,11 @@ import bhs.devilbotz.commands.auto.RotateDegrees;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
+import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.lib.GamePieceTypes;
+import bhs.devilbotz.lib.LEDModes;
+import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -25,12 +39,12 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -49,7 +63,7 @@ public class RobotContainer {
 
   private final Arm arm = new Arm(this);
 
-  private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager();
+  private final ShuffleboardManager shuffleboardManager = new ShuffleboardManager(this);
 
   private final Joystick leftJoystick =
       new Joystick(Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT);
@@ -85,8 +99,22 @@ public class RobotContainer {
     arm.setDefaultCommand(new ArmIdle(arm));
     gripper.setDefaultCommand(new GripperIdle(gripper));
 
-    driveTrain.setDefaultCommand(
-        new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    if (Robot.isReal()
+        || DriverStation.isJoystickConnected(
+            Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
+      driveTrain.setDefaultCommand(
+          new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    } else {
+      driveTrain.setDefaultCommand(
+          new InstantCommand(
+              () -> {
+                driveTrain.tankDriveVolts(0, 0);
+              },
+              driveTrain));
+      System.err.println("#####################################");
+      System.err.println("### Right Joystick NOT Connected ####");
+      System.err.println("#####################################");
+    }
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
     // rightJoystick::getX));
 
@@ -102,32 +130,50 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    if (Robot.isReal()
+        || DriverStation.isJoystickConnected(
+            Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
+      new JoystickButton(leftJoystick, 1)
+          .onTrue(new GripperClose(gripper))
+          .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(leftJoystick, 1)
-        .onTrue(new GripperClose(gripper))
-        .onFalse(new GripperIdle(gripper));
+      new JoystickButton(leftJoystick, 2)
+          .onTrue(new GripperOpen(gripper))
+          .onFalse(new GripperIdle(gripper));
 
-    new JoystickButton(leftJoystick, 2)
-        .onTrue(new GripperOpen(gripper))
-        .onFalse(new GripperIdle(gripper));
+      new JoystickButton(leftJoystick, 5)
+          .whileTrue(new ArmUp(arm, gripper))
+          .onFalse(new ArmStop(arm));
 
-    new JoystickButton(leftJoystick, 5).whileTrue(new ArmUp(arm)).onFalse(new ArmStop(arm));
+      new JoystickButton(leftJoystick, 4)
+          .whileTrue(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE))
+          .onFalse(new ArmStop(arm));
 
-    new JoystickButton(leftJoystick, 4)
-        .whileTrue(new ArmDown(arm, gripper))
-        .onFalse(new ArmStop(arm));
+      new JoystickButton(leftJoystick, 6)
+          .onTrue(
+              new ArmToPosition(
+                  arm, ArmConstants.POSITION_TOP, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
+      new JoystickButton(leftJoystick, 7)
+          .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
-    new JoystickButton(leftJoystick, 6).onTrue(new ArmToTop(arm));
-    new JoystickButton(leftJoystick, 7)
-        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+      new JoystickButton(leftJoystick, 8)
+          .onTrue(
+              new ArmToPosition(
+                  arm, ArmConstants.POSITION_MIDDLE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
+      new JoystickButton(leftJoystick, 9)
+          .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
 
-    new JoystickButton(leftJoystick, 8).onTrue(new ArmToMiddle(arm));
-    new JoystickButton(leftJoystick, 9)
-        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
-
-    new JoystickButton(leftJoystick, 10).onTrue(new ArmToBottom(arm));
-    new JoystickButton(leftJoystick, 11)
-        .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+      new JoystickButton(leftJoystick, 10)
+          .onTrue(
+              new ArmToPosition(
+                  arm, ArmConstants.POSITION_BOTTOM, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
+      new JoystickButton(leftJoystick, 11)
+          .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+    } else {
+      System.err.println("####################################");
+      System.err.println("### Left Joystick NOT Connected ####");
+      System.err.println("####################################");
+    }
 
     SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
     SmartDashboard.putData("gripperClose", new GripperClose(gripper));
@@ -168,7 +214,12 @@ public class RobotContainer {
                       new DriveStraightPID(
                           driveTrain,
                           ShuffleboardManager.autoDistance.getDouble(
-                              Constants.DEFAULT_DISTANCE_MOBILITY)));
+                              Constants.DEFAULT_DISTANCE_MOBILITY)))
+                  .andThen(
+                      new InstantCommand(
+                          () -> {
+                            driveTrain.tankDriveVolts(0, 0);
+                          }));
           break;
         case SCORE_AND_MOBILITY:
           break;
@@ -182,33 +233,39 @@ public class RobotContainer {
                               ShuffleboardManager.autoDistance.getDouble(
                                   Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
                           .andThen(new BalancePID(driveTrain, balancePid))
-                          .andThen(new RotateDegrees(driveTrain, 90)));
+                          .andThen(new RotateDegrees(driveTrain, 90)))
+                  .andThen(
+                      new InstantCommand(
+                          () -> {
+                            driveTrain.tankDriveVolts(0, 0);
+                          }));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
-          if (Alliance.Blue == DriverStation.getAlliance()) {
-            path = PathPlanner.loadPath("MobilityBlueHumanSideToDock", new PathConstraints(2.5, 1));
-          } else {
-            path = PathPlanner.loadPath("MobilityRedHumanSideToDock", new PathConstraints(2.5, 1));
-          }
-          autonomousCommand =
-              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-                  .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(path, true))
-                  .andThen(new BalancePID(driveTrain))
-                  .andThen(new RotateDegrees(driveTrain, 90));
-          break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
-          if (Alliance.Blue == DriverStation.getAlliance()) {
-            path = PathPlanner.loadPath("MobilityBlueWallSideToDock", new PathConstraints(2.5, 1));
-          } else {
-            path = PathPlanner.loadPath("MobilityRedWallSideToDock", new PathConstraints(2.5, 1));
+          {
+            // Figure out which path to load based on alliance color and autoMode
+            String pathName;
+            if (AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE == autoMode) {
+              pathName = "MobilityBlueHumanSideToDock";
+            } else {
+              pathName = "MobilityBlueWallSideToDock";
+            }
+            path = PathPlanner.loadPath(pathName, new PathConstraints(2.5, 2));
+            // set the velocity at the end of the path fast enough to dock
+            path.getEndState().velocityMetersPerSecond = 1.5;
+            autonomousCommand =
+                Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+                    .asProxy()
+                    .andThen(driveTrain.followTrajectoryCommand(path, true, false))
+                    .andThen(new DriveStraightToDock(driveTrain, 2))
+                    .andThen(new BalancePID(driveTrain, balancePid))
+                    .andThen(new RotateDegrees(driveTrain, 90))
+                    .andThen(
+                        new InstantCommand(
+                            () -> {
+                              driveTrain.tankDriveVolts(0, 0);
+                            }));
           }
-          autonomousCommand =
-              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-                  .asProxy()
-                  .andThen(driveTrain.followTrajectoryCommand(path, true))
-                  .andThen(new BalancePID(driveTrain))
-                  .andThen(new RotateDegrees(driveTrain, 90));
           break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
@@ -236,10 +293,6 @@ public class RobotContainer {
     return shuffleboardManager;
   }
 
-  public Arduino getArduino() {
-    return arduino;
-  }
-
   /**
    * Resets the robots position to the pose
    *
@@ -254,69 +307,74 @@ public class RobotContainer {
     gripper.close();
   }
 
-  public void buildArmShuffleboardTab() {
+  private void buildArmShuffleboardTab() {
     ShuffleboardTab tab = Shuffleboard.getTab("Arm");
 
     ShuffleboardContainer cmdList =
-        tab.getLayout("ArmCmds", BuiltInLayouts.kGrid)
+        tab.getLayout("Arm Commands", BuiltInLayouts.kGrid)
             .withPosition(0, 0)
-            .withSize(2, 4)
+            .withSize(4, 4)
             .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
 
     cmdList.add(new ArmStop(arm)).withPosition(0, 0);
-    cmdList.add(new ArmUp(arm)).withPosition(0, 1);
-    cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
-    cmdList.add(new ArmMoveDistance(arm, -10)).withPosition(0, 3);
+    cmdList.add(new ArmUp(arm, gripper)).withPosition(0, 1);
+    cmdList.add(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE)).withPosition(0, 2);
 
-    cmdList.add(new ArmToTop(arm)).withPosition(1, 0);
-    cmdList.add(new ArmToMiddle(arm)).withPosition(1, 1);
-    cmdList.add(new ArmToBottom(arm)).withPosition(1, 2);
-
-    tab.add("Arm subsystem", arm).withPosition(2, 0);
-    tab.add(arm.getEncoder()).withPosition(2, 1);
-
-    ShuffleboardContainer limitsList =
-        tab.getLayout("Limit Switches", BuiltInLayouts.kGrid)
-            .withPosition(2, 2)
-            .withSize(2, 2)
-            .withProperties(Map.of("Number of columns", 1, "Number of rows", 2));
-
-    limitsList.add("top dio " + arm.getTopLimitSwitch().getChannel(), arm.getTopLimitSwitch());
-    limitsList.add(
-        "bottom dio " + arm.getBottomLimitSwitch().getChannel(), arm.getBottomLimitSwitch());
-
-    ShuffleboardContainer list =
-        tab.getLayout("Position", BuiltInLayouts.kGrid)
-            .withPosition(4, 0)
-            .withSize(2, 4)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
-
-    list.addBoolean("atTop", () -> arm.atTop())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 0);
-
-    list.addBoolean("atPortal", () -> arm.atSubstationPortal())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 1);
-
-    list.addBoolean("atMiddle", () -> arm.atMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 2);
-
-    list.addBoolean("atBottom", () -> arm.atBottom())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 3);
-
-    list.addBoolean("aboveMiddle", () -> arm.aboveMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
+    cmdList.add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP)).withPosition(1, 0);
+    cmdList
+        .add("To Middle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE))
         .withPosition(1, 1);
-
-    list.addBoolean("belowMiddle", () -> arm.belowMiddle())
-        .withWidget(BuiltInWidgets.kBooleanBox)
+    cmdList
+        .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM))
         .withPosition(1, 2);
 
-    list.addBoolean("isMoving", () -> arm.isMoving())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(1, 3);
+    tab.add("Arm subsystem", arm).withPosition(0, 4);
+    tab.add("Drivetrain subsystem", arm).withPosition(7, 2);
+    buildGripperShuffleboardTab();
+    buildDriverAssistShuffleboardTab();
+  }
+
+  private void buildGripperShuffleboardTab() {
+    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+
+    ShuffleboardContainer cmdList =
+        tab.getLayout("Grippers Commands", BuiltInLayouts.kGrid)
+            .withPosition(0, 5)
+            .withSize(4, 1)
+            .withProperties(Map.of("Number of columns", 2, "Number of rows", 1));
+
+    cmdList.add(new GripperOpen(gripper)).withPosition(0, 0);
+    cmdList.add(new GripperClose(gripper)).withPosition(1, 0);
+
+    tab.add("Gripper subsystem", gripper).withPosition(7, 4);
+  }
+
+  private void buildDriverAssistShuffleboardTab() {
+    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+
+    ShuffleboardContainer cmdList =
+        tab.getLayout("Driver Assist", BuiltInLayouts.kGrid)
+            .withPosition(4, 0)
+            .withSize(3, 6)
+            .withProperties(Map.of("Number of columns", 1, "Number of rows", 4));
+
+    cmdList.add(new PrepareForGroundPickup(arm, gripper)).withPosition(0, 0);
+    cmdList.add(new PickupFromGround(arm, gripper, driveTrain)).withPosition(0, 1);
+    cmdList
+        .add(new PrepareForScoring(arm, ScoreLevels.HIGH, GamePieceTypes.CONE))
+        .withPosition(0, 2);
+    cmdList.add(new AutoScore(arm, gripper, driveTrain)).withPosition(0, 3);
+  }
+
+  public void setLEDModeAlliance() {
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+      setLEDMode(LEDModes.SET_RED);
+    } else {
+      setLEDMode(LEDModes.SET_BLUE);
+    }
+  }
+
+  public void setLEDMode(LEDModes mode) {
+    new SetLEDMode(arduino, mode).schedule();
   }
 }

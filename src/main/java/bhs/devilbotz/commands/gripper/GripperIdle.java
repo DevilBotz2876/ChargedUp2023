@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @author joshuamanoj
  */
 public class GripperIdle extends CommandBase {
-  private final Gripper gripper;
 
   /**
    * The constructor for the gripper idle command.
@@ -22,7 +21,6 @@ public class GripperIdle extends CommandBase {
    * @param gripper The gripper subsystem.
    */
   public GripperIdle(Gripper gripper) {
-    this.gripper = gripper;
     addRequirements(gripper);
   }
 

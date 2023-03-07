@@ -4,19 +4,26 @@
 
 package bhs.devilbotz.subsystems;
 
-import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.RobotContainer;
-import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.LEDModes;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -52,11 +59,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * to pickup cone/cube. We will need to determine what distance/position encoder reads to be at
  * correct height.
  *
- * <p>There is a method to detect a 'middle' position, move a set distance, and to get the current
- * position. The idea here is to create a set of commands that can move the arm to a set position
- * just high enough above a low/mid/high grid scoring node to score a cube/cone. Then provide a
- * second command that can lower the arm and release the gripper to place/score the cube/cone. Not
- * sure this will be useful to the driver. Will need to experiment with this if time allows.
+ * <p>There is a method to get the current position. The idea here is to create a set of commands
+ * that can move the arm to a set position just high enough above a low/mid/high grid scoring node
+ * to score a cube/cone. Then provide a second command that can lower the arm and release the
+ * gripper to place/score the cube/cone. Not sure this will be useful to the driver. Will need to
+ * experiment with this if time allows.
  *
  * <p>There are two limit switches, one at top of range of motion and one at bottom of range of
  * motion. The limit switches are plugged into the roborio digital input/output ports.
@@ -70,83 +77,32 @@ public class Arm extends SubsystemBase {
   private final DigitalInput bottomLimitSwitch;
   private final Encoder encoder;
 
-  // These values are used to move the arm to known positions.  0 is considered starting
-  // position/bottom. Values increase as arm moves up.
-  //
-  // TODO: The numbers need to be tuned.
-  private final double POSITION_TOP = 558;
-  private final double POSITION_MIDDLE = 468;
-  private final double POSITION_BOTTOM = 258;
-  private final double POSITION_PORTAL = 465;
+  // Simulation Variables
+  // create a sim controller for the encoder
+  EncoderSim encoderSim;
+  DIOSim topLimitSwitchSim;
+  DIOSim bottomLimitSwitchSim;
+  SingleJointedArmSim armSim;
 
-  // Note this value is well above the frame/bumpers, not right above them.  When the arm is moving
-  // down there is momentum and time involved.  You need to
-  // start closing the gripper and give it time to close before the moving arm is near the
-  // frame/bummpers.
-  private final double POSITION_GRIPPER_CLOSE = 190;
-
-  /*
-   * low cone: 258
-   * middle cone: 468
-   * high cone: 558
-   *
-   * cube
-   * low: 180
-   * middle: 354
-   * high: 440
-   *
-   */
-
-  private double topPosition = POSITION_TOP;
-  private double middlePosition = POSITION_MIDDLE;
-  private double bottomPosition = POSITION_BOTTOM;
-  private double portalPosition = POSITION_PORTAL;
-  private double gripperClosePosition = POSITION_GRIPPER_CLOSE;
-
-  // When trying to reach a set position, how close is good enough? This value is used to determine
-  // that. Smaller value tries to reach closer to target position.  Larger will stop arm further
-  // away from exact position read by encoder.  Why do we need this? The arm is moving so trying to
-  // stop at exact position will result in some overshoot.
-  private final double positionError = 2;
-
-  private NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  private NetworkTable table = inst.getTable("Arm");
-
-  private DoubleEntry ntTopPosition = table.getDoubleTopic("position/top").getEntry(POSITION_TOP);
-  private DoubleEntry ntMiddlePosition =
-      table.getDoubleTopic("position/middle").getEntry(POSITION_MIDDLE);
-  private DoubleEntry ntBottomPosition =
-      table.getDoubleTopic("position/bottom").getEntry(POSITION_BOTTOM);
-  private DoubleEntry ntPortalPosition =
-      table.getDoubleTopic("position/portal").getEntry(POSITION_PORTAL);
-  private DoubleEntry ntCurrentPosition =
-      table.getDoubleTopic("position/_current").getEntry(POSITION_PORTAL);
+  // Network Table Based Debug Status
+  protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  protected NetworkTable table = inst.getTable("Arm");
 
   private BooleanEntry ntTopLimitSwitch = table.getBooleanTopic("limit/top").getEntry(false);
   private BooleanEntry ntBottomLimitSwitch = table.getBooleanTopic("limit/bottom").getEntry(false);
-
-  private BooleanEntry ntTop = table.getBooleanTopic("state/atTop").getEntry(false);
-  private BooleanEntry ntMiddle = table.getBooleanTopic("state/atMiddle").getEntry(false);
-  private BooleanEntry ntBottom = table.getBooleanTopic("state/atBottom").getEntry(false);
-  private BooleanEntry ntPortal = table.getBooleanTopic("state/atPortal").getEntry(false);
-  private BooleanEntry ntMoving = table.getBooleanTopic("state/moving").getEntry(false);
+  private DoubleEntry ntPosition = table.getDoubleTopic("position").getEntry(0);
+  private StringEntry ntState = table.getStringTopic("state").getEntry("Unknown");
 
   private RobotContainer robotContainer;
 
-  /** The constructor for the arm subsystem. */
   public Arm(RobotContainer robotContainer) {
     this.robotContainer = robotContainer;
-    ntTopPosition.setDefault(POSITION_TOP);
-    ntMiddlePosition.setDefault(POSITION_MIDDLE);
-    ntBottomPosition.setDefault(POSITION_BOTTOM);
-    ntPortalPosition.setDefault(POSITION_PORTAL);
-
     armMotor =
-        new CANSparkMax(
-            Constants.ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     topLimitSwitch = new DigitalInput(ArmConstants.TOP_LIMIT_SWITCH_DIO_PORT);
     bottomLimitSwitch = new DigitalInput(ArmConstants.BOTTOM_LIMIT_SWITCH_DIO_PORT);
+
     encoder =
         new Encoder(
             ArmConstants.ENCODER_CHANNEL_A_DIO_PORT, ArmConstants.ENCODER_CHANNEL_B_DIO_PORT);
@@ -158,6 +114,30 @@ public class Arm extends SubsystemBase {
     // TODO: check if switching DIO port wires will change sign of value.
     //
     encoder.setReverseDirection(true);
+
+    SmartDashboard.putData("HW/Arm/limit/top", topLimitSwitch);
+    SmartDashboard.putData("HW/Arm/limit/bottom", bottomLimitSwitch);
+    SmartDashboard.putData("HW/Arm/encoder", encoder);
+    setupSimulation();
+  }
+
+  void setupSimulation() {
+    if (Robot.isSimulation()) {
+      encoderSim = new EncoderSim(encoder);
+      encoderSim.setCount(0);
+
+      topLimitSwitchSim = new DIOSim(topLimitSwitch);
+      bottomLimitSwitchSim = new DIOSim(bottomLimitSwitch);
+      topLimitSwitchSim.setValue(false);
+      bottomLimitSwitchSim.setValue(false);
+
+      DCMotor armGearbox = DCMotor.getNEO(1);
+      double armLength = Units.inchesToMeters(48);
+      double minAngle = Units.degreesToRadians(0);
+      double maxAngle = Units.degreesToRadians(100);
+      armSim =
+          new SingleJointedArmSim(armGearbox, 400, .1, armLength, minAngle, maxAngle, false, null);
+    }
   }
 
   /**
@@ -170,25 +150,35 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     ntTopLimitSwitch.set(isTopLimit());
     ntBottomLimitSwitch.set(isBottomLimit());
-    ntTop.set(atTop());
-    ntMiddle.set(atMiddle());
-    ntBottom.set(atBottom());
-    ntPortal.set(atSubstationPortal());
-    ntCurrentPosition.set(getPosition());
-    ntMoving.set(isMoving());
-
-    topPosition = ntTopPosition.get();
-    middlePosition = ntBottomPosition.get();
-    bottomPosition = ntBottomPosition.get();
-    portalPosition = ntPortalPosition.get();
-
-    // System.out.println("test ntmiddle" + ntMiddle.getTopic().getName());
+    ntPosition.set(getPosition());
 
     // Only reset encoder position if arm hit bottom limit switch and is not moving.  The arm will
     // be engaged with limit switch while moving.  We don't want to reset encoder multiple times.
     if (isBottomLimit() && isMoving() == false) {
       resetPosition();
     }
+  }
+
+  /** Update the simulation model. */
+  public void simulationPeriodic() {
+    // In this method, we update our simulation of what our arm is doing
+    // First, we set our "inputs" (voltages)
+    armSim.setInput(armMotor.get() * RobotController.getBatteryVoltage());
+
+    // Next, we update it. The standard loop time is 20ms.
+    armSim.update(0.020);
+
+    // Set our simulated encoder's readings.  The range of movement setup in sim results in a range
+    // of 0-200 degrees.
+    //
+    double distance = 8 * (Units.radiansToDegrees(armSim.getAngleRads()));
+    encoderSim.setDistance(distance);
+
+    topLimitSwitchSim.setValue(!armSim.hasHitUpperLimit());
+    bottomLimitSwitchSim.setValue(!armSim.hasHitLowerLimit());
+
+    // Update the Mechanism Arm angle based on the simulated arm angle
+    //    arm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
   }
 
   /**
@@ -202,23 +192,26 @@ public class Arm extends SubsystemBase {
 
   /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
   public void up() {
+    ntState.set("Moving: Up");
     armMotor.set(1);
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_UP).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
   /**
    * Move the arm down at set speed. There is no check/protection against moving arm too far down.
    */
   public void down() {
+    ntState.set("Moving: Down");
     armMotor.set(-1);
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_DOWN).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
   /** This method stops the arm. */
   public void stop() {
+    ntState.set("Stopped");
     armMotor.set(0.0);
     armMotor.stopMotor();
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_ARM_IDLE).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_ARM_IDLE);
   }
 
   /**
@@ -249,106 +242,6 @@ public class Arm extends SubsystemBase {
   }
 
   /**
-   * Check if arm is at bottom position to allow it to score a game piece in lower grid scoring
-   * node.
-   *
-   * @return true if at bottom, false if not.
-   */
-  public boolean atBottom() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= bottomPosition - positionError
-        && getPosition() <= bottomPosition + positionError);
-  }
-
-  /**
-   * Check if arm is at top position to allow it to score a game piece in top grid scoring node.
-   *
-   * @return true if at top, false if not.
-   */
-  public boolean atTop() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= topPosition - positionError
-        && getPosition() <= topPosition + positionError);
-  }
-
-  /**
-   * Check if arm is at middle position based on encoder position. Middle is just high enough above
-   * middle grid scoring node to allow cone or cube to be lined up.
-   *
-   * @return true if at middle position false if not.
-   */
-  public boolean atMiddle() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= middlePosition - positionError
-        && getPosition() <= middlePosition + positionError);
-  }
-
-  public boolean atPortal() {
-    return getPosition() >= portalPosition - positionError
-        && getPosition() <= portalPosition + positionError;
-  }
-
-  /**
-   * Check if arm is at/nearing position where the gripper needs to be closed. The arm cannot be
-   * fully stowed inside robot unless gripper is closed. We do not want to check/return if the
-   * position is less than the gripper close position. If we did this, then the gripper would never
-   * be able to open while arm is in low positions.
-   *
-   * @return true if at middle position false if not.
-   */
-  public boolean atGripperClose() {
-    return (getPosition() >= gripperClosePosition - positionError
-        && getPosition() <= gripperClosePosition + positionError);
-  }
-
-  /**
-   * Check if arm is above middle position based on encoder position.
-   *
-   * @return true if above middle position false if not.
-   */
-  public boolean aboveMiddle() {
-    return (getPosition() > middlePosition);
-  }
-
-  /**
-   * Check if arm is below middle position based on encoder position.
-   *
-   * @return true if below middle position false if not.
-   */
-  public boolean belowMiddle() {
-    return (getPosition() < middlePosition);
-  }
-
-  /**
-   * Check if arm is above portal position based on encoder position.
-   *
-   * @return true is above portal position false if not.
-   */
-  public boolean abovePortal() {
-    return (getPosition() > portalPosition);
-  }
-
-  /**
-   * Check if arm is below portal position based on encoder position.
-   *
-   * @return true if below portal position false if not
-   */
-  public boolean belowPortal() {
-    return (getPosition() < portalPosition);
-  }
-
-  /**
-   * Check if arm is at correct height to grab cone/cube from substation portal.
-   *
-   * @return true if at substation portal height, false if not.
-   */
-  public boolean atSubstationPortal() {
-    // Don't check for exact position, check if position is in some range.
-    return (getPosition() >= portalPosition - positionError
-        && getPosition() <= portalPosition + positionError);
-  }
-
-  /**
    * Return current position of arm.
    *
    * @return position of arm.
@@ -361,19 +254,7 @@ public class Arm extends SubsystemBase {
    * Reset encoder to zero. We consider arm down inside chassis as zero position. Use lower limit
    * switch to determine when we reach that position. This should be called when arm is not moving.
    */
-  private void resetPosition() {
+  protected void resetPosition() {
     encoder.reset();
-  }
-
-  public DigitalInput getBottomLimitSwitch() {
-    return bottomLimitSwitch;
-  }
-
-  public DigitalInput getTopLimitSwitch() {
-    return topLimitSwitch;
-  }
-
-  public Encoder getEncoder() {
-    return encoder;
   }
 }
