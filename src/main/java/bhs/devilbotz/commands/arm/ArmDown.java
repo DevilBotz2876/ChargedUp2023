@@ -17,15 +17,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ArmDown extends CommandBase {
   private final Arm arm;
   private final Gripper gripper;
+  private final double gripperClosePosition;
 
   /**
    * The constructor for the arm down command.
    *
    * @param arm The arm subsystem.
    */
-  public ArmDown(Arm arm, Gripper gripper) {
+  public ArmDown(Arm arm, Gripper gripper, double gripperClosePosition) {
     this.arm = arm;
     this.gripper = gripper;
+    this.gripperClosePosition = gripperClosePosition;
 
     addRequirements(arm);
     addRequirements(gripper);
@@ -39,7 +41,7 @@ public class ArmDown extends CommandBase {
   @Override
   public void execute() {
     arm.down();
-    if (arm.atGripperClose()) {
+    if (arm.getPosition() < gripperClosePosition) {
       gripper.close();
     }
   }
