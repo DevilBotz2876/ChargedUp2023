@@ -5,8 +5,6 @@ import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Gripper;
-import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
@@ -66,9 +64,7 @@ public class ShuffleboardManager {
   }
 
   public static void putAlerts(String group, Alert.SendableAlerts sendableAlerts) {
-    driveTab.add(group, sendableAlerts)
-            .withPosition(2, 2)
-            .withSize(3, 2);
+    driveTab.add(group, sendableAlerts).withPosition(2, 2).withSize(3, 2);
   }
 
   private void initAutoModeChooser() {
@@ -137,6 +133,6 @@ public class ShuffleboardManager {
   }
 
   public static void putCamera(VideoSource videoSource) {
-      driveTab.add("Camera", videoSource).withPosition(5, 0).withSize(4, 4);
+    driveTab.add("Camera", videoSource).withPosition(5, 0).withSize(4, 4);
   }
 }

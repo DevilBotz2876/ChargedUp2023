@@ -30,7 +30,8 @@ public class Arduino extends SubsystemBase {
         } catch (Exception e2) {
           exists = false;
           System.out.println("Failed to connect to USB Ports");
-          new Alert("Failed to connect to camera! Check USB Connection", Alert.AlertType.WARNING).set(true);
+          new Alert("Failed to connect to camera! Check USB Connection", Alert.AlertType.WARNING)
+              .set(true);
         }
       }
     }

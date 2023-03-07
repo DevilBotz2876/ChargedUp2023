@@ -22,8 +22,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import org.opencv.core.Mat;
-
 import java.io.File;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -31,6 +29,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.opencv.core.Mat;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -73,7 +72,8 @@ public class Robot extends TimedRobot {
       System.out.println("\tid: " + robotConfig.get("id").asText());
     } catch (Exception ex) {
       System.out.println(ex.toString());
-      new Alert("Failed to load robot config. Robot will not function", Alert.AlertType.ERROR).set(true);
+      new Alert("Failed to load robot config. Robot will not function", Alert.AlertType.ERROR)
+          .set(true);
     }
 
     robotContainer = new RobotContainer();
@@ -87,19 +87,16 @@ public class Robot extends TimedRobot {
 
       VideoSource armCameraSource = armCamera;
       ShuffleboardManager.putCamera(armCameraSource);
-      } else {
-      Alert cameraAlert = new Alert(
-              "Robot is a simulation. Camera will display black.", Alert.AlertType.WARNING);
+    } else {
+      Alert cameraAlert =
+          new Alert("Robot is a simulation. Camera will display black.", Alert.AlertType.WARNING);
       cameraAlert.set(true);
       // Create a blank video source to simulate the camera
-        CvSource armCameraSource = CameraServer.putVideo("Test", 320, 240);
-        armCameraSource.putFrame(new Mat(320, 240, 0));
+      CvSource armCameraSource = CameraServer.putVideo("Test", 320, 240);
+      armCameraSource.putFrame(new Mat(320, 240, 0));
 
-
-        ShuffleboardManager.putCamera(armCameraSource);
+      ShuffleboardManager.putCamera(armCameraSource);
     }
-
-
   }
 
   /**
@@ -206,8 +203,7 @@ public class Robot extends TimedRobot {
   /** This method is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    Alert simulationAlert = new Alert(
-            "Robot is a simulation", Alert.AlertType.INFO);
+    Alert simulationAlert = new Alert("Robot is a simulation", Alert.AlertType.INFO);
     simulationAlert.set(true);
   }
 
@@ -244,11 +240,15 @@ public class Robot extends TimedRobot {
               + " not found, using default robot "
               + robotUniqueIdDefault);
       new Alert(
-              "Robot Config not found for this robot! Using the default robot.", Alert.AlertType.WARNING).set(true);
+              "Robot Config not found for this robot! Using the default robot.",
+              Alert.AlertType.WARNING)
+          .set(true);
       return robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix;
     } else {
       new Alert(
-              "Can't find a valid robot config JSON file in: " + robotConfigFilePathPrefix, Alert.AlertType.ERROR).set(true);
+              "Can't find a valid robot config JSON file in: " + robotConfigFilePathPrefix,
+              Alert.AlertType.ERROR)
+          .set(true);
       throw new Exception(
           "Can't find a valid robot config JSON file in: " + robotConfigFilePathPrefix);
     }
