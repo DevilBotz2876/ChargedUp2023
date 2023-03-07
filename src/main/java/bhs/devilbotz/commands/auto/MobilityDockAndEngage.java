@@ -30,7 +30,8 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
    * @param drivetrain the DriveTrain object
    * @param delay the time to wait before starting the command sequence (in seconds)
    * @param startLocation location on the field we are starting from (wall or human)
-   * @param alliance the alliance robot is on (red or blue). The requested path is translated as needed.
+   * @param alliance the alliance robot is on (red or blue). The requested path is translated as
+   *     needed.
    */
   public MobilityDockAndEngage(
       DriveTrain drivetrain, double delay, CommunityLocation startLocation, Alliance alliance) {
