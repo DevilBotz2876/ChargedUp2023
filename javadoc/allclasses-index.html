@@ -83,27 +83,28 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">This command stops the arm.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/arm/ArmToBottom.html" title="class in bhs.devilbotz.commands.arm">ArmToBottom</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">This command moves the arm to bottom position.</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/arm/ArmToMiddle.html" title="class in bhs.devilbotz.commands.arm">ArmToMiddle</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">This command moves the arm to middle scoring position.</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/arm/ArmToPortal.html" title="class in bhs.devilbotz.commands.arm">ArmToPortal</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/arm/ArmToPosition.html" title="class in bhs.devilbotz.commands.arm">ArmToPosition</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/arm/ArmToTop.html" title="class in bhs.devilbotz.commands.arm">ArmToTop</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/arm/ArmUp.html" title="class in bhs.devilbotz.commands.arm">ArmUp</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">This command moves the arm up to highest position.</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/arm/ArmUp.html" title="class in bhs.devilbotz.commands.arm">ArmUp</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">This command moves the arm up.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Autonomous modes enum for the autonomous chooser on the dashboard.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/assist/AutoScore.html" title="class in bhs.devilbotz.commands.assist">AutoScore</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This command will:
+
+ 
+   Open the gripper
+   Drive backwards the specified distance
+   Get ready for pickup of another piece (close grip, lower arm, open grip)
+   Rotate 180 degrees
+ 
+
+ Note: This class assume the robot and arm are already positioned to score!</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/auto/BalancePID.html" title="class in bhs.devilbotz.commands.auto">BalancePID</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -175,27 +176,56 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Do NOT add any static variables to this class, or any initialization at all.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Robot.html" title="class in bhs.devilbotz">Robot</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/assist/PickupFromGround.html" title="class in bhs.devilbotz.commands.assist">PickupFromGround</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This command will:
+
+ 
+   Close the gripper
+   Drive backwards the specified distance (to prevent a stuck arm)
+   Raise the arm a safe driving position
+ 
+
+ Note: This class assume the robot and arm are already positioned to to pickup a piece!</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/assist/PrepareForGroundPickup.html" title="class in bhs.devilbotz.commands.assist">PrepareForGroundPickup</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This command will:
+
+ 
+   Move the arm all the way down
+   Open the gripper
+ </div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/assist/PrepareForScoring.html" title="class in bhs.devilbotz.commands.assist">PrepareForScoring</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This command will:
+
+ 
+   Move the arm to the desired scoring position
+ </div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/Robot.html" title="class in bhs.devilbotz">Robot</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">The VM is configured to automatically run this class, and to call the methods corresponding to
  each mode, as described in the TimedRobot documentation.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">This class is where the bulk of the robot should be declared.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/auto/RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="bhs/devilbotz/lib/ScoreLevels.html" title="enum class in bhs.devilbotz.lib">ScoreLevels</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/led/SetLEDMode.html" title="class in bhs.devilbotz.commands.led">SetLEDMode</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/auto/RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="bhs/devilbotz/lib/ScoreLevels.html" title="enum class in bhs.devilbotz.lib">ScoreLevels</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/led/SetLEDMode.html" title="class in bhs.devilbotz.commands.led">SetLEDMode</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">This class manages the shuffleboard.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">This is the command that is used to drive the robot.</div>
 </div>
 </div>
