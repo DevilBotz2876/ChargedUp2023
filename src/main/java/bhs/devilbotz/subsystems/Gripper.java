@@ -5,10 +5,17 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.commands.gripper.GripperClose;
+import bhs.devilbotz.commands.gripper.GripperOpen;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.Map;
 
 /**
  * This subsystem controls the gripper.
@@ -19,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Gripper extends SubsystemBase {
   private static final PneumaticHub pneumaticHub =
       new PneumaticHub(Constants.GripperConstants.COMPRESSOR_CAN_ID);
+
   private final DoubleSolenoid doubleSolenoid =
       pneumaticHub.makeDoubleSolenoid(
           Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
@@ -27,6 +35,8 @@ public class Gripper extends SubsystemBase {
   /** The constructor for the gripper subsystem. */
   public Gripper() {
     pneumaticHub.disableCompressor();
+
+    buildShuffleboardTab();
   }
 
   /** This method opens the gripper. */
@@ -39,7 +49,16 @@ public class Gripper extends SubsystemBase {
     doubleSolenoid.set(Value.kReverse);
   }
 
-  /** This method sets the grippers speed to 0. */
+  /**
+   * This method deactivates the gripper solenoid. It should be ok to leave the solenoid in
+   * fwd/reverse. Reading thru this thread on CD explains why:
+   * https://www.chiefdelphi.com/t/do-you-need-to-set-a-double-solenoid-to-off-after-bringing-it-in/368798
+   * Based on comments in that thread we should be fine leaving the solenoid actuated/firing all the
+   * time. We want do do this to prevent the gripper from flapping if the gate in the solenoid
+   * moves/slips while the robot is moving around. There is also a delay involved to make sure the
+   * solenoid fired before disabling it. This makes the code more complicated. Ff we can get by with
+   * just leaving the solenoid firing all the time we should do so.
+   */
   public void stop() {
     doubleSolenoid.set(Value.kOff);
   }
@@ -68,5 +87,29 @@ public class Gripper extends SubsystemBase {
    */
   public static boolean getAtSetpoint() {
     return pneumaticHub.getPressureSwitch();
+  }
+
+  public void buildShuffleboardTab() {
+
+    ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+
+    tab.add("Gripper subsystem", this).withPosition(6, 0);
+
+    ShuffleboardContainer cmdList =
+        tab.getLayout("GripCmds", BuiltInLayouts.kGrid)
+            .withPosition(6, 1)
+            .withSize(2, 1)
+            .withProperties(Map.of("Number of columns", 2, "Number of rows", 1));
+
+    cmdList.add(new GripperOpen(this)).withPosition(0, 0);
+    cmdList.add(new GripperClose(this)).withPosition(1, 0);
+
+    ShuffleboardContainer state =
+        tab.getLayout("GripState", BuiltInLayouts.kGrid)
+            .withPosition(6, 2)
+            .withSize(2, 2)
+            .withProperties(Map.of("Number of columns", 1, "Number of rows", 1));
+
+    state.add(doubleSolenoid);
   }
 }

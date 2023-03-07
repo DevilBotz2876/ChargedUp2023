@@ -5,6 +5,7 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.subsystems.Arm;
+import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -15,15 +16,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class ArmDown extends CommandBase {
   private final Arm arm;
+  private final Gripper gripper;
 
   /**
    * The constructor for the arm down command.
    *
    * @param arm The arm subsystem.
    */
-  public ArmDown(Arm arm) {
+  public ArmDown(Arm arm, Gripper gripper) {
     this.arm = arm;
+    this.gripper = gripper;
+
     addRequirements(arm);
+    addRequirements(gripper);
   }
 
   // Called when the command is initially scheduled.
@@ -34,6 +39,9 @@ public class ArmDown extends CommandBase {
   @Override
   public void execute() {
     arm.down();
+    if (arm.atGripperClose()) {
+      gripper.close();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +53,6 @@ public class ArmDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.isBottomLimit() || arm.atBottom();
+    return arm.isBottomLimit();
   }
 }

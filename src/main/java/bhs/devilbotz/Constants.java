@@ -34,7 +34,7 @@ public final class Constants {
    * This is the default distance the robot goes for the autonomous Dock and Engage Routine ({@link
    * bhs.devilbotz.RobotContainer}). The distance is in meters.
    */
-  public static final double DEFAULT_DISTANCE_DOCK_AND_ENGAGE = 2.5;
+  public static final double DEFAULT_DISTANCE_DOCK_AND_ENGAGE = 2.0;
   /**
    * This the tolerance for the Balance PID Controler. This is used so that the robot does not go on
    * balancing forever but stops when it hits the number listed in this constant. The value is
@@ -82,9 +82,9 @@ public final class Constants {
    */
   public static class GripperConstants {
     /** The gripper double solenoid forward channel */
-    public static final int GRIPPER_SOLENOID_FORWARD = 0;
+    public static final int GRIPPER_SOLENOID_FORWARD = 1;
     /** The gripper double solenoid reverse channel */
-    public static final int GRIPPER_SOLENOID_REVERSE = 1;
+    public static final int GRIPPER_SOLENOID_REVERSE = 2;
     /** The CAN ID for the gripper's pneumatic compressor */
     public static final int COMPRESSOR_CAN_ID = 6;
   }

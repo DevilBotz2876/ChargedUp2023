@@ -5,13 +5,16 @@
 
 package bhs.devilbotz;
 
+import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,6 +41,8 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
 
+  private DriverStation.Alliance alliance = null;
+
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
    * useful for simulation
@@ -62,7 +67,6 @@ public class Robot extends TimedRobot {
 
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-
     try {
       String robotConfigPath = getRobotConfigFilePath();
       File robotConfigFile = new File(robotConfigPath);
@@ -104,14 +108,29 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
+    setLEDAlliance();
+  }
+
+  private void setLEDAlliance() {
+    if (DriverStation.getAlliance() != alliance) {
+      alliance = DriverStation.getAlliance();
+      if (alliance == DriverStation.Alliance.Red) {
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
+      } else if (alliance == DriverStation.Alliance.Blue) {
+        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
+      }
+    }
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    setLEDAlliance();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_AUTONOMOUS).schedule();
     robotContainer.resetRobotPosition();
 
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
@@ -130,6 +149,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     robotContainer.resetRobotPosition();
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
+    } else {
+      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
+    }
+    robotContainer.resetRobotPosition();
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -139,6 +164,12 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    // Every time the robot is enabled in teleop initialize gripper to same/set position.
+    // We want the gripper to be in same starting position every time
+    // so driver does not have to remember/see what gripper position is.
+    // If there is not enough stored air in tanks then this will do nothing.
+    robotContainer.initGripper();
   }
 
   /** This method is called periodically during operator control. */
@@ -176,6 +207,9 @@ public class Robot extends TimedRobot {
     String robotConfigFilePathPrefix =
         Filesystem.getDeployDirectory() + File.separator + "robotconfig" + File.separator;
     String robotUniqueId = getMacAddress();
+    if (Robot.isSimulation()) {
+      robotUniqueId = "simulation";
+    }
     String robotConfigFilePathSuffix = ".json";
 
     if (Files.exists(
@@ -239,5 +273,19 @@ public class Robot extends TimedRobot {
    */
   public static JsonNode getDriveTrainConstant(String name) {
     return robotConfig.get("drivetrain").get(name);
+  }
+
+  /**
+   * This method returns the requested robot specific capabilities
+   *
+   * @param name The capability name
+   * @return true if the capability is supported, otherwise false
+   */
+  public static boolean checkCapability(String name) {
+    try {
+      return robotConfig.get("capabilities").get(name).asBoolean(false);
+    } catch (Exception e) {
+      return false;
+    }
   }
 }

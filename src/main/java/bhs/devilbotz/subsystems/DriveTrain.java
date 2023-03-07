@@ -28,7 +28,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -461,14 +460,12 @@ public class DriveTrain extends SubsystemBase {
 
     this.setTalonMode(NeutralMode.Brake);
 
-    // Set the sensor phase of the master talons
-    if (RobotBase.isSimulation()) {
-      // TODO: Understand why the sensor phase needs to be swapped for simulation
-      rightMaster.setSensorPhase(false);
-      leftMaster.setSensorPhase(false);
-    } else {
+    if (Robot.checkCapability("hasInvertedDriveEncoderSensorPhase")) {
       rightMaster.setSensorPhase(true);
       leftMaster.setSensorPhase(true);
+    } else {
+      rightMaster.setSensorPhase(false);
+      leftMaster.setSensorPhase(false);
     }
   }
 
@@ -597,7 +594,11 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   public double getRoll() {
-    return navx.getRoll();
+    double roll = navx.getRoll();
+    if (Robot.checkCapability("hasInvertedRoll")) {
+      roll = -roll;
+    }
+    return roll;
   }
   /**
    * Gets the current yaw of the robot. It is the value of the gyro when it turns left and right
@@ -638,7 +639,7 @@ public class DriveTrain extends SubsystemBase {
    *     Example</a>
    */
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    field.getObject("path").setTrajectory(traj);
+    // field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
