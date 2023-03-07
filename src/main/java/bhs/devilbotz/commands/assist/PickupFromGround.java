@@ -8,6 +8,7 @@ import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -28,16 +29,18 @@ public class PickupFromGround extends SequentialCommandGroup {
     super();
     // Close the gripper
     addCommands(new GripperClose(gripper));
-    // Drive backward
-    addCommands(new DriveStraightPID(drivetrain, -.3));
+    // Drive backward and raise arm at the same time
     addCommands(
-        new InstantCommand(
-            () -> {
-              drivetrain.tankDriveVolts(0, 0);
-            }));
-    // Raise Arm to safe driving position
-    addCommands(
-        new ArmToPosition(
-            arm, ArmConstants.POSITION_DRIVE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
+        new ParallelCommandGroup(
+            // Drive backward
+            new SequentialCommandGroup(
+                new DriveStraightPID(drivetrain, -.3),
+                new InstantCommand(
+                    () -> {
+                      drivetrain.tankDriveVolts(0, 0);
+                    })),
+            // Raise Arm to safe driving position
+            new ArmToPosition(
+                arm, ArmConstants.POSITION_DRIVE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE)));
   }
 }
