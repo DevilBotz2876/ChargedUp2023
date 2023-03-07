@@ -99,8 +99,8 @@ void setAutonomous(){
 
 void armUp(){
   ws2812fx.setBrightness(100);
-  uint8_t notReversed = SIZE_XLARGE;
-  uint8_t reversed = REVERSE + SIZE_XLARGE;
+  uint8_t notReversed = SIZE_MEDIUM;
+  uint8_t reversed = REVERSE + SIZE_MEDIUM;
 
   ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, notReversed);
   ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, reversed);
@@ -108,8 +108,8 @@ void armUp(){
 
 void armDown(){
   ws2812fx.setBrightness(100);
-  uint8_t notReversed = SIZE_XLARGE;
-  uint8_t reversed = REVERSE + SIZE_XLARGE;
+  uint8_t notReversed = SIZE_MEDIUM;
+  uint8_t reversed = REVERSE + SIZE_MEDIUM;
 
   ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, reversed);
   ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, notReversed);
