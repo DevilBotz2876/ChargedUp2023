@@ -24,7 +24,6 @@ void setup() {
 void loop() {
   ws2812fx.service();
 
-  
   if (Serial.available()){
     byte value = Serial.read();
 
@@ -56,12 +55,12 @@ void loop() {
       case 0x8:
         armIdle();
         break;
-      
+
       ws2812fx.start();
     }
   }
-  
-  
+
+
 }
 
 void clear_leds(){
@@ -100,8 +99,11 @@ void setAutonomous(){
 
 void armUp(){
   ws2812fx.setBrightness(100);
-  ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, false);
-  ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, true);
+  uint8_t notReversed = SIZE_XLARGE;
+  uint8_t reversed = REVERSE + SIZE_XLARGE;
+
+  ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, notReversed);
+  ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, reversed);
 }
 
 void armDown(){
