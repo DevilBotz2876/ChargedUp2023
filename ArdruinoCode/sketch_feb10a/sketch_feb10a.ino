@@ -108,8 +108,11 @@ void armUp(){
 
 void armDown(){
   ws2812fx.setBrightness(100);
-  ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, true);
-  ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, false);
+  uint8_t notReversed = SIZE_XLARGE;
+  uint8_t reversed = REVERSE + SIZE_XLARGE;
+
+  ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, reversed);
+  ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, notReversed);
 }
 
 void armIdle(){
