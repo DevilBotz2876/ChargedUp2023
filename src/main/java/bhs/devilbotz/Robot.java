@@ -223,7 +223,10 @@ public class Robot extends TimedRobot {
     } else if (Files.exists(
         Paths.get(robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix))) {
       new Alert(
-              "WARNING: robotConfig for " + robotUniqueId + " not found, using default robot ",
+              "WARNING: robotConfig for "
+                  + robotUniqueId
+                  + " not found, using default robot "
+                  + robotUniqueIdDefault,
               Alert.AlertType.WARNING)
           .set(true);
       return robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix;
