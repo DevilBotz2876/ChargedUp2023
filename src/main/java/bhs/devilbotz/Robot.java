@@ -212,10 +212,7 @@ public class Robot extends TimedRobot {
         Filesystem.getDeployDirectory() + File.separator + "robotconfig" + File.separator;
     String robotUniqueId = getMacAddress();
     if (Robot.isSimulation()) {
-      /* Default to using competition bot */
-      System.err.println("###########################");
-      System.err.println("### Simulation Detected ###");
-      System.err.println("###########################");
+      new Alert("Simulation Detected", Alert.AlertType.INFO).set(true);
       robotUniqueId = "simulation";
     }
     String robotConfigFilePathSuffix = ".json";
@@ -225,13 +222,8 @@ public class Robot extends TimedRobot {
       return robotConfigFilePathPrefix + robotUniqueId + robotConfigFilePathSuffix;
     } else if (Files.exists(
         Paths.get(robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix))) {
-      System.out.println(
-          "WARNING: robotConfig for "
-              + robotUniqueId
-              + " not found, using default robot "
-              + robotUniqueIdDefault);
       new Alert(
-              "Robot Config not found for this robot! Using the default robot.",
+              "WARNING: robotConfig for " + robotUniqueId + " not found, using default robot ",
               Alert.AlertType.WARNING)
           .set(true);
       return robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix;
