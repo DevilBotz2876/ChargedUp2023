@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  */
 public class MobilityDockAndEngage extends SequentialCommandGroup {
   /**
-   * Creates a sequential command that implements the Mobility, Dock & Engage routine
+   * Creates a sequential command that implements the Mobility, Dock and Engage routine
    *
    * @param drivetrain the DriveTrain object
    * @param delay the time to wait before starting the command sequence (in seconds)
