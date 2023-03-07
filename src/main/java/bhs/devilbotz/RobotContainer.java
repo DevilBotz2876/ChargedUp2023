@@ -17,15 +17,15 @@ import bhs.devilbotz.commands.assist.AutoScore;
 import bhs.devilbotz.commands.assist.PickupFromGround;
 import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
 import bhs.devilbotz.commands.assist.PrepareForScoring;
-import bhs.devilbotz.commands.auto.BalancePID;
-import bhs.devilbotz.commands.auto.DriveStraightPID;
-import bhs.devilbotz.commands.auto.DriveStraightToDock;
-import bhs.devilbotz.commands.auto.RotateDegrees;
+import bhs.devilbotz.commands.auto.DockAndEngage;
+import bhs.devilbotz.commands.auto.Mobility;
+import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
+import bhs.devilbotz.lib.CommunityLocation;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.lib.ScoreLevels;
@@ -34,17 +34,11 @@ import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.ShuffleboardManager;
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -71,12 +65,6 @@ public class RobotContainer {
   private final Joystick rightJoystick =
       new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
 
-  // For debugging balance PID. Allows setting balance PID values on the fly
-  private final PIDController balancePid =
-      new PIDController(
-          Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
-          Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
-          Robot.getDriveTrainConstant("BALANCE_D").asDouble());
   private final Arduino arduino;
 
   {
@@ -92,8 +80,6 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // For debugging balance PID. Allows setting balance PID values on the fly
-    SmartDashboard.putData("Balance PID", balancePid);
     SmartDashboard.putData(driveTrain);
 
     arm.setDefaultCommand(new ArmIdle(arm));
@@ -105,12 +91,7 @@ public class RobotContainer {
       driveTrain.setDefaultCommand(
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     } else {
-      driveTrain.setDefaultCommand(
-          new InstantCommand(
-              () -> {
-                driveTrain.tankDriveVolts(0, 0);
-              },
-              driveTrain));
+      driveTrain.setDefaultCommand(driveTrain.stop());
       System.err.println("#####################################");
       System.err.println("### Right Joystick NOT Connected ####");
       System.err.println("#####################################");
@@ -198,7 +179,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
     Command autonomousCommand = null;
-    PathPlannerTrajectory path = null;
+    double delay = ShuffleboardManager.autoDelay.getDouble(0);
+    double maxDistance =
+        ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
 
     if (autoMode == null) {
       System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
@@ -207,69 +190,25 @@ public class RobotContainer {
         case SIT_STILL:
           break;
         case MOBILITY:
-          autonomousCommand =
-              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-                  .asProxy()
-                  .andThen(
-                      new DriveStraightPID(
-                          driveTrain,
-                          ShuffleboardManager.autoDistance.getDouble(
-                              Constants.DEFAULT_DISTANCE_MOBILITY)))
-                  .andThen(
-                      new InstantCommand(
-                          () -> {
-                            driveTrain.tankDriveVolts(0, 0);
-                          }));
+          autonomousCommand = new Mobility(driveTrain, delay, maxDistance);
           break;
         case SCORE_AND_MOBILITY:
           break;
         case DOCK_AND_ENGAGE:
-          autonomousCommand =
-              Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-                  .asProxy()
-                  .andThen(
-                      new DriveStraightToDock(
-                              driveTrain,
-                              ShuffleboardManager.autoDistance.getDouble(
-                                  Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                          .andThen(new BalancePID(driveTrain, balancePid))
-                          .andThen(new RotateDegrees(driveTrain, 90)))
-                  .andThen(
-                      new InstantCommand(
-                          () -> {
-                            driveTrain.tankDriveVolts(0, 0);
-                          }));
+          autonomousCommand = new DockAndEngage(driveTrain, delay, maxDistance);
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
+          autonomousCommand =
+              new MobilityDockAndEngage(
+                  driveTrain, delay, CommunityLocation.HUMAN, DriverStation.getAlliance());
+
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
-          {
-            // Figure out which path to load based on alliance color and autoMode
-            String pathName;
-            if (AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE == autoMode) {
-              pathName = "MobilityBlueHumanSideToDock";
-            } else {
-              pathName = "MobilityBlueWallSideToDock";
-            }
-            path = PathPlanner.loadPath(pathName, new PathConstraints(2.5, 2));
-            // set the velocity at the end of the path fast enough to dock
-            path.getEndState().velocityMetersPerSecond = 1.5;
-            autonomousCommand =
-                Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-                    .asProxy()
-                    .andThen(driveTrain.followTrajectoryCommand(path, true, false))
-                    .andThen(new DriveStraightToDock(driveTrain, 2))
-                    .andThen(new BalancePID(driveTrain, balancePid))
-                    .andThen(new RotateDegrees(driveTrain, 90))
-                    .andThen(
-                        new InstantCommand(
-                            () -> {
-                              driveTrain.tankDriveVolts(0, 0);
-                            }));
-          }
+          autonomousCommand =
+              new MobilityDockAndEngage(
+                  driveTrain, delay, CommunityLocation.WALL, DriverStation.getAlliance());
           break;
         case SCORE_DOCK_AND_ENGAGE:
           break;
-
         case SCORE_MOBILITY_DOCK_ENGAGE:
           break;
         case SCORE_MOBILITY_PICK_DOCK_ENGAGE:

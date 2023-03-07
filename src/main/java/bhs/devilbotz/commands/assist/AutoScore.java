@@ -8,13 +8,13 @@ import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This command will:
  *
  * <ol>
+ *   <li>Lower the arm slightly
  *   <li>Open the gripper
  *   <li>Drive backwards the specified distance
  *   <li>Get ready for pickup of another piece (close grip, lower arm, open grip)
@@ -36,19 +36,11 @@ public class AutoScore extends SequentialCommandGroup {
     addCommands(new GripperOpen(gripper));
     // backup
     addCommands(new DriveStraightPID(drivetrain, driveBackDistance));
-    addCommands(
-        new InstantCommand(
-            () -> {
-              drivetrain.tankDriveVolts(0, 0);
-            }));
+    addCommands(drivetrain.stop());
     // get ready for next piece
     addCommands(new PrepareForGroundPickup(arm, gripper));
     // rotate 180 degrees
     addCommands(new RotateDegrees(drivetrain, 180));
-    addCommands(
-        new InstantCommand(
-            () -> {
-              drivetrain.tankDriveVolts(0, 0);
-            }));
+    addCommands(drivetrain.stop());
   }
 }
