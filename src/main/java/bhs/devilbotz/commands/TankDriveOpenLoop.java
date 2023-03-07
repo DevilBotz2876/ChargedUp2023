@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands;
 
 import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.utils.Alert;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
 
@@ -24,6 +25,8 @@ public class TankDriveOpenLoop extends CommandBase {
     this.drive = drive;
     this.left = left;
     this.right = right;
+
+    new Alert("PID Driving is NOT being used", Alert.AlertType.INFO).set(true);
 
     addRequirements(this.drive);
   }

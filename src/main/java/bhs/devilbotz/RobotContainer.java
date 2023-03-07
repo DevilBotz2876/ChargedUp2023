@@ -19,6 +19,7 @@ import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -69,6 +70,8 @@ public class RobotContainer {
     try {
       arduino = new Arduino();
     } catch (Exception e) {
+      new Alert(
+              "Arduino is disconnected. LEDs will not function", Alert.AlertType.ERROR).set(true);
       throw new RuntimeException(e);
     }
   }
@@ -156,6 +159,8 @@ public class RobotContainer {
 
     if (autoMode == null) {
       System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
+      new Alert(
+              "An Autonomous mode was NOT selected. The robot will not move during autonomous", Alert.AlertType.ERROR).set(true);
     } else {
       switch (autoMode) {
         case SIT_STILL:
