@@ -52,6 +52,22 @@ loadScripts(document, 'script');</script>
 <a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
+<dt><a href="bhs/devilbotz/utils/Alert.html" class="type-name-link" title="class in bhs.devilbotz.utils">Alert</a> - Class in <a href="bhs/devilbotz/utils/package-summary.html">bhs.devilbotz.utils</a></dt>
+<dd>
+<div class="block">Class for managing persistent alerts to be sent over NetworkTables.</div>
+</dd>
+<dt><a href="bhs/devilbotz/utils/Alert.html#%3Cinit%3E(java.lang.String,bhs.devilbotz.utils.Alert.AlertType)" class="member-name-link">Alert(String, Alert.AlertType)</a> - Constructor for class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.html" title="class in bhs.devilbotz.utils">Alert</a></dt>
+<dd>
+<div class="block">Creates a new Alert in the default group - "Alerts".</div>
+</dd>
+<dt><a href="bhs/devilbotz/utils/Alert.html#%3Cinit%3E(java.lang.String,java.lang.String,bhs.devilbotz.utils.Alert.AlertType)" class="member-name-link">Alert(String, String, Alert.AlertType)</a> - Constructor for class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.html" title="class in bhs.devilbotz.utils">Alert</a></dt>
+<dd>
+<div class="block">Creates a new Alert.</div>
+</dd>
+<dt><a href="bhs/devilbotz/utils/Alert.AlertType.html" class="type-name-link" title="enum class in bhs.devilbotz.utils">Alert.AlertType</a> - Enum Class in <a href="bhs/devilbotz/utils/package-summary.html">bhs.devilbotz.utils</a></dt>
+<dd>
+<div class="block">Represents an alert's level of urgency.</div>
+</dd>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#arcadeDrive(double,double)" class="member-name-link">arcadeDrive(double, double)</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>
 <div class="block">Drives the robot with the given linear velocity and angular velocity.</div>
@@ -393,6 +409,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Called once the command ends or is interrupted.</div>
 </dd>
+<dt><a href="bhs/devilbotz/utils/Alert.AlertType.html#ERROR" class="member-name-link">ERROR</a> - Enum constant in enum class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.AlertType.html" title="enum class in bhs.devilbotz.utils">Alert.AlertType</a></dt>
+<dd>
+<div class="block">High priority alert - displayed first on the dashboard with a red "X" symbol.</div>
+</dd>
 <dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Called every time the scheduler runs while the command is scheduled.</div>
@@ -549,6 +569,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
+<dt><a href="bhs/devilbotz/utils/Alert.AlertType.html#INFO" class="member-name-link">INFO</a> - Enum constant in enum class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.AlertType.html" title="enum class in bhs.devilbotz.utils">Alert.AlertType</a></dt>
+<dd>
+<div class="block">Low priority alert - displayed last on the dashboard with a green "i" symbol.</div>
+</dd>
 <dt><a href="bhs/devilbotz/RobotContainer.html#initGripper()" class="member-name-link">initGripper()</a> - Method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
 <dd>
 <div class="block">Initialize gripper to known/same position</div>
@@ -805,6 +829,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/commands/assist/PrepareForScoring.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,bhs.devilbotz.lib.ScoreLevels,bhs.devilbotz.lib.GamePieceTypes)" class="member-name-link">PrepareForScoring(Arm, ScoreLevels, GamePieceTypes)</a> - Constructor for class bhs.devilbotz.commands.assist.<a href="bhs/devilbotz/commands/assist/PrepareForScoring.html" title="class in bhs.devilbotz.commands.assist">PrepareForScoring</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/utils/ShuffleboardManager.html#putAlerts(java.lang.String,bhs.devilbotz.utils.Alert.SendableAlerts)" class="member-name-link">putAlerts(String, Alert.SendableAlerts)</a> - Static method in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/utils/ShuffleboardManager.html#putCamera(edu.wpi.first.cscore.VideoSource)" class="member-name-link">putCamera(VideoSource)</a> - Static method in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/utils/ShuffleboardManager.html#putField(edu.wpi.first.wpilibj.smartdashboard.Field2d)" class="member-name-link">putField(Field2d)</a> - Static method in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></dt>
 <dd>
 <div class="block">Puts the field on the shuffleboard.</div>
@@ -889,6 +917,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/Arduino.html#sendMessage(byte%5B%5D)" class="member-name-link">sendMessage(byte[])</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arduino.html" title="class in bhs.devilbotz.subsystems">Arduino</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/utils/Alert.html#set(boolean)" class="member-name-link">set(boolean)</a> - Method in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.html" title="class in bhs.devilbotz.utils">Alert</a></dt>
+<dd>
+<div class="block">Sets whether the alert should currently be displayed.</div>
+</dd>
 <dt><a href="bhs/devilbotz/lib/LEDModes.html#SET_ARM_DOWN" class="member-name-link">SET_ARM_DOWN</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/LEDModes.html" title="enum class in bhs.devilbotz.lib">LEDModes</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/lib/LEDModes.html#SET_ARM_IDLE" class="member-name-link">SET_ARM_IDLE</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/LEDModes.html" title="enum class in bhs.devilbotz.lib">LEDModes</a></dt>
@@ -928,6 +960,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#setTalonMode(com.ctre.phoenix.motorcontrol.NeutralMode)" class="member-name-link">setTalonMode(NeutralMode)</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>
 <div class="block">Sets the talon mode to either brake or coast.</div>
+</dd>
+<dt><a href="bhs/devilbotz/utils/Alert.html#setText(java.lang.String)" class="member-name-link">setText(String)</a> - Method in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.html" title="class in bhs.devilbotz.utils">Alert</a></dt>
+<dd>
+<div class="block">Updates current alert text.</div>
 </dd>
 <dt><a href="bhs/devilbotz/utils/ShuffleboardManager.html" class="type-name-link" title="class in bhs.devilbotz.utils">ShuffleboardManager</a> - Class in <a href="bhs/devilbotz/utils/package-summary.html">bhs.devilbotz.utils</a></dt>
 <dd>
@@ -1050,6 +1086,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
+<dt><a href="bhs/devilbotz/utils/Alert.AlertType.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.AlertType.html" title="enum class in bhs.devilbotz.utils">Alert.AlertType</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="bhs/devilbotz/lib/AutonomousModes.html#values()" class="member-name-link">values()</a> - Static method in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
@@ -1075,11 +1115,20 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
+<dt><a href="bhs/devilbotz/utils/Alert.AlertType.html#values()" class="member-name-link">values()</a> - Static method in enum class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.AlertType.html" title="enum class in bhs.devilbotz.utils">Alert.AlertType</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
 </dl>
 <h2 class="title" id="I:W">W</h2>
 <dl class="index">
 <dt><a href="bhs/devilbotz/lib/CommunityLocation.html#WALL" class="member-name-link">WALL</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/CommunityLocation.html" title="enum class in bhs.devilbotz.lib">CommunityLocation</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/utils/Alert.AlertType.html#WARNING" class="member-name-link">WARNING</a> - Enum constant in enum class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.AlertType.html" title="enum class in bhs.devilbotz.utils">Alert.AlertType</a></dt>
+<dd>
+<div class="block">Medium priority alert - displayed second on the dashboard with a yellow "!" symbol.</div>
+</dd>
 </dl>
 <a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
 </div>
