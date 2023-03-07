@@ -21,8 +21,7 @@ public class Mobility extends SequentialCommandGroup {
    *
    * @param drivetrain the DriveTrain object
    * @param delay the time to wait before starting the command sequence (in seconds)
-   * @param maxDistance the max distance to travel before assuming we are on the dock. Negative
-   *     indicates move backwards. (in meters)
+   * @param distance the distance to travel. Negative indicates move backwards. (in meters)
    */
   public Mobility(DriveTrain drivetrain, double delay, double distance) {
     super();
