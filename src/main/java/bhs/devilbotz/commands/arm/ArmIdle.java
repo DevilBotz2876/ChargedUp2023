@@ -8,11 +8,9 @@ import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ArmIdle extends CommandBase {
-  private final Arm arm;
 
   /** Creates a new ArmIdle. */
   public ArmIdle(Arm arm) {
-    this.arm = arm;
     addRequirements(arm);
   }
 

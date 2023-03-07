@@ -20,10 +20,10 @@ Code for the FRC 2023 Robotics Competition
             - Follower: Talon SRX (on CAN ID 1)
         - Right:
             - Master: Talon SRX (on CAN ID 4) - Inverted
-            - Follower: Talon SRX (on CAN ID 2) - Inverted  
+            - Follower: Talon SRX (on CAN ID 2) - Inverted
     - Gear Box
         - Toughbox Mini Classic
-            - Counts Per Revolution: 4096 
+            - Counts Per Revolution: 4096
             - Encoder Ratio: 1:1
         - Wheels
             - 6" Diameter (0.1524 meters)
@@ -161,3 +161,42 @@ The routines in **bold** are the most important/common routines we will use
     ScoreLevel: Either low, medium, or high
     GamePieceType: Either cone or cube
 
+## Testing Checklist
+* Autonomous
+    * Mobility
+        * Forward
+        * Reverse
+    * Dock & Engage
+        * Forward
+        * Reverse
+    * Mobility Dock & Engage
+        * Red Alliance
+            * Wall Side
+            * Human Side
+        * Blue Alliance
+            * Wall Side
+            * Human Side
+* Arm/Gripper
+    * Basic
+        * Arm Up (stops at upper limit switch)
+        * Arm Down (stops at bottom limit switch)
+        * Gripper Open
+        * Gripper Close
+    * Auto Position
+        * Top
+        * Middle
+        * Bottom
+        * Shelf
+    * Gripper Safety
+        * Auto close if arm moving down near bottom
+        * Auto close if at bottom limit and the arm moving up
+* Driver Assist
+    * Prepare for Pickup
+    * Pickup from Ground
+    * Prepare for Scoring
+    * AutoScore
+* LEDs
+   * Setting alliance changes LEDs to match red/blue
+   * Starting autonomous changes LEDs to green
+   * Moving Arm Up
+   * Moving Arm Down

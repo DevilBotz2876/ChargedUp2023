@@ -57,7 +57,6 @@ public class BalancePID extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("BalancePID start");
-    drive.arcadeDrive(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -91,7 +90,6 @@ public class BalancePID extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.arcadeDrive(0, 0);
     System.out.println("BalancePID Finished");
   }
 
