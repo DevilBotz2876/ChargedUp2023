@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.assist;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -21,11 +22,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class PrepareForGroundPickup extends SequentialCommandGroup {
   public PrepareForGroundPickup(Arm arm, Gripper gripper) {
     super();
+    addCommands(CommandDebug.start());
     // close the gripper
     addCommands(new GripperClose(gripper));
     // lower arm
     addCommands(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
     // open the gripper
     addCommands(new GripperOpen(gripper));
+    addCommands(CommandDebug.end());
   }
 }

@@ -6,6 +6,7 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -56,7 +57,7 @@ public class BalancePID extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("BalancePID start");
+    CommandDebug.trace();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -90,7 +91,7 @@ public class BalancePID extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("BalancePID Finished");
+    CommandDebug.trace();
   }
 
   // Returns true when the command should end.

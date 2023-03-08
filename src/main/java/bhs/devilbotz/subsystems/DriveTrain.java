@@ -3,6 +3,7 @@ package bhs.devilbotz.subsystems;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -617,6 +618,7 @@ public class DriveTrain extends SubsystemBase {
         PathPlannerTrajectory.transformTrajectoryForAlliance(traj, DriverStation.getAlliance());
     // field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
+        CommandDebug.message("followTrajectoryCommand:Start"),
         new InstantCommand(
             () -> {
               // Reset odometry for the first path you run during auto
@@ -649,7 +651,8 @@ public class DriveTrain extends SubsystemBase {
               if (stopAtEnd) {
                 this.tankDriveVolts(0, 0);
               }
-            }));
+            }),
+        CommandDebug.message("followTrajectoryCommand:Start"));
   }
 
   public Command stop() {

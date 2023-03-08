@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,9 +34,9 @@ public class RotateDegrees extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    CommandDebug.trace();
     startAngle = drivetrain.getYaw();
     targetAngle = startAngle + rotationAmount;
-    System.out.println("RotateDegrees start");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,7 +53,7 @@ public class RotateDegrees extends CommandBase {
   public void end(boolean interrupted) {
     double currentAngle = drivetrain.getYaw();
     SmartDashboard.putNumber("rotate/currentAngle", currentAngle);
-    System.out.println("RotateDegrees Finished");
+    CommandDebug.trace();
   }
 
   // Returns true when the command should end.

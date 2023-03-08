@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.assist;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.ScoreLevels;
@@ -57,6 +58,8 @@ public class PrepareForScoring extends SequentialCommandGroup {
         }
         break;
     }
+    addCommands(CommandDebug.start());
     addCommands(new ArmToPosition(arm, targetArmPosition));
+    addCommands(CommandDebug.end());
   }
 }

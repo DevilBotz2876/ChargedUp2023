@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands.auto;
 
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.lib.CommunityLocation;
 import bhs.devilbotz.subsystems.DriveTrain;
 import com.pathplanner.lib.PathConstraints;
@@ -56,9 +57,11 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
     // set the velocity at the end of the path fast enough to dock
     path.getEndState().velocityMetersPerSecond = 1.5;
 
+    addCommands(CommandDebug.start());
     addCommands(Commands.waitSeconds(delay));
     addCommands(drivetrain.followTrajectoryCommand(path, true, false));
     addCommands(new DockAndEngage(drivetrain, 0, 2));
     addCommands(drivetrain.stop());
+    addCommands(CommandDebug.end());
   }
 }

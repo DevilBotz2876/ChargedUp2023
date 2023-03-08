@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -34,7 +35,9 @@ public class ArmToPosition extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    CommandDebug.trace();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -70,6 +73,7 @@ public class ArmToPosition extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    CommandDebug.trace();
     arm.stop();
   }
 
