@@ -94,9 +94,11 @@ public class RobotContainer {
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     } else {
       driveTrain.setDefaultCommand(driveTrain.stop());
-      System.err.println("#####################################");
-      System.err.println("### Right Joystick NOT Connected ####");
-      System.err.println("#####################################");
+    }
+    if (false
+        == DriverStation.isJoystickConnected(
+            Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
+      new Alert("Right Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
     }
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
     // rightJoystick::getX));
@@ -152,10 +154,11 @@ public class RobotContainer {
                   arm, ArmConstants.POSITION_BOTTOM, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
       new JoystickButton(leftJoystick, 11)
           .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
-    } else {
-      System.err.println("####################################");
-      System.err.println("### Left Joystick NOT Connected ####");
-      System.err.println("####################################");
+    }
+    if (false
+        == DriverStation.isJoystickConnected(
+            Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
+      new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
     }
 
     SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
@@ -186,7 +189,6 @@ public class RobotContainer {
         ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
 
     if (autoMode == null) {
-      System.out.println("Robot will NOT move during autonomous :/// You screwed something up");
       new Alert(
               "An Autonomous mode was NOT selected. The robot will not move during autonomous",
               Alert.AlertType.ERROR)
