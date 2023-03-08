@@ -66,8 +66,13 @@ public class Robot extends TimedRobot {
       ObjectMapper objectMapper = new ObjectMapper();
       robotConfig = objectMapper.readTree(robotConfigFile);
       System.out.println("Loaded robot config: " + robotConfigPath);
-      System.out.println("\tname: " + robotConfig.get("name").asText());
-      System.out.println("\tid: " + robotConfig.get("id").asText());
+      new Alert(
+              "Robot Name: "
+                  + robotConfig.get("name").asText()
+                  + " Id: "
+                  + robotConfig.get("id").asText(),
+              Alert.AlertType.INFO)
+          .set(true);
     } catch (Exception ex) {
       System.out.println(ex.toString());
       new Alert("Failed to load robot config. Robot will not function", Alert.AlertType.ERROR)
@@ -212,10 +217,6 @@ public class Robot extends TimedRobot {
         Filesystem.getDeployDirectory() + File.separator + "robotconfig" + File.separator;
     String robotUniqueId = getMacAddress();
     if (Robot.isSimulation()) {
-      /* Default to using competition bot */
-      System.err.println("###########################");
-      System.err.println("### Simulation Detected ###");
-      System.err.println("###########################");
       robotUniqueId = "simulation";
     }
     String robotConfigFilePathSuffix = ".json";
@@ -225,13 +226,11 @@ public class Robot extends TimedRobot {
       return robotConfigFilePathPrefix + robotUniqueId + robotConfigFilePathSuffix;
     } else if (Files.exists(
         Paths.get(robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix))) {
-      System.out.println(
-          "WARNING: robotConfig for "
-              + robotUniqueId
-              + " not found, using default robot "
-              + robotUniqueIdDefault);
       new Alert(
-              "Robot Config not found for this robot! Using the default robot.",
+              "WARNING: robotConfig for "
+                  + robotUniqueId
+                  + " not found, using default robot "
+                  + robotUniqueIdDefault,
               Alert.AlertType.WARNING)
           .set(true);
       return robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix;
