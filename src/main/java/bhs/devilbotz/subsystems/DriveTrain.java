@@ -644,7 +644,12 @@ public class DriveTrain extends SubsystemBase {
             // Optional, defaults to true
             this // Requires this drive subsystem
             ),
-        stop());
+        new InstantCommand(
+            () -> {
+              if (stopAtEnd) {
+                this.tankDriveVolts(0, 0);
+              }
+            }));
   }
 
   public Command stop() {
