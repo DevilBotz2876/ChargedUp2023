@@ -66,8 +66,13 @@ public class Robot extends TimedRobot {
       ObjectMapper objectMapper = new ObjectMapper();
       robotConfig = objectMapper.readTree(robotConfigFile);
       System.out.println("Loaded robot config: " + robotConfigPath);
-      System.out.println("\tname: " + robotConfig.get("name").asText());
-      System.out.println("\tid: " + robotConfig.get("id").asText());
+      new Alert(
+              "Robot Name: "
+                  + robotConfig.get("name").asText()
+                  + " Id: "
+                  + robotConfig.get("id").asText(),
+              Alert.AlertType.INFO)
+          .set(true);
     } catch (Exception ex) {
       System.out.println(ex.toString());
       new Alert("Failed to load robot config. Robot will not function", Alert.AlertType.ERROR)
@@ -212,7 +217,6 @@ public class Robot extends TimedRobot {
         Filesystem.getDeployDirectory() + File.separator + "robotconfig" + File.separator;
     String robotUniqueId = getMacAddress();
     if (Robot.isSimulation()) {
-      new Alert("Simulation Detected", Alert.AlertType.INFO).set(true);
       robotUniqueId = "simulation";
     }
     String robotConfigFilePathSuffix = ".json";

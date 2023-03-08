@@ -11,7 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-/** Class for managing persistent alerts to be sent over NetworkTables. */
+/**
+ * Class for managing persistent alerts to be sent over NetworkTables.
+ *
+ * <p>Note: To fully utilize the Alert functionality, you must install the following Shuffleboard
+ * plug-in: https://github.com/Mechanical-Advantage/NetworkAlerts/releases
+ */
 public class Alert {
   private static Map<String, SendableAlerts> groups = new HashMap<String, SendableAlerts>();
 
