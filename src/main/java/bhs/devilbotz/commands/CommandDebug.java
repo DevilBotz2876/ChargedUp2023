@@ -12,6 +12,14 @@ public class CommandDebug {
     System.out.println(debug.getTraceString());
   }
 
+  public static void trace(String message) {
+    System.out.println(debug.getTraceString() + ":" + message);
+  }
+
+  public static void println(String message) {
+    System.out.println(message);
+  }
+
   public static Command message(String message) {
     //    return debug.message(message);
     return Commands.print(message);
