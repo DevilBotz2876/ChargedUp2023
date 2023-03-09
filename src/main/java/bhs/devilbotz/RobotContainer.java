@@ -151,27 +151,26 @@ public class RobotContainer {
                   arm, ArmConstants.POSITION_MIDDLE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
 
       new JoystickButton(rightJoystick, 4).onTrue(new ArmMoveDistance(arm, -10));
-
-      if (false
-          == DriverStation.isJoystickConnected(
-              Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
-        new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
-      }
-
-      SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
-      SmartDashboard.putData("gripperClose", new GripperClose(gripper));
-
-      SmartDashboard.putData(
-          "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
-
-      /*
-      new JoystickButton(leftJoystick, 6)
-              .whileTrue( Cone Mode );
-
-      new JoystickButton(leftJoystick, 7)
-              .whileTrue( Cube Mode );
-      */
     }
+    if (false
+        == DriverStation.isJoystickConnected(
+            Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
+      new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
+    }
+
+    SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
+    SmartDashboard.putData("gripperClose", new GripperClose(gripper));
+
+    SmartDashboard.putData(
+        "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+    /*
+    new JoystickButton(leftJoystick, 6)
+            .whileTrue( Cone Mode );
+
+    new JoystickButton(leftJoystick, 7)
+            .whileTrue( Cube Mode );
+    */
   }
 
   /**
