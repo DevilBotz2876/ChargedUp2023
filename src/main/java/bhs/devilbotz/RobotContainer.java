@@ -125,16 +125,16 @@ public class RobotContainer {
       new JoystickButton(leftJoystick, 3)
           .onTrue(new GripperOpen(gripper))
           .onFalse(new GripperIdle(gripper));
-
-      new JoystickButton(leftJoystick, 4)
-          .whileTrue(new ArmUp(arm, gripper))
-          .onFalse(new ArmStop(arm));
-
-      new JoystickButton(leftJoystick, 5)
+      
+        new JoystickButton(leftJoystick, 4)
           .whileTrue(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE))
           .onFalse(new ArmStop(arm));
 
-      new JoystickButton(leftJoystick, 6)
+      new JoystickButton(leftJoystick, 5)
+          .whileTrue(new ArmUp(arm, gripper))
+          .onFalse(new ArmStop(arm));
+
+     new JoystickButton(leftJoystick, 6)
       .onTrue(new SetLEDMode(arduino, LEDModes.SET_CONE));
 
       new JoystickButton(leftJoystick, 7)
