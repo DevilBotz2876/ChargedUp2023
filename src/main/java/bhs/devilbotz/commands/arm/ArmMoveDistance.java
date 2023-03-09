@@ -25,7 +25,7 @@ public class ArmMoveDistance extends ArmSafety {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initializeWithSafety() {
     // Remember our starting position.  Then apply the distance to move.  The execute method will
     // move the arm up or down
     // depending on sign of distance.  The isFinished method will check to see if current arm
