@@ -68,6 +68,11 @@ public abstract class ArmSafety extends CommandBase {
   }
 
   @Override
+  public final void initialize() {
+    initializeWithSafety();
+  }
+
+  @Override
   public final void execute() {
     double currentPosition = getPosition();
     executeWithSafety();
@@ -127,12 +132,19 @@ public abstract class ArmSafety extends CommandBase {
   }
 
   /**
-   * The child should periodically request arm movement using the following functions:
+   * The child must use this function to request arm movement using the following functions:
    *
    * <p>{@link #up()} {@link #down()} {@link #stop()} {@link #getPosition()}
    */
   public abstract void executeWithSafety();
 
-  /** The child can use this function to indicate if the command is finished.` */
+  /** The child must use this function to indicate if the command is finished.` */
   public abstract boolean isFinishedWithSafety();
+
+  /**
+   * The child can use this function to initialize any settings immediately prior to the first
+   * execution of the command
+   */
+  public void initializeWithSafety() {}
+  ;
 }
