@@ -36,8 +36,6 @@ public class PickupFromGround extends SequentialCommandGroup {
             // Drive backward
             new SequentialCommandGroup(new DriveStraightPID(drivetrain, -.3), drivetrain.stop()),
             // Raise Arm to safe driving position
-            new ArmToPosition(
-                arm, ArmConstants.POSITION_DRIVE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE)));
-    addCommands(CommandDebug.end());
+            new ArmToPosition(arm, ArmConstants.POSITION_DRIVE, gripper)));
   }
 }

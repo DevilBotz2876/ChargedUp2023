@@ -4,10 +4,8 @@
 
 package bhs.devilbotz.commands.arm;
 
-import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  * This command moves the arm down.
@@ -15,50 +13,27 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * @since 1/25/2023
  * @author joshuamanoj
  */
-public class ArmDown extends CommandBase {
-  private final Arm arm;
-  private final Gripper gripper;
-  private final double gripperClosePosition;
-
+public class ArmDown extends ArmSafety {
   /**
    * The constructor for the arm down command.
    *
    * @param arm The arm subsystem.
+   * @param arm The gripper subsystem.
    */
-  public ArmDown(Arm arm, Gripper gripper, double gripperClosePosition) {
-    this.arm = arm;
-    this.gripper = gripper;
-    this.gripperClosePosition = gripperClosePosition;
-
-    addRequirements(arm);
-    addRequirements(gripper);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    CommandDebug.trace();
+  public ArmDown(Arm arm, Gripper gripper) {
+    super(arm, gripper);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    arm.down();
-    if (arm.getPosition() < gripperClosePosition) {
-      gripper.close();
-    }
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    arm.stop();
-    CommandDebug.trace();
+  public void executeWithSafety() {
+    down();
   }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
-    return arm.isBottomLimit();
+  public boolean isFinishedWithSafety() {
+    return false;
   }
+  ;
 }
