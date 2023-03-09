@@ -13,10 +13,8 @@ import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmStop;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.arm.ArmUp;
-import bhs.devilbotz.commands.assist.AutoScore;
 import bhs.devilbotz.commands.assist.PickupFromGround;
 import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
-import bhs.devilbotz.commands.assist.PrepareForScoring;
 import bhs.devilbotz.commands.auto.DockAndEngage;
 import bhs.devilbotz.commands.auto.Mobility;
 import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
@@ -26,9 +24,7 @@ import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.CommunityLocation;
-import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
-import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -129,7 +125,7 @@ public class RobotContainer {
           .onFalse(new GripperIdle(gripper));
 
       new JoystickButton(leftJoystick, 4)
-          .whileTrue(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE))
+          .whileTrue(new ArmDown(arm, gripper))
           .onFalse(new ArmStop(arm));
 
       new JoystickButton(leftJoystick, 5)
@@ -141,16 +137,13 @@ public class RobotContainer {
       new JoystickButton(leftJoystick, 7).onTrue(new SetLEDMode(arduino, LEDModes.SET_CUBE));
 
       new JoystickButton(rightJoystick, 1)
-          .onTrue(
-              new ArmToPosition(
-                  arm, ArmConstants.POSITION_TOP, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
+          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
 
       new JoystickButton(rightJoystick, 3)
-          .onTrue(
-              new ArmToPosition(
-                  arm, ArmConstants.POSITION_MIDDLE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
+          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE, gripper));
 
-      new JoystickButton(rightJoystick, 4).onTrue(new ArmMoveDistance(arm, -10));
+      new JoystickButton(rightJoystick, 4)
+          .onTrue(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
     }
     if (false
         == DriverStation.isJoystickConnected(
@@ -162,7 +155,9 @@ public class RobotContainer {
     SmartDashboard.putData("gripperClose", new GripperClose(gripper));
 
     SmartDashboard.putData(
-        "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+        "armScorePiece",
+        new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper)
+            .andThen(new GripperOpen(gripper)));
 
     /*
     new JoystickButton(leftJoystick, 6)
@@ -262,14 +257,19 @@ public class RobotContainer {
 
     cmdList.add(new ArmStop(arm)).withPosition(0, 0);
     cmdList.add(new ArmUp(arm, gripper)).withPosition(0, 1);
-    cmdList.add(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE)).withPosition(0, 2);
+    cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
 
-    cmdList.add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP)).withPosition(1, 0);
     cmdList
-        .add("To Middle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE))
+        .add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper))
+        .withPosition(1, 0);
+    cmdList
+        .add("To Middle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE, gripper))
         .withPosition(1, 1);
     cmdList
-        .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM))
+        .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM, gripper))
+        .withPosition(1, 2);
+    cmdList
+        .add("To Score", new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper))
         .withPosition(1, 2);
 
     tab.add("Arm subsystem", arm).withPosition(0, 4);
@@ -304,10 +304,6 @@ public class RobotContainer {
 
     cmdList.add(new PrepareForGroundPickup(arm, gripper)).withPosition(0, 0);
     cmdList.add(new PickupFromGround(arm, gripper, driveTrain)).withPosition(0, 1);
-    cmdList
-        .add(new PrepareForScoring(arm, ScoreLevels.HIGH, GamePieceTypes.CONE))
-        .withPosition(0, 2);
-    cmdList.add(new AutoScore(arm, gripper, driveTrain)).withPosition(0, 3);
   }
 
   public void setLEDModeAlliance() {
