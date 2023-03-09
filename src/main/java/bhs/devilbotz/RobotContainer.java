@@ -121,15 +121,14 @@ public class RobotContainer {
       new JoystickButton(leftJoystick, 1)
           .onTrue(new GripperClose(gripper))
           .onFalse(new GripperIdle(gripper));
-      
-      new JoystickButton(leftJoystick, 2)
-      .onTrue(new PrepareForGroundPickup(arm, gripper));
+
+      new JoystickButton(leftJoystick, 2).onTrue(new PrepareForGroundPickup(arm, gripper));
 
       new JoystickButton(leftJoystick, 3)
           .onTrue(new GripperOpen(gripper))
           .onFalse(new GripperIdle(gripper));
-      
-        new JoystickButton(leftJoystick, 4)
+
+      new JoystickButton(leftJoystick, 4)
           .whileTrue(new ArmDown(arm, gripper, ArmConstants.POSITION_GRIPPER_CLOSE))
           .onFalse(new ArmStop(arm));
 
@@ -137,11 +136,9 @@ public class RobotContainer {
           .whileTrue(new ArmUp(arm, gripper))
           .onFalse(new ArmStop(arm));
 
-     new JoystickButton(leftJoystick, 6)
-      .onTrue(new SetLEDMode(arduino, LEDModes.SET_CONE));
+      new JoystickButton(leftJoystick, 6).onTrue(new SetLEDMode(arduino, LEDModes.SET_CONE));
 
-      new JoystickButton(leftJoystick, 7)
-      .onTrue(new SetLEDMode(arduino, LEDModes.SET_CUBE));
+      new JoystickButton(leftJoystick, 7).onTrue(new SetLEDMode(arduino, LEDModes.SET_CUBE));
 
       new JoystickButton(rightJoystick, 1)
           .onTrue(
@@ -152,31 +149,30 @@ public class RobotContainer {
           .onTrue(
               new ArmToPosition(
                   arm, ArmConstants.POSITION_MIDDLE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
-                  
-      new JoystickButton(rightJoystick, 4)
-          .onTrue(new ArmMoveDistance(arm, -10));
-          
-    if (false
-        == DriverStation.isJoystickConnected(
-            Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
-      new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
+
+      new JoystickButton(rightJoystick, 4).onTrue(new ArmMoveDistance(arm, -10));
+
+      if (false
+          == DriverStation.isJoystickConnected(
+              Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
+        new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
+      }
+
+      SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
+      SmartDashboard.putData("gripperClose", new GripperClose(gripper));
+
+      SmartDashboard.putData(
+          "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+
+      /*
+      new JoystickButton(leftJoystick, 6)
+              .whileTrue( Cone Mode );
+
+      new JoystickButton(leftJoystick, 7)
+              .whileTrue( Cube Mode );
+      */
     }
-
-    SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
-    SmartDashboard.putData("gripperClose", new GripperClose(gripper));
-
-    SmartDashboard.putData(
-        "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
-
-    /*
-    new JoystickButton(leftJoystick, 6)
-            .whileTrue( Cone Mode );
-
-    new JoystickButton(leftJoystick, 7)
-            .whileTrue( Cube Mode );
-    */
   }
-}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
