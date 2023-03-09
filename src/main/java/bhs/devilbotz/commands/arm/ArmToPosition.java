@@ -14,7 +14,7 @@ public class ArmToPosition extends CommandBase {
   private double gripperClosePosition;
   private boolean bReachedLimit;
 
-  public ArmToPosition(Arm arm, double targetPosition) {
+  private ArmToPosition(Arm arm, double targetPosition) {
     this.arm = arm;
     this.targetPosition = targetPosition;
     targetPositionTolerance = ArmConstants.POSITION_TOLERANCE;
@@ -55,10 +55,10 @@ public class ArmToPosition extends CommandBase {
       if (arm.isBottomLimit()) {
         bReachedLimit = true;
       } else {
-        arm.down();
         if ((null != gripper) && (currentPosition < gripperClosePosition)) {
           gripper.close();
         }
+        arm.down();
       }
     }
 

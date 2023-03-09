@@ -40,10 +40,10 @@ public class ArmDown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.down();
     if (arm.getPosition() < gripperClosePosition) {
       gripper.close();
     }
+    arm.down();
   }
 
   // Called once the command ends or is interrupted.
