@@ -5,6 +5,8 @@
 
 package bhs.devilbotz;
 
+import java.util.Map;
+
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.commands.DriveCommand;
 import bhs.devilbotz.commands.arm.ArmDown;
@@ -17,9 +19,13 @@ import bhs.devilbotz.commands.assist.AutoScore;
 import bhs.devilbotz.commands.assist.PickupFromGround;
 import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
 import bhs.devilbotz.commands.assist.PrepareForScoring;
+import bhs.devilbotz.commands.auto.BalancePID;
 import bhs.devilbotz.commands.auto.DockAndEngage;
+import bhs.devilbotz.commands.auto.DriveStraightPID;
+import bhs.devilbotz.commands.auto.DriveStraightToDock;
 import bhs.devilbotz.commands.auto.Mobility;
 import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
+import bhs.devilbotz.commands.auto.RotateDegrees;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -37,13 +43,17 @@ import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -216,6 +226,27 @@ public class RobotContainer {
                   driveTrain, delay, CommunityLocation.WALL, DriverStation.getAlliance());
           break;
         case SCORE_DOCK_AND_ENGAGE:
+          Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+              .asProxy()
+              .andThen(new ArmToPosition(arm, 0))
+              .andThen(new DriveStraightPID(driveTrain, 1))
+              .andThen(new GripperOpen(gripper))
+              .andThen(new DriveStraightPID(driveTrain, -1))
+              .andThen(new ArmDown(arm, gripper, 0))
+              .andThen(new RotateDegrees(driveTrain, 180))
+              .andThen(
+                  new DriveStraightToDock(
+                          driveTrain,
+                          ShuffleboardManager.autoDistance.getDouble(
+                              Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
+                      .andThen(new BalancePID(driveTrain))
+                      .andThen(new RotateDegrees(driveTrain, 90)))
+              .andThen(
+                  new InstantCommand(
+                      () -> {
+                        driveTrain.tankDriveVolts(0, 0);
+                      }));
+
           break;
         case SCORE_MOBILITY_DOCK_ENGAGE:
           break;
