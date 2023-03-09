@@ -123,7 +123,7 @@ public class RobotContainer {
           .onFalse(new GripperIdle(gripper));
       
       new JoystickButton(leftJoystick, 2)
-      .whileTrue(new PrepareForGroundPickup(arm, gripper));
+      .onTrue(new PrepareForGroundPickup(arm, gripper));
 
       new JoystickButton(leftJoystick, 3)
           .onTrue(new GripperOpen(gripper))
