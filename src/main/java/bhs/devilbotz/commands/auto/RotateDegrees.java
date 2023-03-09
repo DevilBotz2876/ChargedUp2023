@@ -37,6 +37,7 @@ public class RotateDegrees extends CommandBase {
     CommandDebug.trace();
     startAngle = drivetrain.getYaw();
     targetAngle = startAngle + rotationAmount;
+    CommandDebug.trace("startAngle: " + startAngle + " --> " + targetAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,7 +54,7 @@ public class RotateDegrees extends CommandBase {
   public void end(boolean interrupted) {
     double currentAngle = drivetrain.getYaw();
     SmartDashboard.putNumber("rotate/currentAngle", currentAngle);
-    CommandDebug.trace();
+    CommandDebug.trace("endAngle: " + currentAngle);
   }
 
   // Returns true when the command should end.

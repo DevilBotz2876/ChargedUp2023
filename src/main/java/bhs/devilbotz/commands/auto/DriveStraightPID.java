@@ -58,6 +58,7 @@ public class DriveStraightPID extends CommandBase {
     CommandDebug.trace();
     startAngle = drivetrain.getYaw();
     startDistance = drivetrain.getAverageDistance();
+    CommandDebug.trace("startAngle: " + startAngle + " distance: " + distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -86,7 +87,11 @@ public class DriveStraightPID extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    CommandDebug.trace();
+    CommandDebug.trace(
+        "endAngle: "
+            + drivetrain.getYaw()
+            + " distance: "
+            + (drivetrain.getAverageDistance() - startDistance));
   }
 
   // Returns true when the command should end.
