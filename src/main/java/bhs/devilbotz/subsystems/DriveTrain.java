@@ -24,10 +24,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -234,9 +236,9 @@ public class DriveTrain extends SubsystemBase {
     setupTalons();
     // Sets the initial position of the robot to (0, 0) and the initial angle to 0 degrees.
     resetEncoders();
+    resetNavx();
 
     ShuffleboardManager.putField(field);
-    SmartDashboard.putData("Gyro", navx);
     // Defines the odometry of the drive train, which is used to calculate the position of the
     // robot.
     poseEstimator =
@@ -250,7 +252,12 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putData("Left Velocity PID", leftPIDController);
     SmartDashboard.putData("Right Velocity PID", rightPIDController);
-    resetNavx();
+
+    SmartDashboard.putData("HW/Drive Train/Talon/Left/Master", leftMaster);
+    SmartDashboard.putData("HW/Drive Train/Talon/Left/Follower", leftFollower);
+    SmartDashboard.putData("HW/Drive Train/Talon/Right/Master", rightMaster);
+    SmartDashboard.putData("HW/Drive Train/Talon/Right/Follower", rightFollower);
+    SmartDashboard.putData("HW/Drive Train/NavX/Gyro", navx);
   }
 
   /**
@@ -295,6 +302,11 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // Updates the odometry of the drive train.
     updateOdometry();
+    SmartDashboard.putNumber("HW/Drive Train/NavX/Roll", getRoll());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Left/Velocity", getLeftVelocity());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Right/Velocity", getRightVelocity());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Left/Distance", getLeftDistance());
+    SmartDashboard.putNumber("HW/Drive Train/Encoder/Right/Distance", getRightDistance());
   }
 
   /**
@@ -638,18 +650,21 @@ public class DriveTrain extends SubsystemBase {
    *     href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppramsetecommand>PathPlanner
    *     Example</a>
    */
-  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+  public Command followTrajectoryCommand(
+      PathPlannerTrajectory traj, boolean isFirstPath, boolean stopAtEnd) {
+    final PathPlannerTrajectory translatedTraj =
+        PathPlannerTrajectory.transformTrajectoryForAlliance(traj, DriverStation.getAlliance());
     // field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
               // Reset odometry for the first path you run during auto
               if (isFirstPath) {
-                this.resetOdometry(traj.getInitialPose());
+                this.resetOdometry(translatedTraj.getInitialPose());
               }
             }),
         new PPRamseteCommand(
-            traj,
+            translatedTraj,
             this::getPose, // Pose supplier
             new RamseteController(),
             feedforward,
@@ -668,6 +683,19 @@ public class DriveTrain extends SubsystemBase {
             // Optional, defaults to true
             this // Requires this drive subsystem
             ),
-        new InstantCommand(() -> this.tankDriveVolts(0, 0)));
+        new InstantCommand(
+            () -> {
+              if (stopAtEnd) {
+                this.tankDriveVolts(0, 0);
+              }
+            }));
+  }
+
+  public Command stop() {
+    return new InstantCommand(
+        () -> {
+          this.tankDriveVolts(0, 0);
+        },
+        this);
   }
 }

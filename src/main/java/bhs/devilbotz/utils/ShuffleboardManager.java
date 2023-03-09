@@ -1,10 +1,13 @@
 package bhs.devilbotz.utils;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
+import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.lib.ScoreLevels;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -35,10 +38,15 @@ public class ShuffleboardManager {
   private static final ShuffleboardLayout autoMode =
       driveTab.getLayout("Autonomous", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
 
+  private GamePieceTypes selected = GamePieceTypes.CUBE;
+
+  private final RobotContainer robotContainer;
+
   private final GenericEntry gripperSetpoint;
   /** The constructor for the shuffleboard manager. */
-  public ShuffleboardManager() {
+  public ShuffleboardManager(RobotContainer robotContainer) {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    this.robotContainer = robotContainer;
     int connListenerHandle =
         inst.addConnectionListener(
             true,
@@ -60,6 +68,10 @@ public class ShuffleboardManager {
 
     initAutoModeChooser();
     initAutoModePreferences();
+  }
+
+  public static void putAlerts(String group, Alert.SendableAlerts sendableAlerts) {
+    driveTab.add(group, sendableAlerts).withPosition(2, 2).withSize(3, 2);
   }
 
   private void initAutoModeChooser() {
@@ -103,6 +115,7 @@ public class ShuffleboardManager {
 
     autoGamePieceTypeChooser.setDefaultOption("Cube", GamePieceTypes.CUBE);
     autoGamePieceTypeChooser.addOption("Cone", GamePieceTypes.CONE);
+    autoGamePieceTypeChooser.addOption("OFF", GamePieceTypes.NONE);
     autoMode
         .add("Game Piece", autoGamePieceTypeChooser)
         .withWidget(BuiltInWidgets.kSplitButtonChooser);
@@ -112,6 +125,23 @@ public class ShuffleboardManager {
   public void updateValues() {
     // update gripper setpoint using network tables
     gripperSetpoint.setBoolean(Gripper.getAtSetpoint());
+  }
+
+  public void updateValuesTeleop() {
+    if (selected != autoGamePieceTypeChooser.getSelected()) {
+      selected = autoGamePieceTypeChooser.getSelected();
+      switch (selected) {
+        case CONE:
+          robotContainer.setLEDMode(LEDModes.SET_CONE);
+          break;
+        case CUBE:
+          robotContainer.setLEDMode(LEDModes.SET_CUBE);
+          break;
+        case NONE:
+          robotContainer.setLEDModeAlliance();
+          break;
+      }
+    }
   }
 
   /**
@@ -124,6 +154,10 @@ public class ShuffleboardManager {
         .add("Field", field)
         .withWidget(BuiltInWidgets.kField)
         .withPosition(2, 0)
-        .withSize(5, 3);
+        .withSize(3, 2);
+  }
+
+  public static void putCamera(VideoSource videoSource) {
+    driveTab.add("Camera", videoSource).withPosition(5, 0).withSize(4, 4);
   }
 }

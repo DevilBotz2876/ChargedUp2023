@@ -2,6 +2,7 @@ package bhs.devilbotz.commands;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.utils.Alert;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
@@ -32,6 +33,8 @@ public class ArcadeDriveOpenLoop extends CommandBase {
     this.drive = drive;
     this.speed = speed;
     this.rotation = rotation;
+
+    new Alert("PID Driving is NOT being used", Alert.AlertType.INFO).set(true);
 
     addRequirements(this.drive);
   }

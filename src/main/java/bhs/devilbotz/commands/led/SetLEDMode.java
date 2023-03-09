@@ -12,6 +12,7 @@ public class SetLEDMode extends CommandBase {
   public SetLEDMode(Arduino arduino, LEDModes ledMode) {
     this.arduino = arduino;
     this.ledMode = ledMode;
+    addRequirements(arduino);
   }
 
   @Override

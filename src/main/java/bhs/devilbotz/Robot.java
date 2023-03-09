@@ -5,14 +5,17 @@
 
 package bhs.devilbotz;
 
-import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -26,6 +29,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.opencv.core.Mat;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -40,8 +44,7 @@ public class Robot extends TimedRobot {
   private ShuffleboardManager shuffleboardManager;
   private RobotContainer robotContainer;
   private static JsonNode robotConfig;
-
-  private DriverStation.Alliance alliance = null;
+  private DriverStation.Alliance currentAlliance = null;
 
   /**
    * We default to using the "Competition BOT" robot ID if the current ID is not found. This is
@@ -73,16 +76,38 @@ public class Robot extends TimedRobot {
       ObjectMapper objectMapper = new ObjectMapper();
       robotConfig = objectMapper.readTree(robotConfigFile);
       System.out.println("Loaded robot config: " + robotConfigPath);
-      System.out.println("\tname: " + robotConfig.get("name").asText());
-      System.out.println("\tid: " + robotConfig.get("id").asText());
+      new Alert(
+              "Robot Name: "
+                  + robotConfig.get("name").asText()
+                  + " Id: "
+                  + robotConfig.get("id").asText(),
+              Alert.AlertType.INFO)
+          .set(true);
     } catch (Exception ex) {
       System.out.println(ex.toString());
+      new Alert("Failed to load robot config. Robot will not function", Alert.AlertType.ERROR)
+          .set(true);
     }
 
     robotContainer = new RobotContainer();
     shuffleboardManager = robotContainer.getShuffleboardManager();
 
-    CameraServer.startAutomaticCapture();
+    if (Robot.checkCapability("hasCamera")) {
+      UsbCamera armCamera = CameraServer.startAutomaticCapture(0);
+
+      armCamera.setResolution(240, 135);
+      armCamera.setFPS(20);
+      armCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
+    } else {
+      Alert cameraAlert =
+          new Alert("Robot is a simulation. Camera will display black.", Alert.AlertType.WARNING);
+      cameraAlert.set(true);
+      // Create a blank video source to simulate the camera
+      CvSource armCameraSource = CameraServer.putVideo("Test", 320, 240);
+      armCameraSource.putFrame(new Mat(320, 240, 0));
+
+      ShuffleboardManager.putCamera(armCameraSource);
+    }
   }
 
   /**
@@ -108,29 +133,22 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
-    setLEDAlliance();
-  }
-
-  private void setLEDAlliance() {
-    if (DriverStation.getAlliance() != alliance) {
-      alliance = DriverStation.getAlliance();
-      if (alliance == DriverStation.Alliance.Red) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
-      } else if (alliance == DriverStation.Alliance.Blue) {
-        new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
-      }
-    }
   }
 
   @Override
   public void disabledPeriodic() {
-    setLEDAlliance();
+    // We check if the alliance has changed in disable perioic update the LEDs accordingly.  We
+    // remember what the LED was last set to to prevent constantly sending the LED commands.
+    if (DriverStation.getAlliance() != currentAlliance) {
+      currentAlliance = DriverStation.getAlliance();
+      robotContainer.setLEDModeAlliance();
+    }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_AUTONOMOUS).schedule();
+    robotContainer.setLEDMode(LEDModes.SET_AUTONOMOUS);
     robotContainer.resetRobotPosition();
 
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
@@ -149,11 +167,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     robotContainer.resetRobotPosition();
-    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
-      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_RED).schedule();
-    } else {
-      new SetLEDMode(robotContainer.getArduino(), LEDModes.SET_BLUE).schedule();
-    }
+    robotContainer.setLEDModeAlliance();
     robotContainer.resetRobotPosition();
 
     // This makes sure that the autonomous stops running when
@@ -174,7 +188,9 @@ public class Robot extends TimedRobot {
 
   /** This method is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    shuffleboardManager.updateValuesTeleop();
+  }
 
   @Override
   public void testInit() {
@@ -188,7 +204,10 @@ public class Robot extends TimedRobot {
 
   /** This method is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    Alert simulationAlert = new Alert("Robot is a simulation", Alert.AlertType.INFO);
+    simulationAlert.set(true);
+  }
 
   /** This method is called periodically whilst in simulation. */
   @Override
@@ -217,13 +236,19 @@ public class Robot extends TimedRobot {
       return robotConfigFilePathPrefix + robotUniqueId + robotConfigFilePathSuffix;
     } else if (Files.exists(
         Paths.get(robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix))) {
-      System.out.println(
-          "WARNING: robotConfig for "
-              + robotUniqueId
-              + " not found, using default robot "
-              + robotUniqueIdDefault);
+      new Alert(
+              "WARNING: robotConfig for "
+                  + robotUniqueId
+                  + " not found, using default robot "
+                  + robotUniqueIdDefault,
+              Alert.AlertType.WARNING)
+          .set(true);
       return robotConfigFilePathPrefix + robotUniqueIdDefault + robotConfigFilePathSuffix;
     } else {
+      new Alert(
+              "Can't find a valid robot config JSON file in: " + robotConfigFilePathPrefix,
+              Alert.AlertType.ERROR)
+          .set(true);
       throw new Exception(
           "Can't find a valid robot config JSON file in: " + robotConfigFilePathPrefix);
     }
@@ -244,14 +269,19 @@ public class Robot extends TimedRobot {
       NetworkInterface network = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
       byte[] mac = network.getHardwareAddress();
 
-      StringBuilder macString = new StringBuilder();
-      for (byte m : mac) {
-        macString.append(String.format("%02X", m).replace("-", ""));
+      if (null != mac) {
+        StringBuilder macString = new StringBuilder();
+        for (byte m : mac) {
+          macString.append(String.format("%02X", m).replace("-", ""));
+        }
+        return macString.toString();
+      } else {
+        throw new UnknownHostException("Cannot get mac address");
       }
-      return macString.toString();
-      // TODO: Implement checking for the practice bot
     } catch (SocketException | UnknownHostException e) {
-      throw new RuntimeException(e);
+      new Alert("Can't get MAC address", Alert.AlertType.ERROR).set(true);
+      /* Default to using competition bot */
+      return robotUniqueIdDefault;
     }
   }
 
