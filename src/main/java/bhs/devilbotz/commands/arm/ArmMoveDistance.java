@@ -69,10 +69,19 @@ public class ArmMoveDistance extends CommandBase {
   public boolean isFinished() {
     // Stop command in case the end position is out of range or encoder is broken or giving
     // incorrect readings
-    if (arm.isBottomLimit() || arm.isTopLimit()) {
+    double distanceSoFar = arm.getPosition() - start;
+    if (distance < 0) {
+      if (arm.isBottomLimit() || distanceSoFar <= distance) {
+        return true;
+      }
+    } else if (distance > 0) {
+      if (arm.isTopLimit() || distanceSoFar >= distance) {
+        return true;
+      }
+    } else {
       return true;
     }
-    double diff = arm.getPosition() - end;
-    return Math.abs(diff) < 2;
+
+    return false;
   }
 }
