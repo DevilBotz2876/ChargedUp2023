@@ -121,6 +121,9 @@ public class RobotContainer {
       new JoystickButton(leftJoystick, 1)
           .onTrue(new GripperClose(gripper))
           .onFalse(new GripperIdle(gripper));
+      
+      new JoystickButton(leftJoystick, 2)
+      .whileTrue(new PrepareForGroundPickup(arm, gripper));
 
       new JoystickButton(leftJoystick, 3)
           .onTrue(new GripperOpen(gripper))
