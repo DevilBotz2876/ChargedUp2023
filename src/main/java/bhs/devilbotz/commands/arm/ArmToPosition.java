@@ -55,10 +55,10 @@ public class ArmToPosition extends CommandBase {
       if (arm.isBottomLimit()) {
         bReachedLimit = true;
       } else {
-        arm.down();
         if ((null != gripper) && (currentPosition < gripperClosePosition)) {
           gripper.close();
         }
+        arm.down();
       }
     }
 

@@ -5,11 +5,14 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.subsystems.Arm;
+import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** This command moves the arm a given distance. */
 public class ArmMoveDistance extends CommandBase {
   private final Arm arm;
+  private final Gripper gripper;
+  private final double gripperClosePosition;
   private final double distance;
   private double start, end;
 
@@ -19,11 +22,14 @@ public class ArmMoveDistance extends CommandBase {
    * @param arm The arm subsystem.
    * @param distance Amount to move the arm.
    */
-  public ArmMoveDistance(Arm arm, double distance) {
+  public ArmMoveDistance(Arm arm, double distance, Gripper gripper, double gripperClosePosition) {
     this.arm = arm;
     this.distance = distance;
+    this.gripper = gripper;
+    this.gripperClosePosition = gripperClosePosition;
 
     addRequirements(arm);
+    addRequirements(gripper);
   }
 
   // Called when the command is initially scheduled.
@@ -45,6 +51,9 @@ public class ArmMoveDistance extends CommandBase {
     if (distance > 0) {
       arm.up();
     } else if (distance < 0) {
+      if (arm.getPosition() < gripperClosePosition) {
+        gripper.close();
+      }
       arm.down();
     }
   }

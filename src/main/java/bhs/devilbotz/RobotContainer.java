@@ -150,7 +150,13 @@ public class RobotContainer {
               new ArmToPosition(
                   arm, ArmConstants.POSITION_MIDDLE, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
 
-      new JoystickButton(rightJoystick, 4).onTrue(new ArmMoveDistance(arm, -10));
+      new JoystickButton(rightJoystick, 4)
+          .onTrue(
+              new ArmMoveDistance(
+                  arm,
+                  ArmConstants.POSITION_SCORING_DELTA,
+                  gripper,
+                  ArmConstants.POSITION_GRIPPER_CLOSE));
     }
     if (false
         == DriverStation.isJoystickConnected(
@@ -162,7 +168,13 @@ public class RobotContainer {
     SmartDashboard.putData("gripperClose", new GripperClose(gripper));
 
     SmartDashboard.putData(
-        "armScorePiece", new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
+        "armScorePiece",
+        new ArmMoveDistance(
+                arm,
+                ArmConstants.POSITION_SCORING_DELTA,
+                gripper,
+                ArmConstants.POSITION_GRIPPER_CLOSE)
+            .andThen(new GripperOpen(gripper)));
 
     /*
     new JoystickButton(leftJoystick, 6)
