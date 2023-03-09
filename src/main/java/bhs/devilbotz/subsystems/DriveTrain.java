@@ -652,7 +652,7 @@ public class DriveTrain extends SubsystemBase {
                 this.tankDriveVolts(0, 0);
               }
             }),
-        CommandDebug.message("followTrajectoryCommand:Start"));
+        CommandDebug.message("followTrajectoryCommand:End"));
   }
 
   public Command stop() {
