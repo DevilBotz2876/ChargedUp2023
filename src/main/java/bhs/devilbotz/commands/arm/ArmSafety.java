@@ -28,7 +28,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public abstract class ArmSafety extends CommandBase {
   private final Arm arm;
   private final Gripper gripper;
-  private ArmCommand currentCommand;
+  private ArmCommand currentCommand = ArmCommand.UNKNOWN;
+  private ArmCommand previousCommand = ArmCommand.UNKNOWN;
 
   private static enum ArmCommand {
     UNKNOWN,
@@ -70,6 +71,9 @@ public abstract class ArmSafety extends CommandBase {
   @Override
   public final void initialize() {
     initializeWithSafety();
+
+    currentCommand = ArmCommand.UNKNOWN;
+    previousCommand = ArmCommand.UNKNOWN;
   }
 
   @Override
@@ -101,20 +105,24 @@ public abstract class ArmSafety extends CommandBase {
     }
 
     // Send the actual request to the arm subsystem
-    switch (currentCommand) {
-      case MOVE_UP:
-        arm.up();
-        break;
+    if (currentCommand != previousCommand) {
+      switch (currentCommand) {
+        case MOVE_UP:
+          arm.up();
+          break;
 
-      case MOVE_DOWN:
-        arm.down();
-        break;
+        case MOVE_DOWN:
+          arm.down();
+          break;
 
-      case STOP:
-      case EMERGENCY_STOP:
-      default:
-        arm.stop();
-        break;
+        case STOP:
+        case EMERGENCY_STOP:
+        default:
+          arm.stop();
+          break;
+      }
+
+      previousCommand = currentCommand;
     }
   }
 
