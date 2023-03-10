@@ -117,7 +117,7 @@ public final class Constants {
         190; // When the arm is moving down, the positon when the gripper needs to be closed to
     // avoid crashing into the frame
     public static final double POSITION_SCORING_DELTA =
-        10; // The amount to lower the gripper before releasing piece
+        -10; // The amount to move the gripper before releasing piece
     public static final double POSITION_TOLERANCE = 20;
   }
 

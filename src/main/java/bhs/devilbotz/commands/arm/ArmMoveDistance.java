@@ -5,13 +5,12 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.subsystems.Arm;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import bhs.devilbotz.subsystems.Gripper;
 
 /** This command moves the arm a given distance. */
-public class ArmMoveDistance extends CommandBase {
-  private final Arm arm;
+public class ArmMoveDistance extends ArmSafety {
   private final double distance;
-  private double start, end;
+  private double start;
 
   /**
    * The constructor
@@ -19,51 +18,39 @@ public class ArmMoveDistance extends CommandBase {
    * @param arm The arm subsystem.
    * @param distance Amount to move the arm.
    */
-  public ArmMoveDistance(Arm arm, double distance) {
-    this.arm = arm;
+  public ArmMoveDistance(Arm arm, double distance, Gripper gripper) {
+    super(arm, gripper);
     this.distance = distance;
-
-    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initializeWithSafety() {
     // Remember our starting position.  Then apply the distance to move.  The execute method will
     // move the arm up or down
     // depending on sign of distance.  The isFinished method will check to see if current arm
     // position at end position.
-    start = arm.getPosition();
-    end = start + distance;
+    start = getPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void executeWithSafety() {
     // Use sign of distance to figure out if we should move up or down.  Up is positive, down is
     // negative.
     if (distance > 0) {
-      arm.up();
+      up();
     } else if (distance < 0) {
-      arm.down();
+      down();
     }
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    arm.stop();
   }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
+  public boolean isFinishedWithSafety() {
     // Stop command in case the end position is out of range or encoder is broken or giving
     // incorrect readings
-    if (arm.isBottomLimit() || arm.isTopLimit()) {
-      return true;
-    }
-    double diff = arm.getPosition() - end;
-    return Math.abs(diff) < 2;
+    double distanceSoFar = getPosition() - start;
+    return (Math.abs(distanceSoFar) >= Math.abs(distance));
   }
 }
