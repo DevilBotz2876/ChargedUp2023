@@ -121,8 +121,7 @@ public class RobotContainer {
         || DriverStation.isJoystickConnected(
             Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
 
-      new JoystickButton(rightJoystick, 3)
-              .toggleOnTrue(new DriveToTarget(driveTrain));
+      new JoystickButton(rightJoystick, 3).toggleOnTrue(new DriveToTarget(driveTrain));
 
       new JoystickButton(leftJoystick, 1)
           .onTrue(new GripperClose(gripper))

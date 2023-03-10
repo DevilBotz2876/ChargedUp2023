@@ -132,7 +132,8 @@ public final class Constants {
             new Translation3d(
                 Units.inchesToMeters(25), Units.inchesToMeters(0), Units.inchesToMeters(4)),
             new Rotation3d(
-                0, Units.degreesToRadians(-15),
+                0,
+                Units.degreesToRadians(-15),
                 0)); // Cam mounted facing forward, 15 inches forward of center, 4 inches up, and
     // 0 inches to the side
     // from center.
