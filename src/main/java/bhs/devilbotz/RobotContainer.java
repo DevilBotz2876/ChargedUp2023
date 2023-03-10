@@ -7,6 +7,7 @@ package bhs.devilbotz;
 
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.commands.DriveCommand;
+import bhs.devilbotz.commands.arm.*;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmIdle;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
@@ -20,11 +21,6 @@ import bhs.devilbotz.commands.assist.PrepareForScoring;
 import bhs.devilbotz.commands.auto.DockAndEngage;
 import bhs.devilbotz.commands.auto.Mobility;
 import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
-import bhs.devilbotz.commands.arm.*;
-import bhs.devilbotz.commands.auto.BalancePID;
-import bhs.devilbotz.commands.auto.DriveStraightPID;
-import bhs.devilbotz.commands.auto.DriveStraightToDock;
-import bhs.devilbotz.commands.auto.RotateDegrees;
 import bhs.devilbotz.commands.driverassist.DriveToTarget;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
@@ -124,6 +120,10 @@ public class RobotContainer {
     if (Robot.isReal()
         || DriverStation.isJoystickConnected(
             Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
+
+      new JoystickButton(rightJoystick, 3)
+              .toggleOnTrue(new DriveToTarget(driveTrain));
+
       new JoystickButton(leftJoystick, 1)
           .onTrue(new GripperClose(gripper))
           .onFalse(new GripperIdle(gripper));
@@ -158,6 +158,7 @@ public class RobotContainer {
           .onTrue(
               new ArmToPosition(
                   arm, ArmConstants.POSITION_BOTTOM, gripper, ArmConstants.POSITION_GRIPPER_CLOSE));
+
       new JoystickButton(leftJoystick, 11)
           .onTrue(new ArmMoveDistance(arm, -10).andThen(new GripperOpen(gripper)));
     }

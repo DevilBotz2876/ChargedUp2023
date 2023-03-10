@@ -130,11 +130,11 @@ public final class Constants {
     public static final Transform3d robotToCam =
         new Transform3d(
             new Translation3d(
-                Units.inchesToMeters(17), Units.inchesToMeters(-12), Units.inchesToMeters(13)),
+                Units.inchesToMeters(25), Units.inchesToMeters(0), Units.inchesToMeters(4)),
             new Rotation3d(
-                0, 0,
-                0)); // Cam mounted facing forward, 17 inches forward of center, 13 inches up, and
-    // -12 inches to the side
+                0, Units.degreesToRadians(-15),
+                0)); // Cam mounted facing forward, 15 inches forward of center, 4 inches up, and
+    // 0 inches to the side
     // from center.
     public static final String cameraName = "Logitech_Webcam_C930e";
   }

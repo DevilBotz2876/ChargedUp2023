@@ -29,13 +29,13 @@ public class DriveToTarget extends CommandBase {
 
     // move the target back 2 feet
     Translation2d twoFeetBack =
-        targetPose.getTranslation().plus(new Translation2d(Units.feetToMeters(3.5), 0));
+        targetPose.getTranslation().plus(new Translation2d(Units.feetToMeters(4), 0));
 
     Rotation2d flippedRotation = targetPose.getRotation().plus(Rotation2d.fromDegrees(180));
 
     PathPlannerTrajectory traj1 =
         PathPlanner.generatePath(
-            new PathConstraints(0.25, 0.3),
+            new PathConstraints(1.5, 1),
             new PathPoint(
                 estimatedPose.getTranslation(), estimatedPose.getRotation()), // position, heading
             new PathPoint(twoFeetBack, flippedRotation) // position, heading
@@ -43,7 +43,7 @@ public class DriveToTarget extends CommandBase {
     System.out.println("path generated");
     drive.addPathToField(traj1);
     // execute
-    drive.followTrajectoryCommand(traj1, true).schedule();
+    drive.followTrajectoryCommand(traj1, true, true).schedule();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

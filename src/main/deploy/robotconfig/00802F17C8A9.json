@@ -3,7 +3,8 @@
     "id": "00802F17C8A9",
 
     "capabilities" : {
-        "hasInvertedDriveEncoderSensorPhase": true
+        "hasInvertedDriveEncoderSensorPhase": true,
+        "hasCamera": false
     },
 
     "drivetrain" : {
