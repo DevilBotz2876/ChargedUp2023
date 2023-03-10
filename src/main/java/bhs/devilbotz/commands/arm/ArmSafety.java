@@ -23,8 +23,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  *         <li>If the arm is near the bottom limit, the gripper wil close automatically to avoid
  *             hitting the robot frame
  *       </ul>
- *       <i>Note: ALL arm commands that move the arm should extend this class and must implement the
- *       following two methods</i>
+ * </ul>
+ *
+ * <i>Note: ALL arm commands that move the arm should extend this class and must implement the
+ * following two methods</i>
  */
 public abstract class ArmSafety extends CommandBase {
   private final Arm arm;
