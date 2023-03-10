@@ -226,14 +226,17 @@ public class RobotContainer {
                   driveTrain, delay, CommunityLocation.WALL, DriverStation.getAlliance());
           break;
         case SCORE_DOCK_AND_ENGAGE:
-          Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+          break;
+        case SCORE_MOBILITY_DOCK_ENGAGE:
+        Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
               .asProxy()
-              .andThen(new ArmToPosition(arm, 0))
+              .andThen(new DriveStraightPID(driveTrain, -1))
+              .andThen(new ArmToPosition(arm, ArmConstants.POSITION_TOP))
               .andThen(new DriveStraightPID(driveTrain, 1))
+              .andThen(new ArmDown(arm, gripper, 0))
               .andThen(new GripperOpen(gripper))
               .andThen(new DriveStraightPID(driveTrain, -1))
-              .andThen(new ArmDown(arm, gripper, 0))
-              .andThen(new RotateDegrees(driveTrain, 180))
+              .andThen(new ArmDown(arm, gripper, maxDistance))
               .andThen(
                   new DriveStraightToDock(
                           driveTrain,
@@ -247,8 +250,6 @@ public class RobotContainer {
                         driveTrain.tankDriveVolts(0, 0);
                       }));
 
-          break;
-        case SCORE_MOBILITY_DOCK_ENGAGE:
           break;
         case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
           break;
