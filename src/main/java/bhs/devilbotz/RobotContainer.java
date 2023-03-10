@@ -201,7 +201,7 @@ public class RobotContainer {
           autonomousCommand =
               new MobilityDockAndEngage(
                   driveTrain, delay, CommunityLocation.HUMAN, DriverStation.getAlliance());
-
+          break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           autonomousCommand =
               new MobilityDockAndEngage(
