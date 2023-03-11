@@ -137,9 +137,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The child must use this function to request arm movement using the following functions:</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFinishedWithSafety()" class="member-name-link">isFinishedWithSafety</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initializeWithSafety()" class="member-name-link">initializeWithSafety</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The child can use this function to initialize any settings immediately prior to the first
+ execution of the command</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFinishedWithSafety()" class="member-name-link">isFinishedWithSafety</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The child must use this function to indicate if the command is finished.`</div>
 </div>
 </div>
@@ -147,7 +153,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-bhs.devilbotz.commands.arm.ArmSafety">Methods inherited from class&nbsp;bhs.devilbotz.commands.arm.<a href="ArmSafety.html" title="class in bhs.devilbotz.commands.arm">ArmSafety</a></h3>
-<code><a href="ArmSafety.html#down()">down</a>, <a href="ArmSafety.html#end(boolean)">end</a>, <a href="ArmSafety.html#execute()">execute</a>, <a href="ArmSafety.html#getPosition()">getPosition</a>, <a href="ArmSafety.html#initialize()">initialize</a>, <a href="ArmSafety.html#initializeWithSafety()">initializeWithSafety</a>, <a href="ArmSafety.html#isFinished()">isFinished</a>, <a href="ArmSafety.html#stop()">stop</a>, <a href="ArmSafety.html#up()">up</a></code></div>
+<code><a href="ArmSafety.html#down()">down</a>, <a href="ArmSafety.html#end(boolean)">end</a>, <a href="ArmSafety.html#execute()">execute</a>, <a href="ArmSafety.html#getPosition()">getPosition</a>, <a href="ArmSafety.html#initialize()">initialize</a>, <a href="ArmSafety.html#isFinished()">isFinished</a>, <a href="ArmSafety.html#stop()">stop</a>, <a href="ArmSafety.html#up()">up</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-edu.wpi.first.wpilibj2.command.CommandBase">Methods inherited from class&nbsp;edu.wpi.first.wpilibj2.command.CommandBase</h3>
 <code>addRequirements, getName, getRequirements, getSubsystem, initSendable, setName, setSubsystem</code></div>
@@ -184,6 +190,19 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="initializeWithSafety()">
+<h3>initializeWithSafety</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initializeWithSafety</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ArmSafety.html#initializeWithSafety()">ArmSafety</a></code></span></div>
+<div class="block">The child can use this function to initialize any settings immediately prior to the first
+ execution of the command</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="ArmSafety.html#initializeWithSafety()">initializeWithSafety</a></code>&nbsp;in class&nbsp;<code><a href="ArmSafety.html" title="class in bhs.devilbotz.commands.arm">ArmSafety</a></code></dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="executeWithSafety()">
 <h3>executeWithSafety</h3>

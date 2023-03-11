@@ -139,7 +139,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#execute()" class="member-name-link">execute</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#end(boolean)" class="member-name-link">end</a><wbr>(boolean&nbsp;interrupted)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#execute()" class="member-name-link">execute</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initialize()" class="member-name-link">initialize</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFinished()" class="member-name-link">isFinished</a>()</code></div>
@@ -149,7 +155,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-bhs.devilbotz.commands.auto.DriveStraightPID">Methods inherited from class&nbsp;bhs.devilbotz.commands.auto.<a href="DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></h3>
-<code><a href="DriveStraightPID.html#end(boolean)">end</a>, <a href="DriveStraightPID.html#initialize()">initialize</a>, <a href="DriveStraightPID.html#setMaxSpeed(double)">setMaxSpeed</a></code></div>
+<code><a href="DriveStraightPID.html#setMaxSpeed(double)">setMaxSpeed</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-edu.wpi.first.wpilibj2.command.CommandBase">Methods inherited from class&nbsp;edu.wpi.first.wpilibj2.command.CommandBase</h3>
 <code>addRequirements, getName, getRequirements, getSubsystem, initSendable, setName, setSubsystem</code></div>
@@ -193,6 +199,18 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="initialize()">
+<h3>initialize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initialize</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>initialize</code>&nbsp;in interface&nbsp;<code>edu.wpi.first.wpilibj2.command.Command</code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="DriveStraightPID.html#initialize()">initialize</a></code>&nbsp;in class&nbsp;<code><a href="DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="execute()">
 <h3>execute</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">execute</span>()</div>
@@ -201,6 +219,18 @@ loadScripts(document, 'script');</script>
 <dd><code>execute</code>&nbsp;in interface&nbsp;<code>edu.wpi.first.wpilibj2.command.Command</code></dd>
 <dt>Overrides:</dt>
 <dd><code><a href="DriveStraightPID.html#execute()">execute</a></code>&nbsp;in class&nbsp;<code><a href="DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="end(boolean)">
+<h3>end</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">end</span><wbr><span class="parameters">(boolean&nbsp;interrupted)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>end</code>&nbsp;in interface&nbsp;<code>edu.wpi.first.wpilibj2.command.Command</code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="DriveStraightPID.html#end(boolean)">end</a></code>&nbsp;in class&nbsp;<code><a href="DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></code></dd>
 </dl>
 </section>
 </li>
