@@ -193,8 +193,6 @@ The routines in **bold** are the most important/common routines we will use
 * Driver Assist
     * Prepare for Pickup
     * Pickup from Ground
-    * Prepare for Scoring
-    * AutoScore
 * LEDs
    * Setting alliance changes LEDs to match red/blue
    * Starting autonomous changes LEDs to green
