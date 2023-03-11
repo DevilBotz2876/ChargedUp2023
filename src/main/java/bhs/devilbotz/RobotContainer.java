@@ -24,6 +24,7 @@ import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.CommunityLocation;
+import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
@@ -36,6 +37,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -63,6 +65,8 @@ public class RobotContainer {
       new Joystick(Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT);
 
   private final Arduino arduino;
+
+  private GamePieceTypes gamePieceType = GamePieceTypes.CUBE;
 
   {
     try {
@@ -132,9 +136,21 @@ public class RobotContainer {
           .whileTrue(new ArmUp(arm, gripper))
           .onFalse(new ArmStop(arm));
 
-      new JoystickButton(leftJoystick, 6).onTrue(new SetLEDMode(arduino, LEDModes.SET_CONE));
+      new JoystickButton(leftJoystick, 6)
+          .onTrue(
+              new InstantCommand(
+                  () -> {
+                    // Reset odometry for the first path you run during auto
+                    this.setGamePieceType(GamePieceTypes.CONE);
+                  }));
 
-      new JoystickButton(leftJoystick, 7).onTrue(new SetLEDMode(arduino, LEDModes.SET_CUBE));
+      new JoystickButton(leftJoystick, 7)
+          .onTrue(
+              new InstantCommand(
+                  () -> {
+                    // Reset odometry for the first path you run during auto
+                    this.setGamePieceType(GamePieceTypes.CUBE);
+                  }));
 
       new JoystickButton(rightJoystick, 1)
           .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
@@ -304,6 +320,24 @@ public class RobotContainer {
 
     cmdList.add(new PrepareForGroundPickup(arm, gripper)).withPosition(0, 0);
     cmdList.add(new PickupFromGround(arm, gripper, driveTrain)).withPosition(0, 1);
+    cmdList
+        .add(
+            "Cone Mode",
+            new InstantCommand(
+                () -> {
+                  // Reset odometry for the first path you run during auto
+                  this.setGamePieceType(GamePieceTypes.CONE);
+                }))
+        .withPosition(0, 0);
+    cmdList
+        .add(
+            "Cube Mode",
+            new InstantCommand(
+                () -> {
+                  // Reset odometry for the first path you run during auto
+                  this.setGamePieceType(GamePieceTypes.CUBE);
+                }))
+        .withPosition(0, 1);
   }
 
   public void setLEDModeAlliance() {
@@ -316,5 +350,21 @@ public class RobotContainer {
 
   public void setLEDMode(LEDModes mode) {
     new SetLEDMode(arduino, mode).schedule();
+  }
+
+  public GamePieceTypes getGamePieceType() {
+    return this.gamePieceType;
+  }
+
+  public void setGamePieceType(GamePieceTypes gamePieceType) {
+    this.gamePieceType = gamePieceType;
+    switch (gamePieceType) {
+      case CONE:
+        setLEDMode(LEDModes.SET_CONE);
+      case CUBE:
+        setLEDMode(LEDModes.SET_CUBE);
+      default:
+        break;
+    }
   }
 }
