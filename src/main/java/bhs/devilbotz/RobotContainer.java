@@ -32,12 +32,16 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -67,6 +71,11 @@ public class RobotContainer {
   private final Arduino arduino;
 
   private GamePieceTypes gamePieceType = GamePieceTypes.CUBE;
+
+  // Network Table Based Debug Status
+  protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  protected NetworkTable table = inst.getTable("Game Piece Mode");
+  private StringEntry ntGamePieceMode = table.getStringTopic("state").getEntry("Unknown");
 
   {
     try {
@@ -104,6 +113,7 @@ public class RobotContainer {
     // rightJoystick::getX));
 
     buildArmShuffleboardTab();
+    ntGamePieceMode.set("Unknown");
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -152,11 +162,9 @@ public class RobotContainer {
                     this.setGamePieceType(GamePieceTypes.CUBE);
                   }));
 
-      new JoystickButton(rightJoystick, 1)
-          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
+      new JoystickButton(rightJoystick, 1).onTrue(prepareForScoring(ArmConstants.POSITION_TOP));
 
-      new JoystickButton(rightJoystick, 3)
-          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE, gripper));
+      new JoystickButton(rightJoystick, 3).onTrue(prepareForScoring(ArmConstants.POSITION_MIDDLE));
 
       new JoystickButton(rightJoystick, 4)
           .onTrue(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
@@ -276,14 +284,39 @@ public class RobotContainer {
     cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
 
     cmdList
-        .add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper))
+        .add(
+            "To Top",
+            new SelectCommand(
+                // Maps selector values to commands
+                Map.ofEntries(
+                    Map.entry(
+                        GamePieceTypes.CONE,
+                        new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper)),
+                    Map.entry(
+                        GamePieceTypes.CUBE,
+                        new ArmToPosition(
+                            arm,
+                            ArmConstants.POSITION_TOP + ArmConstants.POSITION_CUBE_DELTA,
+                            gripper))),
+                this::getGamePieceType))
         .withPosition(1, 0);
     cmdList
-        .add("To Middle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE, gripper))
+        .add(
+            "To Middle",
+            new SelectCommand(
+                // Maps selector values to commands
+                Map.ofEntries(
+                    Map.entry(
+                        GamePieceTypes.CONE,
+                        new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE, gripper)),
+                    Map.entry(
+                        GamePieceTypes.CUBE,
+                        new ArmToPosition(
+                            arm,
+                            ArmConstants.POSITION_MIDDLE + ArmConstants.POSITION_CUBE_DELTA,
+                            gripper))),
+                this::getGamePieceType))
         .withPosition(1, 1);
-    cmdList
-        .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM, gripper))
-        .withPosition(1, 2);
     cmdList
         .add("To Score", new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper))
         .withPosition(1, 2);
@@ -328,7 +361,7 @@ public class RobotContainer {
                   // Reset odometry for the first path you run during auto
                   this.setGamePieceType(GamePieceTypes.CONE);
                 }))
-        .withPosition(0, 0);
+        .withPosition(0, 2);
     cmdList
         .add(
             "Cube Mode",
@@ -337,7 +370,7 @@ public class RobotContainer {
                   // Reset odometry for the first path you run during auto
                   this.setGamePieceType(GamePieceTypes.CUBE);
                 }))
-        .withPosition(0, 1);
+        .withPosition(0, 3);
   }
 
   public void setLEDModeAlliance() {
@@ -361,10 +394,26 @@ public class RobotContainer {
     switch (gamePieceType) {
       case CONE:
         setLEDMode(LEDModes.SET_CONE);
+        ntGamePieceMode.set("Cone");
+        break;
       case CUBE:
         setLEDMode(LEDModes.SET_CUBE);
+        ntGamePieceMode.set("Cube");
+        break;
       default:
         break;
     }
+  }
+
+  public Command prepareForScoring(double scoringPosition) {
+    return new SelectCommand(
+        // Maps selector values to commands
+        Map.ofEntries(
+            Map.entry(GamePieceTypes.CONE, new ArmToPosition(arm, scoringPosition, gripper)),
+            Map.entry(
+                GamePieceTypes.CUBE,
+                new ArmToPosition(
+                    arm, scoringPosition + ArmConstants.POSITION_CUBE_DELTA, gripper))),
+        this::getGamePieceType);
   }
 }
