@@ -106,6 +106,8 @@ public final class Constants {
     public static final double POSITION_TOP = 558; // arm position to score on top goal
     public static final double POSITION_MIDDLE = 468; // arm position to score in mid goal
     public static final double POSITION_BOTTOM = 258; // arm position to score on bottom goal
+    public static final double POSITION_CUBE_DELTA = -90; // different in score position from cone to cube
+
     //    public static final double POSITION_PORTAL = 465; // arm position to pickup piece from
     // portal
     public static final double POSITION_DRIVE = 300; // arm position to use when holding a piece
@@ -114,6 +116,8 @@ public final class Constants {
     // avoid crashing into the frame
     public static final double POSITION_SCORING_DELTA =
         -10; // The amount to move the gripper before releasing piece
-    public static final double POSITION_TOLERANCE = 20;
+    public static final double POSITION_PICKUP_GROUND_CUBE = 80;
+    public static final double POSITION_PICKUP_GROUND_CONE = 0;
+    public static final double POSITION_TOLERANCE = 5;
   }
 }
