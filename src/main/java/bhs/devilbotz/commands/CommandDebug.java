@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands;
 
+import bhs.devilbotz.Constants.DebugConstants;
 import bhs.devilbotz.utils.Debug;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -9,29 +10,47 @@ public class CommandDebug {
 
   public static void trace() {
     //    debug.trace();
-    System.out.println(debug.getTraceString());
+    if (DebugConstants.enableArmMessages) {
+      System.out.println(debug.getTraceString());
+    }
   }
 
   public static void trace(String message) {
-    System.out.println(debug.getTraceString() + ":" + message);
+    if (DebugConstants.enableArmMessages) {
+      System.out.println(debug.getTraceString() + ":" + message);
+    }
   }
 
   public static void println(String message) {
-    System.out.println(message);
+    if (DebugConstants.enableArmMessages) {
+      System.out.println(message);
+    }
   }
 
   public static Command message(String message) {
     //    return debug.message(message);
-    return Commands.print(message);
+    if (DebugConstants.enableArmMessages) {
+      return Commands.print(message);
+    } else {
+      return Commands.none();
+    }
   }
 
   public static Command start() {
     //    return debug.start();
-    return Commands.print(debug.getClassString() + ":Start");
+    if (DebugConstants.enableArmMessages) {
+      return Commands.print(debug.getClassString() + ":Start");
+    } else {
+      return Commands.none();
+    }
   }
 
   public static Command end() {
     //    return debug.end();
-    return Commands.print(debug.getClassString() + ":End");
+    if (DebugConstants.enableArmMessages) {
+      return Commands.print(debug.getClassString() + ":End");
+    } else {
+      return Commands.none();
+    }
   }
 }

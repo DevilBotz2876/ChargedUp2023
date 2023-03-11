@@ -116,4 +116,8 @@ public final class Constants {
         -10; // The amount to move the gripper before releasing piece
     public static final double POSITION_TOLERANCE = 20;
   }
+
+  public static final class DebugConstants {
+    public static final boolean enableArmMessages = false;
+  }
 }
