@@ -47,8 +47,14 @@ public class DriveStraightToDock extends DriveStraightPID {
          */
         setMaxSpeed(Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_GROUND").asDouble(0.75));
 
-        if ((currentRoll > Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))
-            && (currentRoll < Robot.getDriveTrainConstant("DOCK_MAX_RAMP_ROLL").asDouble(15))) {
+        // We use the absolute value of the current roll so that we can approach the ram either
+        // going forward or backwards.
+        if ((Math.abs(currentRoll) > Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))
+            && (Math.abs(currentRoll)
+                < Robot.getDriveTrainConstant("DOCK_MAX_RAMP_ROLL").asDouble(15))) {
+          if (0 == onRampCount) {
+            System.out.println("On Ramp?");
+          }
           onRampCount++;
           System.out.println("#### Maybe On Ramp (onRampCount: " + onRampCount + ") ####");
         } else {
