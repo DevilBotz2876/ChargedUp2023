@@ -141,6 +141,8 @@ public class RobotContainer {
 
       new JoystickButton(rightJoystick, 4)
           .onTrue(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
+
+      new JoystickButton(rightJoystick, 5).onTrue(new PickupFromGround(arm, gripper, driveTrain));
     }
     if (false
         == DriverStation.isJoystickConnected(

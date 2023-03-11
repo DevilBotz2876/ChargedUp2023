@@ -103,14 +103,14 @@ public final class Constants {
     public static final int ENCODER_CHANNEL_A_DIO_PORT = 2; // TODO: add what color tape on wire
     public static final int ENCODER_CHANNEL_B_DIO_PORT = 3; // TODO: add what color tape on wire
 
-    public static final double POSITION_TOP = 558; // arm position to score on top goal
-    public static final double POSITION_MIDDLE = 468; // arm position to score in mid goal
+    public static final double POSITION_TOP = 525; // arm position to score on top goal
+    public static final double POSITION_MIDDLE = 450; // arm position to score in mid goal
     public static final double POSITION_BOTTOM = 258; // arm position to score on bottom goal
     //    public static final double POSITION_PORTAL = 465; // arm position to pickup piece from
     // portal
-    public static final double POSITION_DRIVE = 300; // arm position to use when holding a piece
+    public static final double POSITION_DRIVE = 100; // arm position to use when holding a piece
     public static final double POSITION_GRIPPER_CLOSE =
-        190; // When the arm is moving down, the positon when the gripper needs to be closed to
+        80; // When the arm is moving down, the positon when the gripper needs to be closed to
     // avoid crashing into the frame
     public static final double POSITION_SCORING_DELTA =
         -10; // The amount to move the gripper before releasing piece
