@@ -5,6 +5,7 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.auto.ScoreMobilityDockAndEngage;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.lib.LEDModes;
@@ -95,8 +96,8 @@ public class Arm extends SubsystemBase {
 
   private RobotContainer robotContainer;
 
-  public Arm(RobotContainer robotContainer) {
-    this.robotContainer = robotContainer;
+  public Arm(RobotContainer robotContainer2) {
+    this.robotContainer = robotContainer2;
     armMotor =
         new CANSparkMax(ArmConstants.ARM_MOTOR_CAN_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
@@ -121,7 +122,7 @@ public class Arm extends SubsystemBase {
     setupSimulation();
   }
 
-  void setupSimulation() {
+void setupSimulation() {
     if (Robot.isSimulation()) {
       encoderSim = new EncoderSim(encoder);
       encoderSim.setCount(0);

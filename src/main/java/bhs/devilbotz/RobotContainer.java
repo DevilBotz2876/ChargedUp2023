@@ -24,6 +24,7 @@ import bhs.devilbotz.commands.auto.DriveStraightToDock;
 import bhs.devilbotz.commands.auto.Mobility;
 import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
 import bhs.devilbotz.commands.auto.RotateDegrees;
+import bhs.devilbotz.commands.auto.ScoreMobilityDockAndEngage;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -220,27 +221,28 @@ public class RobotContainer {
         case SCORE_DOCK_AND_ENGAGE:
           break;
         case SCORE_MOBILITY_DOCK_ENGAGE:
-        Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
-              .asProxy()
-              .andThen(new DriveStraightPID(driveTrain, -1))
-              .andThen(new ArmToPosition(arm, ArmConstants.POSITION_TOP))
-              .andThen(new DriveStraightPID(driveTrain, 1))
-              .andThen(new ArmDown(arm, gripper))
-              .andThen(new GripperOpen(gripper))
-              .andThen(new DriveStraightPID(driveTrain, -1))
-              .andThen(new ArmDown(arm, gripper))
-              .andThen(
-                  new DriveStraightToDock(
-                          driveTrain,
-                          ShuffleboardManager.autoDistance.getDouble(
-                              Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
-                      .andThen(new BalancePID(driveTrain))
-                      .andThen(new RotateDegrees(driveTrain, 90)))
-              .andThen(
-                  new InstantCommand(
-                      () -> {
-                        driveTrain.tankDriveVolts(0, 0);
-                      }));
+        autonomousCommand = new ScoreMobilityDockAndEngage(arm, driveTrain, delay, gripper);
+        // Commands.waitSeconds(ShuffleboardManager.autoDelay.getDouble(0))
+        //       .asProxy()
+        //       .andThen(new DriveStraightPID(driveTrain, 100))
+        //       .andThen(new ArmToPosition(arm, ArmConstants.POSITION_TOP))
+        //       .andThen(new DriveStraightPID(driveTrain, 100))
+        //       .andThen(new ArmDown(arm, gripper))
+        //       .andThen(new GripperOpen(gripper))
+        //       .andThen(new DriveStraightPID(driveTrain, 100))
+        //       .andThen(new ArmDown(arm, gripper))
+        //       .andThen(
+        //           new DriveStraightToDock(
+        //                   driveTrain,
+        //                   ShuffleboardManager.autoDistance.getDouble(
+        //                       Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE))
+        //               .andThen(new BalancePID(driveTrain))
+        //               .andThen(new RotateDegrees(driveTrain, 90)))
+        //       .andThen(
+        //           new InstantCommand(
+        //               () -> {
+        //                 driveTrain.tankDriveVolts(0, 0);
+        //               }));
 
           break;
         case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
