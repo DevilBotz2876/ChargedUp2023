@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands.auto;
 
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -33,10 +34,12 @@ public class DockAndEngage extends SequentialCommandGroup {
    */
   public DockAndEngage(DriveTrain drivetrain, double delay, double maxDistance) {
     super();
+    addCommands(CommandDebug.start());
     addCommands(Commands.waitSeconds(delay));
     addCommands(new DriveStraightToDock(drivetrain, maxDistance));
     addCommands(new BalancePID(drivetrain));
     addCommands(new RotateDegrees(drivetrain, 90));
     addCommands(drivetrain.stop());
+    addCommands(CommandDebug.end());
   }
 }

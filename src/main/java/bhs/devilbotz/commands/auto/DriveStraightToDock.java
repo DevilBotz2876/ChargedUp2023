@@ -5,6 +5,7 @@
 package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 
 /**
@@ -36,6 +37,12 @@ public class DriveStraightToDock extends DriveStraightPID {
   int levelingRampCount = 0;
 
   @Override
+  public void initialize() {
+    CommandDebug.trace();
+    super.initialize();
+  }
+
+  @Override
   public void execute() {
     double currentRoll = drivetrain.getRoll();
 
@@ -49,16 +56,20 @@ public class DriveStraightToDock extends DriveStraightPID {
 
         if ((currentRoll > Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))
             && (currentRoll < Robot.getDriveTrainConstant("DOCK_MAX_RAMP_ROLL").asDouble(15))) {
+          if (0 == onRampCount) {
+            CommandDebug.message("On Ramp?");
+          }
           onRampCount++;
-          System.out.println("#### Maybe On Ramp (onRampCount: " + onRampCount + ") ####");
         } else {
+          if (0 != onRampCount) {
+            CommandDebug.message("No, NOT on Ramp...");
+          }
           onRampCount = 0;
-          System.out.println("#### Not on Ramp ####");
         }
 
         /* If we've been on the ramp long enough (roll is within expected window), we assume we are on the ramp and transition states */
         if (onRampCount > Robot.getDriveTrainConstant("DOCK_MIN_ON_RAMP_COUNT").asInt(10)) {
-          System.out.println("#### On Ramp! ####");
+          CommandDebug.message("Yes, On Ramp! " + onRampCount);
           currentState = DockState.ON_RAMP;
         }
         break;
@@ -72,17 +83,20 @@ public class DriveStraightToDock extends DriveStraightPID {
         double deltaRoll = currentRoll - previousRoll;
         if ((deltaRoll < 0)
             && (currentRoll < Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))) {
+          if (0 == levelingRampCount) {
+            CommandDebug.message("Leveling Off?");
+          }
           levelingRampCount++;
-          System.out.println(
-              "#### Maybe Leveling Off (levelingRampCount: " + levelingRampCount + ") ####");
         } else {
+          if (0 != levelingRampCount) {
+            CommandDebug.message("No, NOT leveling off...");
+          }
           levelingRampCount = 0;
-          System.out.println("#### Not Leveling Off ####");
         }
 
         /* If we've been leveling off long enough, we assume we are almost balanced */
         if (levelingRampCount > Robot.getDriveTrainConstant("DOCK_MIN_LEVELING_COUNT").asInt(2)) {
-          System.out.println("#### Leveling Off! ####");
+          CommandDebug.message("Yes, leveling off! " + levelingRampCount);
           currentState = DockState.LEVELING_OFF;
         }
         break;
@@ -97,6 +111,13 @@ public class DriveStraightToDock extends DriveStraightPID {
 
     /* Execute the base class's execute function to drive straight */
     super.execute();
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    CommandDebug.trace();
+    super.end(interrupted);
   }
 
   // Returns true when the command should end.

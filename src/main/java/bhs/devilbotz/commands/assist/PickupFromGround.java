@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.assist;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
 import bhs.devilbotz.commands.gripper.GripperClose;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class PickupFromGround extends SequentialCommandGroup {
   public PickupFromGround(Arm arm, Gripper gripper, DriveTrain drivetrain) {
     super();
+    addCommands(CommandDebug.start());
     // Close the gripper
     addCommands(new GripperClose(gripper));
     // Drive backward and raise arm at the same time

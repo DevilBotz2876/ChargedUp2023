@@ -4,6 +4,7 @@
 
 package bhs.devilbotz.commands.arm;
 
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
 
@@ -31,6 +32,7 @@ public class ArmMoveDistance extends ArmSafety {
     // depending on sign of distance.  The isFinished method will check to see if current arm
     // position at end position.
     start = getPosition();
+    CommandDebug.trace("@ position: " + start + " --> " + (start + distance));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
