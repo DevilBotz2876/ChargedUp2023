@@ -17,7 +17,7 @@ import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.arm.ArmUp;
 import bhs.devilbotz.commands.assist.PickupFromGround;
 import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
-import bhs.devilbotz.commands.assist.PrepareForScoring;
+import bhs.devilbotz.commands.auto.BalancePID;
 import bhs.devilbotz.commands.auto.DockAndEngage;
 import bhs.devilbotz.commands.auto.DriveStraightPID;
 import bhs.devilbotz.commands.auto.DriveStraightToDock;
@@ -147,10 +147,10 @@ public class RobotContainer {
       new JoystickButton(leftJoystick, 7).onTrue(new SetLEDMode(arduino, LEDModes.SET_CUBE));
 
       new JoystickButton(rightJoystick, 1)
-          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
+          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_TOP));
 
       new JoystickButton(rightJoystick, 3)
-          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE, gripper));
+          .onTrue(new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE));
 
       new JoystickButton(rightJoystick, 4)
           .onTrue(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
@@ -225,10 +225,10 @@ public class RobotContainer {
               .andThen(new DriveStraightPID(driveTrain, -1))
               .andThen(new ArmToPosition(arm, ArmConstants.POSITION_TOP))
               .andThen(new DriveStraightPID(driveTrain, 1))
-              .andThen(new ArmDown(arm, gripper, 0))
+              .andThen(new ArmDown(arm, gripper))
               .andThen(new GripperOpen(gripper))
               .andThen(new DriveStraightPID(driveTrain, -1))
-              .andThen(new ArmDown(arm, gripper, maxDistance))
+              .andThen(new ArmDown(arm, gripper))
               .andThen(
                   new DriveStraightToDock(
                           driveTrain,
@@ -292,13 +292,13 @@ public class RobotContainer {
     cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
 
     cmdList
-        .add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper))
+        .add("To Top", new ArmToPosition(arm, ArmConstants.POSITION_TOP))
         .withPosition(1, 0);
     cmdList
-        .add("To Middle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE, gripper))
+        .add("To Middle", new ArmToPosition(arm, ArmConstants.POSITION_MIDDLE))
         .withPosition(1, 1);
     cmdList
-        .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM, gripper))
+        .add("To Bottom", new ArmToPosition(arm, ArmConstants.POSITION_BOTTOM))
         .withPosition(1, 2);
     cmdList
         .add("To Score", new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper))
