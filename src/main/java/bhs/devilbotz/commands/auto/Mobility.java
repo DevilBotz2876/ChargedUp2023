@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands.auto;
 
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -25,8 +26,10 @@ public class Mobility extends SequentialCommandGroup {
    */
   public Mobility(DriveTrain drivetrain, double delay, double distance) {
     super();
+    addCommands(CommandDebug.start());
     addCommands(Commands.waitSeconds(delay));
     addCommands(new DriveStraightPID(drivetrain, distance));
     addCommands(drivetrain.stop());
+    addCommands(CommandDebug.end());
   }
 }

@@ -38,7 +38,6 @@ import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
@@ -90,8 +89,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-
-    SmartDashboard.putData(driveTrain);
 
     arm.setDefaultCommand(new ArmIdle(arm));
     gripper.setDefaultCommand(new GripperIdle(gripper));
@@ -168,28 +165,14 @@ public class RobotContainer {
 
       new JoystickButton(rightJoystick, 4)
           .onTrue(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
+
+      new JoystickButton(rightJoystick, 5).onTrue(new PickupFromGround(arm, gripper, driveTrain));
     }
     if (false
         == DriverStation.isJoystickConnected(
             Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
       new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
     }
-
-    SmartDashboard.putData("gripperOpen", new GripperOpen(gripper));
-    SmartDashboard.putData("gripperClose", new GripperClose(gripper));
-
-    SmartDashboard.putData(
-        "armScorePiece",
-        new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper)
-            .andThen(new GripperOpen(gripper)));
-
-    /*
-    new JoystickButton(leftJoystick, 6)
-            .whileTrue( Cone Mode );
-
-    new JoystickButton(leftJoystick, 7)
-            .whileTrue( Cube Mode );
-    */
   }
 
   /**
@@ -225,7 +208,7 @@ public class RobotContainer {
           autonomousCommand =
               new MobilityDockAndEngage(
                   driveTrain, delay, CommunityLocation.HUMAN, DriverStation.getAlliance());
-
+          break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           autonomousCommand =
               new MobilityDockAndEngage(
