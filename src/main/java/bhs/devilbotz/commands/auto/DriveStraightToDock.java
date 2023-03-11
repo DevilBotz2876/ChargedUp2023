@@ -52,9 +52,6 @@ public class DriveStraightToDock extends DriveStraightPID {
         if ((Math.abs(currentRoll) > Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))
             && (Math.abs(currentRoll)
                 < Robot.getDriveTrainConstant("DOCK_MAX_RAMP_ROLL").asDouble(15))) {
-          if (0 == onRampCount) {
-            System.out.println("On Ramp?");
-          }
           onRampCount++;
           System.out.println("#### Maybe On Ramp (onRampCount: " + onRampCount + ") ####");
         } else {
