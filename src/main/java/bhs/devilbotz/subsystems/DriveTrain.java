@@ -243,9 +243,6 @@ public class DriveTrain extends SubsystemBase {
     rotSimStart.setNumber(0.0);
     readSimStart.setBoolean(false);
 
-    SmartDashboard.putData("Left Velocity PID", leftPIDController);
-    SmartDashboard.putData("Right Velocity PID", rightPIDController);
-
     SmartDashboard.putData("HW/Drive Train/Talon/Left/Master", leftMaster);
     SmartDashboard.putData("HW/Drive Train/Talon/Left/Follower", leftFollower);
     SmartDashboard.putData("HW/Drive Train/Talon/Right/Master", rightMaster);

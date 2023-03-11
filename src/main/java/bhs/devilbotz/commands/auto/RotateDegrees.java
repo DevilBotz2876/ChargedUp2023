@@ -4,7 +4,6 @@ import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RotateDegrees extends CommandBase {
@@ -24,8 +23,6 @@ public class RotateDegrees extends CommandBase {
     rotatePid.setTolerance(Robot.getDriveTrainConstant("ROTATE_PID_TOLERANCE").asDouble());
     rotatePid.enableContinuousInput(0, 360);
     this.rotationAmount = degrees;
-    SmartDashboard.putNumber("rotate/startAngle", startAngle);
-    SmartDashboard.putNumber("rotate/targetAngle", targetAngle);
     addRequirements(drivetrain);
   }
 
@@ -44,7 +41,6 @@ public class RotateDegrees extends CommandBase {
   @Override
   public void execute() {
     double currentAngle = drivetrain.getYaw();
-    SmartDashboard.putNumber("rotate/currentAngle", currentAngle);
     double turnError = rotatePid.calculate(currentAngle, targetAngle);
     drivetrain.arcadeDrive(0, -turnError);
   }
@@ -53,7 +49,6 @@ public class RotateDegrees extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     double currentAngle = drivetrain.getYaw();
-    SmartDashboard.putNumber("rotate/currentAngle", currentAngle);
     CommandDebug.trace("endAngle: " + currentAngle);
   }
 

@@ -11,7 +11,6 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** This command is a PID controller that drives the robot straight to a set distance. */
@@ -46,8 +45,6 @@ public class DriveStraightPID extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
     distancePid.setTolerance(Robot.getDriveTrainConstant("DISTANCE_PID_TOLERANCE").asDouble());
     straightPid.enableContinuousInput(0, 360);
-    SmartDashboard.putData("Distance PID", distancePid);
-    SmartDashboard.putData("Straight PID", straightPid);
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -68,20 +65,10 @@ public class DriveStraightPID extends CommandBase {
         distancePid.calculate(drivetrain.getAverageDistance() - startDistance, distance);
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
     double speed = speedSlewRateLimiter.calculate(output);
-    SmartDashboard.putNumber("Output", output);
-    SmartDashboard.putNumber("Speed", speed);
     if (0 != maxSpeed) {
       speed = MathUtil.clamp(speed, -maxSpeed, maxSpeed);
     }
     drivetrain.arcadeDrive(speed, -turnError);
-
-    SmartDashboard.putNumber("Distance output", output);
-    SmartDashboard.putNumber("Position Tolerance", distancePid.getPositionTolerance());
-    SmartDashboard.putBoolean("at Setpoint", distancePid.atSetpoint());
-    SmartDashboard.putNumber("Position Error", distancePid.getPositionError());
-    SmartDashboard.putNumber("Distance", drivetrain.getAverageDistance());
-
-    SmartDashboard.putNumber("Turn output", turnError);
   }
 
   // Called once the command ends or is interrupted.
