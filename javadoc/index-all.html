@@ -497,6 +497,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This method returns the requested robot specific drive train configuration</div>
 </dd>
+<dt><a href="bhs/devilbotz/RobotContainer.html#getGamePieceType()" class="member-name-link">getGamePieceType()</a> - Method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#getLeftDistance()" class="member-name-link">getLeftDistance()</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>
 <div class="block">Get the left encoder distance.</div>
@@ -641,6 +643,8 @@ loadScripts(document, 'script');</script>
  execution of the command</div>
 </dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmToPosition.html#initializeWithSafety()" class="member-name-link">initializeWithSafety()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmToPosition.html" title="class in bhs.devilbotz.commands.arm">ArmToPosition</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/RobotContainer.html#inst" class="member-name-link">inst</a> - Variable in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/Arm.html#inst" class="member-name-link">inst</a> - Variable in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
 <dd>&nbsp;</dd>
@@ -833,11 +837,17 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_BOTTOM" class="member-name-link">POSITION_BOTTOM</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_CUBE_DELTA" class="member-name-link">POSITION_CUBE_DELTA</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_DRIVE" class="member-name-link">POSITION_DRIVE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_GRIPPER_CLOSE" class="member-name-link">POSITION_GRIPPER_CLOSE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_MIDDLE" class="member-name-link">POSITION_MIDDLE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_PICKUP_GROUND_CONE" class="member-name-link">POSITION_PICKUP_GROUND_CONE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_PICKUP_GROUND_CUBE" class="member-name-link">POSITION_PICKUP_GROUND_CUBE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_SCORING_DELTA" class="member-name-link">POSITION_SCORING_DELTA</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
@@ -854,7 +864,9 @@ loadScripts(document, 'script');</script>
    Open the gripper
  </div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/assist/PrepareForGroundPickup.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,bhs.devilbotz.subsystems.Gripper)" class="member-name-link">PrepareForGroundPickup(Arm, Gripper)</a> - Constructor for class bhs.devilbotz.commands.assist.<a href="bhs/devilbotz/commands/assist/PrepareForGroundPickup.html" title="class in bhs.devilbotz.commands.assist">PrepareForGroundPickup</a></dt>
+<dt><a href="bhs/devilbotz/commands/assist/PrepareForGroundPickup.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,bhs.devilbotz.subsystems.Gripper,bhs.devilbotz.RobotContainer)" class="member-name-link">PrepareForGroundPickup(Arm, Gripper, RobotContainer)</a> - Constructor for class bhs.devilbotz.commands.assist.<a href="bhs/devilbotz/commands/assist/PrepareForGroundPickup.html" title="class in bhs.devilbotz.commands.assist">PrepareForGroundPickup</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/RobotContainer.html#prepareForScoring(double)" class="member-name-link">prepareForScoring(double)</a> - Method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/CommandDebug.html#println(java.lang.String)" class="member-name-link">println(String)</a> - Static method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/CommandDebug.html" title="class in bhs.devilbotz.commands">CommandDebug</a></dt>
 <dd>&nbsp;</dd>
@@ -966,6 +978,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/lib/LEDModes.html#SET_RED" class="member-name-link">SET_RED</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/LEDModes.html" title="enum class in bhs.devilbotz.lib">LEDModes</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/RobotContainer.html#setGamePieceType(bhs.devilbotz.lib.GamePieceTypes)" class="member-name-link">setGamePieceType(GamePieceTypes)</a> - Method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/RobotContainer.html#setLEDMode(bhs.devilbotz.lib.LEDModes)" class="member-name-link">setLEDMode(LEDModes)</a> - Method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/led/SetLEDMode.html" class="type-name-link" title="class in bhs.devilbotz.commands.led">SetLEDMode</a> - Class in <a href="bhs/devilbotz/commands/led/package-summary.html">bhs.devilbotz.commands.led</a></dt>
@@ -1051,6 +1065,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
+<dt><a href="bhs/devilbotz/RobotContainer.html#table" class="member-name-link">table</a> - Variable in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/Arm.html#table" class="member-name-link">table</a> - Variable in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Arm.html" title="class in bhs.devilbotz.subsystems">Arm</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/Gripper.html#table" class="member-name-link">table</a> - Variable in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/Gripper.html" title="class in bhs.devilbotz.subsystems">Gripper</a></dt>
