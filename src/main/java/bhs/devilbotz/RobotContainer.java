@@ -147,7 +147,7 @@ public class RobotContainer {
           .onTrue(
               new InstantCommand(
                   () -> {
-                    // Reset odometry for the first path you run during auto
+                    // set game piece to "cone"
                     this.setGamePieceType(GamePieceTypes.CONE);
                   }));
 
@@ -155,7 +155,7 @@ public class RobotContainer {
           .onTrue(
               new InstantCommand(
                   () -> {
-                    // Reset odometry for the first path you run during auto
+                    // set game piece to "cube"
                     this.setGamePieceType(GamePieceTypes.CUBE);
                   }));
 
@@ -341,7 +341,7 @@ public class RobotContainer {
             "Cone Mode",
             new InstantCommand(
                 () -> {
-                  // Reset odometry for the first path you run during auto
+                  // set game piece to "cone"
                   this.setGamePieceType(GamePieceTypes.CONE);
                 }))
         .withPosition(0, 2);
@@ -350,7 +350,7 @@ public class RobotContainer {
             "Cube Mode",
             new InstantCommand(
                 () -> {
-                  // Reset odometry for the first path you run during auto
+                  // set game piece to "cube"
                   this.setGamePieceType(GamePieceTypes.CUBE);
                 }))
         .withPosition(0, 3);
