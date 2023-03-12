@@ -129,7 +129,7 @@ public class RobotContainer {
           .onTrue(new GripperClose(gripper))
           .onFalse(new GripperIdle(gripper));
 
-      new JoystickButton(leftJoystick, 2).onTrue(new PrepareForGroundPickup(arm, gripper));
+      new JoystickButton(leftJoystick, 2).onTrue(new PrepareForGroundPickup(arm, gripper, this));
 
       new JoystickButton(leftJoystick, 3)
           .onTrue(new GripperOpen(gripper))
@@ -334,7 +334,7 @@ public class RobotContainer {
             .withSize(3, 6)
             .withProperties(Map.of("Number of columns", 1, "Number of rows", 4));
 
-    cmdList.add(new PrepareForGroundPickup(arm, gripper)).withPosition(0, 0);
+    cmdList.add(new PrepareForGroundPickup(arm, gripper, this)).withPosition(0, 0);
     cmdList.add(new PickupFromGround(arm, gripper, driveTrain)).withPosition(0, 1);
     cmdList
         .add(
