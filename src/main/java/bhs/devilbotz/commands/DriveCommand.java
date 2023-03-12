@@ -80,8 +80,7 @@ public class DriveCommand extends CommandBase {
         -speedSlewRateLimiter.calculate(speed * Robot.getSysIdConstant("MAX_SPEED").asDouble());
 
     // The rotation is inverted, so negate the value
-    final var calculatedRot =
-        -(rot * Robot.getSysIdConstant("MAX_ANGULAR_SPEED").asDouble());
+    final var calculatedRot = -(rot * Robot.getSysIdConstant("MAX_ANGULAR_SPEED").asDouble());
 
     drive.arcadeDrive(calculatedSpeed, calculatedRot);
   }
