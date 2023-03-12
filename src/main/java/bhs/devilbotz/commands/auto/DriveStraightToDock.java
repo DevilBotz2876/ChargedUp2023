@@ -71,7 +71,7 @@ public class DriveStraightToDock extends CommandBase {
     double speed;
 
     CommandDebug.trace("currentRoll: " + currentRoll);
-    
+
     switch (currentState) {
       case ON_GROUND:
         /* We start in the ON_GROUND state. We see if the currentRoll is within the expected ramp angle.
