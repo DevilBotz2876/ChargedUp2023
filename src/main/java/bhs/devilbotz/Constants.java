@@ -69,6 +69,9 @@ public final class Constants {
 
     /** The motor configuration for each side of the robot */
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
+
+    /** Drive distance (in meters) from portal to Charge station */
+    public static final double POSITION_DRIVE_FROM_PORTAL = 0.6;
   }
 
   /**

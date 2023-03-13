@@ -1,7 +1,9 @@
 package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
@@ -36,14 +38,14 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
     super();
 
     addCommands(Commands.waitSeconds(delay));
-    addCommands(new DriveStraightPID(drivetrain, -1));
+    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP));
-    addCommands(new DriveStraightPID(drivetrain, 1));
-    addCommands(new ArmDown(arm, gripper));
+    addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL));
+    addCommands(new ArmMoveDistance(arm, -10, gripper));
     addCommands(new GripperOpen(gripper));
-    addCommands(new DriveStraightPID(drivetrain, -1));
+    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmDown(arm, gripper));
-    addCommands(new DriveStraightToDock(drivetrain, 1));
+    addCommands(new DriveStraightToDock(drivetrain, -1));
     addCommands(drivetrain.stop());
   }
 }
