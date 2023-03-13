@@ -59,7 +59,7 @@ public class DriveStraightToDock extends CommandBase {
     CommandDebug.trace(
         "startRoll: "
             + drivetrain.getRoll()
-            + "startAngle: "
+            + " startAngle: "
             + startAngle
             + " maxDistance: "
             + maxDistance);
@@ -169,7 +169,7 @@ public class DriveStraightToDock extends CommandBase {
     CommandDebug.trace(
         "endRoll: "
             + drivetrain.getRoll()
-            + "endAngle: "
+            + " endAngle: "
             + drivetrain.getYaw()
             + " distance: "
             + (drivetrain.getAverageDistance() - startDistance));
