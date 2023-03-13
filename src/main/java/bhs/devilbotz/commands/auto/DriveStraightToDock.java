@@ -140,6 +140,12 @@ public class DriveStraightToDock extends CommandBase {
     previousRoll = currentRoll;
 
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
+
+    // Drive backwards if maxDistance is negative
+    if (maxDistance < 0) {
+      speed = -speed;
+    }
+
     drivetrain.arcadeDrive(speed, -turnError);
   }
 
