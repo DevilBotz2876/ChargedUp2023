@@ -16,8 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * This command will:
  *
  * <ol>
- *   <li>Wait the specified seconds
- *   <li>Drive straight the specified distance
+ *   <li>Scores, then docks and engages
  * </ol>
  *
  * @see bhs.devilbotz.commands.auto.DriveStraightPID
@@ -45,7 +44,7 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
     addCommands(new GripperOpen(gripper));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmDown(arm, gripper));
-    addCommands(new DriveStraightToDock(drivetrain, -1));
+    addCommands(new DockAndEngage(drivetrain, 0, -2));
     addCommands(drivetrain.stop());
   }
 }
