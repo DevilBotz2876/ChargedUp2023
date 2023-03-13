@@ -27,7 +27,8 @@ public class DriveStraightToDock extends CommandBase {
   private DriveTrain drivetrain;
   private PIDController straightPid;
   private final double maxDistance;
-  private double startAngle;
+  private double targetAngle;
+  private boolean targetAngleValid = false;
   private double startDistance;
   private Timer timer = new Timer();
   EnumMap<DockState, Double> speeds = new EnumMap<>(DockState.class);
@@ -62,18 +63,36 @@ public class DriveStraightToDock extends CommandBase {
     addRequirements(drivetrain);
   }
 
+  /**
+   * The constructor for the Drive Straight To Dock PID command to specify the target angle.
+   *
+   * @param drivetrain The drive train subsystem.
+   * @param maxDistance The MAX distance (in meters) the robot needs to cover. We end when the
+   *     distance is reached OR we've detected that we are physically on the dock
+   * @param targetAngle The desired target angle
+   */
+  public DriveStraightToDock(DriveTrain drivetrain, double maxDistance, double targetAngle) {
+    this(drivetrain, maxDistance);
+
+    this.targetAngle = targetAngle;
+    this.targetAngleValid = true;
+  }
+
   double previousRoll;
 
   @Override
   public void initialize() {
     CommandDebug.trace();
-    startAngle = drivetrain.getYaw();
+    if (false == targetAngleValid) {
+      targetAngle = drivetrain.getYaw();
+      targetAngleValid = true;
+    }
     startDistance = drivetrain.getAverageDistance();
     CommandDebug.trace(
         "startRoll: "
             + drivetrain.getRoll()
-            + " startAngle: "
-            + startAngle
+            + " targetAngle: "
+            + targetAngle
             + " maxDistance: "
             + maxDistance);
   }
@@ -159,7 +178,7 @@ public class DriveStraightToDock extends CommandBase {
     }
 
     // We use a PID to determine how much to turn to maintain the same starting angle
-    double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
+    double turnError = straightPid.calculate(drivetrain.getYaw(), targetAngle);
 
     // Set the speed based on the currentState
     speed = speeds.get(currentState);
