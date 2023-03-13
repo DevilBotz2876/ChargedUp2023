@@ -5,10 +5,14 @@
 
 package bhs.devilbotz;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -124,5 +128,24 @@ public final class Constants {
 
   public static final class DebugConstants {
     public static final boolean enableArmMessages = false;
+  }
+
+  public static class FieldConstants {
+    static final double length = Units.feetToMeters(54);
+    static final double width = Units.feetToMeters(27);
+  }
+
+  public static class VisionConstants {
+    public static final Transform3d robotToCam =
+        new Transform3d(
+            new Translation3d(
+                Units.inchesToMeters(25), Units.inchesToMeters(0), Units.inchesToMeters(4)),
+            new Rotation3d(
+                0,
+                Units.degreesToRadians(-15),
+                0)); // Cam mounted facing forward, 15 inches forward of center, 4 inches up, and
+    // 0 inches to the side
+    // from center.
+    public static final String cameraName = "Logitech_Webcam_C930e";
   }
 }
