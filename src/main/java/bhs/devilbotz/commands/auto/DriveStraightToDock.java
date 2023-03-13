@@ -10,6 +10,7 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import java.util.EnumMap;
 
 /**
  * This command is a PID controller that drives the robot straight to a set distance up a hill to
@@ -29,6 +30,7 @@ public class DriveStraightToDock extends CommandBase {
   private double startAngle;
   private double startDistance;
   private Timer timer = new Timer();
+  EnumMap<DockState, Double> speeds = new EnumMap<>(DockState.class);
 
   /**
    * The constructor for the Drive Straight To Dock PID command.
@@ -46,6 +48,17 @@ public class DriveStraightToDock extends CommandBase {
             Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
             Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
     straightPid.enableContinuousInput(0, 360);
+
+    speeds.put(
+        DockState.ON_GROUND,
+        Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_GROUND")
+            .asDouble(0.75)); // We drive fastest when approaching the ramp.
+    speeds.put(
+        DockState.ON_RAMP,
+        Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_RAMP")
+            .asDouble(0.50)); // We then slow down when on the ramp
+    speeds.put(DockState.LEVELING_OFF, 0.0); // We stop when we are leveling off
+
     addRequirements(drivetrain);
   }
 
@@ -76,10 +89,7 @@ public class DriveStraightToDock extends CommandBase {
       case ON_GROUND:
         /* We start in the ON_GROUND state. We see if the currentRoll is within the expected ramp angle.
          * Empirically, the roll is between min/max when on the ramp.
-         * When approaching the ramp, we cap the max speed to prevent crashing into the ramp
          */
-        speed = Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_GROUND").asDouble(0.75);
-
         // We use the absolute value of the current roll so that we can approach the ramp either
         // going forward or backwards.
         if ((Math.abs(currentRoll) > Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MIN").asDouble(10))
@@ -115,7 +125,6 @@ public class DriveStraightToDock extends CommandBase {
          * ramp to teeter quickly to the other side
          * While the roll is decreasing and the currentRoll is less than the empirical ramp roll we assume we are leveling off.
          */
-        speed = Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_RAMP").asDouble(0.50);
         double deltaRoll = currentRoll - previousRoll;
         if ((deltaRoll < 0)
             && (currentRoll < Robot.getDriveTrainConstant("DOCK_LEVELING_ROLL_MIN").asDouble(10))) {
@@ -146,11 +155,14 @@ public class DriveStraightToDock extends CommandBase {
 
       case LEVELING_OFF:
       default:
-        speed = 0;
         break;
     }
 
+    // We use a PID to determine how much to turn to maintain the same starting angle
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
+
+    // Set the speed based on the currentState
+    speed = speeds.get(currentState);
 
     // Drive backwards if maxDistance is negative
     if (maxDistance < 0) {
