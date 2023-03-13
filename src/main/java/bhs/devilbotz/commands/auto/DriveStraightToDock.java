@@ -8,6 +8,7 @@ import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -22,11 +23,12 @@ public class DriveStraightToDock extends CommandBase {
   }
 
   private DockState currentState = DockState.ON_GROUND;
-  protected DriveTrain drivetrain;
+  private DriveTrain drivetrain;
   private PIDController straightPid;
   private final double maxDistance;
   private double startAngle;
   private double startDistance;
+  private Timer timer = new Timer();
 
   /**
    * The constructor for the Drive Straight To Dock PID command.
@@ -47,9 +49,7 @@ public class DriveStraightToDock extends CommandBase {
     addRequirements(drivetrain);
   }
 
-  int onRampCount = 0;
   double previousRoll;
-  int levelingRampCount = 0;
 
   @Override
   public void initialize() {
@@ -80,26 +80,33 @@ public class DriveStraightToDock extends CommandBase {
          */
         speed = Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_GROUND").asDouble(0.75);
 
-        // We use the absolute value of the current roll so that we can approach the ram either
+        // We use the absolute value of the current roll so that we can approach the ramp either
         // going forward or backwards.
-        if ((Math.abs(currentRoll) > Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))
+        if ((Math.abs(currentRoll) > Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MIN").asDouble(10))
             && (Math.abs(currentRoll)
-                < Robot.getDriveTrainConstant("DOCK_MAX_RAMP_ROLL").asDouble(15))) {
-          if (0 == onRampCount) {
+                < Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MAX").asDouble(15))) {
+          // Looks like the roll reading is within range of being on the ramp, so start the timer if
+          // it already hasn't been started
+          if (0 == timer.get()) {
             CommandDebug.message("On Ramp?");
           }
-          onRampCount++;
+          timer.start();
         } else {
-          if (0 != onRampCount) {
+          // We don't seem to be on the ramp, so reset the timer
+          if (0 != timer.get()) {
             CommandDebug.message("No, NOT on Ramp...");
           }
-          onRampCount = 0;
+          timer.stop();
+          timer.reset();
         }
 
         /* If we've been on the ramp long enough (roll is within expected window), we assume we are on the ramp and transition states */
-        if (onRampCount > Robot.getDriveTrainConstant("DOCK_MIN_ON_RAMP_COUNT").asInt(10)) {
-          CommandDebug.message("Yes, On Ramp! " + onRampCount);
+        if (timer.hasElapsed(
+            Robot.getDriveTrainConstant("DOCK_ON_RAMP_DURATION_MIN").asDouble(0.2))) {
+          CommandDebug.message("Yes, On Ramp!");
           currentState = DockState.ON_RAMP;
+          timer.stop();
+          timer.reset();
         }
         break;
 
@@ -111,22 +118,29 @@ public class DriveStraightToDock extends CommandBase {
         speed = Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_RAMP").asDouble(0.50);
         double deltaRoll = currentRoll - previousRoll;
         if ((deltaRoll < 0)
-            && (currentRoll < Robot.getDriveTrainConstant("DOCK_MIN_RAMP_ROLL").asDouble(10))) {
-          if (0 == levelingRampCount) {
+            && (currentRoll < Robot.getDriveTrainConstant("DOCK_LEVELING_ROLL_MIN").asDouble(10))) {
+          // Looks like the roll reading is within range of leveling off, so start the timer if it
+          // already hasn't been started
+          if (0 == timer.get()) {
             CommandDebug.message("Leveling Off?");
+            timer.start();
           }
-          levelingRampCount++;
         } else {
-          if (0 != levelingRampCount) {
+          // We don't seem to be on the leveling off, so reset the timer
+          if (0 != timer.get()) {
             CommandDebug.message("No, NOT leveling off...");
           }
-          levelingRampCount = 0;
+          timer.stop();
+          timer.reset();
         }
 
         /* If we've been leveling off long enough, we assume we are almost balanced */
-        if (levelingRampCount > Robot.getDriveTrainConstant("DOCK_MIN_LEVELING_COUNT").asInt(2)) {
-          CommandDebug.message("Yes, leveling off! " + levelingRampCount);
+        if (timer.hasElapsed(
+            Robot.getDriveTrainConstant("DOCK_LEVELING_OFF_DURATION_MIN").asDouble(0.2))) {
+          CommandDebug.message("Yes, leveling off!");
           currentState = DockState.LEVELING_OFF;
+          timer.stop();
+          timer.reset();
         }
         break;
 
@@ -136,9 +150,6 @@ public class DriveStraightToDock extends CommandBase {
         break;
     }
 
-    /* We save the current roll so we can calculate the deltaRoll next time */
-    previousRoll = currentRoll;
-
     double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
 
     // Drive backwards if maxDistance is negative
@@ -147,6 +158,9 @@ public class DriveStraightToDock extends CommandBase {
     }
 
     drivetrain.arcadeDrive(speed, -turnError);
+
+    /* We save the current roll so we can calculate the deltaRoll next time */
+    previousRoll = currentRoll;
   }
 
   // Called once the command ends or is interrupted.
