@@ -136,7 +136,7 @@ public class Arm extends SubsystemBase {
       double minAngle = Units.degreesToRadians(0);
       double maxAngle = Units.degreesToRadians(100);
       armSim =
-          new SingleJointedArmSim(armGearbox, 400, .1, armLength, minAngle, maxAngle, false, null);
+          new SingleJointedArmSim(armGearbox, 2000, 1, armLength, minAngle, maxAngle, false, null);
     }
   }
 

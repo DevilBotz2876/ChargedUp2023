@@ -6,11 +6,11 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -56,7 +56,7 @@ public class BalancePID extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("BalancePID start");
+    CommandDebug.trace("startRoll: " + drive.getRoll());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -81,16 +81,12 @@ public class BalancePID extends CommandBase {
       timer.reset();
     }
     drive.arcadeDrive(-output, 0);
-
-    SmartDashboard.putNumber("error", error);
-    SmartDashboard.putNumber("output", output);
-    SmartDashboard.putNumber("angle", drive.getRoll());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("BalancePID Finished");
+    CommandDebug.trace("endRoll: " + drive.getRoll());
   }
 
   // Returns true when the command should end.

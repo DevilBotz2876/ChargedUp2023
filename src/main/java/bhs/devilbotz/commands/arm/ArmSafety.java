@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -44,7 +45,6 @@ public abstract class ArmSafety extends CommandBase {
   public ArmSafety(Arm arm, Gripper gripper) {
     this.arm = arm;
     this.gripper = gripper;
-    currentCommand = ArmCommand.UNKNOWN;
 
     addRequirements(arm);
     addRequirements(gripper);
@@ -72,6 +72,8 @@ public abstract class ArmSafety extends CommandBase {
 
   @Override
   public final void initialize() {
+    double currentPosition = getPosition();
+    CommandDebug.println(getClass().getName() + ":initialize @ position: " + currentPosition);
     initializeWithSafety();
 
     currentCommand = ArmCommand.UNKNOWN;
@@ -87,18 +89,22 @@ public abstract class ArmSafety extends CommandBase {
       case MOVE_UP:
         if (arm.isTopLimit()) {
           // Prevent the arm from moving up if at the top limit
+          CommandDebug.trace("Top Limit Reached @ position: " + currentPosition);
           currentCommand = ArmCommand.EMERGENCY_STOP;
         } else if (arm.isBottomLimit()) {
           // We want to close the gripper if we are moving up but at the bottom
+          CommandDebug.trace("Auto Closing Gripper bottom limit @ position: " + currentPosition);
           gripper.close();
         }
         break;
       case MOVE_DOWN:
         if (arm.isBottomLimit()) {
           // Prevent the arm from moving down if at the top limit
+          CommandDebug.trace("Bottom Limit Reached @ position: " + currentPosition);
           currentCommand = ArmCommand.EMERGENCY_STOP;
         } else if (currentPosition < ArmConstants.POSITION_GRIPPER_CLOSE) {
           // We want to close the gripper if we are moving down and nearing the bottom
+          CommandDebug.trace("Auto Closing Gripper @ position: " + currentPosition);
           gripper.close();
         }
         break;
@@ -110,16 +116,19 @@ public abstract class ArmSafety extends CommandBase {
     if (currentCommand != previousCommand) {
       switch (currentCommand) {
         case MOVE_UP:
+          CommandDebug.println(getClass().getName() + ":move up @ position: " + currentPosition);
           arm.up();
           break;
 
         case MOVE_DOWN:
+          CommandDebug.println(getClass().getName() + ":move down @ position: " + currentPosition);
           arm.down();
           break;
 
         case STOP:
         case EMERGENCY_STOP:
         default:
+          CommandDebug.println(getClass().getName() + ":stop @ position: " + currentPosition);
           arm.stop();
           break;
       }
@@ -131,6 +140,8 @@ public abstract class ArmSafety extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public final void end(boolean interrupted) {
+    double currentPosition = getPosition();
+    CommandDebug.println(getClass().getName() + ":end @ position: " + currentPosition);
     // We always want to stop the arm at the end of any command
     arm.stop();
   }

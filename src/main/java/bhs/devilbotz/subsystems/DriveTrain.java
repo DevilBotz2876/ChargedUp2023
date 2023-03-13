@@ -3,6 +3,7 @@ package bhs.devilbotz.subsystems;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.Robot;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.utils.PhotonCameraWrapper;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -248,9 +249,6 @@ public class DriveTrain extends SubsystemBase {
     ySimStart.setNumber(2.0);
     rotSimStart.setNumber(0.0);
     readSimStart.setBoolean(false);
-
-    SmartDashboard.putData("Left Velocity PID", leftPIDController);
-    SmartDashboard.putData("Right Velocity PID", rightPIDController);
 
     SmartDashboard.putData("HW/Drive Train/Talon/Left/Master", leftMaster);
     SmartDashboard.putData("HW/Drive Train/Talon/Left/Follower", leftFollower);
@@ -655,6 +653,7 @@ public class DriveTrain extends SubsystemBase {
         PathPlannerTrajectory.transformTrajectoryForAlliance(traj, DriverStation.getAlliance());
     // field.getObject("path").setTrajectory(traj);
     return new SequentialCommandGroup(
+        CommandDebug.message("followTrajectoryCommand:Start"),
         new InstantCommand(
             () -> {
               // Reset odometry for the first path you run during auto
@@ -687,7 +686,8 @@ public class DriveTrain extends SubsystemBase {
               if (stopAtEnd) {
                 this.tankDriveVolts(0, 0);
               }
-            }));
+            }),
+        CommandDebug.message("followTrajectoryCommand:End"));
   }
 
   public Command stop() {
