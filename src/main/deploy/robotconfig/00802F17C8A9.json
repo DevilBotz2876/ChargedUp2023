@@ -35,10 +35,10 @@
         "DOCK_MAX_SPEED_ON_GROUND": 0.75,
         "DOCK_MAX_SPEED_ON_RAMP": 0.50,
         "DOCK_ON_RAMP_DURATION_MIN": 0.2,
-        "DOCK_LEVELING_OFF_DURATION_MIN": 0.1,
+        "DOCK_LEVELING_OFF_DURATION_MIN": 0.05,
         "DOCK_RAMP_ROLL_MIN": 10,
         "DOCK_RAMP_ROLL_MAX": 15,
-        "DOCK_LEVELING_ROLL_MIN": 6
+        "DOCK_LEVELING_ROLL_MIN": 6.0
     },
 
     "sysid": {
