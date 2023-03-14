@@ -45,6 +45,23 @@ public class DockAndEngage extends SequentialCommandGroup {
    * Creates a sequential command that implements the Dock and Engage routine
    *
    * @param drivetrain the DriveTrain object
+   * @param maxDistance the max distance to travel before assuming we are on the dock. Negative
+   *     indicates move backwards. (in meters)
+   * @param targetAngle the targetAngle to maintain during the command
+   */
+  public DockAndEngage(DriveTrain drivetrain, double maxDistance, double targetAngle) {
+    super();
+    addCommands(CommandDebug.start());
+    addCommands(new DriveStraightToDock(drivetrain, maxDistance, targetAngle));
+    addCommands(new BalancePID(drivetrain, targetAngle));
+    addCommands(new RotateDegrees(drivetrain, 90));
+    addCommands(CommandDebug.end());
+  }
+
+  /**
+   * Creates a sequential command that implements the Dock and Engage routine
+   *
+   * @param drivetrain the DriveTrain object
    * @param delay the time to wait before starting the command sequence (in seconds)
    * @param maxDistance the max distance to travel before assuming we are on the dock. Negative
    *     indicates move backwards. (in meters)

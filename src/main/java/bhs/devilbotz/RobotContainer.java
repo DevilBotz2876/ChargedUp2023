@@ -195,6 +195,7 @@ public class RobotContainer {
     double delay = ShuffleboardManager.autoDelay.getDouble(0);
     double maxDistance =
         ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
+    double startAngle = driveTrain.getYaw();
 
     autonomousCommand.addCommands(CommandDebug.message("Autonomous: Start"));
     // Always start autonomous with the specified delay to allow alliance members to do whatever
@@ -218,17 +219,17 @@ public class RobotContainer {
               new ScoreAndMobility(arm, driveTrain, maxDistance, gripper));
           break;
         case DOCK_AND_ENGAGE:
-          autonomousCommand.addCommands(new DockAndEngage(driveTrain, maxDistance));
+          autonomousCommand.addCommands(new DockAndEngage(driveTrain, maxDistance, startAngle));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
           autonomousCommand.addCommands(
               new MobilityDockAndEngage(
-                  driveTrain, CommunityLocation.HUMAN, DriverStation.getAlliance()));
+                  driveTrain, CommunityLocation.HUMAN, DriverStation.getAlliance(), startAngle));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
           autonomousCommand.addCommands(
               new MobilityDockAndEngage(
-                  driveTrain, CommunityLocation.WALL, DriverStation.getAlliance()));
+                  driveTrain, CommunityLocation.WALL, DriverStation.getAlliance(), startAngle));
           break;
         case SCORE_DOCK_AND_ENGAGE:
           autonomousCommand.addCommands(new ScoreDockAndEngage(arm, driveTrain, gripper));

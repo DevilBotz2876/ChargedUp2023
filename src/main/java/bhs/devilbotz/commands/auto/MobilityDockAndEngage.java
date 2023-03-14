@@ -30,9 +30,14 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
    * @param startLocation location on the field we are starting from (wall or human)
    * @param alliance the alliance robot is on (red or blue). The requested path is translated as
    *     needed.
+   * @param startAngle the starting angle of the robot. During balancing this command will try to
+   *     stay square while approaching the balance station
    */
   public MobilityDockAndEngage(
-      DriveTrain drivetrain, CommunityLocation startLocation, Alliance alliance) {
+      DriveTrain drivetrain,
+      CommunityLocation startLocation,
+      Alliance alliance,
+      double startAngle) {
     super();
 
     PathPlannerTrajectory path = null;
@@ -56,7 +61,8 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
 
     addCommands(CommandDebug.start());
     addCommands(drivetrain.followTrajectoryCommand(path, true, false));
-    addCommands(new DockAndEngage(drivetrain, 2));
+    // Since the trajectory causes the robot to turn 180 degrees, we set the targetAngle accordingly
+    addCommands(new DockAndEngage(drivetrain, 2, 180 - startAngle));
     addCommands(CommandDebug.end());
   }
 }

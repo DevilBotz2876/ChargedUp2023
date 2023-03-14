@@ -26,6 +26,9 @@ public class BalancePID extends CommandBase {
   // private double levelAngle;
   private final PIDController balancePid;
   Timer timer = new Timer();
+  private double targetAngle;
+  private boolean targetAngleValid = false;
+  private final PIDController straightPid;
 
   /**
    * The constructor for the balance PID command.
@@ -33,9 +36,11 @@ public class BalancePID extends CommandBase {
    * @param drive The drive train subsystem.
    * @param balancePid The external PID for controlling balance
    */
-  public BalancePID(DriveTrain drive, PIDController balancePid) {
+  public BalancePID(DriveTrain drive, PIDController balancePid, PIDController straightPid) {
     this.drive = drive;
     this.balancePid = balancePid;
+    this.straightPid = straightPid;
+
     addRequirements(drive);
   }
 
@@ -50,13 +55,30 @@ public class BalancePID extends CommandBase {
         new PIDController(
             Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
             Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_D").asDouble()));
+            Robot.getDriveTrainConstant("BALANCE_D").asDouble()),
+        null);
+  }
+
+  public BalancePID(DriveTrain drive, double targetAngle) {
+    this(
+        drive,
+        new PIDController(
+            Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
+            Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
+            Robot.getDriveTrainConstant("BALANCE_D").asDouble()),
+        new PIDController(
+            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
+            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
+            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble()));
+
+    this.targetAngle = targetAngle;
+    this.targetAngleValid = true;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    CommandDebug.trace("startRoll: " + drive.getRoll());
+    CommandDebug.trace("startRoll: " + drive.getRoll() + " targetAngle: " + targetAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -65,6 +87,11 @@ public class BalancePID extends CommandBase {
     double error = balancePid.calculate(drive.getRoll(), 0);
     double maxSpeed = Robot.getDriveTrainConstant("BALANCE_MAX_SPEED").asDouble();
     double output = MathUtil.clamp(error, -maxSpeed, maxSpeed);
+    double turnError = 0;
+
+    if (true == targetAngleValid) {
+      turnError = straightPid.calculate(drive.getYaw(), targetAngle);
+    }
 
     if (Math.abs(drive.getRoll()) < Constants.BALANCE_PID_TOLERANCE) {
       /* When the robot is within the balance tolerance we:
@@ -80,13 +107,13 @@ public class BalancePID extends CommandBase {
       timer.stop();
       timer.reset();
     }
-    drive.arcadeDrive(-output, 0);
+    drive.arcadeDrive(-output, -turnError);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    CommandDebug.trace("endRoll: " + drive.getRoll());
+    CommandDebug.trace("endRoll: " + drive.getRoll() + " endAngle: " + drive.getYaw());
   }
 
   // Returns true when the command should end.
