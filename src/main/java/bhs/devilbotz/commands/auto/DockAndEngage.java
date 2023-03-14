@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * This command will:
  *
  * <ol>
- *   <li>Wait the specified seconds
  *   <li>Drive to the dock and will stop when either:
  *       <ul>
  *         <li>specified distance is reached OR

@@ -2,6 +2,7 @@ package bhs.devilbotz.commands.assist;
 
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.Constants.DriveConstants;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
@@ -15,29 +16,32 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * This command will:
  *
  * <ol>
- *   <li>Scores, then docks and engages
+ *   <li>move the robot back enough to give the arm some clearance
+ *   <li>move the arm to the top scoring position
+ *   <li>move the robot back to the original position
+ *   <li>move the arm down slightly
+ *   <li>open the gripper
  * </ol>
- *
- * @see bhs.devilbotz.commands.drivetrain.DriveStraightPID
- * @see bhs.devilbotz.commands.drivetrain.RotateDegrees
  */
 public class AutoScore extends SequentialCommandGroup {
   /**
    * Creates a sequential command that implements the Mobility routine
    *
-   * @param drivetrain the DriveTrain object
-   * @param delay the time to wait before starting the command sequence (in seconds)
-   * @param distance the distance to travel. Negative indicates move backwards. (in meters)
+   * @param arm the Arm object
+   * @param drivetrain the Drivetain object
+   * @param gripper the Gripper object
    */
   // Arm arm, Gripper gripper, DriveTrain drivetrain
   // DriveTrain drivetrain, double delay, double distance
 
-  public AutoScore(Arm arm, DriveTrain drivetrain, double delay, Gripper gripper) {
+  public AutoScore(Arm arm, DriveTrain drivetrain, Gripper gripper) {
     super();
+    addCommands(CommandDebug.start());
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
     addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL));
-    addCommands(new ArmMoveDistance(arm, -10, gripper));
+    addCommands(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
     addCommands(new GripperOpen(gripper));
+    addCommands(CommandDebug.start());
   }
 }

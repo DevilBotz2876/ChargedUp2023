@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * This command will:
  *
  * <ol>
- *   <li>Wait the specified seconds
  *   <li>Load the requested trajectory (wall or human side)
  *   <li>Translate the path depending on alliance (red or blue)
  *   <li>Execute the requested trajectory

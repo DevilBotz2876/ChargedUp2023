@@ -18,7 +18,7 @@ import java.util.Map;
  * This command will:
  *
  * <ol>
- *   <li>Move the arm all the way down
+ *   <li>Move the arm down to the best position for cone vs cube
  *   <li>Open the gripper
  * </ol>
  *

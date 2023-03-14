@@ -9,12 +9,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * This command will:
  *
  * <ol>
- *   <li>Wait the specified seconds
  *   <li>Drive straight the specified distance
  * </ol>
  *
  * @see bhs.devilbotz.commands.drivetrain.DriveStraightPID
- * @see bhs.devilbotz.commands.drivetrain.RotateDegrees
  */
 public class Mobility extends SequentialCommandGroup {
   /**

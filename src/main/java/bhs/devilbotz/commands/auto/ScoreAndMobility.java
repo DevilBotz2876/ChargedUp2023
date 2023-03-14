@@ -10,15 +10,29 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+/**
+ * This command will:
+ *
+ * <ol>
+ *   <li>Auto Score
+ *   <li>Move Back to make clearance for the arm
+ *   <li>Put the arm down
+ *   <li>Mobility
+ * </ol>
+ *
+ * @see bhs.devilbotz.commands.assist.AutoScore
+ * @see bhs.devilbotz.commands.drivetrain.DriveStraightPID
+ * @see bhs.devilbotz.commands.auto.Mobility
+ */
 public class ScoreAndMobility extends SequentialCommandGroup {
   public ScoreAndMobility(Arm arm, DriveTrain drivetrain, double distance, Gripper gripper) {
     super();
 
     addCommands(CommandDebug.start());
-    addCommands(new AutoScore(arm, drivetrain, 0, gripper));
+    addCommands(new AutoScore(arm, drivetrain, gripper));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmDown(arm, gripper));
-    addCommands(new DriveStraightPID(drivetrain, distance));
+    addCommands(new Mobility(drivetrain, distance));
     addCommands(CommandDebug.end());
   }
 }

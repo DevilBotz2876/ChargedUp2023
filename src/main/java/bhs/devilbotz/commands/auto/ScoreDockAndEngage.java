@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * This command will:
  *
  * <ol>
- *   <li>Wait the specified seconds
  *   <li>Auto Score
  *   <li>Move Back to make clearance for the arm
  *   <li>Put the arm down
@@ -37,7 +36,7 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
     super();
 
     addCommands(CommandDebug.start());
-    addCommands(new AutoScore(arm, drivetrain, 0, gripper));
+    addCommands(new AutoScore(arm, drivetrain, gripper));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmDown(arm, gripper));
     addCommands(new DockAndEngage(drivetrain, -2));
