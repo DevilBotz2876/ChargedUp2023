@@ -32,14 +32,15 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
    * @param drivetrain the DriveTrain object
    * @param gripper the gripper object
    */
-  public ScoreDockAndEngage(Arm arm, DriveTrain drivetrain, Gripper gripper) {
+  public ScoreDockAndEngage(Arm arm, DriveTrain drivetrain, Gripper gripper, double startAngle) {
     super();
 
     addCommands(CommandDebug.start());
     addCommands(new AutoScore(arm, drivetrain, gripper));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
+    addCommands(drivetrain.stop());
     addCommands(new ArmDown(arm, gripper));
-    addCommands(new DockAndEngage(drivetrain, -2));
+    addCommands(new DockAndEngage(drivetrain, -2, startAngle));
     addCommands(CommandDebug.end());
   }
 }

@@ -232,7 +232,8 @@ public class RobotContainer {
                   driveTrain, CommunityLocation.WALL, DriverStation.getAlliance(), startAngle));
           break;
         case SCORE_DOCK_AND_ENGAGE:
-          autonomousCommand.addCommands(new ScoreDockAndEngage(arm, driveTrain, gripper));
+          autonomousCommand.addCommands(
+              new ScoreDockAndEngage(arm, driveTrain, gripper, startAngle));
           break;
         case SCORE_MOBILITY_DOCK_ENGAGE:
           break;
