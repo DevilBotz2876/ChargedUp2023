@@ -1,15 +1,10 @@
 package bhs.devilbotz.commands.auto;
 
-import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.commands.arm.ArmDown;
-import bhs.devilbotz.commands.arm.ArmMoveDistance;
-import bhs.devilbotz.commands.arm.ArmToPosition;
-import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -30,8 +25,8 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
    * @param delay the time to wait before starting the command sequence (in seconds)
    * @param distance the distance to travel. Negative indicates move backwards. (in meters)
    */
-  //Arm arm, Gripper gripper, DriveTrain drivetrain
-  //DriveTrain drivetrain, double delay, double distance
+  // Arm arm, Gripper gripper, DriveTrain drivetrain
+  // DriveTrain drivetrain, double delay, double distance
 
   public ScoreMobilityDockAndEngage(Arm arm, DriveTrain drivetrain, double delay, Gripper gripper) {
     super();

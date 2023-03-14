@@ -2,7 +2,6 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.Constants.DriveConstants;
-import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -30,10 +29,10 @@ public class AutoScore extends SequentialCommandGroup {
    * @param delay the time to wait before starting the command sequence (in seconds)
    * @param distance the distance to travel. Negative indicates move backwards. (in meters)
    */
-  //Arm arm, Gripper gripper, DriveTrain drivetrain
-  //DriveTrain drivetrain, double delay, double distance
+  // Arm arm, Gripper gripper, DriveTrain drivetrain
+  // DriveTrain drivetrain, double delay, double distance
 
-  public AutoScore(Arm arm, DriveTrain drivetrain, double delay,  Gripper gripper) {
+  public AutoScore(Arm arm, DriveTrain drivetrain, double delay, Gripper gripper) {
     super();
 
     addCommands(Commands.waitSeconds(delay));

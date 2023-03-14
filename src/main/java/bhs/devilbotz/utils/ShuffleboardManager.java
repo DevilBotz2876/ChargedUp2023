@@ -84,7 +84,8 @@ public class ShuffleboardManager {
         "Mobility/Dock/Engage (Wall)", AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE);
     autoModeChooser.addOption(
         "Mobility/Dock/Engage (Human)", AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE);
-    autoModeChooser.addOption("Score+Mobility+Dock+Engage", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
+    autoModeChooser.addOption(
+        "Score+Mobility+Dock+Engage", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
     //    autoModeChooser.addOption(
     //        "Routine 7: Score, Dock, and Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
     //    autoModeChooser.addOption(
