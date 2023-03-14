@@ -28,8 +28,8 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
   /**
    * Creates a sequential command that implements the Mobility routine
    *
+   * @param arm the Arm object
    * @param drivetrain the DriveTrain object
-   * @param distance the distance to travel. Negative indicates move backwards. (in meters)
    * @param gripper the gripper object
    */
   public ScoreDockAndEngage(Arm arm, DriveTrain drivetrain, Gripper gripper) {
