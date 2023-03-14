@@ -4,6 +4,7 @@
 
 package bhs.devilbotz.commands.arm;
 
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -29,6 +30,7 @@ public class ArmStop extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    CommandDebug.trace();
     arm.stop();
   }
 
@@ -38,7 +40,9 @@ public class ArmStop extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    CommandDebug.trace();
+  }
 
   // Returns true when the command should end.
   @Override

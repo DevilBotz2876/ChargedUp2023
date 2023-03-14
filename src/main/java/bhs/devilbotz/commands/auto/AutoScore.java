@@ -37,7 +37,7 @@ public class AutoScore extends SequentialCommandGroup {
 
     addCommands(Commands.waitSeconds(delay));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
-    addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP));
+    addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
     addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmMoveDistance(arm, -10, gripper));
     addCommands(new GripperOpen(gripper));
