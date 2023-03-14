@@ -73,10 +73,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><a href="../auto/package-summary.html">bhs.devilbotz.commands.auto</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="../gripper/package-summary.html">bhs.devilbotz.commands.gripper</a></div>
+<div class="col-first odd-row-color"><a href="../drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="../led/package-summary.html">bhs.devilbotz.commands.led</a></div>
+<div class="col-first even-row-color"><a href="../gripper/package-summary.html">bhs.devilbotz.commands.gripper</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="../led/package-summary.html">bhs.devilbotz.commands.led</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -86,8 +88,20 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PickupFromGround.html" title="class in bhs.devilbotz.commands.assist">PickupFromGround</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AutoScore.html" title="class in bhs.devilbotz.commands.assist">AutoScore</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">This command will:
+
+ 
+   move the robot back enough to give the arm some clearance
+   move the arm to the top scoring position
+   move the robot back to the original position
+   move the arm down slightly
+   open the gripper
+ </div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PickupFromGround.html" title="class in bhs.devilbotz.commands.assist">PickupFromGround</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">This command will:
 
  
@@ -98,12 +112,12 @@ loadScripts(document, 'script');</script>
 
  Note: This class assume the robot and arm are already positioned to to pickup a piece!</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PrepareForGroundPickup.html" title="class in bhs.devilbotz.commands.assist">PrepareForGroundPickup</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PrepareForGroundPickup.html" title="class in bhs.devilbotz.commands.assist">PrepareForGroundPickup</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">This command will:
 
  
-   Move the arm all the way down
+   Move the arm down to the best position for cone vs cube
    Open the gripper
  </div>
 </div>

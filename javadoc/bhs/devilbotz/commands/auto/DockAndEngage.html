@@ -86,7 +86,6 @@ loadScripts(document, 'script');</script>
 <div class="block">This command will:
 
  <ol>
-   <li>Wait the specified seconds
    <li>Drive to the dock and will stop when either:
        <ul>
          <li>specified distance is reached OR
@@ -99,9 +98,9 @@ loadScripts(document, 'script');</script>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
-<li><a href="DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto"><code>DriveStraightToDock</code></a></li>
-<li><a href="BalancePID.html" title="class in bhs.devilbotz.commands.auto"><code>BalancePID</code></a></li>
-<li><a href="RotateDegrees.html" title="class in bhs.devilbotz.commands.auto"><code>RotateDegrees</code></a></li>
+<li><a href="../drivetrain/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.drivetrain"><code>DriveStraightToDock</code></a></li>
+<li><a href="../drivetrain/BalancePID.html" title="class in bhs.devilbotz.commands.drivetrain"><code>BalancePID</code></a></li>
+<li><a href="../drivetrain/RotateDegrees.html" title="class in bhs.devilbotz.commands.drivetrain"><code>RotateDegrees</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -134,8 +133,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,double)" class="member-name-link">DockAndEngage</a><wbr>(<a href="../../subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a>&nbsp;drivetrain,
- double&nbsp;delay,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double)" class="member-name-link">DockAndEngage</a><wbr>(<a href="../../subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a>&nbsp;drivetrain,
  double&nbsp;maxDistance)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a sequential command that implements the Dock and Engage routine</div>
@@ -181,16 +179,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(bhs.devilbotz.subsystems.DriveTrain,double,double)">
+<section class="detail" id="&lt;init&gt;(bhs.devilbotz.subsystems.DriveTrain,double)">
 <h3>DockAndEngage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DockAndEngage</span><wbr><span class="parameters">(<a href="../../subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a>&nbsp;drivetrain,
- double&nbsp;delay,
  double&nbsp;maxDistance)</span></div>
 <div class="block">Creates a sequential command that implements the Dock and Engage routine</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>drivetrain</code> - the DriveTrain object</dd>
-<dd><code>delay</code> - the time to wait before starting the command sequence (in seconds)</dd>
 <dd><code>maxDistance</code> - the max distance to travel before assuming we are on the dock. Negative
      indicates move backwards. (in meters)</dd>
 </dl>

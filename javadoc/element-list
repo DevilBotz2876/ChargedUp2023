@@ -3,6 +3,7 @@ bhs.devilbotz.commands
 bhs.devilbotz.commands.arm
 bhs.devilbotz.commands.assist
 bhs.devilbotz.commands.auto
+bhs.devilbotz.commands.drivetrain
 bhs.devilbotz.commands.gripper
 bhs.devilbotz.commands.led
 bhs.devilbotz.lib

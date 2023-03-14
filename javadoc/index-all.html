@@ -74,11 +74,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#arcadeDriveOpenLoop(double,double)" class="member-name-link">arcadeDriveOpenLoop(double, double)</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" class="type-name-link" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a> - Class in <a href="bhs/devilbotz/commands/package-summary.html">bhs.devilbotz.commands</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html" class="type-name-link" title="class in bhs.devilbotz.commands.drivetrain">ArcadeDriveOpenLoop</a> - Class in <a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></dt>
 <dd>
 <div class="block">This is the command that is used to drive the robot.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,java.util.function.DoubleSupplier,java.util.function.DoubleSupplier)" class="member-name-link">ArcadeDriveOpenLoop(DriveTrain, DoubleSupplier, DoubleSupplier)</a> - Constructor for class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,java.util.function.DoubleSupplier,java.util.function.DoubleSupplier)" class="member-name-link">ArcadeDriveOpenLoop(DriveTrain, DoubleSupplier, DoubleSupplier)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">ArcadeDriveOpenLoop</a></dt>
 <dd>
 <div class="block">The constructor for the drive command.</div>
 </dd>
@@ -166,6 +166,22 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This method is called periodically during autonomous.</div>
 </dd>
+<dt><a href="bhs/devilbotz/commands/assist/AutoScore.html" class="type-name-link" title="class in bhs.devilbotz.commands.assist">AutoScore</a> - Class in <a href="bhs/devilbotz/commands/assist/package-summary.html">bhs.devilbotz.commands.assist</a></dt>
+<dd>
+<div class="block">This command will:
+
+ 
+   move the robot back enough to give the arm some clearance
+   move the arm to the top scoring position
+   move the robot back to the original position
+   move the arm down slightly
+   open the gripper
+ </div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/assist/AutoScore.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,bhs.devilbotz.subsystems.DriveTrain,bhs.devilbotz.subsystems.Gripper)" class="member-name-link">AutoScore(Arm, DriveTrain, Gripper)</a> - Constructor for class bhs.devilbotz.commands.assist.<a href="bhs/devilbotz/commands/assist/AutoScore.html" title="class in bhs.devilbotz.commands.assist">AutoScore</a></dt>
+<dd>
+<div class="block">Creates a sequential command that implements the Mobility routine</div>
+</dd>
 <dt><a href="bhs/devilbotz/utils/ShuffleboardManager.html#autoScoreLevelChooser" class="member-name-link">autoScoreLevelChooser</a> - Static variable in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/ShuffleboardManager.html" title="class in bhs.devilbotz.utils">ShuffleboardManager</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -175,15 +191,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This the tolerance for the Balance PID Controler.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/BalancePID.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">BalancePID</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/BalancePID.html" class="type-name-link" title="class in bhs.devilbotz.commands.drivetrain">BalancePID</a> - Class in <a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></dt>
 <dd>
 <div class="block">This command is a PID controller that balances the robot on the charge platform.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/BalancePID.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain)" class="member-name-link">BalancePID(DriveTrain)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/BalancePID.html" title="class in bhs.devilbotz.commands.auto">BalancePID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/BalancePID.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain)" class="member-name-link">BalancePID(DriveTrain)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/BalancePID.html" title="class in bhs.devilbotz.commands.drivetrain">BalancePID</a></dt>
 <dd>
 <div class="block">The constructor for the balance PID command.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/BalancePID.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,edu.wpi.first.math.controller.PIDController)" class="member-name-link">BalancePID(DriveTrain, PIDController)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/BalancePID.html" title="class in bhs.devilbotz.commands.auto">BalancePID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/BalancePID.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,edu.wpi.first.math.controller.PIDController)" class="member-name-link">BalancePID(DriveTrain, PIDController)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/BalancePID.html" title="class in bhs.devilbotz.commands.drivetrain">BalancePID</a></dt>
 <dd>
 <div class="block">The constructor for the balance PID command.</div>
 </dd>
@@ -196,6 +212,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/commands/assist/package-summary.html">bhs.devilbotz.commands.assist</a> - package bhs.devilbotz.commands.assist</dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a> - package bhs.devilbotz.commands.auto</dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a> - package bhs.devilbotz.commands.drivetrain</dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/gripper/package-summary.html">bhs.devilbotz.commands.gripper</a> - package bhs.devilbotz.commands.gripper</dt>
 <dd>&nbsp;</dd>
@@ -301,7 +319,6 @@ loadScripts(document, 'script');</script>
 <div class="block">This command will:
 
  
-   Wait the specified seconds
    Drive to the dock and will stop when either:
        
          specified distance is reached OR
@@ -311,7 +328,7 @@ loadScripts(document, 'script');</script>
    Rotate 90 degrees
  </div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/DockAndEngage.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,double)" class="member-name-link">DockAndEngage(DriveTrain, double, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DockAndEngage.html" title="class in bhs.devilbotz.commands.auto">DockAndEngage</a></dt>
+<dt><a href="bhs/devilbotz/commands/auto/DockAndEngage.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double)" class="member-name-link">DockAndEngage(DriveTrain, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DockAndEngage.html" title="class in bhs.devilbotz.commands.auto">DockAndEngage</a></dt>
 <dd>
 <div class="block">Creates a sequential command that implements the Dock and Engage routine</div>
 </dd>
@@ -327,11 +344,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Move the arm down at set speed.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/DriveCommand.html" class="type-name-link" title="class in bhs.devilbotz.commands">DriveCommand</a> - Class in <a href="bhs/devilbotz/commands/package-summary.html">bhs.devilbotz.commands</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html" class="type-name-link" title="class in bhs.devilbotz.commands.drivetrain">DriveCommand</a> - Class in <a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></dt>
 <dd>
 <div class="block">This is the command that is used to drive the robot.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/DriveCommand.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,java.util.function.DoubleSupplier,java.util.function.DoubleSupplier)" class="member-name-link">DriveCommand(DriveTrain, DoubleSupplier, DoubleSupplier)</a> - Constructor for class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/DriveCommand.html" title="class in bhs.devilbotz.commands">DriveCommand</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,java.util.function.DoubleSupplier,java.util.function.DoubleSupplier)" class="member-name-link">DriveCommand(DriveTrain, DoubleSupplier, DoubleSupplier)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html" title="class in bhs.devilbotz.commands.drivetrain">DriveCommand</a></dt>
 <dd>
 <div class="block">The constructor for the drive command.</div>
 </dd>
@@ -343,28 +360,28 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="bhs/devilbotz/Constants.OperatorConstants.html#DRIVER_RIGHT_CONTROLLER_PORT" class="member-name-link">DRIVER_RIGHT_CONTROLLER_PORT</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.OperatorConstants.html" title="class in bhs.devilbotz">Constants.OperatorConstants</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" class="type-name-link" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a> - Class in <a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></dt>
 <dd>
 <div class="block">This command is a PID controller that drives the robot straight to a set distance.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double)" class="member-name-link">DriveStraightPID(DriveTrain, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double)" class="member-name-link">DriveStraightPID(DriveTrain, double)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a></dt>
 <dd>
 <div class="block">The constructor for the Drive Straight PID command.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html" class="type-name-link" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightToDock</a> - Class in <a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></dt>
 <dd>
 <div class="block">This command is a PID controller that drives the robot straight to a set distance up a hill to
  dock with the charging port.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double)" class="member-name-link">DriveStraightToDock(DriveTrain, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double)" class="member-name-link">DriveStraightToDock(DriveTrain, double)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightToDock</a></dt>
 <dd>
 <div class="block">The constructor for the Drive Straight To Dock PID command.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,double)" class="member-name-link">DriveStraightToDock(DriveTrain, double, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,double)" class="member-name-link">DriveStraightToDock(DriveTrain, double, double)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightToDock</a></dt>
 <dd>
 <div class="block">The constructor for the Drive Straight To Dock PID command to specify the target angle.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html#drivetrain" class="member-name-link">drivetrain</a> - Variable in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html#drivetrain" class="member-name-link">drivetrain</a> - Variable in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html" class="type-name-link" title="class in bhs.devilbotz.subsystems">DriveTrain</a> - Class in <a href="bhs/devilbotz/subsystems/package-summary.html">bhs.devilbotz.subsystems</a></dt>
 <dd>
@@ -391,25 +408,29 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/utils/Debug.html#end()" class="member-name-link">end()</a> - Method in class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Debug.html" title="class in bhs.devilbotz.utils">Debug</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Called once the command ends or is interrupted.</div>
-</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmIdle.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmIdle.html" title="class in bhs.devilbotz.commands.arm">ArmIdle</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmSafety.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmSafety.html" title="class in bhs.devilbotz.commands.arm">ArmSafety</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/BalancePID.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/BalancePID.html" title="class in bhs.devilbotz.commands.auto">BalancePID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">ArcadeDriveOpenLoop</a></dt>
+<dd>
+<div class="block">Called once the command ends or is interrupted.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/BalancePID.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/BalancePID.html" title="class in bhs.devilbotz.commands.drivetrain">BalancePID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html" title="class in bhs.devilbotz.commands.drivetrain">DriveCommand</a></dt>
+<dd>
+<div class="block">Called once the command ends or is interrupted.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightToDock</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/RotateDegrees.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html" title="class in bhs.devilbotz.commands.drivetrain">RotateDegrees</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/DriveCommand.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/DriveCommand.html" title="class in bhs.devilbotz.commands">DriveCommand</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">TankDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Called once the command ends or is interrupted.</div>
 </dd>
@@ -421,17 +442,9 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/led/SetLEDMode.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.led.<a href="bhs/devilbotz/commands/led/SetLEDMode.html" title="class in bhs.devilbotz.commands.led">SetLEDMode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html#end(boolean)" class="member-name-link">end(boolean)</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Called once the command ends or is interrupted.</div>
-</dd>
 <dt><a href="bhs/devilbotz/utils/Alert.AlertType.html#ERROR" class="member-name-link">ERROR</a> - Enum constant in enum class bhs.devilbotz.utils.<a href="bhs/devilbotz/utils/Alert.AlertType.html" title="enum class in bhs.devilbotz.utils">Alert.AlertType</a></dt>
 <dd>
 <div class="block">High priority alert - displayed first on the dashboard with a red "X" symbol.</div>
-</dd>
-<dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Called every time the scheduler runs while the command is scheduled.</div>
 </dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmIdle.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmIdle.html" title="class in bhs.devilbotz.commands.arm">ArmIdle</a></dt>
 <dd>&nbsp;</dd>
@@ -439,15 +452,23 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/BalancePID.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/BalancePID.html" title="class in bhs.devilbotz.commands.auto">BalancePID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">ArcadeDriveOpenLoop</a></dt>
+<dd>
+<div class="block">Called every time the scheduler runs while the command is scheduled.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/BalancePID.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/BalancePID.html" title="class in bhs.devilbotz.commands.drivetrain">BalancePID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html" title="class in bhs.devilbotz.commands.drivetrain">DriveCommand</a></dt>
+<dd>
+<div class="block">Called every time the scheduler runs while the command is scheduled.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightToDock</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/RotateDegrees.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html" title="class in bhs.devilbotz.commands.drivetrain">RotateDegrees</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/DriveCommand.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/DriveCommand.html" title="class in bhs.devilbotz.commands">DriveCommand</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">TankDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Called every time the scheduler runs while the command is scheduled.</div>
 </dd>
@@ -459,10 +480,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/led/SetLEDMode.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.led.<a href="bhs/devilbotz/commands/led/SetLEDMode.html" title="class in bhs.devilbotz.commands.led">SetLEDMode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html#execute()" class="member-name-link">execute()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Called every time the scheduler runs while the command is scheduled.</div>
-</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#executeWithSafety()" class="member-name-link">executeWithSafety()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#executeWithSafety()" class="member-name-link">executeWithSafety()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
@@ -609,25 +626,29 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Initialize gripper to known/same position</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Called when the command is initially scheduled.</div>
-</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmIdle.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmIdle.html" title="class in bhs.devilbotz.commands.arm">ArmIdle</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmSafety.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmSafety.html" title="class in bhs.devilbotz.commands.arm">ArmSafety</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/BalancePID.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/BalancePID.html" title="class in bhs.devilbotz.commands.auto">BalancePID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">ArcadeDriveOpenLoop</a></dt>
+<dd>
+<div class="block">Called when the command is initially scheduled.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/BalancePID.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/BalancePID.html" title="class in bhs.devilbotz.commands.drivetrain">BalancePID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html" title="class in bhs.devilbotz.commands.drivetrain">DriveCommand</a></dt>
+<dd>
+<div class="block">Called when the command is initially scheduled.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightToDock</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/RotateDegrees.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html" title="class in bhs.devilbotz.commands.drivetrain">RotateDegrees</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/DriveCommand.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/DriveCommand.html" title="class in bhs.devilbotz.commands">DriveCommand</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">TankDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Called when the command is initially scheduled.</div>
 </dd>
@@ -639,10 +660,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/led/SetLEDMode.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.led.<a href="bhs/devilbotz/commands/led/SetLEDMode.html" title="class in bhs.devilbotz.commands.led">SetLEDMode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html#initialize()" class="member-name-link">initialize()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Called when the command is initially scheduled.</div>
-</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#initializeWithSafety()" class="member-name-link">initializeWithSafety()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmSafety.html#initializeWithSafety()" class="member-name-link">initializeWithSafety()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmSafety.html" title="class in bhs.devilbotz.commands.arm">ArmSafety</a></dt>
@@ -662,25 +679,29 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Return state of bottom limit switch</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands">ArcadeDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Returns whether the command is finished.</div>
-</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmIdle.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmIdle.html" title="class in bhs.devilbotz.commands.arm">ArmIdle</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmSafety.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmSafety.html" title="class in bhs.devilbotz.commands.arm">ArmSafety</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmStop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmStop.html" title="class in bhs.devilbotz.commands.arm">ArmStop</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/BalancePID.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/BalancePID.html" title="class in bhs.devilbotz.commands.auto">BalancePID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/ArcadeDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">ArcadeDriveOpenLoop</a></dt>
+<dd>
+<div class="block">Returns whether the command is finished.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/BalancePID.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/BalancePID.html" title="class in bhs.devilbotz.commands.drivetrain">BalancePID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveCommand.html" title="class in bhs.devilbotz.commands.drivetrain">DriveCommand</a></dt>
+<dd>
+<div class="block">Returns whether the command is finished.</div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.auto">DriveStraightToDock</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightToDock.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightToDock</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/RotateDegrees.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html" title="class in bhs.devilbotz.commands.drivetrain">RotateDegrees</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/DriveCommand.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/DriveCommand.html" title="class in bhs.devilbotz.commands">DriveCommand</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">TankDriveOpenLoop</a></dt>
 <dd>
 <div class="block">Returns whether the command is finished.</div>
 </dd>
@@ -692,10 +713,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/led/SetLEDMode.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.led.<a href="bhs/devilbotz/commands/led/SetLEDMode.html" title="class in bhs.devilbotz.commands.led">SetLEDMode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></dt>
-<dd>
-<div class="block">Returns whether the command is finished.</div>
-</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmDown.html#isFinishedWithSafety()" class="member-name-link">isFinishedWithSafety()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmDown.html" title="class in bhs.devilbotz.commands.arm">ArmDown</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html#isFinishedWithSafety()" class="member-name-link">isFinishedWithSafety()</a> - Method in class bhs.devilbotz.commands.arm.<a href="bhs/devilbotz/commands/arm/ArmMoveDistance.html" title="class in bhs.devilbotz.commands.arm">ArmMoveDistance</a></dt>
@@ -754,11 +771,10 @@ loadScripts(document, 'script');</script>
 <div class="block">This command will:
 
  
-   Wait the specified seconds
    Drive straight the specified distance
  </div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/Mobility.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,double)" class="member-name-link">Mobility(DriveTrain, double, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/Mobility.html" title="class in bhs.devilbotz.commands.auto">Mobility</a></dt>
+<dt><a href="bhs/devilbotz/commands/auto/Mobility.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double)" class="member-name-link">Mobility(DriveTrain, double)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/Mobility.html" title="class in bhs.devilbotz.commands.auto">Mobility</a></dt>
 <dd>
 <div class="block">Creates a sequential command that implements the Mobility routine</div>
 </dd>
@@ -779,14 +795,13 @@ loadScripts(document, 'script');</script>
 <div class="block">This command will:
 
  
-   Wait the specified seconds
    Load the requested trajectory (wall or human side)
    Translate the path depending on alliance (red or blue)
    Execute the requested trajectory
    Dock and Engage
  </div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,double,bhs.devilbotz.lib.CommunityLocation,edu.wpi.first.wpilibj.DriverStation.Alliance)" class="member-name-link">MobilityDockAndEngage(DriveTrain, double, CommunityLocation, DriverStation.Alliance)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html" title="class in bhs.devilbotz.commands.auto">MobilityDockAndEngage</a></dt>
+<dt><a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,bhs.devilbotz.lib.CommunityLocation,edu.wpi.first.wpilibj.DriverStation.Alliance)" class="member-name-link">MobilityDockAndEngage(DriveTrain, CommunityLocation, DriverStation.Alliance)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/MobilityDockAndEngage.html" title="class in bhs.devilbotz.commands.auto">MobilityDockAndEngage</a></dt>
 <dd>
 <div class="block">Creates a sequential command that implements the Mobility, Dock and Engage routine</div>
 </dd>
@@ -849,6 +864,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_DRIVE" class="member-name-link">POSITION_DRIVE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/Constants.DriveConstants.html#POSITION_DRIVE_FROM_PORTAL" class="member-name-link">POSITION_DRIVE_FROM_PORTAL</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.DriveConstants.html" title="class in bhs.devilbotz">Constants.DriveConstants</a></dt>
+<dd>
+<div class="block">Drive distance (in meters) from portal to Charge station</div>
+</dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_GRIPPER_CLOSE" class="member-name-link">POSITION_GRIPPER_CLOSE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/Constants.ArmConstants.html#POSITION_MIDDLE" class="member-name-link">POSITION_MIDDLE</a> - Static variable in class bhs.devilbotz.<a href="bhs/devilbotz/Constants.ArmConstants.html" title="class in bhs.devilbotz">Constants.ArmConstants</a></dt>
@@ -868,7 +887,7 @@ loadScripts(document, 'script');</script>
 <div class="block">This command will:
 
  
-   Move the arm all the way down
+   Move the arm down to the best position for cone vs cube
    Open the gripper
  </div>
 </dd>
@@ -937,9 +956,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This method is called every 20 ms, no matter the mode.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/auto/RotateDegrees.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html" class="type-name-link" title="class in bhs.devilbotz.commands.drivetrain">RotateDegrees</a> - Class in <a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/RotateDegrees.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,int)" class="member-name-link">RotateDegrees(DriveTrain, int)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/RotateDegrees.html" title="class in bhs.devilbotz.commands.auto">RotateDegrees</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,int)" class="member-name-link">RotateDegrees(DriveTrain, int)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/RotateDegrees.html" title="class in bhs.devilbotz.commands.drivetrain">RotateDegrees</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/commands/led/SetLEDMode.html#runsWhenDisabled()" class="member-name-link">runsWhenDisabled()</a> - Method in class bhs.devilbotz.commands.led.<a href="bhs/devilbotz/commands/led/SetLEDMode.html" title="class in bhs.devilbotz.commands.led">SetLEDMode</a></dt>
 <dd>&nbsp;</dd>
@@ -961,6 +980,34 @@ loadScripts(document, 'script');</script>
 <dt><a href="bhs/devilbotz/lib/AutonomousModes.html#SCORE_MOBILITY_PICK_DOCK_ENGAGE" class="member-name-link">SCORE_MOBILITY_PICK_DOCK_ENGAGE</a> - Enum constant in enum class bhs.devilbotz.lib.<a href="bhs/devilbotz/lib/AutonomousModes.html" title="enum class in bhs.devilbotz.lib">AutonomousModes</a></dt>
 <dd>
 <div class="block">Perform <a href="bhs/devilbotz/lib/AutonomousModes.html#SCORE_AND_MOBILITY"><code>AutonomousModes.SCORE_AND_MOBILITY</code></a>, pick up a game piece at center field, and then <a href="bhs/devilbotz/lib/AutonomousModes.html#DOCK_AND_ENGAGE"><code>AutonomousModes.DOCK_AND_ENGAGE</code></a></div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/ScoreAndMobility.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">ScoreAndMobility</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dd>
+<div class="block">This command will:
+
+ 
+   Auto Score
+   Move Back to make clearance for the arm
+   Put the arm down
+   Mobility
+ </div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/ScoreAndMobility.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,bhs.devilbotz.subsystems.DriveTrain,double,bhs.devilbotz.subsystems.Gripper)" class="member-name-link">ScoreAndMobility(Arm, DriveTrain, double, Gripper)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/ScoreAndMobility.html" title="class in bhs.devilbotz.commands.auto">ScoreAndMobility</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="bhs/devilbotz/commands/auto/ScoreDockAndEngage.html" class="type-name-link" title="class in bhs.devilbotz.commands.auto">ScoreDockAndEngage</a> - Class in <a href="bhs/devilbotz/commands/auto/package-summary.html">bhs.devilbotz.commands.auto</a></dt>
+<dd>
+<div class="block">This command will:
+
+ 
+   Auto Score
+   Move Back to make clearance for the arm
+   Put the arm down
+   Dock and Engage
+ </div>
+</dd>
+<dt><a href="bhs/devilbotz/commands/auto/ScoreDockAndEngage.html#%3Cinit%3E(bhs.devilbotz.subsystems.Arm,bhs.devilbotz.subsystems.DriveTrain,bhs.devilbotz.subsystems.Gripper)" class="member-name-link">ScoreDockAndEngage(Arm, DriveTrain, Gripper)</a> - Constructor for class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/ScoreDockAndEngage.html" title="class in bhs.devilbotz.commands.auto">ScoreDockAndEngage</a></dt>
+<dd>
+<div class="block">Creates a sequential command that implements the Mobility routine</div>
 </dd>
 <dt><a href="bhs/devilbotz/lib/ScoreLevels.html" class="type-name-link" title="enum class in bhs.devilbotz.lib">ScoreLevels</a> - Enum Class in <a href="bhs/devilbotz/lib/package-summary.html">bhs.devilbotz.lib</a></dt>
 <dd>&nbsp;</dd>
@@ -996,7 +1043,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/RobotContainer.html#setLEDModeAlliance()" class="member-name-link">setLEDModeAlliance()</a> - Method in class bhs.devilbotz.<a href="bhs/devilbotz/RobotContainer.html" title="class in bhs.devilbotz">RobotContainer</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/auto/DriveStraightPID.html#setMaxSpeed(double)" class="member-name-link">setMaxSpeed(double)</a> - Method in class bhs.devilbotz.commands.auto.<a href="bhs/devilbotz/commands/auto/DriveStraightPID.html" title="class in bhs.devilbotz.commands.auto">DriveStraightPID</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html#setMaxSpeed(double)" class="member-name-link">setMaxSpeed(double)</a> - Method in class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/DriveStraightPID.html" title="class in bhs.devilbotz.commands.drivetrain">DriveStraightPID</a></dt>
 <dd>
 <div class="block">Sets the max speed for driving straight</div>
 </dd>
@@ -1081,11 +1128,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="bhs/devilbotz/subsystems/DriveTrain.html#tankDriveOpenLoop(double,double)" class="member-name-link">tankDriveOpenLoop(double, double)</a> - Method in class bhs.devilbotz.subsystems.<a href="bhs/devilbotz/subsystems/DriveTrain.html" title="class in bhs.devilbotz.subsystems">DriveTrain</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" class="type-name-link" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a> - Class in <a href="bhs/devilbotz/commands/package-summary.html">bhs.devilbotz.commands</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html" class="type-name-link" title="class in bhs.devilbotz.commands.drivetrain">TankDriveOpenLoop</a> - Class in <a href="bhs/devilbotz/commands/drivetrain/package-summary.html">bhs.devilbotz.commands.drivetrain</a></dt>
 <dd>
 <div class="block">This is the command that is used to drive the robot.</div>
 </dd>
-<dt><a href="bhs/devilbotz/commands/TankDriveOpenLoop.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,java.util.function.DoubleSupplier,java.util.function.DoubleSupplier)" class="member-name-link">TankDriveOpenLoop(DriveTrain, DoubleSupplier, DoubleSupplier)</a> - Constructor for class bhs.devilbotz.commands.<a href="bhs/devilbotz/commands/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands">TankDriveOpenLoop</a></dt>
+<dt><a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html#%3Cinit%3E(bhs.devilbotz.subsystems.DriveTrain,java.util.function.DoubleSupplier,java.util.function.DoubleSupplier)" class="member-name-link">TankDriveOpenLoop(DriveTrain, DoubleSupplier, DoubleSupplier)</a> - Constructor for class bhs.devilbotz.commands.drivetrain.<a href="bhs/devilbotz/commands/drivetrain/TankDriveOpenLoop.html" title="class in bhs.devilbotz.commands.drivetrain">TankDriveOpenLoop</a></dt>
 <dd>
 <div class="block">The constructor for the drive command.</div>
 </dd>
