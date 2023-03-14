@@ -77,8 +77,7 @@ public class ShuffleboardManager {
   private void initAutoModeChooser() {
     autoModeChooser.addOption("Sit Still", AutonomousModes.SIT_STILL);
     autoModeChooser.setDefaultOption("Mobility", AutonomousModes.MOBILITY);
-    //    autoModeChooser.addOption("Routine 3: Score and Mobility",
-    // AutonomousModes.SCORE_AND_MOBILITY);
+    autoModeChooser.addOption("Score/Mobility", AutonomousModes.SCORE_AND_MOBILITY);
     autoModeChooser.addOption("Dock/Engage (Middle)", AutonomousModes.DOCK_AND_ENGAGE);
     autoModeChooser.addOption(
         "Mobility/Dock/Engage (Wall)", AutonomousModes.MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE);

@@ -6,6 +6,7 @@
 package bhs.devilbotz;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmIdle;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
@@ -17,7 +18,8 @@ import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
 import bhs.devilbotz.commands.auto.DockAndEngage;
 import bhs.devilbotz.commands.auto.Mobility;
 import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
-import bhs.devilbotz.commands.auto.ScoreMobilityDockAndEngage;
+import bhs.devilbotz.commands.auto.ScoreAndMobility;
+import bhs.devilbotz.commands.auto.ScoreDockAndEngage;
 import bhs.devilbotz.commands.drivetrain.DriveCommand;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
@@ -40,8 +42,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -183,10 +187,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
-    Command autonomousCommand = null;
+    SequentialCommandGroup autonomousCommand = new SequentialCommandGroup();
     double delay = ShuffleboardManager.autoDelay.getDouble(0);
-    double maxDistance =
-        ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
+    double maxDistance = ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
+
+    autonomousCommand.addCommands(CommandDebug.message("Autonomous: Start"));
+    // Always start autonomous with the specified delay to allow alliance members to do whatever they need to do before we start
+    autonomousCommand.addCommands(Commands.waitSeconds(delay));
 
     if (autoMode == null) {
       new Alert(
@@ -198,25 +205,25 @@ public class RobotContainer {
         case SIT_STILL:
           break;
         case MOBILITY:
-          autonomousCommand = new Mobility(driveTrain, delay, maxDistance);
+          autonomousCommand.addCommands(new Mobility(driveTrain, maxDistance));
           break;
         case SCORE_AND_MOBILITY:
+          autonomousCommand.addCommands(new ScoreAndMobility(arm, driveTrain, maxDistance, gripper));
           break;
         case DOCK_AND_ENGAGE:
-          autonomousCommand = new DockAndEngage(driveTrain, delay, maxDistance);
+          autonomousCommand.addCommands(new DockAndEngage(driveTrain, maxDistance));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
-          autonomousCommand =
-              new MobilityDockAndEngage(
-                  driveTrain, delay, CommunityLocation.HUMAN, DriverStation.getAlliance());
+          autonomousCommand.addCommands(new MobilityDockAndEngage(
+                  driveTrain, CommunityLocation.HUMAN, DriverStation.getAlliance()));
           break;
         case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
-          autonomousCommand =
+          autonomousCommand.addCommands(
               new MobilityDockAndEngage(
-                  driveTrain, delay, CommunityLocation.WALL, DriverStation.getAlliance());
+                  driveTrain, CommunityLocation.WALL, DriverStation.getAlliance()));
           break;
         case SCORE_DOCK_AND_ENGAGE:
-          autonomousCommand = new ScoreMobilityDockAndEngage(arm, driveTrain, delay, gripper);
+          autonomousCommand.addCommands(new ScoreDockAndEngage(arm, driveTrain, gripper));
           break;
         case SCORE_MOBILITY_DOCK_ENGAGE:
           break;
@@ -228,6 +235,10 @@ public class RobotContainer {
           break;
       }
     }
+
+    // Always stop the drivetrain at the end of autonomous
+    autonomousCommand.addCommands(driveTrain.stop());
+    autonomousCommand.addCommands(CommandDebug.message("Autonomous: End"));
 
     return autonomousCommand;
   }

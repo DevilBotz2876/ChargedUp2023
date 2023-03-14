@@ -29,13 +29,12 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
    * Creates a sequential command that implements the Mobility, Dock and Engage routine
    *
    * @param drivetrain the DriveTrain object
-   * @param delay the time to wait before starting the command sequence (in seconds)
    * @param startLocation location on the field we are starting from (wall or human)
    * @param alliance the alliance robot is on (red or blue). The requested path is translated as
    *     needed.
    */
   public MobilityDockAndEngage(
-      DriveTrain drivetrain, double delay, CommunityLocation startLocation, Alliance alliance) {
+      DriveTrain drivetrain, CommunityLocation startLocation, Alliance alliance) {
     super();
 
     PathPlannerTrajectory path = null;
@@ -58,10 +57,8 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
     path.getEndState().velocityMetersPerSecond = 1.5;
 
     addCommands(CommandDebug.start());
-    addCommands(Commands.waitSeconds(delay));
     addCommands(drivetrain.followTrajectoryCommand(path, true, false));
-    addCommands(new DockAndEngage(drivetrain, 0, 2));
-    addCommands(drivetrain.stop());
+    addCommands(new DockAndEngage(drivetrain, 2));
     addCommands(CommandDebug.end());
   }
 }
