@@ -74,7 +74,7 @@ public class RobotContainer {
 
   private final Arduino arduino;
 
-  private GamePieceTypes gamePieceType = GamePieceTypes.CUBE;
+  private GamePieceTypes gamePieceType = GamePieceTypes.CONE;
 
   // Network Table Based Debug Status
   protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
