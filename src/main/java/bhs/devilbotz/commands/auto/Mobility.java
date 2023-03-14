@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.commands.CommandDebug;
+import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -13,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  *   <li>Drive straight the specified distance
  * </ol>
  *
- * @see bhs.devilbotz.commands.auto.DriveStraightPID
- * @see bhs.devilbotz.commands.auto.RotateDegrees
+ * @see bhs.devilbotz.commands.drivetrain.DriveStraightPID
+ * @see bhs.devilbotz.commands.drivetrain.RotateDegrees
  */
 public class Mobility extends SequentialCommandGroup {
   /**

@@ -1,9 +1,10 @@
-package bhs.devilbotz.commands.auto;
+package bhs.devilbotz.commands.assist;
 
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
 import bhs.devilbotz.commands.arm.ArmToPosition;
+import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
@@ -18,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  *   <li>Scores, then docks and engages
  * </ol>
  *
- * @see bhs.devilbotz.commands.auto.DriveStraightPID
- * @see bhs.devilbotz.commands.auto.RotateDegrees
+ * @see bhs.devilbotz.commands.drivetrain.DriveStraightPID
+ * @see bhs.devilbotz.commands.drivetrain.RotateDegrees
  */
 public class AutoScore extends SequentialCommandGroup {
   /**
@@ -34,7 +35,6 @@ public class AutoScore extends SequentialCommandGroup {
 
   public AutoScore(Arm arm, DriveTrain drivetrain, double delay, Gripper gripper) {
     super();
-
     addCommands(Commands.waitSeconds(delay));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
     addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));

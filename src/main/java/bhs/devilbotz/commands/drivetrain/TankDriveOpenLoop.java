@@ -1,4 +1,4 @@
-package bhs.devilbotz.commands;
+package bhs.devilbotz.commands.drivetrain;
 
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.utils.Alert;

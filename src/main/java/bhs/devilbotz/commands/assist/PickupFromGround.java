@@ -3,7 +3,7 @@ package bhs.devilbotz.commands.assist;
 import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmToPosition;
-import bhs.devilbotz.commands.auto.DriveStraightPID;
+import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;

@@ -2,6 +2,8 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.assist.AutoScore;
+import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -14,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  *   <li>Scores, then docks and engages
  * </ol>
  *
- * @see bhs.devilbotz.commands.auto.DriveStraightPID
- * @see bhs.devilbotz.commands.auto.RotateDegrees
+ * @see bhs.devilbotz.commands.drivetrain.DriveStraightPID
+ * @see bhs.devilbotz.commands.drivetrain.RotateDegrees
  */
 public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
   /**

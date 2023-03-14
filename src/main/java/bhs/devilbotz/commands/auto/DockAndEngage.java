@@ -1,6 +1,9 @@
 package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.commands.CommandDebug;
+import bhs.devilbotz.commands.drivetrain.BalancePID;
+import bhs.devilbotz.commands.drivetrain.DriveStraightToDock;
+import bhs.devilbotz.commands.drivetrain.RotateDegrees;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -19,9 +22,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  *   <li>Rotate 90 degrees
  * </ol>
  *
- * @see bhs.devilbotz.commands.auto.DriveStraightToDock
- * @see bhs.devilbotz.commands.auto.BalancePID
- * @see bhs.devilbotz.commands.auto.RotateDegrees
+ * @see bhs.devilbotz.commands.drivetrain.DriveStraightToDock
+ * @see bhs.devilbotz.commands.drivetrain.BalancePID
+ * @see bhs.devilbotz.commands.drivetrain.RotateDegrees
  */
 public class DockAndEngage extends SequentialCommandGroup {
   /**

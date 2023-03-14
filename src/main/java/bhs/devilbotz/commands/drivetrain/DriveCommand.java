@@ -1,4 +1,4 @@
-package bhs.devilbotz.commands;
+package bhs.devilbotz.commands.drivetrain;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Robot;
