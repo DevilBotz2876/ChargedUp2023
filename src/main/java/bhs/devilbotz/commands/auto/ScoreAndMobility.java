@@ -11,15 +11,14 @@ import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class ScoreAndMobility extends SequentialCommandGroup {
-    public ScoreAndMobility(Arm arm, DriveTrain drivetrain, double distance, Gripper gripper)
-    {
-        super();
+  public ScoreAndMobility(Arm arm, DriveTrain drivetrain, double distance, Gripper gripper) {
+    super();
 
-        addCommands(CommandDebug.start());
-        addCommands(new AutoScore(arm, drivetrain, 0, gripper));
-        addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
-        addCommands(new ArmDown(arm, gripper));
-        addCommands(new DriveStraightPID(drivetrain, distance));
-        addCommands(CommandDebug.end());
-    }
+    addCommands(CommandDebug.start());
+    addCommands(new AutoScore(arm, drivetrain, 0, gripper));
+    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
+    addCommands(new ArmDown(arm, gripper));
+    addCommands(new DriveStraightPID(drivetrain, distance));
+    addCommands(CommandDebug.end());
+  }
 }

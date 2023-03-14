@@ -8,12 +8,10 @@ import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This command will:
- * 
  *
  * <ol>
  *   <li>Wait the specified seconds
@@ -35,7 +33,6 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
    * @param distance the distance to travel. Negative indicates move backwards. (in meters)
    * @param gripper the gripper object
    */
-
   public ScoreDockAndEngage(Arm arm, DriveTrain drivetrain, Gripper gripper) {
     super();
 
