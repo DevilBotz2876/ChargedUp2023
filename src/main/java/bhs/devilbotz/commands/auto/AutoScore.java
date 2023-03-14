@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * @see bhs.devilbotz.commands.auto.DriveStraightPID
  * @see bhs.devilbotz.commands.auto.RotateDegrees
  */
-public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
+public class AutoScore extends SequentialCommandGroup {
   /**
    * Creates a sequential command that implements the Mobility routine
    *
@@ -33,13 +33,14 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
   //Arm arm, Gripper gripper, DriveTrain drivetrain
   //DriveTrain drivetrain, double delay, double distance
 
-  public ScoreMobilityDockAndEngage(Arm arm, DriveTrain drivetrain, double delay, Gripper gripper) {
+  public AutoScore(Arm arm, DriveTrain drivetrain, double delay,  Gripper gripper) {
     super();
 
-    addCommands(new AutoScore(arm, drivetrain, 0, gripper));
+    addCommands(Commands.waitSeconds(delay));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
-    addCommands(new ArmDown(arm, gripper));
-    addCommands(new DockAndEngage(drivetrain, 0, -2));
-    addCommands(drivetrain.stop());
+    addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP));
+    addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL));
+    addCommands(new ArmMoveDistance(arm, -10, gripper));
+    addCommands(new GripperOpen(gripper));
   }
 }
