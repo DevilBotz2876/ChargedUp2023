@@ -57,6 +57,7 @@ public class ShuffleboardManager {
                 System.out.println("Disconnected from " + event.connInfo.remote_id);
               }
             });
+    System.out.println(connListenerHandle);
 
     gripperSetpoint =
         driveTab
