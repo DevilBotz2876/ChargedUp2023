@@ -192,6 +192,6 @@ public abstract class ArmSafety extends CommandBase {
       timer.reset();
     }
 
-    return timer.hasElapsed(1.0);
+    return timer.hasElapsed(0.1);
   }
 }
