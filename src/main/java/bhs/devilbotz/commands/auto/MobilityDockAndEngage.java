@@ -62,7 +62,7 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
     addCommands(CommandDebug.start());
     addCommands(drivetrain.followTrajectoryCommand(path, true, false));
     // Since the trajectory causes the robot to turn 180 degrees, we set the targetAngle accordingly
-    addCommands(new DockAndEngage(drivetrain, 2, 180 - startAngle));
+    addCommands(new DockAndEngage(drivetrain, 2, startAngle - 180));
     addCommands(CommandDebug.end());
   }
 }
