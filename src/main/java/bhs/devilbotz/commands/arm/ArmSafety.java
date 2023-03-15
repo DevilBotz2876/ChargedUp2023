@@ -181,7 +181,7 @@ public abstract class ArmSafety extends CommandBase {
 
     // start a timer to see if the rope is stuck for a while
     // if it is, then we need to stop the arm
-    if (currentSpeed < 0.1) {
+    if (currentSpeed < 0.75) {
       timer.start();
     } else {
       timer.stop();
