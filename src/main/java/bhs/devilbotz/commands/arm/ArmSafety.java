@@ -80,6 +80,9 @@ public abstract class ArmSafety extends CommandBase {
 
     currentCommand = ArmCommand.UNKNOWN;
     previousCommand = ArmCommand.UNKNOWN;
+
+    timer.stop();
+    timer.reset();
   }
 
   @Override
