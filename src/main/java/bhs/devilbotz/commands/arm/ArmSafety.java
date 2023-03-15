@@ -4,7 +4,7 @@ import bhs.devilbotz.Constants.ArmConstants;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
-import edu.wpi.first.wpilibj.Timer;
+// import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -34,7 +34,7 @@ public abstract class ArmSafety extends CommandBase {
   private final Gripper gripper;
   private ArmCommand currentCommand = ArmCommand.UNKNOWN;
   private ArmCommand previousCommand = ArmCommand.UNKNOWN;
-  private Timer timer = new Timer();
+  // private Timer timer = new Timer();
 
   private static enum ArmCommand {
     UNKNOWN,
@@ -84,11 +84,14 @@ public abstract class ArmSafety extends CommandBase {
 
   @Override
   public final void execute() {
-    if (isArmStuck()) {
-      currentCommand = ArmCommand.EMERGENCY_STOP;
-    }
+
     double currentPosition = getPosition();
     executeWithSafety();
+
+    if (isArmStuck()) {
+      currentCommand = ArmCommand.EMERGENCY_STOP;
+      CommandDebug.trace("Detected stuck arm " + currentPosition);
+    }
 
     switch (currentCommand) {
       case MOVE_UP:
@@ -181,13 +184,16 @@ public abstract class ArmSafety extends CommandBase {
 
     // start a timer to see if the rope is stuck for a while
     // if it is, then we need to stop the arm
-    if (currentSpeed < 0.75) {
-      timer.start();
+    if (currentSpeed < ArmConstants.SPEED_TO_DECIDE_ARM_STUCK) {
+      return true;
+      // timer.start();
+
     } else {
-      timer.stop();
-      timer.reset();
+      return false;
+      // timer.stop();
+      // timer.reset();
     }
 
-    return timer.hasElapsed(1.0);
+    // return timer.hasElapsed(1.0);
   }
 }

@@ -123,6 +123,11 @@ public final class Constants {
     public static final double POSITION_PICKUP_GROUND_CUBE = 80;
     public static final double POSITION_PICKUP_GROUND_CONE = 0;
     public static final double POSITION_TOLERANCE = 5;
+    /**
+     * This is the speed to decide if the arm is stuck. If the arm is moving slower that this speed,
+     * then it is considered to be stuck
+     */
+    public static final double SPEED_TO_DECIDE_ARM_STUCK = 75;
   }
 
   public static final class DebugConstants {
