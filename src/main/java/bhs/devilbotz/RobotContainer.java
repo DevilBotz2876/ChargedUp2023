@@ -103,7 +103,7 @@ public class RobotContainer {
       driveTrain.setDefaultCommand(
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     } else {
-      driveTrain.setDefaultCommand(driveTrain.stop());
+      driveTrain.setDefaultCommand(driveTrain.stopCommand());
     }
     if (false
         == DriverStation.isJoystickConnected(
@@ -247,7 +247,7 @@ public class RobotContainer {
     }
 
     // Always stop the drivetrain at the end of autonomous
-    autonomousCommand.addCommands(driveTrain.stop());
+    autonomousCommand.addCommands(driveTrain.stopCommand());
     autonomousCommand.addCommands(CommandDebug.message("Autonomous: End"));
 
     return autonomousCommand;

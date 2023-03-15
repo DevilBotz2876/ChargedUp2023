@@ -31,7 +31,7 @@ public class ScoreAndMobility extends SequentialCommandGroup {
     addCommands(CommandDebug.start());
     addCommands(new AutoScore(arm, drivetrain, gripper));
     addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
-    addCommands(drivetrain.stop());
+    addCommands(drivetrain.stopCommand());
     addCommands(new ArmDown(arm, gripper));
     // Since we are scoring, we always want to drive backwards in the end. Always set negative
     // distance in case the driver forgets
