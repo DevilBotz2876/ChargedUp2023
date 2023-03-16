@@ -11,20 +11,26 @@ import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-/**
- * This command will:
- *
- * <ol>
- *   <li>Close the gripper
- *   <li>Drive backwards the specified distance (to prevent a stuck arm)
- *   <li>Raise the arm a safe driving position
- * </ol>
- *
- * Note: This class assume the robot and arm are already positioned to to pickup a piece!
- *
- * @see bhs.devilbotz.commands.assist.PrepareForGroundPickup
- */
 public class PickupFromGround extends SequentialCommandGroup {
+  /**
+   * Creates a sequential command that implements the "Pickup From Ground" routine
+   *
+   * <p>This command will:
+   *
+   * <ol>
+   *   <li>Close the gripper
+   *   <li>Drive backwards the specified distance (to prevent a stuck arm)
+   *   <li>Raise the arm a safe driving position
+   * </ol>
+   *
+   * <i>Note: This command assumes the robot and arm are already positioned to to pickup a
+   * piece!</i>
+   *
+   * @param arm the Arm object
+   * @param drivetrain the Drivetain object
+   * @param gripper the Gripper object
+   * @see bhs.devilbotz.commands.assist.PrepareForGroundPickup
+   */
   public PickupFromGround(Arm arm, Gripper gripper, DriveTrain drivetrain) {
     super();
     addCommands(CommandDebug.start());

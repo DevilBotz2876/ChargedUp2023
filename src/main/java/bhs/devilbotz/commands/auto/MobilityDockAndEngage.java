@@ -9,22 +9,28 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-/**
- * This command will:
- *
- * <ol>
- *   <li>Load the requested trajectory (wall or human side)
- *   <li>Translate the path depending on alliance (red or blue)
- *   <li>Execute the requested trajectory
- *   <li>Dock and Engage
- * </ol>
- *
- * @see com.pathplanner.lib.PathPlanner
- * @see bhs.devilbotz.commands.auto.DockAndEngage
- */
 public class MobilityDockAndEngage extends SequentialCommandGroup {
   /**
-   * Creates a sequential command that implements the Mobility, Dock and Engage routine
+   * Creates a sequential command that implements the "Mobility, Dock and Engage" routine
+   *
+   * <p>This command will:
+   *
+   * <ol>
+   *   <li>Load the proper trajectory that will move the robot to in front of the dock (wall or
+   *       human side)
+   *   <li>Translate the path depending on alliance (red or blue)
+   *   <li>Execute the requested trajectory
+   *   <li>Dock and Engage
+   * </ol>
+   *
+   * <p>Trajectories
+   *
+   * <ul>
+   *   <li>Human Side: <img src="./doc-files/MDE_Human_Blue_Trajectory.png" alt="MDE Start/End
+   *       Trajectory for Human Side"/>
+   *   <li>Wall Side: <img src="./doc-files/MDE_Wall_Blue_Trajectory.png" alt=MDE Start/End
+   *       Trajectory for Wall Side/>
+   * </ul>
    *
    * @param drivetrain the DriveTrain object
    * @param startLocation location on the field we are starting from (wall or human)
@@ -32,6 +38,9 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
    *     needed.
    * @param startAngle the starting angle of the robot. During balancing this command will try to
    *     stay square while approaching the balance station
+   * @see com.pathplanner.lib.PathPlanner
+   * @see bhs.devilbotz.subsystems.DriveTrain#followTrajectoryCommand()
+   * @see bhs.devilbotz.commands.auto.DockAndEngage
    */
   public MobilityDockAndEngage(
       DriveTrain drivetrain,

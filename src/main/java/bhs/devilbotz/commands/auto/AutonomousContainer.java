@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+/** This class is used to encapsulate all of the autonmous routines */
 public class AutonomousContainer {
   private final DriveTrain drivetrain;
   private final Arm arm;
@@ -59,7 +60,8 @@ public class AutonomousContainer {
                 drivetrain, CommunityLocation.WALL, DriverStation.getAlliance(), startAngle));
         break;
       case SCORE_DOCK_AND_ENGAGE:
-        autonomousCommand.addCommands(new ScoreDockAndEngage(arm, drivetrain, gripper, startAngle));
+        autonomousCommand.addCommands(
+            new ScoreDockAndEngage(arm, drivetrain, maxDistance, gripper, startAngle));
         break;
       case SCORE_MOBILITY_DOCK_ENGAGE:
         break;
