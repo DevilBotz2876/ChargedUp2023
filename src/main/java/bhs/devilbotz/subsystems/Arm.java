@@ -250,6 +250,10 @@ public class Arm extends SubsystemBase {
     return encoder.getDistance();
   }
 
+  public double getVelocity() {
+    return encoder.getRate();
+  }
+
   /**
    * Reset encoder to zero. We consider arm down inside chassis as zero position. Use lower limit
    * switch to determine when we reach that position. This should be called when arm is not moving.
