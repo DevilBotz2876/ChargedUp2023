@@ -195,6 +195,6 @@ public abstract class ArmSafety extends CommandBase {
       timer.reset();
     }
 
-    return timer.hasElapsed(0.1);
+    return timer.hasElapsed(ArmConstants.DURATION_TO_DECIDE_ARM_STUCK);
   }
 }

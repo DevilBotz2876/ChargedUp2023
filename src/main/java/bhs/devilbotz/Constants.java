@@ -127,7 +127,11 @@ public final class Constants {
      * This is the speed to decide if the arm is stuck. If the arm is moving slower that this speed,
      * then it is considered to be stuck
      */
-    public static final double SPEED_TO_DECIDE_ARM_STUCK = 75;
+    public static final double SPEED_TO_DECIDE_ARM_STUCK =
+        75; /* The arm encoder speed is generally in the +/- 125-175 range */
+
+    public static final double DURATION_TO_DECIDE_ARM_STUCK =
+        0.04; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
   }
 
   public static final class DebugConstants {
