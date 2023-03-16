@@ -84,7 +84,7 @@ public class BalancePID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double error = balancePid.calculate(drive.getRoll(), 0);
+    double error = balancePid.calculate(drive.getRoll(), 6);
     double maxSpeed = Robot.getDriveTrainConstant("BALANCE_MAX_SPEED").asDouble();
     double output = MathUtil.clamp(error, -maxSpeed, maxSpeed);
     double turnError = 0;
