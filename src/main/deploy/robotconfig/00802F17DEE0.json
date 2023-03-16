@@ -23,7 +23,7 @@
         "BALANCE_D": 0.03,
         "BALANCE_MAX_SPEED": 0.50,
         "BALANCE_MIN_DURATION": 0.2,
-        "DISTANCE_P": 2,
+        "DISTANCE_P": 1,
         "DISTANCE_I": 0,
         "DISTANCE_D": 0.1,
         "DISTANCE_PID_TOLERANCE": 0.1,        
