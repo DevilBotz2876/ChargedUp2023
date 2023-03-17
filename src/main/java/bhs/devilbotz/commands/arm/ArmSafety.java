@@ -1,6 +1,7 @@
 package bhs.devilbotz.commands.arm;
 
 import bhs.devilbotz.Constants.ArmConstants;
+import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
@@ -184,6 +185,9 @@ public abstract class ArmSafety extends CommandBase {
   public void initializeWithSafety() {}
 
   private boolean isArmStuck() {
+    if (Robot.isSimulation()) {
+      return false;
+    }
     // check the rate of change of the arm position
     // if there is no change, then the rope is broken
 
