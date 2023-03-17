@@ -1,5 +1,7 @@
 package bhs.devilbotz.lib;
 
+import bhs.devilbotz.commands.auto.ScoreMobilityDock;
+
 /**
  * Autonomous modes enum for the autonomous chooser on the dashboard.
  *
@@ -19,6 +21,8 @@ public enum AutonomousModes {
   /** Drive straight onto charge station and balance */
   DOCK_AND_ENGAGE,
   /** Perform {@link #MOBILITY} and then {@link #DOCK_AND_ENGAGE} */
+  ScoreMobilityDock,
+
   MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE,
   /** Perform {@link #MOBILITY} and then {@link #DOCK_AND_ENGAGE} */
   MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE,
