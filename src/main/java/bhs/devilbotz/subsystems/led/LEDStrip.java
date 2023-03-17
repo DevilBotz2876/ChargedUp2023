@@ -75,10 +75,6 @@ public class LEDStrip extends SubsystemBase implements LEDInterface {
       ntReversed.set(this.settings.reversed);
     }
 
-    public void enable(boolean enable) {
-      LEDStrip.this.enable(enable);
-    }
-
     public void setBackgroundColor(Color color) {
       Color[] colors = new Color[1];
       colors[0] = color;
@@ -91,7 +87,7 @@ public class LEDStrip extends SubsystemBase implements LEDInterface {
       apply();
     }
 
-    public void setBackgroundEffect(LEDEffectType effectType) {
+    public void setBackgroundEffect(LEDEffectType effectType, double rate) {
       switch (effectType) {
         case STATIC:
           backgroundEffect = getEffectStatic();
@@ -104,16 +100,15 @@ public class LEDStrip extends SubsystemBase implements LEDInterface {
         default:
           break;
       }
-      apply();
-    }
 
-    public void setBackgroundMotionRate(double rate) {
       if (true == this.settings.reversed) {
         rate = -rate;
       }
 
       backgroundMotionRate = rate;
       ntBackgroundMotionRate.set(backgroundMotionRate);
+
+      apply();
     }
 
     public void setOverlay(Color color, int length, double rate) {
@@ -325,15 +320,9 @@ public class LEDStrip extends SubsystemBase implements LEDInterface {
     }
   }
 
-  public void setBackgroundEffect(LEDEffectType effectType) {
+  public void setBackgroundEffect(LEDEffectType effectType, double rate) {
     for (int i = 0; i < segment.length; i++) {
-      segment[i].setBackgroundEffect(effectType);
-    }
-  }
-
-  public void setBackgroundMotionRate(double rate) {
-    for (int i = 0; i < segment.length; i++) {
-      segment[i].setBackgroundMotionRate(rate);
+      segment[i].setBackgroundEffect(effectType, rate);
     }
   }
 

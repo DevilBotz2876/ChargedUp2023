@@ -66,9 +66,9 @@ public final class LEDStripHelper {
         break;
     }
 
-    strip.setBackgroundEffect(LEDEffectType.SINUSOID);
-    ledSegment[1].setBackgroundMotionRate(0.1);
-    ledSegment[3].setBackgroundMotionRate(0.1);
+    strip.setBackgroundEffect(LEDEffectType.SINUSOID, 0);
+    ledSegment[1].setBackgroundEffect(LEDEffectType.SINUSOID, 0.1);
+    ledSegment[3].setBackgroundEffect(LEDEffectType.SINUSOID, 0.1);
     strip.enable(true);
   }
 }
