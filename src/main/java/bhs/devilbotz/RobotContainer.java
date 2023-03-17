@@ -170,8 +170,7 @@ public class RobotContainer {
 
       new JoystickButton(rightJoystick, 2)
           .toggleOnTrue(
-              new SlowRotateDriveCommand(
-                      driveTrain, rightJoystick::getX, rightJoystick::getY));
+              new SlowRotateDriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
 
       new JoystickButton(rightJoystick, 3)
           .onTrue(

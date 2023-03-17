@@ -1,9 +1,7 @@
 package bhs.devilbotz.commands.drivetrain;
 
 import bhs.devilbotz.Constants;
-import bhs.devilbotz.commands.drivetrain.DriveCommand;
 import bhs.devilbotz.subsystems.DriveTrain;
-
 import java.util.function.DoubleSupplier;
 
 public class SlowRotateDriveCommand extends DriveCommand implements DoubleSupplier {
@@ -14,7 +12,8 @@ public class SlowRotateDriveCommand extends DriveCommand implements DoubleSuppli
 
     this.rot = rot;
   }
+
   public double getAsDouble() {
-    return rot.getAsDouble()/ Constants.DriveConstants.PRECISION_ROTATE_SPEED_DIVIDER;
+    return rot.getAsDouble() / Constants.DriveConstants.PRECISION_ROTATE_SPEED_DIVIDER;
   }
 }
