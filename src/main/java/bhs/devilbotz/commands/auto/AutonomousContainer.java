@@ -61,7 +61,7 @@ public class AutonomousContainer {
         break;
       case SCORE_DOCK_AND_ENGAGE:
         autonomousCommand.addCommands(
-            new ScoreMobilityDock(arm, drivetrain, maxDistance, gripper, startAngle));
+            new ScoreDockAndEngage(arm, drivetrain, maxDistance, gripper, startAngle));
         break;
       case SCORE_MOBILITY_DOCK_ENGAGE:
         break;
