@@ -7,7 +7,7 @@ public interface LEDInterface {
 
   public void setBackgroundColor(Color color);
 
-  public void setBackgroundColor(Color[] colors);
+  public void setBackgroundColor(Color[] color);
 
   public void setBackgroundEffect(LEDEffectType effectType);
 
