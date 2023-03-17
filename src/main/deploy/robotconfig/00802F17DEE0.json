@@ -35,7 +35,7 @@
         "ROTATE_D": 0,
         "ROTATE_PID_TOLERANCE": 5,        
         "DOCK_MAX_SPEED_ON_GROUND": 1.50,
-        "DOCK_MAX_SPEED_ON_RAMP": 0.75,
+        "DOCK_MAX_SPEED_ON_RAMP": 0.50,
         "DOCK_ON_RAMP_DURATION_MIN": 0.2,
         "DOCK_LEVELING_OFF_DURATION_MIN": 0.2,
         "DOCK_RAMP_ROLL_MIN": 10,
