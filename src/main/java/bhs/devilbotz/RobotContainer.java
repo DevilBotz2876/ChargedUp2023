@@ -169,7 +169,8 @@ public class RobotContainer {
               new PrepareForScore(arm, ArmConstants.POSITION_TOP, gripper, this::getGamePieceType));
 
       new JoystickButton(rightJoystick, 2)
-              .toggleOnTrue(new SlowRotateDriveCommand(driveTrain, rightJoystick::getX, rightJoystick::getY));
+          .toggleOnTrue(
+              new SlowRotateDriveCommand(driveTrain, rightJoystick::getX, rightJoystick::getY));
 
       new JoystickButton(rightJoystick, 3)
           .onTrue(

@@ -74,8 +74,8 @@ public final class Constants {
     public static final double POSITION_DRIVE_FROM_PORTAL = 0.6;
 
     /**
-     * Precision rotate speed divider. This is the speed that the robot will rotate at when the driver
-     * is toggling the precision rotate button.
+     * Precision rotate speed divider. This is the speed that the robot will rotate at when the
+     * driver is toggling the precision rotate button.
      */
     public static final double PRECISION_ROTATE_SPEED_DIVIDER = 2;
   }
