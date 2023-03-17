@@ -134,6 +134,11 @@ public final class Constants {
         0.04; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
   }
 
+  public static final class LedConstants {
+    public static final int LED_PWM_PORT = 0;
+    public static final int LED_COUNT = 300;
+  }
+
   public static final class DebugConstants {
     public static final boolean enableArmMessages = false;
   }
