@@ -33,7 +33,6 @@ import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
-import bhs.devilbotz.subsystems.led.LEDStrip;
 import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.networktables.NetworkTable;
