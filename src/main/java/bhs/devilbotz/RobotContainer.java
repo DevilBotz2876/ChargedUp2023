@@ -74,8 +74,6 @@ public class RobotContainer {
 
   private final Arduino arduino;
 
-  private final LEDStrip ledStrip = LEDStripHelper.ledStrip;
-
   private GamePieceTypes gamePieceType = GamePieceTypes.CONE;
 
   // Network Table Based Debug Status
@@ -427,7 +425,7 @@ public class RobotContainer {
 
   public void setLEDMode(LEDModes mode) {
     new SetLEDMode(arduino, mode).schedule();
-    LEDStripHelper.setMode(ledStrip, mode);
+    LEDStripHelper.setMode(mode);
   }
 
   public GamePieceTypes getGamePieceType() {

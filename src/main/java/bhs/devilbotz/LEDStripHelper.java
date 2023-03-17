@@ -17,12 +17,12 @@ public final class LEDStripHelper {
     new LEDSegmentSettings("Segment 4", 228, 299, true)
   };
 
-  public static final LEDStrip ledStrip =
+  public static final LEDStrip strip =
       new LEDStrip(LedConstants.LED_PWM_PORT, LedConstants.LED_COUNT, segmentSettings);
 
-  public static final LEDSegment[] ledSegment = ledStrip.getSegments();
+  public static final LEDSegment[] ledSegment = strip.getSegments();
 
-  public static void setMode(LEDStrip strip, LEDModes mode) {
+  public static void setMode(LEDModes mode) {
     // Handle static vs animation mode assignments
     switch (mode) {
       case SET_ARM_UP:
