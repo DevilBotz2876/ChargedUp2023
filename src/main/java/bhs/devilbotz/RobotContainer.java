@@ -21,6 +21,7 @@ import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
 import bhs.devilbotz.commands.auto.ScoreAndMobility;
 import bhs.devilbotz.commands.auto.ScoreDockAndEngage;
 import bhs.devilbotz.commands.drivetrain.DriveCommand;
+import bhs.devilbotz.commands.drivetrain.SlowRotateDriveCommand;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
@@ -166,6 +167,9 @@ public class RobotContainer {
       new JoystickButton(rightJoystick, 1)
           .onTrue(
               new PrepareForScore(arm, ArmConstants.POSITION_TOP, gripper, this::getGamePieceType));
+
+      new JoystickButton(rightJoystick, 2)
+              .toggleOnTrue(new SlowRotateDriveCommand(driveTrain, rightJoystick::getX, rightJoystick::getY));
 
       new JoystickButton(rightJoystick, 3)
           .onTrue(
