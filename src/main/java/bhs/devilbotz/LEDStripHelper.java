@@ -1,20 +1,37 @@
 package bhs.devilbotz;
 
+import bhs.devilbotz.Constants.LedConstants;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.led.LEDEffectType;
 import bhs.devilbotz.subsystems.led.LEDStrip;
+import bhs.devilbotz.subsystems.led.LEDStrip.LEDSegment;
+import bhs.devilbotz.subsystems.led.LEDStrip.LEDSegmentSettings;
 import edu.wpi.first.wpilibj.util.Color;
 
-public class LEDStripHelper {
-  public static void setMode(LEDStrip strip, LEDModes mode) {
+public final class LEDStripHelper {
+  static LEDSegmentSettings[] segmentSettings = {
+    new LEDSegmentSettings("Segment 0", 0, 65, false),
+    new LEDSegmentSettings("Segment 1 (Arm)", 66, 124, false),
+    new LEDSegmentSettings("Segment 2", 125, 164, true),
+    new LEDSegmentSettings("Segment 3 (Arm)", 165, 227, true),
+    new LEDSegmentSettings("Segment 4", 228, 299, true)
+  };
 
+  public static final LEDStrip ledStrip =
+      new LEDStrip(LedConstants.LED_PWM_PORT, LedConstants.LED_COUNT, segmentSettings);
+
+  public static final LEDSegment[] ledSegment = ledStrip.getSegments();
+
+  public static void setMode(LEDStrip strip, LEDModes mode) {
     // Handle static vs animation mode assignments
     switch (mode) {
       case SET_ARM_UP:
-        strip.setOverlay(Color.kWhite, 5, -0.2);
+        ledSegment[1].setOverlay(Color.kWhite, 5, -0.2);
+        ledSegment[3].setOverlay(Color.kWhite, 5, -0.2);
         break;
       case SET_ARM_DOWN:
-        strip.setOverlay(Color.kWhite, 5, 0.2);
+        ledSegment[1].setOverlay(Color.kWhite, 5, 0.2);
+        ledSegment[3].setOverlay(Color.kWhite, 5, 0.2);
         break;
       case SET_ARM_IDLE:
       case CLEAR:
@@ -50,7 +67,8 @@ public class LEDStripHelper {
     }
 
     strip.setBackgroundEffect(LEDEffectType.SINUSOID);
-    strip.setBackgroundMotionRate(0.1);
+    ledSegment[1].setBackgroundMotionRate(0.1);
+    ledSegment[3].setBackgroundMotionRate(0.1);
     strip.enable(true);
   }
 }

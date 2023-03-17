@@ -6,7 +6,6 @@
 package bhs.devilbotz;
 
 import bhs.devilbotz.Constants.ArmConstants;
-import bhs.devilbotz.Constants.LedConstants;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmIdle;
@@ -75,7 +74,7 @@ public class RobotContainer {
 
   private final Arduino arduino;
 
-  private final LEDStrip ledStrip = new LEDStrip(LedConstants.LED_PWM_PORT, LedConstants.LED_COUNT);
+  private final LEDStrip ledStrip = LEDStripHelper.ledStrip;
 
   private GamePieceTypes gamePieceType = GamePieceTypes.CONE;
 
