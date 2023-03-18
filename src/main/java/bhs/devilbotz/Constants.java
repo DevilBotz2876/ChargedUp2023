@@ -141,6 +141,6 @@ public final class Constants {
   }
 
   public static final class DebugConstants {
-    public static final boolean enableArmMessages = false;
+    public static final boolean enableArmMessages = true;
   }
 }

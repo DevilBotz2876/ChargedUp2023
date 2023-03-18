@@ -15,6 +15,7 @@ import bhs.devilbotz.commands.assist.PickupFromGround;
 import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
 import bhs.devilbotz.commands.assist.PrepareForScore;
 import bhs.devilbotz.commands.auto.AutonomousContainer;
+import bhs.devilbotz.commands.drivetrain.BalancePID;
 import bhs.devilbotz.commands.drivetrain.DriveCommand;
 import bhs.devilbotz.commands.drivetrain.SlowRotateDriveCommand;
 import bhs.devilbotz.commands.gripper.GripperClose;
@@ -104,8 +105,7 @@ public class RobotContainer {
     } else {
       driveTrain.setDefaultCommand(driveTrain.stopCommand());
     }
-    if (false
-        == DriverStation.isJoystickConnected(
+    if (!DriverStation.isJoystickConnected(
             Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
       new Alert("Right Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
     }
@@ -181,8 +181,7 @@ public class RobotContainer {
 
       new JoystickButton(rightJoystick, 5).onTrue(new PickupFromGround(arm, gripper, driveTrain));
     }
-    if (false
-        == DriverStation.isJoystickConnected(
+    if (!DriverStation.isJoystickConnected(
             Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
       new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
     }

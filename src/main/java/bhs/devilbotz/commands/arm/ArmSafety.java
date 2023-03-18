@@ -185,7 +185,7 @@ public abstract class ArmSafety extends CommandBase {
   public void initializeWithSafety() {}
 
   private boolean isArmStuck() {
-    if (Robot.isSimulation()) {
+    if (Robot.isSimulation() || currentCommand.equals(ArmCommand.MOVE_UP)) {
       return false;
     }
     // check the rate of change of the arm position
