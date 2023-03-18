@@ -41,6 +41,7 @@ public class BalancePID extends CommandBase {
     this.balancePid = balancePid;
     this.straightPid = straightPid;
 
+    straightPid.enableContinuousInput(0, 360);
     addRequirements(drive);
   }
 
