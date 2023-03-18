@@ -1,10 +1,8 @@
 package bhs.devilbotz.commands.auto;
 
-import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.assist.AutoScore;
-import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
