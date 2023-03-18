@@ -10,6 +10,7 @@ import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class AutoScore extends SequentialCommandGroup {
@@ -24,6 +25,7 @@ public class AutoScore extends SequentialCommandGroup {
    *   <li>move the robot back to the original position
    *   <li>move the arm down slightly
    *   <li>open the gripper
+   *   <li>wait 1 second (for gripper to open and piece to drop)
    * </ol>
    *
    * <i>Note: This command assumes the robot and arm are already positioned and lined up with the
@@ -36,13 +38,14 @@ public class AutoScore extends SequentialCommandGroup {
   public AutoScore(Arm arm, DriveTrain drivetrain, Gripper gripper) {
     super();
     addCommands(CommandDebug.start());
-    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
+    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
     addCommands(drivetrain.stopCommand());
     addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
-    addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL));
+    addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
     addCommands(drivetrain.stopCommand());
     addCommands(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
     addCommands(new GripperOpen(gripper));
+    addCommands(Commands.waitSeconds(1));
     addCommands(CommandDebug.end());
   }
 }

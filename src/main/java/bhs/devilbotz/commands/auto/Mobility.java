@@ -23,7 +23,8 @@ public class Mobility extends SequentialCommandGroup {
   public Mobility(DriveTrain drivetrain, double distance) {
     super();
     addCommands(CommandDebug.start());
-    addCommands(new DriveStraightPID(drivetrain, distance));
+    addCommands(new DriveStraightPID(drivetrain, distance, 1));
+    addCommands(drivetrain.stopCommand());
     addCommands(CommandDebug.end());
   }
 }
