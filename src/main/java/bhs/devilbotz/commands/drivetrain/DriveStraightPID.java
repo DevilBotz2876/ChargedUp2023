@@ -49,6 +49,19 @@ public class DriveStraightPID extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
+  /**
+   * The constructor for the Drive Straight PID command.
+   *
+   * @param drivetrain The drive train subsystem.
+   * @param distance The distance (in meters) the robot needs to cover.
+   * @param maxSpeed The max speed the robot should travel
+   */
+  public DriveStraightPID(DriveTrain drivetrain, double distance, double maxSpeed) {
+    this(drivetrain, distance);
+
+    this.maxSpeed = maxSpeed;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {

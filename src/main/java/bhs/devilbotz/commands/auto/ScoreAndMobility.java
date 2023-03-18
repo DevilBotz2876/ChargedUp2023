@@ -8,6 +8,7 @@ import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class ScoreAndMobility extends SequentialCommandGroup {
@@ -44,12 +45,15 @@ public class ScoreAndMobility extends SequentialCommandGroup {
 
     addCommands(CommandDebug.start());
     addCommands(new AutoScore(arm, drivetrain, gripper));
-    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
-    addCommands(drivetrain.stopCommand());
-    addCommands(new ArmDown(arm, gripper));
-    // Since we are scoring, we always want to drive backwards in the end. Always set negative
-    // distance in case the driver forgets
-    addCommands(new Mobility(drivetrain, -(Math.abs(distance))));
+    // Move back enough to give clearance for the arm to go down
+    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, 1));
+    addCommands(
+        new ParallelCommandGroup(
+            // Move arm all the way down
+            new ArmDown(arm, gripper),
+            // Since we are scoring, we always want to drive backwards in the end. Always set
+            // negative distance in case the driver forgets
+            new Mobility(drivetrain, -(Math.abs(distance)))));
     addCommands(CommandDebug.end());
   }
 }
