@@ -1,7 +1,6 @@
 package bhs.devilbotz.commands.assist;
 
 import bhs.devilbotz.Constants.ArmConstants;
-import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmToPosition;
@@ -13,19 +12,28 @@ import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import java.util.Map;
+import java.util.function.Supplier;
 
-/**
- * This command will:
- *
- * <ol>
- *   <li>Move the arm down to the best position for cone vs cube
- *   <li>Open the gripper
- * </ol>
- *
- * @see bhs.devilbotz.commands.assist.PickupFromGround
- */
 public class PrepareForGroundPickup extends SequentialCommandGroup {
-  public PrepareForGroundPickup(Arm arm, Gripper gripper, RobotContainer robotContainer) {
+  /**
+   * Creates a sequential command that implements the "Prepare for Ground Pickup" routine
+   *
+   * <p>This command will:
+   *
+   * <ol>
+   *   <li>Move the arm down to the best position for cone vs cube (depending on which the driver
+   *       has selected)
+   *   <li>Open the gripper
+   * </ol>
+   *
+   * <i>Note: This command assumes the arm has enough clearance to move down</i>
+   *
+   * @param arm the Arm object
+   * @param gripper the Gripper object
+   * @param gamePieceTypeSelector selector that returns the desired game piece type
+   * @see bhs.devilbotz.commands.assist.PickupFromGround
+   */
+  public PrepareForGroundPickup(Arm arm, Gripper gripper, Supplier<Object> gamePieceTypeSelector) {
     super();
     addCommands(CommandDebug.start());
     // close the gripper
@@ -40,7 +48,7 @@ public class PrepareForGroundPickup extends SequentialCommandGroup {
                 Map.entry(
                     GamePieceTypes.CUBE,
                     new ArmToPosition(arm, ArmConstants.POSITION_PICKUP_GROUND_CUBE, gripper))),
-            robotContainer::getGamePieceType));
+            gamePieceTypeSelector));
 
     // open the gripper
     addCommands(new GripperOpen(gripper));

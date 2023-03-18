@@ -5,6 +5,7 @@ import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -24,6 +25,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  *         <li>The arm will stop automatically when the <i>bottom/lower</i> limit switch is reached
  *         <li>If the arm is near the bottom limit, the gripper wil close automatically to avoid
  *             hitting the robot frame
+ *       </ul>
+ *   <li>If the arm is expected to be moving (up <b>or</b> down):
+ *       <ul>
+ *         <li>The arm will stop automatically if the arm isn't moving (e.g. is stuck)
  *       </ul>
  * </ul>
  *
@@ -94,7 +99,11 @@ public abstract class ArmSafety extends CommandBase {
 
     if (isArmStuck()) {
       currentCommand = ArmCommand.EMERGENCY_STOP;
-      CommandDebug.trace("Detected stuck arm " + currentPosition);
+      CommandDebug.trace(
+          "Detected stuck arm @ position:"
+              + currentPosition
+              + " and velocity:"
+              + arm.getVelocity());
     }
 
     switch (currentCommand) {
@@ -181,7 +190,8 @@ public abstract class ArmSafety extends CommandBase {
   public void initializeWithSafety() {}
 
   private boolean isArmStuck() {
-    if (Robot.isSimulation()) {
+    if (Robot.isSimulation()
+        || (currentCommand.equals(ArmCommand.MOVE_UP) && !DriverStation.isAutonomous())) {
       return false;
     }
     // check the rate of change of the arm position
@@ -199,6 +209,10 @@ public abstract class ArmSafety extends CommandBase {
       timer.reset();
     }
 
-    return timer.hasElapsed(ArmConstants.DURATION_TO_DECIDE_ARM_STUCK);
+    if (DriverStation.isAutonomous()) {
+      return timer.hasElapsed(1);
+    } else {
+      return timer.hasElapsed(ArmConstants.DURATION_TO_DECIDE_ARM_STUCK);
+    }
   }
 }

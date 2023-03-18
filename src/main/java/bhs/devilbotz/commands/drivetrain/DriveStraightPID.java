@@ -22,7 +22,7 @@ public class DriveStraightPID extends CommandBase {
   private double startAngle;
   private double startDistance;
   private final SlewRateLimiter speedSlewRateLimiter =
-      new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMITER * 2);
+      new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMITER / 2);
   private double maxSpeed = 0; // in meters/sec
   /**
    * The constructor for the Drive Straight PID command.
@@ -47,6 +47,19 @@ public class DriveStraightPID extends CommandBase {
     straightPid.enableContinuousInput(0, 360);
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  /**
+   * The constructor for the Drive Straight PID command.
+   *
+   * @param drivetrain The drive train subsystem.
+   * @param distance The distance (in meters) the robot needs to cover.
+   * @param maxSpeed The max speed the robot should travel
+   */
+  public DriveStraightPID(DriveTrain drivetrain, double distance, double maxSpeed) {
+    this(drivetrain, distance);
+
+    this.maxSpeed = maxSpeed;
   }
 
   // Called when the command is initially scheduled.

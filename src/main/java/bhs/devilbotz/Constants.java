@@ -71,7 +71,13 @@ public final class Constants {
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
 
     /** Drive distance (in meters) from portal to Charge station */
-    public static final double POSITION_DRIVE_FROM_PORTAL = 0.6;
+    public static final double POSITION_DRIVE_FROM_PORTAL = 0.65;
+
+    /**
+     * Precision rotate speed divider. This is the speed that the robot will rotate at when the
+     * driver is toggling the precision rotate button.
+     */
+    public static final double PRECISION_ROTATE_SPEED_DIVIDER = 2;
   }
 
   /**
@@ -128,10 +134,10 @@ public final class Constants {
      * then it is considered to be stuck
      */
     public static final double SPEED_TO_DECIDE_ARM_STUCK =
-        75; /* The arm encoder speed is generally in the +/- 125-175 range */
+        15; /* The arm encoder speed is generally in the +/- 125-175 range */
 
     public static final double DURATION_TO_DECIDE_ARM_STUCK =
-        0.04; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
+        0.20; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
   }
 
   public static final class LedConstants {
@@ -140,6 +146,6 @@ public final class Constants {
   }
 
   public static final class DebugConstants {
-    public static final boolean enableArmMessages = false;
+    public static final boolean enableArmMessages = true;
   }
 }

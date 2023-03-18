@@ -10,38 +10,42 @@ import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-/**
- * This command will:
- *
- * <ol>
- *   <li>move the robot back enough to give the arm some clearance
- *   <li>move the arm to the top scoring position
- *   <li>move the robot back to the original position
- *   <li>move the arm down slightly
- *   <li>open the gripper
- * </ol>
- */
 public class AutoScore extends SequentialCommandGroup {
   /**
-   * Creates a sequential command that implements the Mobility routine
+   * Creates a sequential command that implements the "Auto Score" routine
+   *
+   * <p>This command will:
+   *
+   * <ol>
+   *   <li>move the robot back enough to give the arm some clearance
+   *   <li>move the arm to the top scoring position
+   *   <li>move the robot back to the original position
+   *   <li>move the arm down slightly
+   *   <li>open the gripper
+   *   <li>wait 1 second (for gripper to open and piece to drop)
+   * </ol>
+   *
+   * <i>Note: This command assumes the robot and arm are already positioned and lined up with the
+   * scoring target</i>
    *
    * @param arm the Arm object
    * @param drivetrain the Drivetain object
    * @param gripper the Gripper object
    */
-  // Arm arm, Gripper gripper, DriveTrain drivetrain
-  // DriveTrain drivetrain, double delay, double distance
-
   public AutoScore(Arm arm, DriveTrain drivetrain, Gripper gripper) {
     super();
     addCommands(CommandDebug.start());
-    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL));
-    addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper));
-    addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL));
+    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
+    addCommands(drivetrain.stopCommand());
+    addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP + 10, gripper));
+    addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
+    addCommands(drivetrain.stopCommand());
     addCommands(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
     addCommands(new GripperOpen(gripper));
-    addCommands(CommandDebug.start());
+    addCommands(Commands.waitSeconds(0.5));
+    addCommands(CommandDebug.end());
   }
 }
