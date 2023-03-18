@@ -76,9 +76,6 @@ public class RobotContainer {
   protected NetworkTable table = inst.getTable("Game Piece Mode");
   private StringEntry ntGamePieceMode = table.getStringTopic("state").getEntry("Cone");
 
-  private final AutonomousContainer autonomousContainer =
-      new AutonomousContainer(driveTrain, arm, gripper);
-
   {
     try {
       arduino = new Arduino();
@@ -86,7 +83,11 @@ public class RobotContainer {
       new Alert("Arduino is disconnected. LEDs will not function", Alert.AlertType.ERROR).set(true);
       throw new RuntimeException(e);
     }
+
   }
+
+  private final AutonomousContainer autonomousContainer =
+          new AutonomousContainer(driveTrain, arm, gripper, arduino);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

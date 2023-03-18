@@ -53,7 +53,7 @@ public class ScoreAndMobility extends SequentialCommandGroup {
             new ArmDown(arm, gripper),
             // Since we are scoring, we always want to drive backwards in the end. Always set
             // negative distance in case the driver forgets
-            new Mobility(drivetrain, -(Math.abs(distance)))));
+            new Mobility(drivetrain, -3)));
     addCommands(CommandDebug.end());
   }
 }
