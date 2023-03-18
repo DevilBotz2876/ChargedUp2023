@@ -15,4 +15,5 @@ public enum LEDModes {
   SET_ARM_UP,
   SET_ARM_DOWN,
   SET_ARM_IDLE,
+  SET_LOADING
 }

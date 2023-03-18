@@ -123,6 +123,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
+    robotContainer.setLEDMode(LEDModes.SET_LOADING);
   }
 
   @Override
