@@ -45,6 +45,9 @@ public class SetLEDMode extends CommandBase {
       case SET_ARM_IDLE:
         arduino.sendMessage(new byte[] {0x8});
         break;
+      case SET_LOADING:
+        arduino.sendMessage(new byte[] {0x9});
+        break;
     }
 
     sentMessage = true;

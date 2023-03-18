@@ -55,6 +55,9 @@ void loop() {
       case 0x8:
         armIdle();
         break;
+      case 0x9:
+        setLoading();
+        break;
 
       ws2812fx.start();
     }
