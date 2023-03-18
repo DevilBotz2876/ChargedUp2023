@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public final class LEDStripHelper {
   static LEDSegmentSettings[] segmentSettings = {
-    new LEDSegmentSettings("Segment 0", 0, 65, false),
-    new LEDSegmentSettings("Segment 1 (Arm)", 66, 124, false),
-    new LEDSegmentSettings("Segment 2", 125, 164, true),
-    new LEDSegmentSettings("Segment 3 (Arm)", 165, 227, true),
-    new LEDSegmentSettings("Segment 4", 228, 299, true)
+    new LEDSegmentSettings("Segment 0 (Right Diagonal)", 0, 65, false),
+    new LEDSegmentSettings("Segment 1 (Right Arm)", 66, 124, false),
+    new LEDSegmentSettings("Segment 2 (Front Bottom)", 125, 164, true),
+    new LEDSegmentSettings("Segment 3 (Left Arm)", 165, 227, true),
+    new LEDSegmentSettings("Segment 4 (Left Diagonal)", 228, 299, true)
   };
 
   public static final LEDStrip strip =
@@ -67,8 +67,10 @@ public final class LEDStripHelper {
     }
 
     strip.setBackgroundEffect(LEDEffectType.SINUSOID, 0);
+    ledSegment[0].setBackgroundEffect(LEDEffectType.SINUSOID, 0.1);
     ledSegment[1].setBackgroundEffect(LEDEffectType.SINUSOID, 0.1);
     ledSegment[3].setBackgroundEffect(LEDEffectType.SINUSOID, 0.1);
+    ledSegment[4].setBackgroundEffect(LEDEffectType.SINUSOID, 0.1);
     strip.enable(true);
   }
 }
