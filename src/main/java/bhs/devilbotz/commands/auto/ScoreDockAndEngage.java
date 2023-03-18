@@ -39,7 +39,7 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
 
     addCommands(CommandDebug.start());
     addCommands(new AutoScore(arm, drivetrain, gripper));
-    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, 1));
+    // addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, 1));
     addCommands(
         new ParallelCommandGroup(
             // Move arm all the way down
