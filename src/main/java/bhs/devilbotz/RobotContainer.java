@@ -83,11 +83,10 @@ public class RobotContainer {
       new Alert("Arduino is disconnected. LEDs will not function", Alert.AlertType.ERROR).set(true);
       throw new RuntimeException(e);
     }
-
   }
 
   private final AutonomousContainer autonomousContainer =
-          new AutonomousContainer(driveTrain, arm, gripper, arduino);
+      new AutonomousContainer(driveTrain, arm, gripper, arduino);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

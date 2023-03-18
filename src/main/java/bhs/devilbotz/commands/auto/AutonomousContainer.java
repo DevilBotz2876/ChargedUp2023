@@ -73,9 +73,7 @@ public class AutonomousContainer {
       case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
         break;
       case TEST:
-        autonomousCommand.addCommands(
-                new TestRoutine(arm, gripper, arduino, drivetrain)
-        );
+        autonomousCommand.addCommands(new TestRoutine(arm, gripper, arduino, drivetrain));
         break;
       default:
         break;

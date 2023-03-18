@@ -163,7 +163,12 @@ public abstract class ArmSafety extends CommandBase {
   public final void end(boolean interrupted) {
 
     double currentPosition = getPosition();
-    CommandDebug.println(getClass().getName() + ":end @ position: " + currentPosition + " Interrupted? " + interrupted);
+    CommandDebug.println(
+        getClass().getName()
+            + ":end @ position: "
+            + currentPosition
+            + " Interrupted? "
+            + interrupted);
     // We always want to stop the arm at the end of any command
     arm.stop();
   }
