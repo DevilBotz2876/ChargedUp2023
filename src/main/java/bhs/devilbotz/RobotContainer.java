@@ -255,7 +255,7 @@ public class RobotContainer {
         .withPosition(1, 2);
 
     tab.add("Arm subsystem", arm).withPosition(0, 4);
-    tab.add("Drivetrain subsystem", arm).withPosition(7, 2);
+    tab.add("Drivetrain subsystem", driveTrain).withPosition(7, 2);
     buildGripperShuffleboardTab();
     buildDriverAssistShuffleboardTab();
   }

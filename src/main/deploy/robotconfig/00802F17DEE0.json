@@ -45,7 +45,7 @@
 
     "sysid": {
         "MAX_SPEED": 3,
-        "MAX_ANGULAR_SPEED": 3.14,
+        "MAX_ANGULAR_SPEED": 4,
 
         "COMBINED_FEED_BACK_VELOCITY_P": 3.9725,
         "COMBINED_FEED_BACK_VELOCITY_I": 0.0,

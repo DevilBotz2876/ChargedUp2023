@@ -71,7 +71,7 @@ public final class Constants {
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
 
     /** Drive distance (in meters) from portal to Charge station */
-    public static final double POSITION_DRIVE_FROM_PORTAL = 0.6;
+    public static final double POSITION_DRIVE_FROM_PORTAL = 0.65;
 
     /**
      * Precision rotate speed divider. This is the speed that the robot will rotate at when the
