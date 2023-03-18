@@ -190,7 +190,8 @@ public abstract class ArmSafety extends CommandBase {
   public void initializeWithSafety() {}
 
   private boolean isArmStuck() {
-    if (Robot.isSimulation() || (currentCommand.equals(ArmCommand.MOVE_UP) && !DriverStation.isAutonomous())) {
+    if (Robot.isSimulation()
+        || (currentCommand.equals(ArmCommand.MOVE_UP) && !DriverStation.isAutonomous())) {
       return false;
     }
     // check the rate of change of the arm position
