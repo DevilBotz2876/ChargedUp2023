@@ -5,6 +5,7 @@ import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -189,7 +190,7 @@ public abstract class ArmSafety extends CommandBase {
   public void initializeWithSafety() {}
 
   private boolean isArmStuck() {
-    if (Robot.isSimulation() || currentCommand.equals(ArmCommand.MOVE_UP)) {
+    if (Robot.isSimulation() || (currentCommand.equals(ArmCommand.MOVE_UP) && !DriverStation.isAutonomous())) {
       return false;
     }
     // check the rate of change of the arm position
@@ -207,6 +208,11 @@ public abstract class ArmSafety extends CommandBase {
       timer.reset();
     }
 
-    return timer.hasElapsed(ArmConstants.DURATION_TO_DECIDE_ARM_STUCK);
+    if (DriverStation.isAutonomous()) {
+      return timer.hasElapsed(1);
+    } else {
+      return timer.hasElapsed(ArmConstants.DURATION_TO_DECIDE_ARM_STUCK);
+    }
+
   }
 }
