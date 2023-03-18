@@ -97,8 +97,8 @@ public abstract class ArmSafety extends CommandBase {
     executeWithSafety();
 
     if (isArmStuck()) {
-      CommandDebug.trace("Detected stuck arm @ position:" + currentPosition);
       currentCommand = ArmCommand.EMERGENCY_STOP;
+      CommandDebug.trace("Detected stuck arm @ position:" + currentPosition + " and velocity:" + arm.getVelocity());
     }
 
     switch (currentCommand) {
