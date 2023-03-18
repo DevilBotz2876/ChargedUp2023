@@ -22,7 +22,7 @@ public class DriveStraightPID extends CommandBase {
   private double startAngle;
   private double startDistance;
   private final SlewRateLimiter speedSlewRateLimiter =
-      new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMITER * 2);
+      new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMITER / 2);
   private double maxSpeed = 0; // in meters/sec
   /**
    * The constructor for the Drive Straight PID command.

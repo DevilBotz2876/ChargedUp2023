@@ -6,7 +6,6 @@
 package bhs.devilbotz;
 
 import bhs.devilbotz.Constants.ArmConstants;
-import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmIdle;
 import bhs.devilbotz.commands.arm.ArmMoveDistance;
@@ -15,18 +14,14 @@ import bhs.devilbotz.commands.arm.ArmUp;
 import bhs.devilbotz.commands.assist.PickupFromGround;
 import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
 import bhs.devilbotz.commands.assist.PrepareForScore;
-import bhs.devilbotz.commands.auto.DockAndEngage;
-import bhs.devilbotz.commands.auto.Mobility;
-import bhs.devilbotz.commands.auto.MobilityDockAndEngage;
-import bhs.devilbotz.commands.auto.ScoreAndMobility;
-import bhs.devilbotz.commands.auto.ScoreDockAndEngage;
+import bhs.devilbotz.commands.auto.AutonomousContainer;
 import bhs.devilbotz.commands.drivetrain.DriveCommand;
+import bhs.devilbotz.commands.drivetrain.SlowRotateDriveCommand;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.commands.led.SetLEDMode;
 import bhs.devilbotz.lib.AutonomousModes;
-import bhs.devilbotz.lib.CommunityLocation;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Arduino;
@@ -40,11 +35,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -80,6 +76,9 @@ public class RobotContainer {
   protected NetworkTable table = inst.getTable("Game Piece Mode");
   private StringEntry ntGamePieceMode = table.getStringTopic("state").getEntry("Cone");
 
+  private final AutonomousContainer autonomousContainer =
+      new AutonomousContainer(driveTrain, arm, gripper);
+
   {
     try {
       arduino = new Arduino();
@@ -103,11 +102,10 @@ public class RobotContainer {
       driveTrain.setDefaultCommand(
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     } else {
-      driveTrain.setDefaultCommand(driveTrain.stop());
+      driveTrain.setDefaultCommand(driveTrain.stopCommand());
     }
-    if (false
-        == DriverStation.isJoystickConnected(
-            Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
+    if (!DriverStation.isJoystickConnected(
+        Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
       new Alert("Right Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
     }
     // driveTrain.setDefaultCommand(new ArcadeDriveOpenLoop(driveTrain, rightJoystick::getY,
@@ -133,7 +131,8 @@ public class RobotContainer {
           .onTrue(new GripperClose(gripper))
           .onFalse(new GripperIdle(gripper));
 
-      new JoystickButton(leftJoystick, 2).onTrue(new PrepareForGroundPickup(arm, gripper, this));
+      new JoystickButton(leftJoystick, 2)
+          .onTrue(new PrepareForGroundPickup(arm, gripper, this::getGamePieceType));
 
       new JoystickButton(leftJoystick, 3)
           .onTrue(new GripperOpen(gripper))
@@ -167,6 +166,10 @@ public class RobotContainer {
           .onTrue(
               new PrepareForScore(arm, ArmConstants.POSITION_TOP, gripper, this::getGamePieceType));
 
+      new JoystickButton(rightJoystick, 2)
+          .toggleOnTrue(
+              new SlowRotateDriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+
       new JoystickButton(rightJoystick, 3)
           .onTrue(
               new PrepareForScore(
@@ -177,9 +180,8 @@ public class RobotContainer {
 
       new JoystickButton(rightJoystick, 5).onTrue(new PickupFromGround(arm, gripper, driveTrain));
     }
-    if (false
-        == DriverStation.isJoystickConnected(
-            Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
+    if (!DriverStation.isJoystickConnected(
+        Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
       new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
     }
   }
@@ -191,64 +193,15 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand(AutonomousModes autoMode) {
-    SequentialCommandGroup autonomousCommand = new SequentialCommandGroup();
-    double delay = ShuffleboardManager.autoDelay.getDouble(0);
-    double maxDistance =
-        ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
-
-    autonomousCommand.addCommands(CommandDebug.message("Autonomous: Start"));
-    // Always start autonomous with the specified delay to allow alliance members to do whatever
-    // they need to do before we start
-    autonomousCommand.addCommands(Commands.waitSeconds(delay));
-
     if (autoMode == null) {
       new Alert(
               "An Autonomous mode was NOT selected. The robot will not move during autonomous",
               Alert.AlertType.ERROR)
           .set(true);
+      return null;
     } else {
-      switch (autoMode) {
-        case SIT_STILL:
-          break;
-        case MOBILITY:
-          autonomousCommand.addCommands(new Mobility(driveTrain, maxDistance));
-          break;
-        case SCORE_AND_MOBILITY:
-          autonomousCommand.addCommands(
-              new ScoreAndMobility(arm, driveTrain, maxDistance, gripper));
-          break;
-        case DOCK_AND_ENGAGE:
-          autonomousCommand.addCommands(new DockAndEngage(driveTrain, maxDistance));
-          break;
-        case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
-          autonomousCommand.addCommands(
-              new MobilityDockAndEngage(
-                  driveTrain, CommunityLocation.HUMAN, DriverStation.getAlliance()));
-          break;
-        case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
-          autonomousCommand.addCommands(
-              new MobilityDockAndEngage(
-                  driveTrain, CommunityLocation.WALL, DriverStation.getAlliance()));
-          break;
-        case SCORE_DOCK_AND_ENGAGE:
-          autonomousCommand.addCommands(new ScoreDockAndEngage(arm, driveTrain, gripper));
-          break;
-        case SCORE_MOBILITY_DOCK_ENGAGE:
-          break;
-        case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
-          break;
-        case TEST:
-          break;
-        default:
-          break;
-      }
+      return autonomousContainer.getAutonomousCommand(autoMode);
     }
-
-    // Always stop the drivetrain at the end of autonomous
-    autonomousCommand.addCommands(driveTrain.stop());
-    autonomousCommand.addCommands(CommandDebug.message("Autonomous: End"));
-
-    return autonomousCommand;
   }
 
   /**
@@ -331,7 +284,9 @@ public class RobotContainer {
             .withSize(3, 6)
             .withProperties(Map.of("Number of columns", 1, "Number of rows", 4));
 
-    cmdList.add(new PrepareForGroundPickup(arm, gripper, this)).withPosition(0, 0);
+    cmdList
+        .add(new PrepareForGroundPickup(arm, gripper, this::getGamePieceType))
+        .withPosition(0, 0);
     cmdList.add(new PickupFromGround(arm, gripper, driveTrain)).withPosition(0, 1);
     cmdList
         .add(

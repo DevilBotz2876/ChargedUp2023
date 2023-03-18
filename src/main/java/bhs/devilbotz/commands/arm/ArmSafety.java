@@ -25,6 +25,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  *         <li>If the arm is near the bottom limit, the gripper wil close automatically to avoid
  *             hitting the robot frame
  *       </ul>
+ *   <li>If the arm is expected to be moving (up <b>or</b> down):
+ *       <ul>
+ *         <li>The arm will stop automatically if the arm isn't moving (e.g. is stuck)
+ *       </ul>
  * </ul>
  *
  * <i>Note: ALL arm commands that move the arm should extend this class and must implement the
@@ -93,8 +97,8 @@ public abstract class ArmSafety extends CommandBase {
     executeWithSafety();
 
     if (isArmStuck()) {
+      CommandDebug.trace("Detected stuck arm @ position:" + currentPosition);
       currentCommand = ArmCommand.EMERGENCY_STOP;
-      CommandDebug.trace("Detected stuck arm " + currentPosition);
     }
 
     switch (currentCommand) {
@@ -181,7 +185,7 @@ public abstract class ArmSafety extends CommandBase {
   public void initializeWithSafety() {}
 
   private boolean isArmStuck() {
-    if (Robot.isSimulation()) {
+    if (Robot.isSimulation() || currentCommand.equals(ArmCommand.MOVE_UP)) {
       return false;
     }
     // check the rate of change of the arm position
