@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands.auto;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.CommunityLocation;
