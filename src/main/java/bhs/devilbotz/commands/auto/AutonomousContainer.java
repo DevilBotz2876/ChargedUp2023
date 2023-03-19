@@ -3,7 +3,6 @@ package bhs.devilbotz.commands.auto;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.CommunityLocation;
-import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -18,13 +17,11 @@ public class AutonomousContainer {
   private final DriveTrain drivetrain;
   private final Arm arm;
   private final Gripper gripper;
-  private final Arduino arduino;
 
-  public AutonomousContainer(DriveTrain drivetrain, Arm arm, Gripper gripper, Arduino arduino) {
+  public AutonomousContainer(DriveTrain drivetrain, Arm arm, Gripper gripper) {
     this.drivetrain = drivetrain;
     this.arm = arm;
     this.gripper = gripper;
-    this.arduino = arduino;
   }
 
   public Command getAutonomousCommand(AutonomousModes autoMode) {
@@ -71,7 +68,6 @@ public class AutonomousContainer {
       case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
         break;
       case TEST:
-        autonomousCommand.addCommands(new TestRoutine(arm, gripper, arduino, drivetrain));
         break;
       default:
         break;
