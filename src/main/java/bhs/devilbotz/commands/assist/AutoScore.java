@@ -11,6 +11,7 @@ import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class AutoScore extends SequentialCommandGroup {
@@ -38,9 +39,12 @@ public class AutoScore extends SequentialCommandGroup {
   public AutoScore(Arm arm, DriveTrain drivetrain, Gripper gripper) {
     super();
     addCommands(CommandDebug.start());
-    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
-    addCommands(drivetrain.stopCommand());
-    addCommands(new ArmToPosition(arm, ArmConstants.POSITION_TOP + 10, gripper));
+    addCommands(new ParallelCommandGroup(
+            new SequentialCommandGroup(
+                    new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5),
+                    drivetrain.stopCommand()),
+            new ArmToPosition(arm, ArmConstants.POSITION_TOP + 10, gripper)
+    ));
     addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
     addCommands(drivetrain.stopCommand());
     addCommands(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
