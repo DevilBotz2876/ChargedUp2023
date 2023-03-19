@@ -43,7 +43,9 @@ public class DriveCommand extends CommandBase {
    * @see CommandBase#initialize()
    */
   @Override
-  public void initialize() {}
+  public void initialize() {
+    drive.setSlowMode(false);
+  }
 
   /**
    * Called every time the scheduler runs while the command is scheduled.

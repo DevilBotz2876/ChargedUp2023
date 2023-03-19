@@ -4,6 +4,7 @@ import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
+import bhs.devilbotz.commands.drivetrain.SlowRotateDriveCommand;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -136,6 +137,8 @@ public class DriveTrain extends SubsystemBase {
           // l and r velocity: 0.1   m/s
           // l and r position: 0.005 m
           VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
+
+  private boolean slowMode = false;
 
   /**
    * Helper function to convert position (in meters) to Talon SRX encoder native units. Used for
@@ -658,5 +661,13 @@ public class DriveTrain extends SubsystemBase {
           this.tankDriveVolts(0, 0);
         },
         this);
+  }
+
+  public boolean isSlowMode() {
+    return slowMode;
+  }
+
+  public void setSlowMode(boolean enabled) {
+    slowMode = enabled;
   }
 }

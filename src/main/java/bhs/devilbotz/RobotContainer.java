@@ -339,4 +339,8 @@ public class RobotContainer {
         break;
     }
   }
+
+  public boolean getSlowMode() {
+    return driveTrain.isSlowMode();
+  }
 }

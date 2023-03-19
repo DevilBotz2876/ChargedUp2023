@@ -6,6 +6,7 @@ import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.lib.ScoreLevels;
+import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.GenericEntry;
@@ -43,6 +44,8 @@ public class ShuffleboardManager {
   private final RobotContainer robotContainer;
 
   private final GenericEntry gripperSetpoint;
+
+  private final GenericEntry slowModeEntry;
   /** The constructor for the shuffleboard manager. */
   public ShuffleboardManager(RobotContainer robotContainer) {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -68,6 +71,9 @@ public class ShuffleboardManager {
 
     initAutoModeChooser();
     initAutoModePreferences();
+
+    slowModeEntry = autoMode.add("Slow Mode", robotContainer.getSlowMode())
+                    .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
   }
 
   public static void putAlerts(String group, Alert.SendableAlerts sendableAlerts) {
@@ -125,6 +131,8 @@ public class ShuffleboardManager {
   public void updateValues() {
     // update gripper setpoint using network tables
     gripperSetpoint.setBoolean(Gripper.getAtSetpoint());
+    slowModeEntry.setBoolean(robotContainer.getSlowMode());
+    System.out.println(robotContainer.getSlowMode());
   }
 
   public void updateValuesTeleop() {
