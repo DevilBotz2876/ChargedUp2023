@@ -1,5 +1,6 @@
 package bhs.devilbotz.commands.auto;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.CommunityLocation;
@@ -27,7 +28,7 @@ public class AutonomousContainer {
   public Command getAutonomousCommand(AutonomousModes autoMode) {
     SequentialCommandGroup autonomousCommand = new SequentialCommandGroup();
     double delay = ShuffleboardManager.autoDelay.getDouble(0);
-    double maxDistance = ShuffleboardManager.autoDistance.getDouble(2);
+    double maxDistance = ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
     double startAngle = drivetrain.getYaw();
 
     autonomousCommand.addCommands(CommandDebug.message("Autonomous: Start"));
