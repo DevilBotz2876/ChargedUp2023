@@ -32,7 +32,7 @@ public class AutonomousContainer {
     SequentialCommandGroup autonomousCommand = new SequentialCommandGroup();
     double delay = ShuffleboardManager.autoDelay.getDouble(0);
     double maxDistance =
-        ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
+        ShuffleboardManager.autoDistance.getDouble(2);
     double startAngle = drivetrain.getYaw();
 
     autonomousCommand.addCommands(CommandDebug.message("Autonomous: Start"));

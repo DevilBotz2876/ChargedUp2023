@@ -103,7 +103,7 @@ public class ShuffleboardManager {
 
     autoDistance =
         autoMode
-            .add("Distance (in meters)", Constants.DEFAULT_DISTANCE_DOCK_AND_ENGAGE)
+            .add("Distance (in meters)", 2)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
 

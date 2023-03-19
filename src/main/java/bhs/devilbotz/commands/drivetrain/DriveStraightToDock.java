@@ -133,7 +133,7 @@ public class DriveStraightToDock extends CommandBase {
         if (timer.hasElapsed(
             Robot.getDriveTrainConstant("DOCK_ON_RAMP_DURATION_MIN").asDouble(0.2))) {
           CommandDebug.message("Yes, On Ramp!");
-          currentState = DockState.LEVELING_OFF;
+          currentState = DockState.ON_RAMP;
           timer.stop();
           timer.reset();
         }
