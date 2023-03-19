@@ -6,7 +6,6 @@ import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.lib.ScoreLevels;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.GenericEntry;
@@ -72,8 +71,11 @@ public class ShuffleboardManager {
     initAutoModeChooser();
     initAutoModePreferences();
 
-    slowModeEntry = autoMode.add("Slow Mode", robotContainer.getSlowMode())
-                    .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+    slowModeEntry =
+        autoMode
+            .add("Slow Mode", robotContainer.getSlowMode())
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .getEntry();
   }
 
   public static void putAlerts(String group, Alert.SendableAlerts sendableAlerts) {

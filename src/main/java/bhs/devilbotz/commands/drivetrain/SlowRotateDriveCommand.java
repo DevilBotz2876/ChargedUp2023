@@ -6,6 +6,7 @@ import java.util.function.DoubleSupplier;
 
 public class SlowRotateDriveCommand extends DriveCommand {
   private DriveTrain drive;
+
   public SlowRotateDriveCommand(DriveTrain drive, DoubleSupplier speed, DoubleSupplier rot) {
     super(
         drive,
