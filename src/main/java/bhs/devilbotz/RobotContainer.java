@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -306,6 +307,25 @@ public class RobotContainer {
                   this.setGamePieceType(GamePieceTypes.CUBE);
                 }))
         .withPosition(0, 3);
+
+    CommandBase slowRotateCommand =
+        new SlowRotateDriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX);
+    cmdList
+        .add(
+            "Normal Mode",
+            new InstantCommand(
+                () -> {
+                  slowRotateCommand.end(true);
+                }))
+        .withPosition(0, 4);
+    cmdList
+        .add(
+            "Slow Mode",
+            new InstantCommand(
+                () -> {
+                  slowRotateCommand.schedule();
+                }))
+        .withPosition(0, 5);
   }
 
   public void setLEDModeAlliance() {
