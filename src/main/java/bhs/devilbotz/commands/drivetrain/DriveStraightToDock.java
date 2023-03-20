@@ -133,9 +133,7 @@ public class DriveStraightToDock extends CommandBase {
         if (timer.hasElapsed(
             Robot.getDriveTrainConstant("DOCK_ON_RAMP_DURATION_MIN").asDouble(0.2))) {
           CommandDebug.message("Yes, On Ramp!");
-          // We skip ON_RAMP and go straight to LEVELING_OFF because the BalancePID can take over
-          // once we are on the ramp
-          currentState = DockState.LEVELING_OFF;
+          currentState = DockState.ON_RAMP;
           timer.stop();
           timer.reset();
         }
