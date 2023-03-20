@@ -53,7 +53,9 @@ public class ScoreAndMobility extends SequentialCommandGroup {
             new ArmDown(arm, gripper),
             // Since we are scoring, we always want to drive backwards in the end. Always set
             // negative distance in case the driver forgets
-            new Mobility(drivetrain, -3)));
+            // After scoring we always drive back 3.5 meters to ensure we leave the zone from either
+            // side
+            new Mobility(drivetrain, -3.5)));
     addCommands(CommandDebug.end());
   }
 }
