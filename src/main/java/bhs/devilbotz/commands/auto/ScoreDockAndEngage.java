@@ -2,7 +2,9 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
+import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.assist.AutoScore;
+import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -38,13 +40,15 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
     addCommands(CommandDebug.start());
     addCommands(new AutoScore(arm, drivetrain, gripper));
     // addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, 1));
+    addCommands(new GripperClose(gripper));
     addCommands(
         new ParallelCommandGroup(
             // Move arm all the way down
-            new ArmDown(arm, gripper),
+            new ArmToPosition(arm, 150, gripper),
             // Since we are scoring, we always want to drive backwards in the end. Always set
             // negative distance in case the driver forgets
             new DockAndEngage(drivetrain, -(Math.abs(maxDistance)), startAngle)));
+    addCommands(new ArmDown(arm, gripper));
     addCommands(drivetrain.stopCommand());
     addCommands(CommandDebug.end());
   }
