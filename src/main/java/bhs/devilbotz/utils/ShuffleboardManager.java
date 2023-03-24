@@ -85,9 +85,8 @@ public class ShuffleboardManager {
     autoModeChooser.addOption("Score/Dock/Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
     //    autoModeChooser.addOption(
     //        "Routine 7: Score, Dock, and Engage", AutonomousModes.SCORE_DOCK_AND_ENGAGE);
-    //    autoModeChooser.addOption(
-    //       "Routine 8: Score, Mobility, Dock, and Engage",
-    // AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
+    autoModeChooser.addOption(
+        "Score/Mobility/Dock/Engage (Middle)", AutonomousModes.SCORE_MOBILITY_DOCK_ENGAGE);
     //    autoModeChooser.addOption(
     //        "Routine 9: Score, Mobility, Pick, Dock, and Engage",
     //        AutonomousModes.SCORE_MOBILITY_PICK_DOCK_ENGAGE);
