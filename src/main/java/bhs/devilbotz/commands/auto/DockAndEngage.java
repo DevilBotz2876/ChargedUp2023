@@ -7,11 +7,6 @@ import bhs.devilbotz.commands.drivetrain.RotateDegrees;
 import bhs.devilbotz.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-/**
- * @see bhs.devilbotz.commands.drivetrain.DriveStraightToDock
- * @see bhs.devilbotz.commands.drivetrain.BalancePID
- * @see bhs.devilbotz.commands.drivetrain.RotateDegrees
- */
 public class DockAndEngage extends SequentialCommandGroup {
   /**
    * Creates a sequential command that implements the "Dock and Engage" routine
