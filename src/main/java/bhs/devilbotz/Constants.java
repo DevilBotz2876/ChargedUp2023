@@ -87,9 +87,9 @@ public final class Constants {
    */
   public static class GripperConstants {
     /** The gripper double solenoid forward channel */
-    public static final int GRIPPER_SOLENOID_FORWARD = 1;
+    public static final int GRIPPER_SOLENOID_FORWARD = 0;
     /** The gripper double solenoid reverse channel */
-    public static final int GRIPPER_SOLENOID_REVERSE = 2;
+    public static final int GRIPPER_SOLENOID_REVERSE = 1;
     /** The CAN ID for the gripper's pneumatic compressor */
     public static final int COMPRESSOR_CAN_ID = 6;
   }
