@@ -193,7 +193,7 @@ public class Arm extends SubsystemBase {
   /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
   public void up() {
     ntState.set("Moving: Up");
-    armMotor.set(1);
+    armMotor.set(0.1);
     robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
@@ -202,7 +202,7 @@ public class Arm extends SubsystemBase {
    */
   public void down() {
     ntState.set("Moving: Down");
-    armMotor.set(-1);
+    armMotor.set(-0.2);
     robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 

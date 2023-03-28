@@ -25,7 +25,7 @@ public enum AutonomousModes {
   /** Score preloaded game piece and then perform {@link #DOCK_AND_ENGAGE} */
   SCORE_DOCK_AND_ENGAGE,
   /** Perform {@link #SCORE_AND_MOBILITY} and then {@link #DOCK_AND_ENGAGE} */
-  SCORE_MOBILITY_DOCK_ENGAGE,
+  SCORE_MOBILITY_DOCK_AND_ENGAGE,
   /**
    * Perform {@link #SCORE_AND_MOBILITY}, pick up a game piece at center field, and then {@link
    * #DOCK_AND_ENGAGE}
