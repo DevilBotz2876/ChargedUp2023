@@ -59,15 +59,12 @@ public class AutonomousContainer {
             new MobilityDockAndEngage(
                 drivetrain, CommunityLocation.WALL, DriverStation.getAlliance(), startAngle));
         break;
-      case SCORE_DOCK_AND_ENGAGE:
-        autonomousCommand.addCommands(
-            new ScoreMobilityDockAndEngage(arm, drivetrain, maxDistance, gripper, startAngle)
-            // new ScoreMobilityDock(arm, drivetrain, maxDistance, gripper, startAngle)
-            );
-        break;
       case SCORE_MOBILITY_DOCK_AND_ENGAGE:
         break;
       case SCORE_MOBILITY_PICK_DOCK_ENGAGE:
+      autonomousCommand.addCommands(
+        new ScoreDockAndEngage(arm, drivetrain, maxDistance, gripper, startAngle)
+        );
         break;
       case TEST:
         break;
