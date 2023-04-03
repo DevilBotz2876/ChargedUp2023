@@ -122,7 +122,7 @@ public final class Constants {
     // portal
     public static final double POSITION_DRIVE = 100; // arm position to use when holding a piece
     public static final double POSITION_GRIPPER_CLOSE =
-        80; // When the arm is moving down, the positon when the gripper needs to be closed to
+        100; // When the arm is moving down, the positon when the gripper needs to be closed to
     // avoid crashing into the frame
     public static final double POSITION_SCORING_DELTA =
         -10; // The amount to move the gripper before releasing piece
@@ -138,7 +138,7 @@ public final class Constants {
 
     public static final double DURATION_TO_DECIDE_ARM_STUCK =
         0.20; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
-    public static final double POSITION_SLOW_ARM = 100;
+    public static final double POSITION_SLOW_ARM = 175;
   }
 
   public static final class DebugConstants {
