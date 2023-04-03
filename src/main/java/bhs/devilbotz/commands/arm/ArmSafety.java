@@ -135,9 +135,6 @@ public abstract class ArmSafety extends CommandBase {
           }
         }
 
-
-
-
         break;
       default:
         break;

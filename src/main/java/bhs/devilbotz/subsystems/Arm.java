@@ -10,7 +10,6 @@ import bhs.devilbotz.RobotContainer;
 import bhs.devilbotz.lib.LEDModes;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanEntry;
@@ -194,10 +193,8 @@ public class Arm extends SubsystemBase {
   /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
   public void up(boolean slow) {
     ntState.set("Moving: Up");
-    if (slow)
-      armMotor.set(0.5);
-    else
-      armMotor.set(1);
+    if (slow) armMotor.set(0.5);
+    else armMotor.set(1);
     robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
@@ -206,10 +203,8 @@ public class Arm extends SubsystemBase {
    */
   public void down(boolean slow) {
     ntState.set("Moving: Down");
-    if (slow)
-      armMotor.set(-0.5);
-    else
-      armMotor.set(-1);
+    if (slow) armMotor.set(-0.5);
+    else armMotor.set(-1);
     robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
