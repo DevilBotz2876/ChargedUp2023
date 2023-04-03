@@ -138,6 +138,7 @@ public final class Constants {
 
     public static final double DURATION_TO_DECIDE_ARM_STUCK =
         0.20; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
+    public static final double POSITION_SLOW_ARM = 100;
   }
 
   public static final class DebugConstants {
