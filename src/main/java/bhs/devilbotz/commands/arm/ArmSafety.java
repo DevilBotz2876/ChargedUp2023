@@ -131,7 +131,7 @@ public abstract class ArmSafety extends CommandBase {
           }
 
           if (getPosition() < ArmConstants.POSITION_SLOW_ARM) {
-            arm.down(true);
+            arm.down(0.5);
           }
         }
 
@@ -144,12 +144,12 @@ public abstract class ArmSafety extends CommandBase {
       switch (currentCommand) {
         case MOVE_UP:
           CommandDebug.println(getClass().getName() + ":move up @ position: " + currentPosition);
-          arm.up(false);
+          arm.up(0.9);
           break;
 
         case MOVE_DOWN:
           CommandDebug.println(getClass().getName() + ":move down @ position: " + currentPosition);
-          arm.down(false);
+          arm.down(0.9);
           break;
 
         case STOP:
