@@ -122,7 +122,7 @@ public final class Constants {
     // portal
     public static final double POSITION_DRIVE = 100; // arm position to use when holding a piece
     public static final double POSITION_GRIPPER_CLOSE =
-        100; // When the arm is moving down, the positon when the gripper needs to be closed to
+        80; // When the arm is moving down, the positon when the gripper needs to be closed to
     // avoid crashing into the frame
     public static final double POSITION_SCORING_DELTA =
         -10; // The amount to move the gripper before releasing piece

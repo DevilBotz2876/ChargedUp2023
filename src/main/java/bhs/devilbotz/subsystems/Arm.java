@@ -194,7 +194,7 @@ public class Arm extends SubsystemBase {
   public void up(boolean slow) {
     ntState.set("Moving: Up");
     if (slow) armMotor.set(0.5);
-    else armMotor.set(1);
+    else armMotor.set(0.9);
     robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
@@ -204,7 +204,7 @@ public class Arm extends SubsystemBase {
   public void down(boolean slow) {
     ntState.set("Moving: Down");
     if (slow) armMotor.set(-0.5);
-    else armMotor.set(-1);
+    else armMotor.set(-0.9);
     robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
