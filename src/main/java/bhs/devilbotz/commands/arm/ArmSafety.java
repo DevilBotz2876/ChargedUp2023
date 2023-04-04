@@ -144,12 +144,12 @@ public abstract class ArmSafety extends CommandBase {
       switch (currentCommand) {
         case MOVE_UP:
           CommandDebug.println(getClass().getName() + ":move up @ position: " + currentPosition);
-          arm.up(0.9);
+          arm.up(0.95);
           break;
 
         case MOVE_DOWN:
           CommandDebug.println(getClass().getName() + ":move down @ position: " + currentPosition);
-          arm.down(0.9);
+          arm.down(1);
           break;
 
         case STOP:
