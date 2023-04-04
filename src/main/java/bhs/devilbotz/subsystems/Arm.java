@@ -181,19 +181,25 @@ public class Arm extends SubsystemBase {
     //    arm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
   }
 
-  /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
+  /**
+   * Move the arm up at set speed. There is no check/protection against moving arm too far up.
+   *
+   * @param speed - speed to move arm up.  Positive value.
+   */
   public void up(double speed) {
     ntState.set("Moving: Up");
-    armMotor.set(speed);
+    armMotor.set(Math.abs(speed));
     robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
   /**
    * Move the arm down at set speed. There is no check/protection against moving arm too far down.
+   *
+   * @param speed - speed to move arm down.  Positive value.
    */
   public void down(double speed) {
     ntState.set("Moving: Down");
-    armMotor.set(-speed);
+    armMotor.set(-Math.abs(speed));
     robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
