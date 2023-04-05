@@ -4,7 +4,6 @@ import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.assist.AutoScore;
-import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
