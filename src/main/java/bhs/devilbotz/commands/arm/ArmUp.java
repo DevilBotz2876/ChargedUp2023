@@ -23,6 +23,10 @@ public class ArmUp extends ArmSafety {
     super(arm, gripper);
   }
 
+  public ArmUp(Arm arm, Gripper gripper, double maxSpeed) {
+    super(arm, gripper, maxSpeed);
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void executeWithSafety() {
