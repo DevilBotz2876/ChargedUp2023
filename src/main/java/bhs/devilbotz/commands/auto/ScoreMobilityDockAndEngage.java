@@ -2,7 +2,6 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
-import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.assist.AutoScore;
 import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.subsystems.Arm;
@@ -10,6 +9,7 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
   /**
@@ -54,17 +54,12 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             // Move arm down but not too low to hit the ramp/ground
-            new ArmToPosition(arm, 150, gripper),
+            new ArmDown(arm, gripper),
             // Since we are scoring, we always want to drive backwards over the charge station.
             // Always set negative distance in case the driver forgets
-            new DriveStraightPID(drivetrain, -3.75, 1)));
+            new DriveStraightPID(drivetrain, -3.8, 1)));
     // In parallel, lower the arm the rest of the way down and drive forward to dock and engage
-    addCommands(
-        new ParallelCommandGroup(
-            // Lower the arm all the way for stability
-            new ArmDown(arm, gripper),
-            // We drove back over the dock, we need to drive forward to the dock
-            new DockAndEngage(drivetrain, 3, startAngle)));
+    addCommands(new DockAndEngage(drivetrain, 3, startAngle));
     addCommands(drivetrain.stopCommand());
     addCommands(CommandDebug.end());
   }
