@@ -5,6 +5,7 @@ import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -41,6 +42,9 @@ public abstract class ArmSafety extends CommandBase {
   private ArmCommand currentCommand = ArmCommand.UNKNOWN;
   private ArmCommand previousCommand = ArmCommand.UNKNOWN;
   private Timer timer = new Timer();
+  private final double maxSpeed;
+  private double currentSpeed;
+  private double previousSpeed;
 
   private static enum ArmCommand {
     UNKNOWN,
@@ -51,8 +55,13 @@ public abstract class ArmSafety extends CommandBase {
   }
 
   public ArmSafety(Arm arm, Gripper gripper) {
+    this(arm, gripper, 1.0);
+  }
+
+  public ArmSafety(Arm arm, Gripper gripper, double maxSpeed) {
     this.arm = arm;
     this.gripper = gripper;
+    this.maxSpeed = Math.abs(maxSpeed);
 
     addRequirements(arm);
     addRequirements(gripper);
@@ -108,6 +117,8 @@ public abstract class ArmSafety extends CommandBase {
 
     switch (currentCommand) {
       case MOVE_UP:
+        //        currentSpeed = ArmConstants.SPEED_UP_MAX;
+        currentSpeed = curve(getPosition());
         if (arm.isTopLimit()) {
           // Prevent the arm from moving up if at the top limit
           CommandDebug.trace("Top Limit Reached @ position: " + currentPosition);
@@ -117,10 +128,10 @@ public abstract class ArmSafety extends CommandBase {
           CommandDebug.trace("Auto Closing Gripper bottom limit @ position: " + currentPosition);
           gripper.close();
         }
-
-        arm.up(curve(getPosition()));
         break;
       case MOVE_DOWN:
+        //        currentSpeed = ArmConstants.SPEED_DOWN_MAX;
+        currentSpeed = curve(getPosition());
         if (arm.isBottomLimit()) {
           // Prevent the arm from moving down if at the top limit
           CommandDebug.trace("Bottom Limit Reached @ position: " + currentPosition);
@@ -132,24 +143,35 @@ public abstract class ArmSafety extends CommandBase {
             gripper.close();
           }
         }
-
-        arm.down(curve(getPosition()));
         break;
       default:
         break;
     }
 
+    // Make sure we don't exceed the max speed requested
+    currentSpeed = MathUtil.clamp(currentSpeed, 0, maxSpeed);
+
     // Send the actual request to the arm subsystem
-    if (currentCommand != previousCommand) {
+    if ((currentCommand != previousCommand) || (currentSpeed != previousSpeed)) {
       switch (currentCommand) {
         case MOVE_UP:
-          CommandDebug.println(getClass().getName() + ":move up @ position: " + currentPosition);
-          arm.up(ArmConstants.SPEED_UP_MAX);
+          CommandDebug.println(
+              getClass().getName()
+                  + ":move up @ position: "
+                  + currentPosition
+                  + " @ speed: "
+                  + currentSpeed);
+          arm.up(currentSpeed);
           break;
 
         case MOVE_DOWN:
-          CommandDebug.println(getClass().getName() + ":move down @ position: " + currentPosition);
-          arm.down(ArmConstants.SPEED_DOWN_MAX);
+          CommandDebug.println(
+              getClass().getName()
+                  + ":move down @ position: "
+                  + currentPosition
+                  + " @ speed: "
+                  + currentSpeed);
+          arm.down(currentSpeed);
           break;
 
         case STOP:
@@ -161,6 +183,7 @@ public abstract class ArmSafety extends CommandBase {
       }
 
       previousCommand = currentCommand;
+      previousSpeed = currentSpeed;
     }
   }
 

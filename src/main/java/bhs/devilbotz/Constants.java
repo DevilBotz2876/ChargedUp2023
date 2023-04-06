@@ -142,6 +142,7 @@ public final class Constants {
     public static final double SPEED_DOWN_MAX = 1.0;
     public static final double SPEED_DOWN_SLOW = 0.5;
     public static final double SPEED_UP_MAX = 0.95;
+    public static final double SPEED_MANUAL_MAX = 0.5;
   }
 
   public static final class DebugConstants {
