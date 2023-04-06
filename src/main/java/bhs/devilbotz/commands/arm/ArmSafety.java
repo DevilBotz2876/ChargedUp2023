@@ -75,7 +75,7 @@ public abstract class ArmSafety extends CommandBase {
 
   /** Command to return the current position of the arm */
   public final double getPosition() {
-    return arm.getPosition();
+    return arm.getPosition() + ArmConstants.ARM_ENCODER_OFFSET;
   }
 
   @Override

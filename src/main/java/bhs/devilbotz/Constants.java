@@ -138,6 +138,8 @@ public final class Constants {
 
     public static final double DURATION_TO_DECIDE_ARM_STUCK =
         0.20; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
+    public static final double ARM_ENCODER_OFFSET =
+        -20; /* WORKAROUND: offset to adjust empirically determined arm positions */
   }
 
   public static final class DebugConstants {
