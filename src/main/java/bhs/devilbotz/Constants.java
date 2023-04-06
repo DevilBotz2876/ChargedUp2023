@@ -87,9 +87,9 @@ public final class Constants {
    */
   public static class GripperConstants {
     /** The gripper double solenoid forward channel */
-    public static final int GRIPPER_SOLENOID_FORWARD = 1;
+    public static final int GRIPPER_SOLENOID_FORWARD = 0;
     /** The gripper double solenoid reverse channel */
-    public static final int GRIPPER_SOLENOID_REVERSE = 2;
+    public static final int GRIPPER_SOLENOID_REVERSE = 1;
     /** The CAN ID for the gripper's pneumatic compressor */
     public static final int COMPRESSOR_CAN_ID = 6;
   }
@@ -138,6 +138,10 @@ public final class Constants {
 
     public static final double DURATION_TO_DECIDE_ARM_STUCK =
         0.20; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
+    public static final double POSITION_SLOW_ARM = 175;
+    public static final double SPEED_DOWN_MAX = 1.0;
+    public static final double SPEED_DOWN_SLOW = 0.5;
+    public static final double SPEED_UP_MAX = 0.95;
   }
 
   public static final class DebugConstants {

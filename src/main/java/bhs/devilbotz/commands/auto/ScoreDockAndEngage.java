@@ -4,7 +4,6 @@ import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.assist.AutoScore;
-import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -48,9 +47,6 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
     addCommands(CommandDebug.start());
     // Execute the auto score routine
     addCommands(new AutoScore(arm, drivetrain, gripper));
-    // Close the gripper when we are done
-    addCommands(new GripperClose(gripper));
-    // In parallel, lower the arm to a reasonable/stable position and attempt to dock and engage
     addCommands(
         new ParallelCommandGroup(
             // Move arm down but not too low to hit the ramp/ground
