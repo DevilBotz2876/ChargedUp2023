@@ -123,11 +123,18 @@ public abstract class ArmSafety extends CommandBase {
           // Prevent the arm from moving down if at the top limit
           CommandDebug.trace("Bottom Limit Reached @ position: " + currentPosition);
           currentCommand = ArmCommand.EMERGENCY_STOP;
-        } else if (currentPosition < ArmConstants.POSITION_GRIPPER_CLOSE) {
-          // We want to close the gripper if we are moving down and nearing the bottom
-          CommandDebug.trace("Auto Closing Gripper @ position: " + currentPosition);
-          gripper.close();
+        } else {
+          if (currentPosition < ArmConstants.POSITION_GRIPPER_CLOSE) {
+            // We want to close the gripper if we are moving down and nearing the bottom
+            CommandDebug.trace("Auto Closing Gripper @ position: " + currentPosition);
+            gripper.close();
+          }
+
+          if (getPosition() < ArmConstants.POSITION_SLOW_ARM) {
+            arm.down(ArmConstants.SPEED_DOWN_SLOW);
+          }
         }
+
         break;
       default:
         break;
@@ -138,12 +145,12 @@ public abstract class ArmSafety extends CommandBase {
       switch (currentCommand) {
         case MOVE_UP:
           CommandDebug.println(getClass().getName() + ":move up @ position: " + currentPosition);
-          arm.up();
+          arm.up(ArmConstants.SPEED_UP_MAX);
           break;
 
         case MOVE_DOWN:
           CommandDebug.println(getClass().getName() + ":move down @ position: " + currentPosition);
-          arm.down();
+          arm.down(ArmConstants.SPEED_DOWN_MAX);
           break;
 
         case STOP:

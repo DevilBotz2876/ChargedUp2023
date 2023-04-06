@@ -4,7 +4,6 @@ import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.assist.AutoScore;
-import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -39,8 +38,6 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
 
     addCommands(CommandDebug.start());
     addCommands(new AutoScore(arm, drivetrain, gripper));
-    // addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, 1));
-    addCommands(new GripperClose(gripper));
     addCommands(
         new ParallelCommandGroup(
             // Move arm all the way down
