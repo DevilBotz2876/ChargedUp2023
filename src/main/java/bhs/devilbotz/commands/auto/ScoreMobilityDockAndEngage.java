@@ -64,7 +64,7 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
             // Lower the arm all the way for stability
             new ArmDown(arm, gripper),
             // We drove back over the dock, we need to drive forward to the dock
-            new DockAndEngage(drivetrain, 1, startAngle)));
+            new DockAndEngage(drivetrain, 3, startAngle)));
     addCommands(drivetrain.stopCommand());
     addCommands(CommandDebug.end());
   }
