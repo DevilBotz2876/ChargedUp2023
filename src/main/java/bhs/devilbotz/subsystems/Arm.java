@@ -77,7 +77,6 @@ public class Arm extends SubsystemBase {
   private final DigitalInput topLimitSwitch;
   private final DigitalInput bottomLimitSwitch;
   private final Encoder encoder;
-  private double maxSpeed = 1;
 
   // Simulation Variables
   // create a sim controller for the encoder
@@ -150,7 +149,6 @@ public class Arm extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    System.out.println(maxSpeed);
     ntTopLimitSwitch.set(isTopLimit());
     ntBottomLimitSwitch.set(isBottomLimit());
     ntPosition.set(getPosition());
@@ -191,7 +189,7 @@ public class Arm extends SubsystemBase {
    */
   public void up(double speed) {
     ntState.set("Moving: Up");
-    armMotor.set(MathUtil.clamp(Math.abs(speed), 0, maxSpeed));
+    armMotor.set(Math.abs(speed));
     robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
@@ -202,7 +200,7 @@ public class Arm extends SubsystemBase {
    */
   public void down(double speed) {
     ntState.set("Moving: Down");
-    armMotor.set(-MathUtil.clamp(Math.abs(speed), 0, maxSpeed));
+    armMotor.set(-Math.abs(speed));
     robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
@@ -260,9 +258,5 @@ public class Arm extends SubsystemBase {
    */
   protected void resetPosition() {
     encoder.reset();
-  }
-
-  public void setMaxSpeed(double speed) {
-    maxSpeed = speed;
   }
 }

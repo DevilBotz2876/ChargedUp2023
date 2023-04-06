@@ -50,7 +50,7 @@ public class ScoreAndMobility extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             // Move arm all the way down
-            new ArmDown(arm, gripper, 0.95),
+            new ArmDown(arm, gripper),
             // Since we are scoring, we always want to drive backwards in the end. Always set
             // negative distance in case the driver forgets
             // After scoring we always drive back 3.5 meters to ensure we leave the zone from either

@@ -14,16 +14,13 @@ import bhs.devilbotz.subsystems.Gripper;
  * @author joshuamanoj
  */
 public class ArmUp extends ArmSafety {
-  private double maxSpeed;
   /**
    * The constructor for the arm up command.
    *
    * @param arm The arm subsystem.
    */
-  public ArmUp(Arm arm, Gripper gripper, double maxSpeed) {
+  public ArmUp(Arm arm, Gripper gripper) {
     super(arm, gripper);
-    this.maxSpeed = maxSpeed;
-    arm.setMaxSpeed(maxSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

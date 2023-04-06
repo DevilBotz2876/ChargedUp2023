@@ -140,11 +140,11 @@ public class RobotContainer {
           .onFalse(new GripperIdle(gripper));
 
       new JoystickButton(leftJoystick, 4)
-          .whileTrue(new ArmDown(arm, gripper, 0.5))
+          .whileTrue(new ArmDown(arm, gripper))
           .onFalse(new ArmStop(arm));
 
       new JoystickButton(leftJoystick, 5)
-          .whileTrue(new ArmUp(arm, gripper, 0.5))
+          .whileTrue(new ArmUp(arm, gripper))
           .onFalse(new ArmStop(arm));
 
       new JoystickButton(leftJoystick, 6)
@@ -238,8 +238,8 @@ public class RobotContainer {
             .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
 
     cmdList.add(new ArmStop(arm)).withPosition(0, 0);
-    cmdList.add(new ArmUp(arm, gripper, 1)).withPosition(0, 1);
-    cmdList.add(new ArmDown(arm, gripper, 0.95)).withPosition(0, 2);
+    cmdList.add(new ArmUp(arm, gripper)).withPosition(0, 1);
+    cmdList.add(new ArmDown(arm, gripper)).withPosition(0, 2);
 
     cmdList
         .add(
