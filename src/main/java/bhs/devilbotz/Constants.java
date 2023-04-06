@@ -115,6 +115,7 @@ public final class Constants {
     public static final double POSITION_TOP = 525; // arm position to score on top goal
     public static final double POSITION_MIDDLE = 450; // arm position to score in mid goal
     public static final double POSITION_BOTTOM = 258; // arm position to score on bottom goal
+    public static final double POSITION_TOP_MAX = 600; // arm position at the very top
     public static final double POSITION_CUBE_DELTA =
         -90; // different in score position from cone to cube
 
