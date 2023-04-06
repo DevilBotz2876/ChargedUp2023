@@ -50,8 +50,6 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
     addCommands(CommandDebug.start());
     // Execute the auto score routine
     addCommands(new AutoScore(arm, drivetrain, gripper));
-    // Close the gripper when we are done
-    addCommands(new GripperClose(gripper));
     // In parallel, lower the arm to a reasonable/stable position and drive backwards over the
     // charge station to the other side
     addCommands(
