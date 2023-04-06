@@ -226,7 +226,7 @@ public class Arm extends SubsystemBase {
    * @return true limit switch is pressed, false if not.
    */
   public boolean isTopLimit() {
-    return !topLimitSwitch.get();
+    return (!topLimitSwitch.get() || getPosition() >= ArmConstants.POSITION_TOP_MAX);
   }
 
   /**
