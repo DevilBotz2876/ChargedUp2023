@@ -97,8 +97,8 @@ public class RobotContainer {
     arm.setDefaultCommand(new ArmIdle(arm));
     gripper.setDefaultCommand(new GripperIdle(gripper));
 
-    if (!Robot.isReal()
-        || !DriverStation.isJoystickConnected(
+    if (Robot.isReal()
+        || DriverStation.isJoystickConnected(
             Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
       driveTrain.setDefaultCommand(
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
@@ -125,8 +125,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    if (!Robot.isReal()
-        || !DriverStation.isJoystickConnected(
+    if (Robot.isReal()
+        || DriverStation.isJoystickConnected(
             Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
       new JoystickButton(leftJoystick, 1)
           .onTrue(new GripperClose(gripper))
