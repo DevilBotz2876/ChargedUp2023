@@ -65,7 +65,7 @@ public final class Constants {
     public static final double JOYSTICK_DEADBAND = 0.035;
 
     /** The maximum acceleration of the robot in units per second */
-    public static final double SLEW_RATE_LIMITER = 5;
+    public static final double SLEW_RATE_LIMITER = 5.5;
 
     /** The motor configuration for each side of the robot */
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
@@ -125,7 +125,7 @@ public final class Constants {
         80; // When the arm is moving down, the positon when the gripper needs to be closed to
     // avoid crashing into the frame
     public static final double POSITION_SCORING_DELTA =
-        -10; // The amount to move the gripper before releasing piece
+        -20; // The amount to move the gripper before releasing piece
     public static final double POSITION_PICKUP_GROUND_CUBE = 80;
     public static final double POSITION_PICKUP_GROUND_CONE = 0;
     public static final double POSITION_TOLERANCE = 5;
@@ -142,6 +142,7 @@ public final class Constants {
     public static final double SPEED_DOWN_MAX = 1.0;
     public static final double SPEED_DOWN_SLOW = 0.5;
     public static final double SPEED_UP_MAX = 0.95;
+    public static final double SPEED_MANUAL_MAX = 0.5;
   }
 
   public static final class DebugConstants {
