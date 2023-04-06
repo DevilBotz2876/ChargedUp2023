@@ -5,6 +5,7 @@ import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -117,6 +118,8 @@ public abstract class ArmSafety extends CommandBase {
           CommandDebug.trace("Auto Closing Gripper bottom limit @ position: " + currentPosition);
           gripper.close();
         }
+
+        arm.up(curve(getPosition()));
         break;
       case MOVE_DOWN:
         if (arm.isBottomLimit()) {
@@ -129,12 +132,9 @@ public abstract class ArmSafety extends CommandBase {
             CommandDebug.trace("Auto Closing Gripper @ position: " + currentPosition);
             gripper.close();
           }
-
-          if (getPosition() < ArmConstants.POSITION_SLOW_ARM) {
-            arm.down(ArmConstants.SPEED_DOWN_SLOW);
-          }
         }
 
+        arm.down(curve(getPosition()));
         break;
       default:
         break;
@@ -225,6 +225,19 @@ public abstract class ArmSafety extends CommandBase {
       return timer.hasElapsed(1);
     } else {
       return timer.hasElapsed(ArmConstants.DURATION_TO_DECIDE_ARM_STUCK);
+    }
+  }
+
+  public static double curve(double x) {
+    if (x < 0) {
+      x = 0;
+    } else if (x > 600) {
+      x = 600;
+    }
+    if (x <= 300) {
+      return 0.3 + (x / 300) * 0.65;
+    } else {
+      return 0.95 - ((x - 300) / 300) * 0.65;
     }
   }
 }

@@ -46,7 +46,7 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
             // Since we are scoring, we always want to drive backwards in the end. Always set
             // negative distance in case the driver forgets
             new DockAndEngage(drivetrain, -(Math.abs(maxDistance)), startAngle)));
-    addCommands(new ArmDown(arm, gripper));
+    addCommands(new ArmDown(arm, gripper, 0.95));
     addCommands(drivetrain.stopCommand());
     addCommands(CommandDebug.end());
   }

@@ -44,7 +44,7 @@ public class PrepareForGroundPickup extends SequentialCommandGroup {
         new SelectCommand(
             // Maps selector values to commands
             Map.ofEntries(
-                Map.entry(GamePieceTypes.CONE, new ArmDown(arm, gripper)),
+                Map.entry(GamePieceTypes.CONE, new ArmDown(arm, gripper, 0.95)),
                 Map.entry(
                     GamePieceTypes.CUBE,
                     new ArmToPosition(arm, ArmConstants.POSITION_PICKUP_GROUND_CUBE, gripper))),
