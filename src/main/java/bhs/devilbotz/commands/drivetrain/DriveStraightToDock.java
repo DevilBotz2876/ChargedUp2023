@@ -112,8 +112,11 @@ public class DriveStraightToDock extends CommandBase {
         // We use the absolute value of the current roll so that we can approach the ramp either
         // going forward or backwards.
         if ((Math.abs(currentRoll) > Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MIN").asDouble(10))
-            && (Math.abs(currentRoll)
-                < Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MAX").asDouble(15))) {
+            // To minimize breakage of working routines, ignore the upper roll value when driving
+            // forward)
+            && ((maxDistance < 0)
+                || (Math.abs(currentRoll)
+                    < Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MAX").asDouble(15)))) {
           // Looks like the roll reading is within range of being on the ramp, so start the timer if
           // it already hasn't been started
           if (0 == timer.get()) {
