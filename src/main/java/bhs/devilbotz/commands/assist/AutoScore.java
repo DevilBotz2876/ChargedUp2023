@@ -26,7 +26,7 @@ public class AutoScore extends SequentialCommandGroup {
    *   <li>move the robot back to the original position
    *   <li>move the arm down slightly
    *   <li>open the gripper
-   *   <li>wait 1 second (for gripper to open and piece to drop)
+   *   <li>wait a fixed amount of time (for gripper to open and piece to drop)
    * </ol>
    *
    * <i>Note: This command assumes the robot and arm are already positioned and lined up with the
@@ -47,15 +47,6 @@ public class AutoScore extends SequentialCommandGroup {
             new ArmToPosition(arm, ArmConstants.POSITION_TOP + 10, gripper)));
     addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
     addCommands(drivetrain.stopCommand());
-    /*
-    addCommands(
-            new ParallelCommandGroup(
-                    new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper),
-                    new GripperOpen(gripper)
-            )
-    );
-
-     */
     addCommands(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
     addCommands(new GripperOpen(gripper));
     addCommands(Commands.waitSeconds(0.25));

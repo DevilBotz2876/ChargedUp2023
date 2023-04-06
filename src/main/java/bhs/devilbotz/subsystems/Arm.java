@@ -184,7 +184,7 @@ public class Arm extends SubsystemBase {
   /**
    * Move the arm up at set speed. There is no check/protection against moving arm too far up.
    *
-   * @param speed - speed to move arm up. Positive value.
+   * @param speed - speed to move arm up. Positive value. Value is 0-1, where 1 is 100%
    */
   public void up(double speed) {
     ntState.set("Moving: Up");
@@ -195,7 +195,7 @@ public class Arm extends SubsystemBase {
   /**
    * Move the arm down at set speed. There is no check/protection against moving arm too far down.
    *
-   * @param speed - speed to move arm down. Positive value.
+   * @param speed - speed to move arm down. Positive value. Value is 0-1, where 1 is 100%
    */
   public void down(double speed) {
     ntState.set("Moving: Down");

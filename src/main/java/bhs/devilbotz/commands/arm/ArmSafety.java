@@ -139,6 +139,7 @@ public abstract class ArmSafety extends CommandBase {
         break;
     }
 
+    // Send the actual request to the arm subsystem
     if (currentCommand != previousCommand) {
       switch (currentCommand) {
         case MOVE_UP:
