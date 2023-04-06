@@ -5,7 +5,6 @@ import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.assist.AutoScore;
 import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
-import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -58,14 +57,14 @@ public class ScoreMobilityDockAndEngage extends SequentialCommandGroup {
             new ArmToPosition(arm, 150, gripper),
             // Since we are scoring, we always want to drive backwards over the charge station.
             // Always set negative distance in case the driver forgets
-            new DriveStraightPID(drivetrain, -(Math.abs(maxDistance)), 1)));
+            new DriveStraightPID(drivetrain, -3.75, 1)));
     // In parallel, lower the arm the rest of the way down and drive forward to dock and engage
     addCommands(
         new ParallelCommandGroup(
             // Lower the arm all the way for stability
             new ArmDown(arm, gripper),
             // We drove back over the dock, we need to drive forward to the dock
-            new DockAndEngage(drivetrain, Math.abs(maxDistance), startAngle)));
+            new DockAndEngage(drivetrain, 1, startAngle)));
     addCommands(drivetrain.stopCommand());
     addCommands(CommandDebug.end());
   }
