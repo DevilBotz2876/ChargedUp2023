@@ -26,7 +26,7 @@ public class AutoScore extends SequentialCommandGroup {
    *   <li>move the robot back to the original position
    *   <li>move the arm down slightly
    *   <li>open the gripper
-   *   <li>wait 1 second (for gripper to open and piece to drop)
+   *   <li>wait a fixed amount of time (for gripper to open and piece to drop)
    * </ol>
    *
    * <i>Note: This command assumes the robot and arm are already positioned and lined up with the
