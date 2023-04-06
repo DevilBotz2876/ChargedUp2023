@@ -182,27 +182,24 @@ public class Arm extends SubsystemBase {
   }
 
   /**
-   * This method sets the speed of the arm.
+   * Move the arm up at set speed. There is no check/protection against moving arm too far up.
    *
-   * @param speed The speed of the arm.
+   * @param speed - speed to move arm up. Positive value. Value is 0-1, where 1 is 100%
    */
-  public void setSpeed(double speed) {
-    armMotor.set(speed);
-  }
-
-  /** Move the arm up at set speed. There is no check/protection against moving arm too far up. */
-  public void up() {
+  public void up(double speed) {
     ntState.set("Moving: Up");
-    armMotor.set(1);
+    armMotor.set(Math.abs(speed));
     robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
   }
 
   /**
    * Move the arm down at set speed. There is no check/protection against moving arm too far down.
+   *
+   * @param speed - speed to move arm down. Positive value. Value is 0-1, where 1 is 100%
    */
-  public void down() {
+  public void down(double speed) {
     ntState.set("Moving: Down");
-    armMotor.set(-1);
+    armMotor.set(-Math.abs(speed));
     robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
   }
 
@@ -229,7 +226,7 @@ public class Arm extends SubsystemBase {
    * @return true limit switch is pressed, false if not.
    */
   public boolean isTopLimit() {
-    return !topLimitSwitch.get();
+    return (!topLimitSwitch.get() || getPosition() >= ArmConstants.POSITION_TOP_MAX);
   }
 
   /**
