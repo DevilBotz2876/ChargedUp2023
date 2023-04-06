@@ -24,6 +24,10 @@ public class ArmDown extends ArmSafety {
     super(arm, gripper);
   }
 
+  public ArmDown(Arm arm, Gripper gripper, double maxSpeed) {
+    super(arm, gripper, maxSpeed);
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void executeWithSafety() {
