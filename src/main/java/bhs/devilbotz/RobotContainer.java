@@ -140,11 +140,11 @@ public class RobotContainer {
           .onFalse(new GripperIdle(gripper));
 
       new JoystickButton(leftJoystick, 4)
-          .whileTrue(new ArmDown(arm, gripper))
+          .whileTrue(new ArmDown(arm, gripper, ArmConstants.SPEED_MANUAL_MAX))
           .onFalse(new ArmStop(arm));
 
       new JoystickButton(leftJoystick, 5)
-          .whileTrue(new ArmUp(arm, gripper))
+          .whileTrue(new ArmUp(arm, gripper, ArmConstants.SPEED_MANUAL_MAX))
           .onFalse(new ArmStop(arm));
 
       new JoystickButton(leftJoystick, 6)
