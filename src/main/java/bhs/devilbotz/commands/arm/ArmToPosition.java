@@ -30,9 +30,7 @@ public class ArmToPosition extends ArmSafety {
   @Override
   public void executeWithSafety() {
     double currentPosition = getPosition();
-    double speed = positionPid.calculate(currentPosition, targetPosition)/600;
-    System.out.println("speed: " + speed);
-    
+    double speed = positionPid.calculate(currentPosition, targetPosition)/600;    
     if (speed > 0) {
       up(speed);
     } else if (speed < 0) {
