@@ -125,8 +125,8 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     robotContainer.resetRobotPosition();
     if (RobotController.getBatteryVoltage() < 12.25) {
-        new Alert("Battery voltage is low", Alert.AlertType.WARNING).set(true);
-        robotContainer.setLEDMode(LEDModes.SET_VOLTAGE_WARNING);
+      new Alert("Battery voltage is low", Alert.AlertType.WARNING).set(true);
+      robotContainer.setLEDMode(LEDModes.SET_VOLTAGE_WARNING);
     } else {
       robotContainer.setLEDMode(LEDModes.SET_LOADING);
     }
