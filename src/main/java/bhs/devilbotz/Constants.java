@@ -71,7 +71,7 @@ public final class Constants {
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
 
     /** Drive distance (in meters) from portal to Charge station */
-    public static final double POSITION_DRIVE_FROM_PORTAL = 0.75;
+    public static final double POSITION_DRIVE_FROM_PORTAL = 0.65;
 
     /**
      * Precision rotate speed divider. This is the speed that the robot will rotate at when the
@@ -112,7 +112,7 @@ public final class Constants {
     public static final int ENCODER_CHANNEL_A_DIO_PORT = 2; // TODO: add what color tape on wire
     public static final int ENCODER_CHANNEL_B_DIO_PORT = 3; // TODO: add what color tape on wire
 
-    public static final double POSITION_TOP = 550; // arm position to score on top goal
+    public static final double POSITION_TOP = 540; // arm position to score on top goal
     public static final double POSITION_MIDDLE = 450; // arm position to score in mid goal
     public static final double POSITION_BOTTOM = 258; // arm position to score on bottom goal
     public static final double POSITION_TOP_MAX = 600; // arm position at the very top
