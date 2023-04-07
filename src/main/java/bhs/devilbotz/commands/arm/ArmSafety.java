@@ -45,6 +45,7 @@ public abstract class ArmSafety extends CommandBase {
   private final double maxSpeed;
   private double currentSpeed;
   private double previousSpeed;
+  private double speed;
 
   private static enum ArmCommand {
     UNKNOWN,
@@ -69,12 +70,24 @@ public abstract class ArmSafety extends CommandBase {
 
   /** Command to request moving the arm down */
   public final void down() {
-    currentCommand = ArmCommand.MOVE_DOWN;
+    this.down(1.0);
   }
 
   /** Command to request moving the arm up */
   public final void up() {
+    this.up(1.0);
+  }
+
+  /** Command to request moving the arm down */
+  public final void down(double speed) {
+    currentCommand = ArmCommand.MOVE_DOWN;
+    this.speed = Math.abs(speed);
+  }
+
+  /** Command to request moving the arm up */
+  public final void up(double speed) {
     currentCommand = ArmCommand.MOVE_UP;
+    this.speed = Math.abs(speed);
   }
 
   /** Command to request stopping the arm */
@@ -118,7 +131,7 @@ public abstract class ArmSafety extends CommandBase {
     switch (currentCommand) {
       case MOVE_UP:
         //        currentSpeed = ArmConstants.SPEED_UP_MAX;
-        currentSpeed = curve(getPosition());
+        currentSpeed = Math.min(this.speed, curve(getPosition()));
         if (arm.isTopLimit()) {
           // Prevent the arm from moving up if at the top limit
           CommandDebug.trace("Top Limit Reached @ position: " + currentPosition);
@@ -131,7 +144,7 @@ public abstract class ArmSafety extends CommandBase {
         break;
       case MOVE_DOWN:
         //        currentSpeed = ArmConstants.SPEED_DOWN_MAX;
-        currentSpeed = curve(getPosition());
+        currentSpeed = Math.min(this.speed, curve(getPosition()));
         if (arm.isBottomLimit()) {
           // Prevent the arm from moving down if at the top limit
           CommandDebug.trace("Bottom Limit Reached @ position: " + currentPosition);
