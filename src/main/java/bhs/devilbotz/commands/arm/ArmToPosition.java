@@ -5,6 +5,7 @@ import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.Gripper;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmToPosition extends ArmSafety {
   private final double targetPosition;
@@ -29,8 +30,9 @@ public class ArmToPosition extends ArmSafety {
   @Override
   public void executeWithSafety() {
     double currentPosition = getPosition();
-    double speed = positionPid.calculate(currentPosition, targetPosition);
-
+    double speed = positionPid.calculate(currentPosition, targetPosition)/600;
+    System.out.println("speed: " + speed);
+    
     if (speed > 0) {
       up(speed);
     } else if (speed < 0) {
