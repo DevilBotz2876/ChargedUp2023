@@ -244,7 +244,7 @@ public class Arm extends SubsystemBase {
    * @return position of arm.
    */
   public double getPosition() {
-    return encoder.getDistance();
+    return encoder.getDistance() + ArmConstants.ARM_ENCODER_OFFSET;
   }
 
   public double getVelocity() {
