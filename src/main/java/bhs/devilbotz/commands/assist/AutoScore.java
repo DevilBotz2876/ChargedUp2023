@@ -51,6 +51,7 @@ public class AutoScore extends SequentialCommandGroup {
     addCommands(new WaitCommand(0.8));
     addCommands(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA - 10, gripper));
     addCommands(new GripperOpen(gripper));
+    addCommands(new WaitCommand(0.45));
     addCommands(CommandDebug.end());
   }
 }
