@@ -39,7 +39,8 @@ public class MobilityDockAndEngage extends SequentialCommandGroup {
    * @param startAngle the starting angle of the robot. During balancing this command will try to
    *     stay square while approaching the balance station
    * @see com.pathplanner.lib.PathPlanner
-   * @see bhs.devilbotz.subsystems.DriveTrain#followTrajectoryCommand()
+   * @see bhs.devilbotz.subsystems.DriveTrain#followTrajectoryCommand(PathPlannerTrajectory,
+   *     boolean, boolean)
    * @see bhs.devilbotz.commands.auto.DockAndEngage
    */
   public MobilityDockAndEngage(
