@@ -17,6 +17,7 @@ import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -26,6 +27,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -225,6 +227,19 @@ public class DriveTrain extends SubsystemBase {
       NetworkTableInstance.getDefault().getTable("Simulation").getEntry("read_start_pose");
 
   /**
+   * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
+   * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
+   */
+  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+
+  /**
+   * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
+   * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
+   */
+  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
+
+
+  /**
    * DriveTrain constructor This constructor sets up the drive train.
    *
    * @since 1/30/2023
@@ -243,7 +258,7 @@ public class DriveTrain extends SubsystemBase {
     // robot.
     poseEstimator =
         new DifferentialDrivePoseEstimator(
-            kinematics, navx.getRotation2d(), getLeftDistance(), getRightDistance(), new Pose2d());
+            kinematics, navx.getRotation2d(), getLeftDistance(), getRightDistance(), new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
 
     xSimStart.setNumber(2.0);
     ySimStart.setNumber(2.0);
