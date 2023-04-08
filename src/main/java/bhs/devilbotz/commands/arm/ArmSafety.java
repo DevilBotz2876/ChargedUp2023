@@ -270,10 +270,13 @@ public abstract class ArmSafety extends CommandBase {
     } else if (x > 600) {
       x = 600;
     }
-    if (x <= 300) {
-      return 0.575 + (x / 300) * 0.65;
+
+    if (x <= 150) {
+      return 0.9/(150 * 2)*x+0.5;
+    } else if (x <= 450) {
+      return 0.95;
     } else {
-      return 0.95 - ((x - 300) / 300) * 0.65;
+      return -0.9/(150*2)*x+2.3;
     }
   }
 }
