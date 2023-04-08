@@ -112,7 +112,7 @@ public final class Constants {
     public static final int ENCODER_CHANNEL_A_DIO_PORT = 2; // TODO: add what color tape on wire
     public static final int ENCODER_CHANNEL_B_DIO_PORT = 3; // TODO: add what color tape on wire
 
-    public static final double POSITION_TOP = 525; // arm position to score on top goal
+    public static final double POSITION_TOP = 540; // arm position to score on top goal
     public static final double POSITION_MIDDLE = 450; // arm position to score in mid goal
     public static final double POSITION_BOTTOM = 258; // arm position to score on bottom goal
     public static final double POSITION_TOP_MAX = 600; // arm position at the very top
@@ -146,6 +146,10 @@ public final class Constants {
     public static final double SPEED_DOWN_SLOW = 0.5;
     public static final double SPEED_UP_MAX = 0.95;
     public static final double SPEED_MANUAL_MAX = 0.5;
+
+    public static final double POSITION_P = 5;
+    public static final double POSITION_I = 0;
+    public static final double POSITION_D = 0;
   }
 
   public static final class DebugConstants {
