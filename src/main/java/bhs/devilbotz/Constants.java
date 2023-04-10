@@ -37,6 +37,11 @@ public final class Constants {
    * degrees (yaw)
    */
   public static final double BALANCE_PID_TOLERANCE = 3;
+
+  /**
+   * The voltage to turn the warning lights on. 
+   */
+  public static final double MIN_BATTERY_VOLTAGE = 12.5;
   /**
    * Operator constants are for the operator interface (joysticks, buttons, etc.).
    *
