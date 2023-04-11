@@ -58,6 +58,9 @@ void loop() {
       case 0x9:
         setLoading();
         break;
+      case 0xA:
+        voltageWarning();
+        break;
 
       ws2812fx.start();
     }
@@ -105,8 +108,8 @@ void armUp(){
   uint8_t notReversed = SIZE_MEDIUM;
   uint8_t reversed = REVERSE + SIZE_MEDIUM;
 
-  ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, notReversed);
-  ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, reversed);
+  ws2812fx.setSegment(1, 159, 223, 31, 0x45e6ff, 25, notReversed);
+  ws2812fx.setSegment(2, 65, 123, 31, 0x45e6ff, 25, reversed);
 }
 
 void armDown(){
@@ -114,11 +117,16 @@ void armDown(){
   uint8_t notReversed = SIZE_MEDIUM;
   uint8_t reversed = REVERSE + SIZE_MEDIUM;
 
-  ws2812fx.setSegment(1, 165, 227, 31, 0x45e6ff, 25, reversed);
-  ws2812fx.setSegment(2, 66, 124, 31, 0x45e6ff, 25, notReversed);
+  ws2812fx.setSegment(1, 159, 223, 31, 0x45e6ff, 25, reversed);
+  ws2812fx.setSegment(2, 65, 123, 31, 0x45e6ff, 25, notReversed);
 }
 
 void armIdle(){
   ws2812fx.removeActiveSegment(1);
   ws2812fx.removeActiveSegment(2);
+}
+
+void voltageWarning(){
+  ws2812fx.setBrightness(100);
+  ws2812fx.setSegment(0, 0, NUM_PIXELS, 1, 0xff0000, 2000, false);
 }
