@@ -3,10 +3,9 @@ package bhs.devilbotz.subsystems.drive;
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Robot;
 import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 
 public class DriveIOSim implements DriveIO {
   /**

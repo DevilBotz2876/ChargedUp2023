@@ -139,8 +139,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
     new JoystickButton(leftJoystick, 1)
-            .onTrue(new GripperClose(gripper))
-            .onFalse(new GripperIdle(gripper));
+        .onTrue(new GripperClose(gripper))
+        .onFalse(new GripperIdle(gripper));
 
     new JoystickButton(leftJoystick, 2)
         .onTrue(new PrepareForGroundPickup(arm, gripper, this::getGamePieceType));
@@ -178,8 +178,7 @@ public class RobotContainer {
             new PrepareForScore(arm, ArmConstants.POSITION_TOP, gripper, this::getGamePieceType));
 
     new JoystickButton(rightJoystick, 2)
-        .toggleOnTrue(
-            new SlowRotateDriveCommand(drive, rightJoystick::getY, rightJoystick::getX));
+        .toggleOnTrue(new SlowRotateDriveCommand(drive, rightJoystick::getY, rightJoystick::getX));
 
     new JoystickButton(rightJoystick, 3)
         .onTrue(
