@@ -19,7 +19,6 @@ import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.io.File;
@@ -29,6 +28,12 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.opencv.core.Mat;
 
 /**
@@ -37,7 +42,7 @@ import org.opencv.core.Mat;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private AutonomousModes autoMode;
 
@@ -59,6 +64,56 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    // Setup logger
+    Logger logger = Logger.getInstance();
+
+    // Record metadata
+    logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+    switch (BuildConstants.DIRTY) {
+      case 0:
+        logger.recordMetadata("GitDirty", "All changes committed");
+        break;
+      case 1:
+        logger.recordMetadata("GitDirty", "Uncomitted changes");
+        break;
+      default:
+        logger.recordMetadata("GitDirty", "Unknown");
+        break;
+    }
+
+    // Set up data receivers & replay source
+    switch (Constants.currentMode) {
+        // Running on a real robot, log to a USB stick
+      case REAL:
+        logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
+        logger.addDataReceiver(new NT4Publisher());
+        break;
+
+        // Running a physics simulator, log to local folder
+      case SIM:
+        logger.addDataReceiver(new WPILOGWriter(""));
+        logger.addDataReceiver(new NT4Publisher());
+        break;
+
+        // Replaying a log, set up replay source
+      case REPLAY:
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        logger.setReplaySource(new WPILOGReader(logPath));
+        logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+    }
+
+    // See http://bit.ly/3YIzFZ6 for more information on timestamps in AdvantageKit.
+    // Logger.getInstance().disableDeterministicTimestamps()
+
+    // Start AdvantageKit logger
+    logger.start();
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     try {
@@ -123,7 +178,6 @@ public class Robot extends TimedRobot {
   /** This method is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    robotContainer.resetRobotPosition();
     // Wait for the voltage to appear
     if (RobotController.getBatteryVoltage() < Constants.MIN_BATTERY_VOLTAGE) {
       new Alert(
@@ -150,7 +204,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     robotContainer.setLEDMode(LEDModes.SET_AUTONOMOUS);
-    robotContainer.resetRobotPosition();
 
     autonomousCommand = robotContainer.getAutonomousCommand(autoMode);
     Gripper.enableCompressor();
@@ -167,9 +220,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    robotContainer.resetRobotPosition();
     robotContainer.setLEDModeAlliance();
-    robotContainer.resetRobotPosition();
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -302,7 +353,7 @@ public class Robot extends TimedRobot {
    * @param name The drivetrain constant name
    * @return JsonNode containing the value of the requested configuration value
    */
-  public static JsonNode getDriveTrainConstant(String name) {
+  public static JsonNode getDriveConstant(String name) {
     return robotConfig.get("drivetrain").get(name);
   }
 

@@ -7,7 +7,7 @@ package bhs.devilbotz.commands.drivetrain;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
-import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** This command is a PID controller that drives the robot straight to a set distance. */
 public class DriveStraightPID extends CommandBase {
-  protected DriveTrain drivetrain;
+  protected Drive drive;
   private PIDController distancePid;
   private PIDController straightPid;
   private double distance;
@@ -30,22 +30,22 @@ public class DriveStraightPID extends CommandBase {
    * @param drivetrain The drive train subsystem.
    * @param distance The distance (in meters) the robot needs to cover.
    */
-  public DriveStraightPID(DriveTrain drivetrain, double distance) {
-    this.drivetrain = drivetrain;
+  public DriveStraightPID(Drive drive, double distance) {
+    this.drive = drive;
     this.distance = distance;
     distancePid =
         new PIDController(
-            Robot.getDriveTrainConstant("DISTANCE_P").asDouble(),
-            Robot.getDriveTrainConstant("DISTANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("DISTANCE_D").asDouble());
+            Robot.getDriveConstant("DISTANCE_P").asDouble(),
+            Robot.getDriveConstant("DISTANCE_I").asDouble(),
+            Robot.getDriveConstant("DISTANCE_D").asDouble());
     straightPid =
         new PIDController(
-            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
-    distancePid.setTolerance(Robot.getDriveTrainConstant("DISTANCE_PID_TOLERANCE").asDouble());
+            Robot.getDriveConstant("STRAIGHT_P").asDouble(),
+            Robot.getDriveConstant("STRAIGHT_I").asDouble(),
+            Robot.getDriveConstant("STRAIGHT_D").asDouble());
+    distancePid.setTolerance(Robot.getDriveConstant("DISTANCE_PID_TOLERANCE").asDouble());
     straightPid.enableContinuousInput(0, 360);
-    addRequirements(drivetrain);
+    addRequirements(drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -56,8 +56,8 @@ public class DriveStraightPID extends CommandBase {
    * @param distance The distance (in meters) the robot needs to cover.
    * @param maxSpeed The max speed the robot should travel
    */
-  public DriveStraightPID(DriveTrain drivetrain, double distance, double maxSpeed) {
-    this(drivetrain, distance);
+  public DriveStraightPID(Drive drive, double distance, double maxSpeed) {
+    this(drive, distance);
 
     this.maxSpeed = maxSpeed;
   }
@@ -66,22 +66,21 @@ public class DriveStraightPID extends CommandBase {
   @Override
   public void initialize() {
     CommandDebug.trace();
-    startAngle = drivetrain.getYaw();
-    startDistance = drivetrain.getAverageDistance();
+    startAngle = drive.getYaw();
+    startDistance = drive.getAverageDistance();
     CommandDebug.trace("startAngle: " + startAngle + " distance: " + distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double output =
-        distancePid.calculate(drivetrain.getAverageDistance() - startDistance, distance);
-    double turnError = straightPid.calculate(drivetrain.getYaw(), startAngle);
+    double output = distancePid.calculate(drive.getAverageDistance() - startDistance, distance);
+    double turnError = straightPid.calculate(drive.getYaw(), startAngle);
     double speed = speedSlewRateLimiter.calculate(output);
     if (0 != maxSpeed) {
       speed = MathUtil.clamp(speed, -maxSpeed, maxSpeed);
     }
-    drivetrain.arcadeDrive(speed, -turnError);
+    drive.arcadeDrive(speed, turnError);
   }
 
   // Called once the command ends or is interrupted.
@@ -89,9 +88,9 @@ public class DriveStraightPID extends CommandBase {
   public void end(boolean interrupted) {
     CommandDebug.trace(
         "endAngle: "
-            + drivetrain.getYaw()
+            + drive.getYaw()
             + " distance: "
-            + (drivetrain.getAverageDistance() - startDistance));
+            + (drive.getAverageDistance() - startDistance));
   }
 
   // Returns true when the command should end.

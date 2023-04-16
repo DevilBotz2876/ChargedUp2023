@@ -21,6 +21,19 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
  * @since 1/9/2023
  */
 public final class Constants {
+  public static final Mode currentMode = Mode.SIM;
+
+  public enum Mode {
+    /** Running on a real robot. */
+    REAL,
+
+    /** Running a physics simulator. */
+    SIM,
+
+    /** Replaying from a log file. */
+    REPLAY
+  }
+
   /**
    * This is the default distance the robot goes for the autonomous Mobility Routine ({@link
    * bhs.devilbotz.RobotContainer}). The distance is in meters.

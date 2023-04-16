@@ -26,8 +26,11 @@ import bhs.devilbotz.lib.GamePieceTypes;
 import bhs.devilbotz.lib.LEDModes;
 import bhs.devilbotz.subsystems.Arduino;
 import bhs.devilbotz.subsystems.Arm;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.subsystems.drive.Drive;
+import bhs.devilbotz.subsystems.drive.DriveIO;
+import bhs.devilbotz.subsystems.drive.DriveIOCIM;
+import bhs.devilbotz.subsystems.drive.DriveIOSim;
 import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.networktables.NetworkTable;
@@ -54,7 +57,7 @@ import java.util.Map;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final DriveTrain driveTrain = new DriveTrain();
+  private final Drive drive;
 
   private final Gripper gripper = new Gripper();
 
@@ -77,8 +80,7 @@ public class RobotContainer {
   protected NetworkTable table = inst.getTable("Game Piece Mode");
   private StringEntry ntGamePieceMode = table.getStringTopic("state").getEntry("Cone");
 
-  private final AutonomousContainer autonomousContainer =
-      new AutonomousContainer(driveTrain, arm, gripper);
+  private final AutonomousContainer autonomousContainer;
 
   {
     try {
@@ -91,20 +93,31 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    switch (Constants.currentMode) {
+      case REAL:
+        drive = new Drive(new DriveIOCIM());
+        break;
+
+      case SIM:
+        drive = new Drive(new DriveIOSim());
+        break;
+
+        // Replayed robot, disable IO implementations
+      default:
+        drive = new Drive(new DriveIO() {});
+        break;
+    }
+
+    autonomousContainer = new AutonomousContainer(drive, arm, gripper);
+
     // Configure the trigger bindings
     configureBindings();
 
     arm.setDefaultCommand(new ArmIdle(arm));
     gripper.setDefaultCommand(new GripperIdle(gripper));
 
-    if (Robot.isReal()
-        || DriverStation.isJoystickConnected(
-            Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
-      driveTrain.setDefaultCommand(
-          new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
-    } else {
-      driveTrain.setDefaultCommand(driveTrain.stopCommand());
-    }
+    drive.setDefaultCommand(new DriveCommand(drive, rightJoystick::getY, rightJoystick::getX));
+
     if (!DriverStation.isJoystickConnected(
         Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {
       new Alert("Right Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
@@ -125,62 +138,59 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    if (Robot.isReal()
-        || DriverStation.isJoystickConnected(
-            Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
-      new JoystickButton(leftJoystick, 1)
-          .onTrue(new GripperClose(gripper))
-          .onFalse(new GripperIdle(gripper));
+    new JoystickButton(leftJoystick, 1)
+            .onTrue(new GripperClose(gripper))
+            .onFalse(new GripperIdle(gripper));
 
-      new JoystickButton(leftJoystick, 2)
-          .onTrue(new PrepareForGroundPickup(arm, gripper, this::getGamePieceType));
+    new JoystickButton(leftJoystick, 2)
+        .onTrue(new PrepareForGroundPickup(arm, gripper, this::getGamePieceType));
 
-      new JoystickButton(leftJoystick, 3)
-          .onTrue(new GripperOpen(gripper))
-          .onFalse(new GripperIdle(gripper));
+    new JoystickButton(leftJoystick, 3)
+        .onTrue(new GripperOpen(gripper))
+        .onFalse(new GripperIdle(gripper));
 
-      new JoystickButton(leftJoystick, 4)
-          .whileTrue(new ArmDown(arm, gripper))
-          .onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 4)
+        .whileTrue(new ArmDown(arm, gripper))
+        .onFalse(new ArmStop(arm));
 
-      new JoystickButton(leftJoystick, 5)
-          .whileTrue(new ArmUp(arm, gripper))
-          .onFalse(new ArmStop(arm));
+    new JoystickButton(leftJoystick, 5)
+        .whileTrue(new ArmUp(arm, gripper))
+        .onFalse(new ArmStop(arm));
 
-      new JoystickButton(leftJoystick, 6)
-          .onTrue(
-              new InstantCommand(
-                  () -> {
-                    // set game piece to "cone"
-                    this.setGamePieceType(GamePieceTypes.CONE);
-                  }));
+    new JoystickButton(leftJoystick, 6)
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  // set game piece to "cone"
+                  this.setGamePieceType(GamePieceTypes.CONE);
+                }));
 
-      new JoystickButton(leftJoystick, 7)
-          .onTrue(
-              new InstantCommand(
-                  () -> {
-                    // set game piece to "cube"
-                    this.setGamePieceType(GamePieceTypes.CUBE);
-                  }));
+    new JoystickButton(leftJoystick, 7)
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  // set game piece to "cube"
+                  this.setGamePieceType(GamePieceTypes.CUBE);
+                }));
 
-      new JoystickButton(rightJoystick, 1)
-          .onTrue(
-              new PrepareForScore(arm, ArmConstants.POSITION_TOP, gripper, this::getGamePieceType));
+    new JoystickButton(rightJoystick, 1)
+        .onTrue(
+            new PrepareForScore(arm, ArmConstants.POSITION_TOP, gripper, this::getGamePieceType));
 
-      new JoystickButton(rightJoystick, 2)
-          .toggleOnTrue(
-              new SlowRotateDriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
+    new JoystickButton(rightJoystick, 2)
+        .toggleOnTrue(
+            new SlowRotateDriveCommand(drive, rightJoystick::getY, rightJoystick::getX));
 
-      new JoystickButton(rightJoystick, 3)
-          .onTrue(
-              new PrepareForScore(
-                  arm, ArmConstants.POSITION_MIDDLE, gripper, this::getGamePieceType));
+    new JoystickButton(rightJoystick, 3)
+        .onTrue(
+            new PrepareForScore(
+                arm, ArmConstants.POSITION_MIDDLE, gripper, this::getGamePieceType));
 
-      new JoystickButton(rightJoystick, 4)
-          .onTrue(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
+    new JoystickButton(rightJoystick, 4)
+        .onTrue(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA, gripper));
 
-      new JoystickButton(rightJoystick, 5).onTrue(new PickupFromGround(arm, gripper, driveTrain));
-    }
+    new JoystickButton(rightJoystick, 5).onTrue(new PickupFromGround(arm, gripper, drive));
+
     if (!DriverStation.isJoystickConnected(
         Constants.OperatorConstants.DRIVER_LEFT_CONTROLLER_PORT)) {
       new Alert("Left Joystick NOT Connected!", Alert.AlertType.WARNING).set(true);
@@ -212,15 +222,6 @@ public class RobotContainer {
    */
   public ShuffleboardManager getShuffleboardManager() {
     return shuffleboardManager;
-  }
-
-  /**
-   * Resets the robots position to the pose
-   *
-   * @see DriveTrain#resetRobotPosition()
-   */
-  public void resetRobotPosition() {
-    driveTrain.resetRobotPosition();
   }
 
   /** Initialize gripper to known/same position */
@@ -256,7 +257,7 @@ public class RobotContainer {
         .withPosition(1, 2);
 
     tab.add("Arm subsystem", arm).withPosition(0, 4);
-    tab.add("Drivetrain subsystem", driveTrain).withPosition(7, 2);
+    tab.add("Drivetrain subsystem", drive).withPosition(7, 2);
     buildGripperShuffleboardTab();
     buildDriverAssistShuffleboardTab();
   }
@@ -288,7 +289,7 @@ public class RobotContainer {
     cmdList
         .add(new PrepareForGroundPickup(arm, gripper, this::getGamePieceType))
         .withPosition(0, 0);
-    cmdList.add(new PickupFromGround(arm, gripper, driveTrain)).withPosition(0, 1);
+    cmdList.add(new PickupFromGround(arm, gripper, drive)).withPosition(0, 1);
     cmdList
         .add(
             "Cone Mode",
@@ -309,7 +310,7 @@ public class RobotContainer {
         .withPosition(0, 3);
 
     CommandBase slowRotateCommand =
-        new SlowRotateDriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX);
+        new SlowRotateDriveCommand(drive, rightJoystick::getY, rightJoystick::getX);
     cmdList
         .add(
             "Normal Mode",

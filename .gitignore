@@ -336,3 +336,5 @@ bin/
 .SysId/
 simgui*.json
 networktables.json
+
+src/main/java/bhs/devilbotz/BuildConstants.java

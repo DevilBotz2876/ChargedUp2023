@@ -7,7 +7,7 @@ package bhs.devilbotz.commands.drivetrain;
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
-import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class BalancePID extends CommandBase {
   /** Creates a new BalancePID. */
   // TODO: Add a feedforward term to the PID controller and tune pid
-  private final DriveTrain drive;
+  private final Drive drive;
   // private double levelAngle;
   private final PIDController balancePid;
   Timer timer = new Timer();
@@ -36,7 +36,7 @@ public class BalancePID extends CommandBase {
    * @param drive The drive train subsystem.
    * @param balancePid The external PID for controlling balance
    */
-  public BalancePID(DriveTrain drive, PIDController balancePid, PIDController straightPid) {
+  public BalancePID(Drive drive, PIDController balancePid, PIDController straightPid) {
     this.drive = drive;
     this.balancePid = balancePid;
     this.straightPid = straightPid;
@@ -50,27 +50,27 @@ public class BalancePID extends CommandBase {
    *
    * @param drive The drive train subsystem.
    */
-  public BalancePID(DriveTrain drive) {
+  public BalancePID(Drive drive) {
     this(
         drive,
         new PIDController(
-            Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_D").asDouble()),
+            Robot.getDriveConstant("BALANCE_P").asDouble(),
+            Robot.getDriveConstant("BALANCE_I").asDouble(),
+            Robot.getDriveConstant("BALANCE_D").asDouble()),
         null);
   }
 
-  public BalancePID(DriveTrain drive, double targetAngle) {
+  public BalancePID(Drive drive, double targetAngle) {
     this(
         drive,
         new PIDController(
-            Robot.getDriveTrainConstant("BALANCE_P").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_I").asDouble(),
-            Robot.getDriveTrainConstant("BALANCE_D").asDouble()),
+            Robot.getDriveConstant("BALANCE_P").asDouble(),
+            Robot.getDriveConstant("BALANCE_I").asDouble(),
+            Robot.getDriveConstant("BALANCE_D").asDouble()),
         new PIDController(
-            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble()));
+            Robot.getDriveConstant("STRAIGHT_P").asDouble(),
+            Robot.getDriveConstant("STRAIGHT_I").asDouble(),
+            Robot.getDriveConstant("STRAIGHT_D").asDouble()));
 
     this.targetAngle = targetAngle;
     this.targetAngleValid = true;
@@ -86,7 +86,7 @@ public class BalancePID extends CommandBase {
   @Override
   public void execute() {
     double error = balancePid.calculate(drive.getRoll(), 0);
-    double maxSpeed = Robot.getDriveTrainConstant("BALANCE_MAX_SPEED").asDouble();
+    double maxSpeed = Robot.getDriveConstant("BALANCE_MAX_SPEED").asDouble();
     double output = MathUtil.clamp(error, -maxSpeed, maxSpeed);
     double turnError = 0;
 
@@ -121,7 +121,7 @@ public class BalancePID extends CommandBase {
   @Override
   public boolean isFinished() {
     // Empirically, if we've been balanced for at least the min duration, we assume we are done
-    if (timer.hasElapsed(Robot.getDriveTrainConstant("BALANCE_MIN_DURATION").asDouble())) {
+    if (timer.hasElapsed(Robot.getDriveConstant("BALANCE_MIN_DURATION").asDouble())) {
       return true;
     }
     return false;

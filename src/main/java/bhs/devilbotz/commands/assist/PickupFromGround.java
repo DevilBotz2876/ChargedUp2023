@@ -6,8 +6,8 @@ import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.subsystems.Arm;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -31,7 +31,7 @@ public class PickupFromGround extends SequentialCommandGroup {
    * @param gripper the Gripper object
    * @see bhs.devilbotz.commands.assist.PrepareForGroundPickup
    */
-  public PickupFromGround(Arm arm, Gripper gripper, DriveTrain drivetrain) {
+  public PickupFromGround(Arm arm, Gripper gripper, Drive drive) {
     super();
     addCommands(CommandDebug.start());
     // Close the gripper
@@ -40,8 +40,7 @@ public class PickupFromGround extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             // Drive backward
-            new SequentialCommandGroup(
-                new DriveStraightPID(drivetrain, -0.3), drivetrain.stopCommand()),
+            new SequentialCommandGroup(new DriveStraightPID(drive, -0.3), drive.stopCommand()),
             // Raise Arm to safe driving position
             new ArmToPosition(arm, ArmConstants.POSITION_DRIVE, gripper)));
     addCommands(CommandDebug.end());

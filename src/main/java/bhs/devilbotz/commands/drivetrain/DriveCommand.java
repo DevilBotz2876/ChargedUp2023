@@ -2,7 +2,7 @@ package bhs.devilbotz.commands.drivetrain;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.Robot;
-import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -16,7 +16,7 @@ import java.util.function.DoubleSupplier;
  * @author ParkerMeyers
  */
 public class DriveCommand extends CommandBase {
-  private final DriveTrain drive;
+  private final Drive drive;
   private final DoubleSupplier speed;
   private final DoubleSupplier rot;
 
@@ -30,7 +30,7 @@ public class DriveCommand extends CommandBase {
    * @param speed The speed of the robot.
    * @param rot The rotation of the robot.
    */
-  public DriveCommand(DriveTrain drive, DoubleSupplier speed, DoubleSupplier rot) {
+  public DriveCommand(Drive drive, DoubleSupplier speed, DoubleSupplier rot) {
     this.drive = drive;
     this.speed = speed;
     this.rot = rot;

@@ -6,7 +6,7 @@ package bhs.devilbotz.commands.drivetrain;
 
 import bhs.devilbotz.Robot;
 import bhs.devilbotz.commands.CommandDebug;
-import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -24,7 +24,7 @@ public class DriveStraightToDock extends CommandBase {
   }
 
   private DockState currentState = DockState.ON_GROUND;
-  private DriveTrain drivetrain;
+  private Drive drive;
   private PIDController straightPid;
   private final double maxDistance;
   private double targetAngle;
@@ -36,43 +36,43 @@ public class DriveStraightToDock extends CommandBase {
   /**
    * The constructor for the Drive Straight To Dock PID command.
    *
-   * @param drivetrain The drive train subsystem.
+   * @param drive The drive train subsystem.
    * @param maxDistance The MAX distance (in meters) the robot needs to cover. We end when the
    *     distance is reached OR we've detected that we are physically on the dock
    */
-  public DriveStraightToDock(DriveTrain drivetrain, double maxDistance) {
-    this.drivetrain = drivetrain;
+  public DriveStraightToDock(Drive drive, double maxDistance) {
+    this.drive = drive;
     this.maxDistance = maxDistance;
     straightPid =
         new PIDController(
-            Robot.getDriveTrainConstant("STRAIGHT_P").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_I").asDouble(),
-            Robot.getDriveTrainConstant("STRAIGHT_D").asDouble());
+            Robot.getDriveConstant("STRAIGHT_P").asDouble(),
+            Robot.getDriveConstant("STRAIGHT_I").asDouble(),
+            Robot.getDriveConstant("STRAIGHT_D").asDouble());
     straightPid.enableContinuousInput(0, 360);
 
     speeds.put(
         DockState.ON_GROUND,
-        Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_GROUND")
+        Robot.getDriveConstant("DOCK_MAX_SPEED_ON_GROUND")
             .asDouble(0.75)); // We drive fastest when approaching the ramp.
     speeds.put(
         DockState.ON_RAMP,
-        Robot.getDriveTrainConstant("DOCK_MAX_SPEED_ON_RAMP")
+        Robot.getDriveConstant("DOCK_MAX_SPEED_ON_RAMP")
             .asDouble(0.50)); // We then slow down when on the ramp
     speeds.put(DockState.LEVELING_OFF, 0.0); // We stop when we are leveling off
 
-    addRequirements(drivetrain);
+    addRequirements(drive);
   }
 
   /**
    * The constructor for the Drive Straight To Dock PID command to specify the target angle.
    *
-   * @param drivetrain The drive train subsystem.
+   * @param drive The drive train subsystem.
    * @param maxDistance The MAX distance (in meters) the robot needs to cover. We end when the
    *     distance is reached OR we've detected that we are physically on the dock
    * @param targetAngle The desired target angle
    */
-  public DriveStraightToDock(DriveTrain drivetrain, double maxDistance, double targetAngle) {
-    this(drivetrain, maxDistance);
+  public DriveStraightToDock(Drive drive, double maxDistance, double targetAngle) {
+    this(drive, maxDistance);
 
     this.targetAngle = targetAngle;
     this.targetAngleValid = true;
@@ -84,13 +84,13 @@ public class DriveStraightToDock extends CommandBase {
   public void initialize() {
     CommandDebug.trace();
     if (false == targetAngleValid) {
-      targetAngle = drivetrain.getYaw();
+      targetAngle = drive.getYaw();
       targetAngleValid = true;
     }
-    startDistance = drivetrain.getAverageDistance();
+    startDistance = drive.getAverageDistance();
     CommandDebug.trace(
         "startRoll: "
-            + drivetrain.getRoll()
+            + drive.getRoll()
             + " targetAngle: "
             + targetAngle
             + " maxDistance: "
@@ -99,7 +99,7 @@ public class DriveStraightToDock extends CommandBase {
 
   @Override
   public void execute() {
-    double currentRoll = drivetrain.getRoll();
+    double currentRoll = drive.getRoll();
     double speed;
 
     CommandDebug.trace("currentRoll: " + currentRoll);
@@ -111,9 +111,9 @@ public class DriveStraightToDock extends CommandBase {
          */
         // We use the absolute value of the current roll so that we can approach the ramp either
         // going forward or backwards.
-        if ((Math.abs(currentRoll) > Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MIN").asDouble(10))
+        if ((Math.abs(currentRoll) > Robot.getDriveConstant("DOCK_RAMP_ROLL_MIN").asDouble(10))
             && (Math.abs(currentRoll)
-                < Robot.getDriveTrainConstant("DOCK_RAMP_ROLL_MAX").asDouble(15))) {
+                < Robot.getDriveConstant("DOCK_RAMP_ROLL_MAX").asDouble(15))) {
           // Looks like the roll reading is within range of being on the ramp, so start the timer if
           // it already hasn't been started
           if (0 == timer.get()) {
@@ -130,8 +130,7 @@ public class DriveStraightToDock extends CommandBase {
         }
 
         /* If we've been on the ramp long enough (roll is within expected window), we assume we are on the ramp and transition states */
-        if (timer.hasElapsed(
-            Robot.getDriveTrainConstant("DOCK_ON_RAMP_DURATION_MIN").asDouble(0.2))) {
+        if (timer.hasElapsed(Robot.getDriveConstant("DOCK_ON_RAMP_DURATION_MIN").asDouble(0.2))) {
           CommandDebug.message("Yes, On Ramp!");
           // We skip ON_RAMP and go straight to LEVELING_OFF because the BalancePID can take over
           // once we are on the ramp
@@ -148,7 +147,7 @@ public class DriveStraightToDock extends CommandBase {
          */
         double deltaRoll = currentRoll - previousRoll;
         if ((deltaRoll < 0)
-            && (currentRoll < Robot.getDriveTrainConstant("DOCK_LEVELING_ROLL_MIN").asDouble(10))) {
+            && (currentRoll < Robot.getDriveConstant("DOCK_LEVELING_ROLL_MIN").asDouble(10))) {
           // Looks like the roll reading is within range of leveling off, so start the timer if it
           // already hasn't been started
           if (0 == timer.get()) {
@@ -166,7 +165,7 @@ public class DriveStraightToDock extends CommandBase {
 
         /* If we've been leveling off long enough, we assume we are almost balanced */
         if (timer.hasElapsed(
-            Robot.getDriveTrainConstant("DOCK_LEVELING_OFF_DURATION_MIN").asDouble(0.2))) {
+            Robot.getDriveConstant("DOCK_LEVELING_OFF_DURATION_MIN").asDouble(0.2))) {
           CommandDebug.message("Yes, leveling off!");
           currentState = DockState.LEVELING_OFF;
           timer.stop();
@@ -180,7 +179,7 @@ public class DriveStraightToDock extends CommandBase {
     }
 
     // We use a PID to determine how much to turn to maintain the same starting angle
-    double turnError = straightPid.calculate(drivetrain.getYaw(), targetAngle);
+    double turnError = straightPid.calculate(drive.getYaw(), targetAngle);
 
     // Set the speed based on the currentState
     speed = speeds.get(currentState);
@@ -190,7 +189,7 @@ public class DriveStraightToDock extends CommandBase {
       speed = -speed;
     }
 
-    drivetrain.arcadeDrive(speed, -turnError);
+    drive.arcadeDrive(speed, -turnError);
 
     /* We save the current roll so we can calculate the deltaRoll next time */
     previousRoll = currentRoll;
@@ -201,17 +200,17 @@ public class DriveStraightToDock extends CommandBase {
   public void end(boolean interrupted) {
     CommandDebug.trace(
         "endRoll: "
-            + drivetrain.getRoll()
+            + drive.getRoll()
             + " endAngle: "
-            + drivetrain.getYaw()
+            + drive.getYaw()
             + " distance: "
-            + (drivetrain.getAverageDistance() - startDistance));
+            + (drive.getAverageDistance() - startDistance));
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double distanceTravelled = drivetrain.getAverageDistance() - startDistance;
+    double distanceTravelled = drive.getAverageDistance() - startDistance;
     /* We are finished when we are in the LEVELING_OFF state.
      * As a backup, we also assume we are finished when the total distance has been traveled
      */

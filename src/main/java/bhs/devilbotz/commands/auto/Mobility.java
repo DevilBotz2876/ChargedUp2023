@@ -2,7 +2,7 @@ package bhs.devilbotz.commands.auto;
 
 import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
-import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Mobility extends SequentialCommandGroup {
@@ -15,15 +15,15 @@ public class Mobility extends SequentialCommandGroup {
    *   <li>Drive the specified distance in a straight line
    * </ol>
    *
-   * @param drivetrain the DriveTrain object
+   * @param drive the drive object
    * @param distance the distance to travel. Negative indicates move backwards. (in meters)
    * @see bhs.devilbotz.commands.drivetrain.DriveStraightPID
    */
-  public Mobility(DriveTrain drivetrain, double distance) {
+  public Mobility(Drive drive, double distance) {
     super();
     addCommands(CommandDebug.start());
-    addCommands(new DriveStraightPID(drivetrain, distance, 1));
-    addCommands(drivetrain.stopCommand());
+    addCommands(new DriveStraightPID(drive, distance, 1));
+    addCommands(drive.stopCommand());
     addCommands(CommandDebug.end());
   }
 }

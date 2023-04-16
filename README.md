@@ -13,7 +13,7 @@ Code for the FRC 2023 Robotics Competition
     * [NavX Gyro Sensor](https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/com/kauailabs/navx/frc/package-summary.html)
 
 ## Hardware Configuration
-- DriveTrain
+- Drive
     - Motors
         - Left
             - Master: Talon SRX (on CAN ID 3)

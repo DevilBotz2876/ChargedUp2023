@@ -2,7 +2,7 @@ package bhs.devilbotz.commands.drivetrain;
 
 import bhs.devilbotz.Constants;
 import bhs.devilbotz.commands.CommandDebug;
-import bhs.devilbotz.subsystems.DriveTrain;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -14,7 +14,7 @@ public class SlowRotateDriveCommand extends DriveCommand {
 
   private BooleanEntry ntSlowMode = table.getBooleanTopic("Slow Mode").getEntry(false);
 
-  public SlowRotateDriveCommand(DriveTrain drive, DoubleSupplier speed, DoubleSupplier rot) {
+  public SlowRotateDriveCommand(Drive drive, DoubleSupplier speed, DoubleSupplier rot) {
     super(
         drive,
         speed,

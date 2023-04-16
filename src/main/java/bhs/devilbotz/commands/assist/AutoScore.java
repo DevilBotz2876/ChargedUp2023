@@ -8,8 +8,8 @@ import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -36,17 +36,17 @@ public class AutoScore extends SequentialCommandGroup {
    * @param drivetrain the Drivetain object
    * @param gripper the Gripper object
    */
-  public AutoScore(Arm arm, DriveTrain drivetrain, Gripper gripper) {
+  public AutoScore(Arm arm, Drive drive, Gripper gripper) {
     super();
     addCommands(CommandDebug.start());
     addCommands(
         new ParallelCommandGroup(
             new SequentialCommandGroup(
-                new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, .9),
-                drivetrain.stopCommand()),
+                new DriveStraightPID(drive, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, .9),
+                drive.stopCommand()),
             new ArmToPosition(arm, ArmConstants.POSITION_TOP, gripper)));
-    addCommands(new DriveStraightPID(drivetrain, DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
-    addCommands(drivetrain.stopCommand());
+    addCommands(new DriveStraightPID(drive, DriveConstants.POSITION_DRIVE_FROM_PORTAL, .5));
+    addCommands(drive.stopCommand());
     addCommands(new ArmMoveDistance(arm, ArmConstants.POSITION_SCORING_DELTA - 10, gripper));
     addCommands(new GripperOpen(gripper));
     addCommands(Commands.waitSeconds(0.25));

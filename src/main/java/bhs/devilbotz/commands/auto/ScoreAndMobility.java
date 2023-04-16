@@ -8,8 +8,8 @@ import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
 import bhs.devilbotz.commands.drivetrain.RotateDegrees;
 import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -38,19 +38,18 @@ public class ScoreAndMobility extends SequentialCommandGroup {
    * </ul>
    *
    * @param arm the Arm object
-   * @param drivetrain the DriveTrain object
-   * @param distance the distance to travel. Negative indicates move backwards. (in meters)
+   * @param drive the drive object
    * @param gripper the gripper object
    * @see bhs.devilbotz.commands.assist.AutoScore
    * @see bhs.devilbotz.commands.auto.Mobility
    */
-  public ScoreAndMobility(Arm arm, DriveTrain drivetrain, double distance, Gripper gripper) {
+  public ScoreAndMobility(Arm arm, Drive drive, Gripper gripper) {
     super();
 
     addCommands(CommandDebug.start());
-    addCommands(new AutoScore(arm, drivetrain, gripper));
+    addCommands(new AutoScore(arm, drive, gripper));
     // Move back enough to give clearance for the arm to go down
-    addCommands(new DriveStraightPID(drivetrain, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, 1));
+    addCommands(new DriveStraightPID(drive, -DriveConstants.POSITION_DRIVE_FROM_PORTAL, 1));
     addCommands(
         new ParallelCommandGroup(
             // Move arm all the way down
@@ -59,8 +58,8 @@ public class ScoreAndMobility extends SequentialCommandGroup {
             // negative distance in case the driver forgets
             // After scoring we always drive back 3.5 meters to ensure we leave the zone from either
             // side
-            new Mobility(drivetrain, -3.5)));
-    addCommands(new RotateDegrees(drivetrain, 180));
+            new Mobility(drive, -3.5)));
+    addCommands(new RotateDegrees(drive, 180));
     // open the gripper
     addCommands(new GripperOpen(gripper));
     addCommands(CommandDebug.end());

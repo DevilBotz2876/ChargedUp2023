@@ -5,8 +5,8 @@ import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.lib.AutonomousModes;
 import bhs.devilbotz.lib.CommunityLocation;
 import bhs.devilbotz.subsystems.Arm;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.subsystems.drive.Drive;
 import bhs.devilbotz.utils.ShuffleboardManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,12 +15,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** This class is used to encapsulate all of the autonmous routines */
 public class AutonomousContainer {
-  private final DriveTrain drivetrain;
+  private final Drive drive;
   private final Arm arm;
   private final Gripper gripper;
 
-  public AutonomousContainer(DriveTrain drivetrain, Arm arm, Gripper gripper) {
-    this.drivetrain = drivetrain;
+  public AutonomousContainer(Drive drive, Arm arm, Gripper gripper) {
+    this.drive = drive;
     this.arm = arm;
     this.gripper = gripper;
   }
@@ -30,7 +30,7 @@ public class AutonomousContainer {
     double delay = ShuffleboardManager.autoDelay.getDouble(0);
     double maxDistance =
         ShuffleboardManager.autoDistance.getDouble(Constants.DEFAULT_DISTANCE_MOBILITY);
-    double startAngle = drivetrain.getYaw();
+    double startAngle = drive.getYaw();
 
     autonomousCommand.addCommands(CommandDebug.message("Autonomous: Start"));
     // Always start autonomous with the specified delay to allow alliance members to do whatever
@@ -41,27 +41,27 @@ public class AutonomousContainer {
       case SIT_STILL:
         break;
       case MOBILITY:
-        autonomousCommand.addCommands(new Mobility(drivetrain, maxDistance));
+        autonomousCommand.addCommands(new Mobility(drive, maxDistance));
         break;
       case SCORE_AND_MOBILITY:
-        autonomousCommand.addCommands(new ScoreAndMobility(arm, drivetrain, maxDistance, gripper));
+        autonomousCommand.addCommands(new ScoreAndMobility(arm, drive, gripper));
         break;
       case DOCK_AND_ENGAGE:
-        autonomousCommand.addCommands(new DockAndEngage(drivetrain, maxDistance, startAngle));
+        autonomousCommand.addCommands(new DockAndEngage(drive, maxDistance, startAngle));
         break;
       case MOBILITY_DOCK_AND_ENGAGE_HUMAN_SIDE:
         autonomousCommand.addCommands(
             new MobilityDockAndEngage(
-                drivetrain, CommunityLocation.HUMAN, DriverStation.getAlliance(), startAngle));
+                drive, CommunityLocation.HUMAN, DriverStation.getAlliance(), startAngle));
         break;
       case MOBILITY_DOCK_AND_ENGAGE_WALL_SIDE:
         autonomousCommand.addCommands(
             new MobilityDockAndEngage(
-                drivetrain, CommunityLocation.WALL, DriverStation.getAlliance(), startAngle));
+                drive, CommunityLocation.WALL, DriverStation.getAlliance(), startAngle));
         break;
       case SCORE_DOCK_AND_ENGAGE:
         autonomousCommand.addCommands(
-            new ScoreDockAndEngage(arm, drivetrain, maxDistance, gripper, startAngle));
+            new ScoreDockAndEngage(arm, drive, maxDistance, gripper, startAngle));
         break;
       case SCORE_MOBILITY_DOCK_ENGAGE:
         break;
@@ -74,7 +74,7 @@ public class AutonomousContainer {
     }
 
     // Always stop the drivetrain at the end of autonomous
-    autonomousCommand.addCommands(drivetrain.stopCommand());
+    autonomousCommand.addCommands(drive.stopCommand());
     autonomousCommand.addCommands(CommandDebug.message("Autonomous: End"));
 
     return autonomousCommand;

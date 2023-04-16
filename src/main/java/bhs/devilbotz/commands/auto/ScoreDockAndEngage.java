@@ -5,8 +5,8 @@ import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.arm.ArmToPosition;
 import bhs.devilbotz.commands.assist.AutoScore;
 import bhs.devilbotz.subsystems.Arm;
-import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
+import bhs.devilbotz.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -33,7 +33,7 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
    * </ul>
    *
    * @param arm the Arm object
-   * @param drivetrain the DriveTrain object
+   * @param drive the drive object
    * @param maxDistance the distance to travel. Negative indicates move backwards. (in meters)
    * @param gripper the gripper object
    * @param startAngle the orientation of the robot at the start of the match
@@ -41,22 +41,22 @@ public class ScoreDockAndEngage extends SequentialCommandGroup {
    * @see bhs.devilbotz.commands.auto.DockAndEngage
    */
   public ScoreDockAndEngage(
-      Arm arm, DriveTrain drivetrain, double maxDistance, Gripper gripper, double startAngle) {
+      Arm arm, Drive drive, double maxDistance, Gripper gripper, double startAngle) {
     super();
 
     addCommands(CommandDebug.start());
     // Execute the auto score routine
-    addCommands(new AutoScore(arm, drivetrain, gripper));
+    addCommands(new AutoScore(arm, drive, gripper));
     addCommands(
         new ParallelCommandGroup(
             // Move arm down but not too low to hit the ramp/ground
             new ArmToPosition(arm, 150, gripper),
             // Since we are scoring, we always want to drive backwards in the end. Always set
             // negative distance in case the driver forgets
-            new DockAndEngage(drivetrain, -(Math.abs(maxDistance)), startAngle)));
+            new DockAndEngage(drive, -(Math.abs(maxDistance)), startAngle)));
     // Lower the arm all the way for stability
     addCommands(new ArmDown(arm, gripper));
-    addCommands(drivetrain.stopCommand());
+    addCommands(drive.stopCommand());
     addCommands(CommandDebug.end());
   }
 }
