@@ -81,7 +81,7 @@ public class DriveStraightPID extends CommandBase {
     if (0 != maxSpeed) {
       speed = MathUtil.clamp(speed, -maxSpeed, maxSpeed);
     }
-    drivetrain.arcadeDrive(speed, -turnError);
+    drivetrain.arcadeDrive(speed, turnError);
   }
 
   // Called once the command ends or is interrupted.
