@@ -40,6 +40,11 @@ public final class Constants {
 
   /** The voltage to turn the warning lights on. */
   public static final double MIN_BATTERY_VOLTAGE = 12.5;
+
+  public static final double CAMERA_PITCH_RADIANS = 1.0;
+  public static final double CAMERA_HEIGHT_METERS = 1.0;
+  public static final double TARGET_HEIGHT_METERS = 1.0;
+
   /**
    * Operator constants are for the operator interface (joysticks, buttons, etc.).
    *

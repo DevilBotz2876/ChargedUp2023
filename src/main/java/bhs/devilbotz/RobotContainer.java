@@ -16,6 +16,7 @@ import bhs.devilbotz.commands.assist.PrepareForGroundPickup;
 import bhs.devilbotz.commands.assist.PrepareForScore;
 import bhs.devilbotz.commands.auto.AutonomousContainer;
 import bhs.devilbotz.commands.drivetrain.DriveCommand;
+import bhs.devilbotz.commands.drivetrain.DriveVision;
 import bhs.devilbotz.commands.drivetrain.SlowRotateDriveCommand;
 import bhs.devilbotz.commands.gripper.GripperClose;
 import bhs.devilbotz.commands.gripper.GripperIdle;
@@ -103,7 +104,8 @@ public class RobotContainer {
       driveTrain.setDefaultCommand(
           new DriveCommand(driveTrain, rightJoystick::getY, rightJoystick::getX));
     } else {
-      driveTrain.setDefaultCommand(driveTrain.stopCommand());
+      // driveTrain.setDefaultCommand(driveTrain.stopCommand());
+      driveTrain.setDefaultCommand(new DriveVision(driveTrain, 0));
     }
     if (!DriverStation.isJoystickConnected(
         Constants.OperatorConstants.DRIVER_RIGHT_CONTROLLER_PORT)) {

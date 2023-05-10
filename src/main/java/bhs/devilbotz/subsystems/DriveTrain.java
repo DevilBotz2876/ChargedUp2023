@@ -1,5 +1,6 @@
 package bhs.devilbotz.subsystems;
 
+import bhs.devilbotz.Constants;
 import bhs.devilbotz.Constants.DriveConstants;
 import bhs.devilbotz.Constants.SysIdConstants;
 import bhs.devilbotz.Robot;
@@ -20,11 +21,16 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -38,6 +44,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.photonvision.SimVisionSystem;
+import org.photonvision.SimVisionTarget;
 
 /**
  * The DriveTrain subsystem controls the robot's drive train. It also handles: - The NAVX
@@ -136,6 +144,8 @@ public class DriveTrain extends SubsystemBase {
           // l and r velocity: 0.1   m/s
           // l and r position: 0.005 m
           VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
+
+  private SimVisionSystem simVision;
 
   /**
    * Helper function to convert position (in meters) to Talon SRX encoder native units. Used for
@@ -242,6 +252,8 @@ public class DriveTrain extends SubsystemBase {
     ySimStart.setNumber(2.0);
     rotSimStart.setNumber(0.0);
     readSimStart.setBoolean(false);
+
+    initVisionSim();
 
     SmartDashboard.putData("HW/Drive Train/Talon/Left/Master", leftMaster);
     SmartDashboard.putData("HW/Drive Train/Talon/Left/Follower", leftFollower);
@@ -396,6 +408,9 @@ public class DriveTrain extends SubsystemBase {
     int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
     SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
     angle.set(-differentialDriveSim.getHeading().getDegrees());
+
+    // Update PhotonVision based on our new robot position.
+    simVision.processFrame(getPose());
   }
 
   /**
@@ -658,5 +673,53 @@ public class DriveTrain extends SubsystemBase {
           this.tankDriveVolts(0, 0);
         },
         this);
+  }
+
+  // =========================================================================
+  // photon vision sim
+
+  private void initVisionSim() {
+    // double CAMERA_PITCH_RADIANS = 1.0;
+    // double CAMERA_HEIGHT_METERS = 1.0;
+    // double TARGET_HEIGHT_METERS = 1.0;
+
+    // See
+    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+    // page 208
+    double targetWidth = Units.inchesToMeters(41.30) - Units.inchesToMeters(6.70); // meters
+    // See
+    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+    // page 197
+    double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
+    // See https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
+    // pages 4 and 5
+    double tgtXPos = Units.feetToMeters(54);
+    double tgtYPos =
+        Units.feetToMeters(27 / 2) - Units.inchesToMeters(43.75) - Units.inchesToMeters(48.0 / 2.0);
+    Pose3d farTargetPose =
+        new Pose3d(
+            new Translation3d(tgtXPos, tgtYPos, Constants.TARGET_HEIGHT_METERS),
+            new Rotation3d(0.0, 0.0, 0.0));
+
+    double camDiagFOV = 170.0; // degrees - assume wide-angle camera
+    double camPitch = Units.radiansToDegrees(Constants.CAMERA_PITCH_RADIANS); // degrees
+    double camHeightOffGround = Constants.CAMERA_HEIGHT_METERS; // meters
+    double maxLEDRange = 20; // meters
+    int camResolutionWidth = 640; // pixels
+    int camResolutionHeight = 480; // pixels
+    double minTargetArea = 10; // square pixels
+
+    simVision =
+        new SimVisionSystem(
+            "photonvision",
+            camDiagFOV,
+            new Transform3d(
+                new Translation3d(0, 0, camHeightOffGround), new Rotation3d(0, camPitch, 0)),
+            maxLEDRange,
+            camResolutionWidth,
+            camResolutionHeight,
+            minTargetArea);
+
+    simVision.addSimVisionTarget(new SimVisionTarget(farTargetPose, targetWidth, targetHeight, -1));
   }
 }
