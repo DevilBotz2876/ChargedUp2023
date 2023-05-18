@@ -25,12 +25,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,7 +54,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class DriveTrain extends SubsystemBase {
   // Defines the motor controllers for both sides of the drive train (left and right).
-
   private static final WPI_TalonSRX leftMaster =
       new WPI_TalonSRX(Robot.getDriveTrainConstant("MOTOR_LEFT_MASTER_CAN_ID").asInt());
   private static final WPI_TalonSRX rightMaster =
@@ -517,6 +519,12 @@ public class DriveTrain extends SubsystemBase {
     tankDriveVolts(leftOutput + leftFeedforward, rightOutput + rightFeedforward);
   }
 
+  private GenericEntry maxSpeed = Shuffleboard.getTab("Drive")
+  .add("Max Speed", 1)
+  .withPosition(0, 4)
+  .withSize(2, 1)
+  .getEntry();
+
   /**
    * Drives the robot with the given linear velocity and angular velocity.
    *
@@ -525,6 +533,10 @@ public class DriveTrain extends SubsystemBase {
    * @since 1/30/2023
    */
   public void arcadeDrive(double speed, double rot) {
+    Double maxSpeedValue = maxSpeed.getDouble(1.0);
+    speed = speed * maxSpeedValue;
+    rot = rot * maxSpeedValue;
+
     var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
     setSpeeds(wheelSpeeds);
   }
