@@ -30,6 +30,7 @@ import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
 import bhs.devilbotz.utils.Alert;
 import bhs.devilbotz.utils.ShuffleboardManager;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringEntry;
@@ -56,7 +57,7 @@ import java.util.Map;
 public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
 
-  private final Gripper gripper = new Gripper();
+  private final Gripper gripper = new Gripper(this);
 
   private final Arm arm = new Arm(this);
 
@@ -88,6 +89,12 @@ public class RobotContainer {
       throw new RuntimeException(e);
     }
   }
+
+  public GenericEntry armLock = Shuffleboard.getTab("Drive")
+  .add("Arm Lock", false)
+  .withPosition(3, 4)
+  .withSize(1, 1)
+  .getEntry();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

@@ -525,6 +525,12 @@ public class DriveTrain extends SubsystemBase {
   .withSize(2, 1)
   .getEntry();
 
+  private GenericEntry quickStop = Shuffleboard.getTab("Drive")
+  .add("Quick Stop", false)
+  .withPosition(2, 4)
+  .withSize(1, 1)
+  .getEntry();
+
   /**
    * Drives the robot with the given linear velocity and angular velocity.
    *
@@ -534,9 +540,15 @@ public class DriveTrain extends SubsystemBase {
    */
   public void arcadeDrive(double speed, double rot) {
     Double maxSpeedValue = maxSpeed.getDouble(1.0);
-    speed = speed * maxSpeedValue;
-    rot = rot * maxSpeedValue;
-
+    boolean quickStopValue = quickStop.getBoolean(false);
+    if (!quickStopValue) {
+      speed = speed * maxSpeedValue;
+      rot = rot * maxSpeedValue;
+    } else {
+      speed = 0;
+      rot = 0;
+    }
+    
     var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0.0, rot));
     setSpeeds(wheelSpeeds);
   }

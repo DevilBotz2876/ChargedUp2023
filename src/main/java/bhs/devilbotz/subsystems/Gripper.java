@@ -5,6 +5,7 @@
 package bhs.devilbotz.subsystems;
 
 import bhs.devilbotz.Constants;
+import bhs.devilbotz.RobotContainer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringEntry;
@@ -37,8 +38,11 @@ public class Gripper extends SubsystemBase {
   protected NetworkTable table = inst.getTable("Gripper");
   private StringEntry ntState = table.getStringTopic("state").getEntry("Unknown");
 
+  private RobotContainer robotContainer;
+
   /** The constructor for the gripper subsystem. */
-  public Gripper() {
+  public Gripper(RobotContainer robotContainer) {
+    this.robotContainer = robotContainer;
     compressor.disable();
     ntState.set("Unknown");
     SmartDashboard.putData("HW/Gripper/Solenoid", doubleSolenoid);
@@ -46,14 +50,20 @@ public class Gripper extends SubsystemBase {
 
   /** This method opens the gripper. */
   public void open() {
-    doubleSolenoid.set(Value.kForward);
-    ntState.set("Open");
+    if (robotContainer.armLock.getBoolean(false)) {
+    } else {
+      doubleSolenoid.set(Value.kForward);
+      ntState.set("Open");
+    }
   }
 
   /** This method closes the gripper. */
   public void close() {
-    doubleSolenoid.set(Value.kReverse);
-    ntState.set("Closed");
+    if (robotContainer.armLock.getBoolean(false)) {
+    } else {
+      doubleSolenoid.set(Value.kReverse);
+      ntState.set("Closed");
+    }
   }
 
   /**

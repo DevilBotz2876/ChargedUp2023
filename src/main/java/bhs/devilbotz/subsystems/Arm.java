@@ -187,9 +187,13 @@ public class Arm extends SubsystemBase {
    * @param speed - speed to move arm up. Positive value. Value is 0-1, where 1 is 100%
    */
   public void up(double speed) {
-    ntState.set("Moving: Up");
-    armMotor.set(Math.abs(speed));
-    robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
+    if (robotContainer.armLock.getBoolean(false)) {
+      armMotor.set(0);
+    } else {
+      ntState.set("Moving: Up");
+      armMotor.set(Math.abs(speed));
+      robotContainer.setLEDMode(LEDModes.SET_ARM_UP);
+    }
   }
 
   /**
@@ -198,9 +202,13 @@ public class Arm extends SubsystemBase {
    * @param speed - speed to move arm down. Positive value. Value is 0-1, where 1 is 100%
    */
   public void down(double speed) {
-    ntState.set("Moving: Down");
-    armMotor.set(-Math.abs(speed));
-    robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
+    if (robotContainer.armLock.getBoolean(false)) {
+      armMotor.set(0);
+    } else {
+      ntState.set("Moving: Down");
+      armMotor.set(-Math.abs(speed));
+      robotContainer.setLEDMode(LEDModes.SET_ARM_DOWN);
+    }
   }
 
   /** This method stops the arm. */
