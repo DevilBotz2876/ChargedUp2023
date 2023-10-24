@@ -102,19 +102,21 @@ public class ShuffleboardManager {
     autoDistance =
         autoMode.add("Distance (in meters)", 2).withWidget(BuiltInWidgets.kTextView).getEntry();
 
-    autoScoreLevelChooser.setDefaultOption("Low", ScoreLevels.LOW);
-    autoScoreLevelChooser.addOption("Mid", ScoreLevels.MID);
-    autoScoreLevelChooser.addOption("High", ScoreLevels.HIGH);
-    autoMode
-        .add("Score Level", autoScoreLevelChooser)
-        .withWidget(BuiltInWidgets.kSplitButtonChooser);
+    /*
+        autoScoreLevelChooser.setDefaultOption("Low", ScoreLevels.LOW);
+        autoScoreLevelChooser.addOption("Mid", ScoreLevels.MID);
+        autoScoreLevelChooser.addOption("High", ScoreLevels.HIGH);
+        autoMode
+            .add("Score Level", autoScoreLevelChooser)
+            .withWidget(BuiltInWidgets.kSplitButtonChooser);
 
-    autoGamePieceTypeChooser.setDefaultOption("Cube", GamePieceTypes.CUBE);
-    autoGamePieceTypeChooser.addOption("Cone", GamePieceTypes.CONE);
-    autoGamePieceTypeChooser.addOption("OFF", GamePieceTypes.NONE);
-    autoMode
-        .add("Game Piece", autoGamePieceTypeChooser)
-        .withWidget(BuiltInWidgets.kSplitButtonChooser);
+        autoGamePieceTypeChooser.setDefaultOption("Cube", GamePieceTypes.CUBE);
+        autoGamePieceTypeChooser.addOption("Cone", GamePieceTypes.CONE);
+        autoGamePieceTypeChooser.addOption("OFF", GamePieceTypes.NONE);
+        autoMode
+            .add("Game Piece", autoGamePieceTypeChooser)
+            .withWidget(BuiltInWidgets.kSplitButtonChooser);
+    */
   }
 
   /** Updates the values on the shuffleboard. */
