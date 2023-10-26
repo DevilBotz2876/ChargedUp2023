@@ -10,7 +10,7 @@ import java.util.function.DoubleSupplier;
 
 public class SlowRotateDriveCommand extends DriveCommand {
   protected NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  protected NetworkTable table = inst.getTable("Shuffleboard/Drive/Autonomous");
+  protected NetworkTable table = inst.getTable("Shuffleboard/Drive");
 
   private BooleanEntry ntSlowMode = table.getBooleanTopic("Slow Mode").getEntry(false);
 

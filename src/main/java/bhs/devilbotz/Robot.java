@@ -18,6 +18,7 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -123,7 +124,16 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     robotContainer.resetRobotPosition();
-    robotContainer.setLEDMode(LEDModes.SET_LOADING);
+    // Wait for the voltage to appear
+    if (RobotController.getBatteryVoltage() < Constants.MIN_BATTERY_VOLTAGE) {
+      new Alert(
+              "Battery voltage is low: " + RobotController.getBatteryVoltage() + "v",
+              Alert.AlertType.WARNING)
+          .set(true);
+      robotContainer.setLEDMode(LEDModes.SET_VOLTAGE_WARNING);
+    } else {
+      robotContainer.setLEDMode(LEDModes.SET_LOADING);
+    }
   }
 
   @Override

@@ -8,9 +8,10 @@ import bhs.devilbotz.Constants;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringEntry;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,11 +22,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author joshuamanoj &amp; ParkerMeyers
  */
 public class Gripper extends SubsystemBase {
-  private static final PneumaticHub pneumaticHub =
-      new PneumaticHub(Constants.GripperConstants.COMPRESSOR_CAN_ID);
+  private static final Compressor compressor =
+      new Compressor(Constants.GripperConstants.COMPRESSOR_CAN_ID, PneumaticsModuleType.CTREPCM);
 
   private final DoubleSolenoid doubleSolenoid =
-      pneumaticHub.makeDoubleSolenoid(
+      new DoubleSolenoid(
+          Constants.GripperConstants.COMPRESSOR_CAN_ID,
+          PneumaticsModuleType.CTREPCM,
           Constants.GripperConstants.GRIPPER_SOLENOID_FORWARD,
           Constants.GripperConstants.GRIPPER_SOLENOID_REVERSE);
 
@@ -36,7 +39,7 @@ public class Gripper extends SubsystemBase {
 
   /** The constructor for the gripper subsystem. */
   public Gripper() {
-    pneumaticHub.disableCompressor();
+    compressor.disable();
     ntState.set("Unknown");
     SmartDashboard.putData("HW/Gripper/Solenoid", doubleSolenoid);
   }
@@ -79,9 +82,7 @@ public class Gripper extends SubsystemBase {
 
   /** Enables the compressor for the pnuematic gripper. Remains on until the robot is disabled. */
   public static void enableCompressor() {
-    if (!pneumaticHub.getCompressor()) {
-      pneumaticHub.enableCompressorDigital();
-    }
+    compressor.enableDigital();
   }
 
   /**
@@ -91,6 +92,6 @@ public class Gripper extends SubsystemBase {
    * @return true if pressue is at pre-configured set point
    */
   public static boolean getAtSetpoint() {
-    return pneumaticHub.getPressureSwitch();
+    return !compressor.getPressureSwitchValue();
   }
 }

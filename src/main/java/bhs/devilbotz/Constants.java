@@ -37,6 +37,9 @@ public final class Constants {
    * degrees (yaw)
    */
   public static final double BALANCE_PID_TOLERANCE = 3;
+
+  /** The voltage to turn the warning lights on. */
+  public static final double MIN_BATTERY_VOLTAGE = 12.5;
   /**
    * Operator constants are for the operator interface (joysticks, buttons, etc.).
    *
@@ -65,7 +68,7 @@ public final class Constants {
     public static final double JOYSTICK_DEADBAND = 0.035;
 
     /** The maximum acceleration of the robot in units per second */
-    public static final double SLEW_RATE_LIMITER = 5;
+    public static final double SLEW_RATE_LIMITER = 5.5;
 
     /** The motor configuration for each side of the robot */
     public static final DCMotor MOTOR_CONFIGURATION = DCMotor.getCIM(2);
@@ -87,9 +90,9 @@ public final class Constants {
    */
   public static class GripperConstants {
     /** The gripper double solenoid forward channel */
-    public static final int GRIPPER_SOLENOID_FORWARD = 1;
+    public static final int GRIPPER_SOLENOID_FORWARD = 0;
     /** The gripper double solenoid reverse channel */
-    public static final int GRIPPER_SOLENOID_REVERSE = 2;
+    public static final int GRIPPER_SOLENOID_REVERSE = 1;
     /** The CAN ID for the gripper's pneumatic compressor */
     public static final int COMPRESSOR_CAN_ID = 6;
   }
@@ -112,9 +115,10 @@ public final class Constants {
     public static final int ENCODER_CHANNEL_A_DIO_PORT = 2; // TODO: add what color tape on wire
     public static final int ENCODER_CHANNEL_B_DIO_PORT = 3; // TODO: add what color tape on wire
 
-    public static final double POSITION_TOP = 525; // arm position to score on top goal
+    public static final double POSITION_TOP = 540; // arm position to score on top goal
     public static final double POSITION_MIDDLE = 450; // arm position to score in mid goal
     public static final double POSITION_BOTTOM = 258; // arm position to score on bottom goal
+    public static final double POSITION_TOP_MAX = 600; // arm position at the very top
     public static final double POSITION_CUBE_DELTA =
         -90; // different in score position from cone to cube
 
@@ -125,7 +129,7 @@ public final class Constants {
         80; // When the arm is moving down, the positon when the gripper needs to be closed to
     // avoid crashing into the frame
     public static final double POSITION_SCORING_DELTA =
-        -10; // The amount to move the gripper before releasing piece
+        -20; // The amount to move the gripper before releasing piece
     public static final double POSITION_PICKUP_GROUND_CUBE = 80;
     public static final double POSITION_PICKUP_GROUND_CONE = 0;
     public static final double POSITION_TOLERANCE = 5;
@@ -138,6 +142,17 @@ public final class Constants {
 
     public static final double DURATION_TO_DECIDE_ARM_STUCK =
         0.20; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
+    public static final double ARM_ENCODER_OFFSET =
+        -20; /* WORKAROUND: offset to adjust empirically determined arm positions */
+    public static final double POSITION_SLOW_ARM = 175;
+    public static final double SPEED_DOWN_MAX = 1.0;
+    public static final double SPEED_DOWN_SLOW = 0.5;
+    public static final double SPEED_UP_MAX = 0.95;
+    public static final double SPEED_MANUAL_MAX = 0.5;
+
+    public static final double POSITION_P = 5;
+    public static final double POSITION_I = 0;
+    public static final double POSITION_D = 0;
   }
 
   public static final class LedConstants {

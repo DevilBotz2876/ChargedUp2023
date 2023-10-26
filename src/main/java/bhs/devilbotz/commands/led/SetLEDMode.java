@@ -48,6 +48,9 @@ public class SetLEDMode extends CommandBase {
       case SET_LOADING:
         arduino.sendMessage(new byte[] {0x9});
         break;
+      case SET_VOLTAGE_WARNING:
+        arduino.sendMessage(new byte[] {0xA});
+        break;
     }
 
     sentMessage = true;

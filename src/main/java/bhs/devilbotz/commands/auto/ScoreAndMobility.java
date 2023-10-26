@@ -5,6 +5,8 @@ import bhs.devilbotz.commands.CommandDebug;
 import bhs.devilbotz.commands.arm.ArmDown;
 import bhs.devilbotz.commands.assist.AutoScore;
 import bhs.devilbotz.commands.drivetrain.DriveStraightPID;
+import bhs.devilbotz.commands.drivetrain.RotateDegrees;
+import bhs.devilbotz.commands.gripper.GripperOpen;
 import bhs.devilbotz.subsystems.Arm;
 import bhs.devilbotz.subsystems.DriveTrain;
 import bhs.devilbotz.subsystems.Gripper;
@@ -22,6 +24,8 @@ public class ScoreAndMobility extends SequentialCommandGroup {
    *   <li>Move Back to make clearance for the arm
    *   <li>Put the arm down
    *   <li>Mobility
+   *   <li>Rotate 180
+   *   <li>Open the gripper
    * </ol>
    *
    * <p><i>Note: The robot is assumed to be:</i>
@@ -56,6 +60,9 @@ public class ScoreAndMobility extends SequentialCommandGroup {
             // After scoring we always drive back 3.5 meters to ensure we leave the zone from either
             // side
             new Mobility(drivetrain, -3.5)));
+    addCommands(new RotateDegrees(drivetrain, 180));
+    // open the gripper
+    addCommands(new GripperOpen(gripper));
     addCommands(CommandDebug.end());
   }
 }
