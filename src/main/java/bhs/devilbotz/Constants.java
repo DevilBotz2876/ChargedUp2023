@@ -143,7 +143,7 @@ public final class Constants {
     public static final double DURATION_TO_DECIDE_ARM_STUCK =
         0.20; /* Wait 40 ms (2 cycle times) before deciding the arm is stuck */
     public static final double ARM_ENCODER_OFFSET =
-        -20; /* WORKAROUND: offset to adjust empirically determined arm positions */
+        0; /* WORKAROUND: offset to adjust empirically determined arm positions */
     public static final double POSITION_SLOW_ARM = 175;
     public static final double SPEED_DOWN_MAX = 1.0;
     public static final double SPEED_DOWN_SLOW = 0.5;
