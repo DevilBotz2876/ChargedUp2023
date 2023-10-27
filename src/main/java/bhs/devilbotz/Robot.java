@@ -91,8 +91,8 @@ public class Robot extends TimedRobot {
       armCamera.setFPS(20);
       armCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
 
-      driveCamera.setResolution(240, 135);
-      driveCamera.setFPS(30);
+      driveCamera.setResolution(160, 120);
+      driveCamera.setFPS(20);
       driveCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
     } else {
       Alert cameraAlert =
