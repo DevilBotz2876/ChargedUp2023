@@ -26,12 +26,12 @@ public final class LEDStripHelper {
     // Handle static vs animation mode assignments
     switch (mode) {
       case SET_ARM_UP:
-        ledSegment[1].setOverlay(Color.kWhite, 5, -0.2);
-        ledSegment[3].setOverlay(Color.kWhite, 5, -0.2);
+        ledSegment[1].setOverlay(Color.kWhite, 5, -0.5);
+        ledSegment[3].setOverlay(Color.kWhite, 5, -0.5);
         break;
       case SET_ARM_DOWN:
-        ledSegment[1].setOverlay(Color.kWhite, 5, 0.2);
-        ledSegment[3].setOverlay(Color.kWhite, 5, 0.2);
+        ledSegment[1].setOverlay(Color.kWhite, 5, 0.5);
+        ledSegment[3].setOverlay(Color.kWhite, 5, 0.5);
         break;
       case SET_ARM_IDLE:
       case CLEAR:
