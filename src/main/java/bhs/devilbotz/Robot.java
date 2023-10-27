@@ -85,10 +85,15 @@ public class Robot extends TimedRobot {
 
     if (Robot.checkCapability("hasCamera")) {
       UsbCamera armCamera = CameraServer.startAutomaticCapture(0);
+      UsbCamera driveCamera = CameraServer.startAutomaticCapture(1);
 
       armCamera.setResolution(240, 135);
       armCamera.setFPS(20);
       armCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
+
+      driveCamera.setResolution(240, 135);
+      driveCamera.setFPS(30);
+      driveCamera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
     } else {
       Alert cameraAlert =
           new Alert("Robot is a simulation. Camera will display black.", Alert.AlertType.WARNING);
