@@ -59,6 +59,12 @@ public final class LEDStripHelper {
       case SET_AUTONOMOUS:
         strip.setBackgroundColor(Color.kGreen);
         break;
+      case SET_LOADING:
+        strip.setBackgroundColor(Color.kWhite);
+        break;
+      case SET_VOLTAGE_WARNING:
+        strip.setBackgroundColor(Color.kOrange);
+        break;
       case CLEAR:
         strip.enable(false);
         return;
