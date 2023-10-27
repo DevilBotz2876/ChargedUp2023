@@ -155,6 +155,11 @@ public final class Constants {
     public static final double POSITION_D = 0;
   }
 
+  public static final class LedConstants {
+    public static final int LED_PWM_PORT = 0;
+    public static final int LED_COUNT = 300;
+  }
+
   public static final class DebugConstants {
     public static final boolean enableArmMessages = true;
   }

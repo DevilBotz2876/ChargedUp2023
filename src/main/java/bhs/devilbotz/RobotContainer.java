@@ -114,6 +114,7 @@ public class RobotContainer {
 
     buildArmShuffleboardTab();
     ntGamePieceMode.set("Cone");
+    buildLEDShuffleboardTab();
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -328,6 +329,66 @@ public class RobotContainer {
         .withPosition(0, 5);
   }
 
+  private void buildLEDShuffleboardTab() {
+    ShuffleboardTab tab = Shuffleboard.getTab("LED");
+
+    ShuffleboardContainer cmdList = tab.getLayout("Modes", BuiltInLayouts.kList).withPosition(0, 0);
+    cmdList.add(
+        "Clear",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.CLEAR);
+            }));
+    cmdList.add(
+        "Red",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_RED);
+            }));
+    cmdList.add(
+        "Blue",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_BLUE);
+            }));
+    cmdList.add(
+        "Cone",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_CONE);
+            }));
+    cmdList.add(
+        "Cube",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_CUBE);
+            }));
+    cmdList.add(
+        "Autonomous",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_AUTONOMOUS);
+            }));
+    cmdList.add(
+        "Arm Up",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_ARM_UP);
+            }));
+    cmdList.add(
+        "Arm Down",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_ARM_DOWN);
+            }));
+    cmdList.add(
+        "Arm Idle",
+        new InstantCommand(
+            () -> {
+              this.setLEDMode(LEDModes.SET_ARM_IDLE);
+            }));
+  }
+
   public void setLEDModeAlliance() {
     if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
       setLEDMode(LEDModes.SET_RED);
@@ -338,6 +399,7 @@ public class RobotContainer {
 
   public void setLEDMode(LEDModes mode) {
     new SetLEDMode(arduino, mode).schedule();
+    LEDStripHelper.setMode(mode);
   }
 
   public GamePieceTypes getGamePieceType() {
